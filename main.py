@@ -8,7 +8,6 @@ from csv import DictReader, DictWriter
 import random
 from time import sleep
 from shutil import copyfile
-from werkzeug.security import generate_password_hash, check_password_hash
 
 
 version = 'v1.5.0.0'    # Version program
@@ -108,8 +107,7 @@ def auth_with_password():    # Auth Confirm Password
         if hash_password == bool(False):
             print(red + '\n --- Wrong password --- ' + mc)
             sleep(1)
-            system_action('clear')
-            system_action('restart')
+            system_action('either')
         else:
             return master_password
 
@@ -436,6 +434,10 @@ if __name__ == '__main__':
         from datetime_obs import greeting
         from stars_obs import hide_password
         from update_obs import update
+        try:
+            from werkzeug.security import generate_password_hash, check_password_hash
+        except ModuleNotFoundError:
+            os.system('pip install werkzeug')
 
         print(blue, "\n Password Manager", version, "Stable For Linux (SFL) \n by Berliner187 ", '\n' * 3, mc)
         elba()  # Вывод логотипа
