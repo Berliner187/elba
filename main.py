@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Password manager v1.5.0.0 Stable For Linux (SFL)
+# Password manager v1.5.0.1 Stable For Linux (SFL)
 # Resources and notes related to them are encrypted with a single password
 # by Berliner187
 import os
@@ -10,7 +10,7 @@ from time import sleep
 from shutil import copyfile
 
 
-version = 'v1.5.0.0'    # Version program
+version = 'v1.5.0.1'    # Version program
 
 
 def system_action(action):
@@ -104,9 +104,18 @@ def auth_with_password():    # Auth Confirm Password
     # Проверка хэша пароля
     with open(file_hash_password, 'r') as hash_pas_from_file:
         hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
+        attempt_counter = 0
         if hash_password == bool(False):
             print(red + '\n --- Wrong password --- ' + mc)
             sleep(1)
+            attempt_counter += 1
+            if attempt_counter == 3:
+                print(blue + '' + mc)
+                sleep(1)
+                total_attempt_counter = attempt_counter
+                total_attempt_counter += 1
+                if total_attempt_counter == 7:
+                    os.system('rm -r ' + main_folder)
             system_action('either')
         else:
             return master_password
