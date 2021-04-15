@@ -1,9 +1,11 @@
 from main import system_action, show_decryption_data, decryption_block
 from enc_obs import dec_data
 import os
+from time import sleep
 
 
 yellow, mc = "\033[33m", "\033[0m"
+
 
 def update(master_password, status):
     main_file = 'main.py'  # Главный файл программы
