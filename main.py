@@ -63,14 +63,11 @@ def save_data_to_file(resource, login, password, master_password):
         writer = DictWriter(data, fieldnames=fields_for_main_data)
         if check_file_date_base == bool(False):
             writer.writeheader()    # Запись заголовков
-        # Шифрование данных ресурса
-        enc_res = enc_data(resource, master_password)
-        enc_log = enc_data(login, master_password)
-        enc_pas = enc_data(password, master_password)
+        # Шифрование данных ресурса и запись в файл
         writer.writerow({
-            'resource': enc_res,
-            'login': enc_log,
-            'password': enc_pas})
+            'resource': enc_data(resource, master_password),
+            'login': enc_data(login, master_password),
+            'password': enc_data(password, master_password)})
 
 
 def show_decryption_data(master_password):
@@ -98,7 +95,7 @@ def show_decryption_data(master_password):
 
 def auth_with_password():    # Auth Confirm Password
     """ Получение мастер-пароля и доп. ключей """
-    master_password = hide_password(yellow + ' -- Your master-password: ' + mc)
+    master_password = hide_password(yellow + '\n -- Your master-password: ' + mc)
     if master_password == 'x':  # Досрочный выход из программы
         quit()
     # Проверка хэша пароля
@@ -119,15 +116,6 @@ def auth_with_password():    # Auth Confirm Password
             system_action('either')
         else:
             return master_password
-
-
-def data_for_resource():
-    """ Данные для сохранения (ресурс, логин, пароль) """
-    system_action('clear')
-    print(green, '\n   --- Add new resource ---   ', '\n' * 3, mc)  # Текст запроса ввода данных о ресурсе
-    resource = input(yellow + ' Resource: ' + mc)
-    login = input(yellow + ' Login: ' + mc)
-    return resource, login
 
 
 def confirm_user_password(type_pas):
@@ -173,6 +161,15 @@ def confirm_user_password(type_pas):
         print('  Your new password - ' + green + password + mc + ' - success saved')
         sleep(2)
         return password
+
+
+def data_for_resource():
+    """ Данные для сохранения (ресурс, логин, пароль) """
+    system_action('clear')
+    print(green, '\n   --- Add new resource ---   ', '\n' * 3, mc)  # Текст запроса ввода данных о ресурсе
+    resource = input(yellow + ' Resource: ' + mc)
+    login = input(yellow + ' Login: ' + mc)
+    return resource, login
 
 
 def change_type_of_password():
@@ -448,7 +445,8 @@ if __name__ == '__main__':
         except ModuleNotFoundError:
             os.system('pip install werkzeug')
 
-        print(blue, "\n Password Manager and Keeper of Notes", version, "Stable For Linux (SFL) \n by Berliner187 ", '\n' * 3, mc)
+        print(blue, "\n || Password Manager and Keeper of Notes ||", version,
+              "|| For Linux (SFL) || \n || by Berliner187 ||", '\n' * 3, mc)
         elba()  # Вывод логотипа
         launcher()  # Запуск главной направляющей функции
 
