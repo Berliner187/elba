@@ -88,7 +88,7 @@ def show_decryption_data(master_password):
         print(blue +
               '\n  - Enter "-r" to restart, "-x" to exit'
               '\n  - Enter "-a" to add new resource'
-              '\n  - Enter "-c" to change master-password '  # + red + 'BETA' + blue,
+              # '\n  - Enter "-c" to change master-password '  # + red + 'BETA' + blue,
               '\n  - Enter "-d" to remove resource'
               '\n  - Enter "-u" to update program'
               '\n  - Enter "-n" to go to notes'
@@ -439,7 +439,7 @@ if __name__ == '__main__':
         except ModuleNotFoundError:
             os.system('pip install werkzeug')
 
-        print(blue, "\n Password Manager", version, "Stable For Linux (SFL) \n by Berliner187 ", '\n' * 3, mc)
+        print(blue, "\n Password Manager and Keeper of Notes", version, "Stable For Linux (SFL) \n by Berliner187 ", '\n' * 3, mc)
         elba()  # Вывод логотипа
         launcher()  # Запуск главной направляющей функции
 
