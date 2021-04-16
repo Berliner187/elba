@@ -11,7 +11,6 @@ file_self_name = main_folder + ".self_name.dat"  # Файл с именем (н�
 def greeting(master_password):   # Greating Depending On Date Time
     """ Фунция вывода приветствия в зависимости от времени суток """
     def get_name():
-        file_self_name = 'volare/.self_name.dat'
         if os.path.exists(file_self_name) == bool(False):  # Создание файла с именем
             with open(file_self_name, "w") as self_name:
                 name = input(yellow + '\n -- Your name or nickname: ' + mc)
