@@ -10,45 +10,32 @@ file_self_name = main_folder + ".self_name.dat"  # Файл с именем (н�
 
 def greeting(master_password):   # Greating Depending On Date Time
     """ Фунция вывода приветствия в зависимости от времени суток """
-    def time(name):
-        hms = datetime.datetime.today()  # Дата и время
-        hour = int(hms.hour)  # Формат часов
-        minute = int(hms.minute)  # Формат минут
-        secunde = int(hms.second)  # Формат секунд
-        # Для корректоного вывода
-        if hour < 10:
-            hour = str(0) + str(hour)
-        if minute < 10:
-            minute = str(0) + str(minute)
-        if secunde < 10:
-            secunde = str(0) + str(secunde)
-        time_format = (str(hour), str(minute), str(secunde))
-        time_now = ":".join(time_format)  # Форматирование в формат времени
-        if '04:00:00' <= time_now < '12:00:00':  # Condition morning
-            seq = (green, 'Good morning,', name, mc)
-            total = " ".join(seq)
-            return total
-        elif '12:00:00' <= time_now < '17:00:00':  # Condition day
-            seq = (green, 'Good afternoon,', name, mc)
-            total = " ".join(seq)
-            return total
-        elif '17:00:00' <= time_now <= '23:59:59':  # Condition evening
-            seq = (green, 'Good evening,', name, mc)
-            total = " ".join(seq)
-            return total
-        elif '00:00:00' <= time_now < '04:00:00':  # Condition night
-            seq = (green, 'Good night,', name, mc)
-            total = " ".join(seq)
-            print(total)
-    if os.path.exists(file_self_name) == bool(False):  # Создание файла с именем
-        with open(file_self_name, "w") as self_name:
-            name = input(yellow + ' - Your name or nickname: ' + mc)
-            enc_name = enc_data(name, master_password)
-            self_name.write(enc_name)
-            self_name.close()
-            print(time(name))
-    else:  # Чтение из файла с именем и вывод в консоль
-        with open(file_self_name, "r") as self_name:
-            dec_name = self_name.readline()
-            name = dec_data(dec_name, master_password)
-            print(time(name))
+    def get_name():
+        file_self_name = 'volare/.self_name.dat'
+        if os.path.exists(file_self_name) == bool(False):  # Создание файла с именем
+            with open(file_self_name, "w") as self_name:
+                name = input(yellow + '\n -- Your name or nickname: ' + mc)
+                enc_name = enc_data(name, master_password)
+                self_name.write(enc_name)
+                self_name.close()
+                return name
+        else:  # Чтение из файла с именем и вывод в консоль
+            with open(file_self_name, "r") as self_name:
+                dec_name = self_name.readline()
+                name = dec_data(dec_name, master_password)
+                return name
+
+    def template_greeting(times_of_day):
+        print(green, times_of_day, get_name(), mc)
+
+    hms = datetime.datetime.today()
+    hours_to_secunds = hms.hour * 3600 + hms.minute * 60 + hms.second
+    time_now = hours_to_secunds    # Время в секундах
+    if 14400 <= time_now < 43200:  # Condition morning
+        template_greeting('Good modring,')
+    elif 43200 <= time_now < 61200:  # Condition day
+        template_greeting('Good afternoon,')
+    elif 61200 <= time_now <= 86399:  # Condition evening
+        template_greeting('Good evening,')
+    elif 86399 <= time_now < 14400:  # Condition night
+        template_greeting('Good night,')
