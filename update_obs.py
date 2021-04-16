@@ -1,10 +1,11 @@
-from main import system_action, show_decryption_data, decryption_block
-from enc_obs import dec_data
 import os
 from time import sleep
+from enc_obs import dec_data
+from main import system_action, show_decryption_data, decryption_block
 
 
 yellow, mc = "\033[33m", "\033[0m"
+used_modules = ['stars_obs.py', 'datetime_obs.py', 'enc_obs.py', 'logo_obs.py', 'update_obs.py']
 
 
 def update(master_password, status):
@@ -22,11 +23,11 @@ def update(master_password, status):
                 os.system('cp ' + new_folder_pm + file + ' . ; ')
 
             actions_for_install(main_file)
-            actions_for_install('stars_obs.py')
-            actions_for_install('enc_obs.py')
-            actions_for_install('datetime.py')
-            actions_for_install('logo_obs.py')
-            actions_for_install('update_obs.py')
+            actions_for_install(used_modules[0])
+            actions_for_install(used_modules[1])
+            actions_for_install(used_modules[2])
+            actions_for_install(used_modules[3])
+            actions_for_install(used_modules[4])
 
             system_action('either')
         else:
