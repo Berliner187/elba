@@ -1,16 +1,22 @@
 #!/usr/bin/env python3
-# Password manager v1.5.0.1 Stable For Linux (SFL)
+# Password manager v1.5.0.2 Stable For Linux (SFL)
 # Resources and notes related to them are encrypted with a single password
 # by Berliner187
 import os
 import sys
-from csv import DictReader, DictWriter
 import random
 from time import sleep
 from shutil import copyfile
+from csv import DictReader, DictWriter
 
 
-version = 'v1.5.0.1'    # Version program
+version = 'v1.5.0.2'    # Version program
+
+
+def starter_text():
+    print(blue, "\n || Password Manager and Keeper of Notes ||",
+          version, "|| For Linux (SFL) || \n || by Berliner187 ||", '\n' * 3, mc)
+    elba()  # Вывод логотипа
 
 
 def system_action(action):
@@ -95,24 +101,16 @@ def show_decryption_data(master_password):
 
 def auth_with_password():    # Auth Confirm Password
     """ Получение мастер-пароля и доп. ключей """
+    starter_text()
     master_password = hide_password(yellow + '\n -- Your master-password: ' + mc)
     if master_password == 'x':  # Досрочный выход из программы
         quit()
     # Проверка хэша пароля
     with open(file_hash_password, 'r') as hash_pas_from_file:
         hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
-        attempt_counter = 0
         if hash_password == bool(False):
             print(red + '\n --- Wrong password --- ' + mc)
             sleep(1)
-            attempt_counter += 1
-            if attempt_counter == 3:
-                print(blue + '' + mc)
-                sleep(1)
-                total_attempt_counter = attempt_counter
-                total_attempt_counter += 1
-                if total_attempt_counter == 7:
-                    os.system('rm -r ' + main_folder)
             system_action('either')
         else:
             return master_password
@@ -443,13 +441,13 @@ if __name__ == '__main__':
         try:
             from werkzeug.security import generate_password_hash, check_password_hash
         except ModuleNotFoundError:
-            os.system('pip install werkzeug')
+            print(red + 'Missing module' + mc)
+            sleep(1)
+            quit()
 
-        print(blue, "\n || Password Manager and Keeper of Notes ||", version,
-              "|| For Linux (SFL) || \n || by Berliner187 ||", '\n' * 3, mc)
-        elba()  # Вывод логотипа
         launcher()  # Запуск главной направляющей функции
-
+    except ModuleNotFoundError:
+        update(None, False)
     except ValueError:
         print(red, '\n' + ' --- Critical error, program is restarted --- ', mc)
         sleep(1)
@@ -458,4 +456,4 @@ if __name__ == '__main__':
         change = input(yellow + ' - Update? (y/n): ' + mc)
         if change == 'y':  # Если получает запрос от юзера
             update(None, False)
-        system_action('clear')
+        system_action('restart')
