@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 # Password manager v1.5.0.2 Stable For Linux (SFL)
 # Resources and notes related to them are encrypted with a single password
-# by Berliner187
+# Elba - Password manager and keeper notes
+# Copyright (C) 2021  Berliner187
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
 import os
 import sys
 import random
@@ -10,12 +17,12 @@ from shutil import copyfile
 from csv import DictReader, DictWriter
 
 
-version = 'v1.5.0.2'    # Version program
+__version__ = 'v1.5.0.2'    # Version program
 
 
 def starter_text():
     print(blue, "\n || Password Manager and Keeper of Notes ||",
-          version, "|| For Linux (SFL) || \n || by Berliner187 ||", '\n' * 3, mc)
+          __version__, "|| For Linux (SFL) || \n || by Berliner187 ||", '\n' * 3, mc)
     elba()  # Вывод логотипа
 
 
