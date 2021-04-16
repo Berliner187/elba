@@ -1,1 +1,1 @@
-# Elba - Password Manager and keeper of notes.
+# Elba - Password Manager and Keeper of Notes.
