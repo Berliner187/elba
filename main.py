@@ -465,29 +465,29 @@ def launcher():
 
 if __name__ == '__main__':
     system_action('clear')
-    # try:
-    from logo_obs import elba
-    from enc_obs import enc_data, dec_data
-    from datetime_obs import greeting
-    from stars_obs import hide_password
-    from update_obs import update
-    from del_resource_obs import delete_resource
     try:
-        from werkzeug.security import generate_password_hash, check_password_hash
-    except ModuleNotFoundError:
-        print(red + 'Missing module' + mc)
-        sleep(1)
-        quit()
+        from logo_obs import elba
+        from enc_obs import enc_data, dec_data
+        from datetime_obs import greeting
+        from stars_obs import hide_password
+        from update_obs import update
+        from del_resourse_obs import delete_resource
+        try:
+            from werkzeug.security import generate_password_hash, check_password_hash
+        except ModuleNotFoundError:
+            print(red + 'Missing module' + mc)
+            sleep(1)
+            quit()
 
-    launcher()  # Запуск главной направляющей функции
-    # except ModuleNotFoundError:
-    #     update()
-    # except ValueError:
-    #     print(red, '\n' + ' --- Critical error, program is restarted --- ', mc)
-    #     sleep(1)
-    #     system_action('clear')
-    #     print(red + ' -- You can try to update the program -- \n' + mc)
-    #     change = input(yellow + ' - Update? (y/n): ' + mc)
-    #     if change == 'y':  # Если получает запрос от юзера
-    #         update()
-    #     system_action('restart')
+        launcher()  # Запуск главной направляющей функции
+    except ModuleNotFoundError:
+        update()
+    except ValueError:
+        print(red, '\n' + ' --- Critical error, program is restarted --- ', mc)
+        sleep(1)
+        system_action('clear')
+        print(red + ' -- You can try to update the program -- \n' + mc)
+        change = input(yellow + ' - Update? (y/n): ' + mc)
+        if change == 'y':  # Если получает запрос от юзера
+            update()
+        system_action('restart')
