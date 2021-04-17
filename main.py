@@ -20,7 +20,7 @@ from shutil import copyfile
 from csv import DictReader, DictWriter
 
 
-__version__ = 'v1.5.1.0'    # Version program
+__version__ = 'v1.5.1.1'    # Version program
 
 
 def show_name_program():
@@ -308,38 +308,8 @@ def decryption_block(master_password):
                 system_action('restart')
 
             elif change_resource_or_actions == '-d':    # Удаление ресурса
-                text_prompting_you_to_choose_something('Change by number resource')
-                change_res_by_num = prompting_to_input_something()
-                # Выгрузка старого
-                with open(file_date_base, encoding='utf-8') as saved_resource:
-                    reader = DictReader(saved_resource, delimiter=',')
-                    mas_res, mas_log, mas_pas = [], [], []
-                    cnt = 0
-                    for row in reader:
-                        cnt += 1
-                        if cnt == change_res_by_num:    # Перескакивает выбранный юзером и не добавляется
-                            cnt += 1
-                        else:   # Нужные ресурсы добавляются в массивы
-                            mas_res.append(row["resource"])
-                            mas_log.append(row["login"])
-                            mas_pas.append(row["password"])
-                    saved_resource.close()
-                # Перенос в новый файл
-                new_file_date_base = 'new_data.dat'
-                with open(new_file_date_base, mode="a", encoding='utf-8') as new_data:
-                    writer = DictWriter(new_data, fieldnames=fields_for_main_data)
-                    writer.writeheader()
-                    for i in range(cnt - 2):
-                        writer.writerow({
-                            fields_for_main_data[0]: mas_res[i],
-                            fields_for_main_data[1]: mas_log[i],
-                            fields_for_main_data[2]: mas_pas[i]
-                        })
-                    new_data.close()
-                copyfile(new_file_date_base, file_date_base)    # Старый записывается новым файлом
-                os.system('rm ' + new_file_date_base)   # Удаление нового файла
-                show_decryption_data(master_password)   # Вывод ресурсов
-
+                delete_resource()
+                show_decryption_data(master_password)  # Вывод ресурсов
             elif change_resource_or_actions == '-n':    # Добавление зашифрованных заметок
                 system_action('clear')
                 while True:     # Старт цикла для работы с заметками
@@ -495,28 +465,29 @@ def launcher():
 
 if __name__ == '__main__':
     system_action('clear')
+    # try:
+    from logo_obs import elba
+    from enc_obs import enc_data, dec_data
+    from datetime_obs import greeting
+    from stars_obs import hide_password
+    from update_obs import update
+    from del_resourse_obs import delete_resource
     try:
-        from logo_obs import elba
-        from enc_obs import enc_data, dec_data
-        from datetime_obs import greeting
-        from stars_obs import hide_password
-        from update_obs import update
-        try:
-            from werkzeug.security import generate_password_hash, check_password_hash
-        except ModuleNotFoundError:
-            print(red + 'Missing module' + mc)
-            sleep(1)
-            quit()
-
-        launcher()  # Запуск главной направляющей функции
+        from werkzeug.security import generate_password_hash, check_password_hash
     except ModuleNotFoundError:
-        update()
-    except ValueError:
-        print(red, '\n' + ' --- Critical error, program is restarted --- ', mc)
+        print(red + 'Missing module' + mc)
         sleep(1)
-        system_action('clear')
-        print(red + ' -- You can try to update the program -- \n' + mc)
-        change = input(yellow + ' - Update? (y/n): ' + mc)
-        if change == 'y':  # Если получает запрос от юзера
-            update()
-        system_action('restart')
+        quit()
+
+    launcher()  # Запуск главной направляющей функции
+    # except ModuleNotFoundError:
+        # update()
+    # except ValueError:
+    #     print(red, '\n' + ' --- Critical error, program is restarted --- ', mc)
+    #     sleep(1)
+    #     system_action('clear')
+    #     print(red + ' -- You can try to update the program -- \n' + mc)
+    #     change = input(yellow + ' - Update? (y/n): ' + mc)
+    #     if change == 'y':  # Если получает запрос от юзера
+    #         update()
+    #     system_action('restart')

@@ -3,7 +3,7 @@ from time import sleep
 from main import system_action, show_decryption_data, decryption_block
 
 
-__version__ = '1.0.2'   # Версия модуля
+__version__ = '1.0.3'   # Версия модуля
 
 
 yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
@@ -18,6 +18,7 @@ def update():
     os.system('git clone https://github.com/Berliner187/elba')
     system_action('clear')
 
+    print(blue + '\n        Check modules \n\n' + mc)
     file_type = 'obs.py'
     any_file = os.listdir('.')
     modules = []
