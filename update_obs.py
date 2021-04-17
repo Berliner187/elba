@@ -12,7 +12,7 @@ stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
                  'notes_obs.py', 'change_password_obs.py', 'confirm_password_obs.py']
 
 
-def update():
+def update():   # Обновление программы
     main_file = 'main.py'  # Главный файл программы
     new_folder_el = 'elba/'    # Новая папка из репозитория проекта
     remove_main_folder = 'rm -r elba/ -f'

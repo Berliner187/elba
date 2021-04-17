@@ -262,6 +262,7 @@ def launcher():
 if __name__ == '__main__':
     system_action('clear')
     try:
+        # Локальные модули
         from logo_obs import elba
         from enc_obs import enc_data, dec_data
         from datetime_obs import greeting
