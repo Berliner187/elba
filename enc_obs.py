@@ -52,11 +52,11 @@ def X(Y,E):
   F=E[i%l(E)]
   D.append(z((256+c(s[i])-c(F))%256))
  return "".join(D)
-def enc_data(anything,master_password):
- S=j(anything,master_password)
+def enc_data(s,w):
+ S=j(s,w)
  u=d(S)
  return u
-def dec_data(anything,master_password):
- U=M(anything)
- I=X(U,master_password)
+def dec_data(K,P):
+ U=M(K)
+ I=X(U,P)
  return I
