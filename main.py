@@ -261,13 +261,13 @@ def launcher():
 
 if __name__ == '__main__':
     system_action('clear')
+    from update_obs import update
     try:
         # Локальные модули
         from logo_obs import elba
         from enc_obs import enc_data, dec_data
         from datetime_obs import greeting
         from stars_obs import hide_password
-        from update_obs import update
         from del_resource_obs import delete_resource
         from notes_obs import notes
         from change_password_obs import change_master_password
