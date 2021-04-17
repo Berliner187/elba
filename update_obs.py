@@ -8,7 +8,7 @@ __version__ = '1.0.5'   # Версия модуля
 
 yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
 stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
-                 'update_obs.py', 'stars_obs.py', 'notes_obs.py', 'del_resource_obs.py']
+                 'update_obs.py', 'stars_obs.py', 'del_resource_obs.py']
 
 
 def update():
