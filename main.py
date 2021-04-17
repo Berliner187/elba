@@ -121,11 +121,11 @@ def point_of_entry():    # Auth Confirm Password
     # Проверка хэша пароля
     with open(file_hash_password, 'r') as hash_pas_from_file:
         hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
-        if hash_password == bool(False):
+        if hash_password == bool(False):    # Если хеши не совпадают
             print(red + '\n --- Wrong password --- ' + mc)
             sleep(1)
             system_action('either')
-        else:
+        else:   # Если совпали
             return master_password
 
 
