@@ -3,7 +3,7 @@ from time import sleep
 from main import system_action, show_decryption_data, decryption_block
 
 
-__version__ = '1.0.5'   # Версия модуля
+__version__ = '1.0.6'   # Версия модуля
 
 
 yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
@@ -48,7 +48,7 @@ def update():
             for i in range(len(stock_modules)):
                 actions_for_install(stock_modules[i])
 
-            system_action('restart')
+            system_action('either')
         else:
             os.system(remove_main_folder)
     else:

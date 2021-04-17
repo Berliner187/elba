@@ -471,7 +471,7 @@ if __name__ == '__main__':
         from datetime_obs import greeting
         from stars_obs import hide_password
         from update_obs import update
-        from del_resourse_obs import delete_resource
+        from del_resource_obs import delete_resource
         try:
             from werkzeug.security import generate_password_hash, check_password_hash
         except ModuleNotFoundError:
