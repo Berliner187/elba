@@ -48,7 +48,7 @@ def update():
             for i in range(len(stock_modules)):
                 actions_for_install(stock_modules[i])
 
-            system_action('either')
+            system_action('restart')
         else:
             os.system(remove_main_folder)
     else:
