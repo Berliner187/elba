@@ -7,6 +7,7 @@ symbols_for_password = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234
 
 yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
 
+check_file_hash_password = 'volare/.hash_password.dat'
 
 def confirm_user_password(type_pas):
     """ Подтвержение пользовательского пароля """
