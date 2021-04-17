@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-""" 
+"""
     Password Manager Stable For Linux (SFL)
     Elba - Password manager and keeper notes
     Resources and notes related to them are encrypted with a single password
-    Copyright (C) 2021  Berliner187
+    Copyright (C) 2021  by Berliner187
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,7 +20,15 @@ from shutil import copyfile
 from csv import DictReader, DictWriter
 
 
-__version__ = 'v1.5.0.3'    # Version program
+__version__ = 'v1.5.1.0'    # Version program
+
+
+def show_name_program():
+    print(blue,
+          "\n || Password Manager and Keeper of Notes ||",
+          __version__, 
+          "\n || Stable For Linux || \n || by Berliner187   ||", '\n' * 3, mc)
+    elba()  # Вывод логотипа
 
 
 def system_action(action):
@@ -62,7 +70,7 @@ if os.path.exists(main_folder) == bool(False):
 
 if check_file_notes == bool(False):     # Создание файла с заметками
     with open(file_notes, mode="a", encoding='utf-8') as file_for_notes:
-        open_note = DictWriter(file_for_notes, fieldnames=['name_note', 'note'])
+        open_note = DictWriter(file_for_notes, fieldnames=fields_for_notes)
         open_note.writeheader()
 
 
@@ -89,27 +97,22 @@ def show_decryption_data(master_password):
         for line in reader:
             decryption_res = dec_data(line["resource"], master_password)
             s += 1
-            print(str(s) + '. ' + decryption_res)    # Decryption resource
+            print(str(s) + '.', decryption_res)    # Decryption resource
         print(blue +
               '\n  - Enter "-r" to restart, "-x" to exit'
               '\n  - Enter "-a" to add new resource'
-              # '\n  - Enter "-c" to change master-password '  # + red + 'BETA' + blue,
+              '\n  - Enter "-c" to change master-password ', red, 'NEW' + blue,
               '\n  - Enter "-d" to remove resource'
-              '\n  - Enter "-u" to update program'
               '\n  - Enter "-n" to go to notes'
+              '\n  - Enter "-u" to update program'
               '\n  - Enter "-z" to remove ALL data',
               yellow, 
               '\n Select resource by number \n', mc)
 
 
 def point_of_entry():    # Auth Confirm Password
-    """ Получение мастер-пароля и доп. ключей """
-    print(blue,
-          "\n || Password Manager and Keeper of Notes ||",
-          __version__, 
-          "\n || Stable For Linux || \n || by Berliner187   ||", '\n' * 3, mc)
-    elba()  # Вывод логотипа
-
+    """ Получение мастер-пароля """
+    show_name_program()     # Показывает название программы и выводит логотип
     master_password = hide_password(yellow + '\n -- Your master-password: ' + mc)
     if master_password == 'x':  # Досрочный выход из программы
         quit()
@@ -130,7 +133,7 @@ def confirm_user_password(type_pas):
     """ Подтвержение пользовательского пароля """
     def user_input_password():
         print(blue + '\n Minimum password length 8 characters' + mc)
-        user_password = hide_password(' Password: ')
+        user_password = hide_password('\n Password: ')
         if user_password == 'x':
             quit()
         user_confirm_password = hide_password(' Confirm password: ')  # hide_password(' Confirm password: ')
@@ -153,33 +156,31 @@ def confirm_user_password(type_pas):
             generation_new_password()
 
     # Условаия принятия и подтверждения пароля
-    if type_pas == 'self':
+    if type_pas == 'self':  # Собсвенный пароль для ресурса
         password = user_input_password()
         print(blue + ' - Your password success saved' + mc)
         sleep(1)
         return password
-    elif type_pas == 'master':
+    elif type_pas == 'master':  # Мастер пароль
         master_password = user_input_password()
-        if check_file_hash_password == bool(False):  # Создание хэша
+        # Проверка хеша пароля
+        if check_file_hash_password == bool(False) and check_file_date_base == bool(False):  # Создание хэша
             hash_to_file = generate_password_hash(master_password)
             with open(file_hash_password, 'w') as hash_pas:
                 hash_pas.write(hash_to_file)
                 hash_pas.close()
-        return master_password
-    elif type_pas == 'gen_new':
+            return master_password
+        elif check_file_hash_password == bool(False) and check_file_date_base == bool(True):
+            print(red + ' - Not confirmed - ' + mc)
+            sleep(2)
+            quit()
+        elif check_file_date_base and check_file_hash_password == bool(True):
+            return master_password
+    elif type_pas == 'gen_new':     # Генерирование нового пароля
         password = generation_new_password()
         print(blue + ' - Your new password - ' + green + password + mc + ' - success saved' + mc)
         sleep(2)
         return password
-
-
-def data_for_resource():
-    """ Данные для сохранения (ресурс, логин, пароль) """
-    system_action('clear')
-    print(green, '\n   --- Add new resource ---   ', '\n' * 3, mc)  # Текст запроса ввода данных о ресурсе
-    resource = input(yellow + ' Resource: ' + mc)
-    login = input(yellow + ' Login: ' + mc)
-    return resource, login
 
 
 def change_type_of_password(resource, login, master_password):
@@ -189,7 +190,7 @@ def change_type_of_password(resource, login, master_password):
           green + ' 2' + yellow + ' - Save your password      \n', mc)
 
     change_type = int(input('Change (1/2): '))
-    if change_type == 1:  # Generation new password
+    if change_type == 1:  # Генерирование пароля и сохранение в файл
         password = confirm_user_password('gen_new')
         save_data_to_file(resource, login, password, master_password)
     elif change_type == 2:  # Сохранение пользовательского пароля
@@ -201,9 +202,17 @@ def change_type_of_password(resource, login, master_password):
     system_action('clear')
 
 
+def data_for_resource():
+    """ Данные для сохранения (ресурс, логин) """
+    system_action('clear')
+    print(green, '\n   --- Add new resource ---   ', '\n' * 3, mc)  # Текст запроса ввода данных о ресурсе
+    resource = input(yellow + ' Resource: ' + mc)
+    login = input(yellow + ' Login: ' + mc)
+    return resource, login
+
+
 def decryption_block(master_password):
     """ Show resources and decrypt them with keys """
-
     def text_prompting_you_to_choose_something(text):
         print(blue + '\n -- ' + text + ' -- \n' + mc)
 
@@ -229,7 +238,7 @@ def decryption_block(master_password):
                 add_resource_data()
             elif change_resource_or_actions == '-u':    # Обновление программы из репозитория
                 system_action('clear')
-                update(master_password, True)
+                update()
                 show_decryption_data(master_password)
             elif change_resource_or_actions == '-x':  # Условие выхода
                 system_action('clear')  # Clearing terminal
@@ -239,23 +248,65 @@ def decryption_block(master_password):
                 system_action('clear')  # Clearing terminal
                 print('\n', green, ' -- Restart -- ', mc)
                 sleep(.4)
-                system_action('clear')
-                system_action('restart')  # Restart program
+                system_action('either')  # Restart program
             elif change_resource_or_actions == '-c':
                 system_action('clear')
                 # Сверяются хеши паролей
                 confirm_master_password = hide_password(yellow + ' -- Enter your master-password: ' + mc)
-                hash_confirm_master_password = enc_data(confirm_master_password, master_password)
-                saved_master_password = open(file_hash_password)
-                enc_pas_from_file = ''
-                for hash_pas in saved_master_password.readlines():
-                    enc_pas_from_file = hash_pas
-                if hash_confirm_master_password != enc_pas_from_file:
+                open_file_with_hash = open(file_hash_password).readline()
+                check_master_password = check_password_hash(open_file_with_hash, confirm_master_password)
+
+                if check_master_password == bool(False):
                     print(red + '\n --- Wrong password --- ' + mc)
                     sleep(1)
+                    system_action('either')
                 else:
-                    pass    # Допилить фичу
-                show_decryption_data(master_password)
+                    print('[ ' + green + 'OK' + mc + ' ]')
+                    sleep(.6)
+                    system_action('clear')
+                    print(blue + '\n Pick a new master-password \n' + mc)
+                    new_master_password = confirm_user_password('master')
+                    cnt = 0
+                    with open(file_date_base, encoding='utf-8') as saved_resource:  # Выгружается старый файл
+                        reader_resources = DictReader(saved_resource, delimiter=',')
+                        mas_res, mas_log, mas_pas = [], [], []
+                        new_file_data_base = 'new_file_data_base.dat'
+                        for item in reader_resources:
+                            cnt += 1    # Счетчик для нового файла
+                            # Дешифрование старым паролем
+                            dec_res = dec_data(item["resource"], master_password)
+                            dec_log = dec_data(item["login"], master_password)
+                            dec_pas = dec_data(item["password"], master_password)
+
+                            # Шифрование новым паролем
+                            enc_res = enc_data(dec_res, new_master_password)
+                            enc_log = enc_data(dec_log, new_master_password)
+                            enc_pas = enc_data(dec_pas, new_master_password)
+
+                            # Добавление зашифрованных данных в массивы
+                            mas_res.append(enc_res)
+                            mas_log.append(enc_log)
+                            mas_pas.append(enc_pas)
+
+                    with open(new_file_data_base, mode="a", encoding='utf-8') as data:  # Запись в новый файл
+                        new_writer = DictWriter(data, fieldnames=fields_for_main_data)
+                        new_writer.writeheader()
+                        for i in range(cnt):
+                            new_writer.writerow({
+                                'resource': mas_res[i],
+                                'login': mas_log[i],
+                                'password': mas_pas[i]
+                            })
+                    copyfile(new_file_data_base, file_date_base)    # Перезапись старого файла новым
+                    os.system('rm ' + new_file_data_base)   # Удаление нового файла
+
+                    new_hash = generate_password_hash(new_master_password)
+                    with open(file_hash_password, 'w') as hash_pas:
+                        hash_pas.write(new_hash)
+                        hash_pas.close()
+
+                system_action('restart')
+
             elif change_resource_or_actions == '-d':    # Удаление ресурса
                 text_prompting_you_to_choose_something('Change by number resource')
                 change_res_by_num = prompting_to_input_something()
@@ -280,13 +331,15 @@ def decryption_block(master_password):
                     writer.writeheader()
                     for i in range(cnt - 2):
                         writer.writerow({
-                            'resource': mas_res[i],
-                            'login': mas_log[i],
-                            'password': mas_pas[i]})
+                            fields_for_main_data[0]: mas_res[i],
+                            fields_for_main_data[1]: mas_log[i],
+                            fields_for_main_data[2]: mas_pas[i]
+                        })
                     new_data.close()
                 copyfile(new_file_date_base, file_date_base)    # Старый записывается новым файлом
                 os.system('rm ' + new_file_date_base)   # Удаление нового файла
                 show_decryption_data(master_password)   # Вывод ресурсов
+
             elif change_resource_or_actions == '-n':    # Добавление зашифрованных заметок
                 system_action('clear')
                 while True:     # Старт цикла для работы с заметками
@@ -398,7 +451,7 @@ def decryption_block(master_password):
                                 print(yellow, type_data + ':', green, dec_data(line[value], master_password), mc)
 
                             resource_template('Resource', 'resource')
-                            resource_template(' Login  ', 'login')
+                            resource_template('Login   ', 'login')
                             resource_template('Password', 'password')
         except ValueError:
             show_decryption_data(master_password)   # Показ содежимого
@@ -411,7 +464,8 @@ def decryption_block(master_password):
 def launcher():
     """ The main function responsible for the operation of the program """
     if check_file_date_base == bool(False):   # Если файла нет, идет создание файла с ресурсами
-        print(blue +
+        show_name_program()
+        print(blue,
               "\n  - Encrypt your passwords with one master-password -    "
               "\n  -           No resources saved. Add them!         -  \n"
               "\n ----                That's easy!                 ---- \n",
@@ -421,7 +475,7 @@ def launcher():
               '\n --              Создание мастер-пароля               -- '
               '\n --    Только не используйте свой банковский пароль,  -- '
               '\n          я не сильно вкладывался в безопасность         '
-              '\n                     этой программы                      ' + mc)
+              '\n                     этой программы                      ', mc)
 
         master_password = confirm_user_password('master')  # Создание мастер-пароля
         greeting(master_password)  # Вывод приветствия
@@ -430,7 +484,7 @@ def launcher():
         system_action('restart')
     else:
         # Если файл уже создан, выводтся содержимое и дальнейшее взаимодействие с программой происходит тут
-        master_password = point_of_entry()
+        master_password = point_of_entry()  # Ввод пароля
         system_action('clear')
         greeting(master_password)  # Вывод приветствия
         sleep(.5)
@@ -456,7 +510,7 @@ if __name__ == '__main__':
 
         launcher()  # Запуск главной направляющей функции
     except ModuleNotFoundError:
-        update(None, False)
+        update()
     except ValueError:
         print(red, '\n' + ' --- Critical error, program is restarted --- ', mc)
         sleep(1)
@@ -464,5 +518,5 @@ if __name__ == '__main__':
         print(red + ' -- You can try to update the program -- \n' + mc)
         change = input(yellow + ' - Update? (y/n): ' + mc)
         if change == 'y':  # Если получает запрос от юзера
-            update(None, False)
+            update()
         system_action('restart')

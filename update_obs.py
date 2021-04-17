@@ -1,33 +1,50 @@
 import os
 from time import sleep
-from enc_obs import dec_data
 from main import system_action, show_decryption_data, decryption_block
 
 
-yellow, mc = "\033[33m", "\033[0m"
-used_modules = ['stars_obs.py', 'datetime_obs.py', 'enc_obs.py', 'logo_obs.py', 'update_obs.py']
+yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
+stock_modules = ['datetime_obs.py', 'del_resource_obs.py', 'enc_obs.py',
+                 'logo_obs.py', 'update_obs.py', 'stars_obs.py', 'notes_obs.py']
 
 
-def update(master_password, status):
+def update():
     main_file = 'main.py'  # Главный файл программы
+    new_folder_pm = 'elba/'    # Новая папка из репозитория проекта
     remove_main_folder = 'rm -r elba/ -f'
     os.system('git clone https://github.com/Berliner187/elba')
     system_action('clear')
 
-    if os.path.getsize(main_file) != os.path.getsize('elba/' + main_file):
+    file_type = 'obs.py'
+    any_file = os.listdir('.')
+    modules = []
+    for file in any_file:
+        if file.endswith(file_type):
+            modules.append(file)
+    for i in range(len(modules)):
+        if modules[i] != stock_modules[i]:
+            print('[', red, 'Missing module', mc, ']', modules[i])
+            sleep(1)
+        else:
+            print('[', green, 'OK', mc, ']', modules[i])
+            sleep(1)
+
+    system_action('clear')
+
+    if os.path.getsize(main_file) != os.path.getsize(new_folder_pm + main_file):
         install_or_no = input(yellow + ' - Install? (y/n): ' + mc)
-        new_folder_pm = 'elba/'    # Новая папка из репозитория проекта
         if install_or_no == 'y':
 
-            def actions_for_install(file):  # Действия для установки
-                os.system('cp ' + new_folder_pm + file + ' . ; ')
+            def actions_for_install(program_file):  # Действия для установки
+                os.system('cp ' + new_folder_pm + program_file + ' . ; ')
+                print()
 
             actions_for_install(main_file)
-            actions_for_install(used_modules[0])
-            actions_for_install(used_modules[1])
-            actions_for_install(used_modules[2])
-            actions_for_install(used_modules[3])
-            actions_for_install(used_modules[4])
+            actions_for_install(stock_modules[0])
+            actions_for_install(stock_modules[1])
+            actions_for_install(stock_modules[2])
+            actions_for_install(stock_modules[3])
+            actions_for_install(stock_modules[4])
 
             system_action('either')
         else:
