@@ -3,8 +3,12 @@ from csv import DictReader, DictWriter
 from enc_obs import enc_data, dec_data
 
 
-file_notes = 'volare/notes.csv'
+__version__ = '1.0.1'
+
+
 yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
+file_notes = main_folder + 'notes.csv'   # Файл с заметками
+fields_for_notes = ['name_note', 'note']
 
 
 def notes(master_password):

@@ -20,7 +20,7 @@ from shutil import copyfile
 from csv import DictReader, DictWriter
 
 
-__version__ = 'v1.5.1.3'    # Version program
+__version__ = 'v1.5.1.4'    # Version program
 
 
 def show_name_program():
