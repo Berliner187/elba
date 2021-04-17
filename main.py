@@ -485,10 +485,10 @@ def launcher():
     else:
         # Если файл уже создан, выводтся содержимое и дальнейшее взаимодействие с программой происходит тут
         master_password = point_of_entry()  # Ввод пароля
-        system_action('clear')
+        system_action('clear')  # Очистка терминала
         greeting(master_password)  # Вывод приветствия
         sleep(.5)
-        system_action('clear')
+        system_action('clear')  # Очистка терминала
         show_decryption_data(master_password)       # Показ содержимого файла с ресурсами
         decryption_block(master_password)  # Старт цикла
 

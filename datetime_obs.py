@@ -3,6 +3,7 @@ import os
 from enc_obs import enc_data, dec_data
 
 
+__version__ = '1.0.1'
 yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
 main_folder = 'volare/'
 file_self_name = main_folder + ".self_name.dat"  # Файл с именем (никнеймом)
@@ -25,7 +26,7 @@ def greeting(master_password):   # Greating Depending On Date Time
                 return name
 
     def template_greeting(times_of_day):
-        print(green, times_of_day, get_name(), mc)
+        print('\n', green, times_of_day, get_name(), mc)
 
     hms = datetime.datetime.today()
     hours_to_secunds = hms.hour * 3600 + hms.minute * 60 + hms.second

@@ -3,12 +3,12 @@ from time import sleep
 from main import system_action, show_decryption_data, decryption_block
 
 
-__version__ = '1.0.1'   # Версия модуля
+__version__ = '1.0.2'   # Версия модуля
 
 
 yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
-stock_modules = ['datetime_obs.py', 'del_resource_obs.py', 'enc_obs.py',
-                 'logo_obs.py', 'update_obs.py', 'stars_obs.py', 'notes_obs.py']
+stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
+                 'update_obs.py', 'stars_obs.py', 'notes_obs.py']
 
 
 def update():
@@ -25,7 +25,7 @@ def update():
         if file.endswith(file_type):
             modules.append(file)
     for i in range(len(modules)):
-        if modules[i] != stock_modules[i]:
+        if modules[i] not in stock_modules:
             print('[', red, 'Missing module', mc, ']', modules[i])
             sleep(1)
         else:
@@ -40,7 +40,6 @@ def update():
 
             def actions_for_install(program_file):  # Действия для установки
                 os.system('cp ' + new_folder_pm + program_file + ' . ; ')
-                print()
 
             actions_for_install(main_file)
             actions_for_install(stock_modules[0])
