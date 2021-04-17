@@ -3,12 +3,13 @@ from time import sleep
 from main import system_action, show_decryption_data, decryption_block
 
 
-__version__ = '1.0.6'   # Версия модуля
+__version__ = '1.0.7'   # Версия модуля
 
 
 yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
 stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
-                 'update_obs.py', 'stars_obs.py', 'del_resource_obs.py', 'notes_obs.py']
+                 'update_obs.py', 'stars_obs.py', 'del_resource_obs.py',
+                 'notes_obs.py', 'change_master_password.py']
 
 
 def update():
