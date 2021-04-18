@@ -99,7 +99,7 @@ def show_decryption_data(master_password):
         print(blue +
               '\n  - Enter "-r" to restart, "-x" to exit'
               '\n  - Enter "-a" to add new resource'
-              '\n  - Enter "-c" to change master-password ', red, 'NEW' + blue,
+              '\n  - Enter "-c" to change master-password '
               '\n  - Enter "-d" to remove resource'
               '\n  - Enter "-n" to go to notes'
               '\n  - Enter "-u" to update program'
@@ -122,7 +122,7 @@ def point_of_entry():    # Auth Confirm Password
         if hash_password == bool(False):    # Если хеши не совпадают
             print(red + '\n --- Wrong password --- ' + mc)
             sleep(1)
-            system_action('either')
+            system_action('restart')
         else:   # Если совпали
             return master_password
 
