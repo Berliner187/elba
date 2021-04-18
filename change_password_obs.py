@@ -1,5 +1,5 @@
 from main import system_action
-from werkzeug import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from csv import DictReader, DictWriter
 from enc_obs import enc_data, dec_data
 from stars_obs import hide_password
@@ -8,7 +8,7 @@ from shutil import copyfile
 import os
 
 
-__version__ = '1.0.1'
+__version__ = '1.0.2'
 
 
 main_folder = 'volare/'
