@@ -3,7 +3,7 @@ from time import sleep
 from main import system_action, show_decryption_data, decryption_block
 
 
-__version__ = '1.0.9'   # Версия модуля
+__version__ = '1.0.10'   # Версия модуля
 
 
 yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
@@ -19,29 +19,12 @@ def update():   # Обновление программы
     os.system('git clone https://github.com/Berliner187/elba')
     system_action('clear')
 
-    cnt_modules = 0
-
     def actions_for_install(program_file):  # Действия для установки
         os.system('cp ' + new_folder_el + program_file + ' . ; ')
 
-    def check_modules_from_repository():
-        print(blue + '\n        Check modules \n\n' + mc)
-        file_type = 'obs.py'
-        any_file = os.listdir('.')
-        modules = []
-        for file in any_file:
-            if file.endswith(file_type):
-                modules.append(file)
-        for j in range(len(stock_modules)):
-            if stock_modules[j] not in modules:
-                print('[', red, 'Missing module', mc, ']', stock_modules[j])
-                sleep(.8)
-            else:
-                print('[', green, 'OK', mc, ']', stock_modules[j])
-                sleep(.5)
-
     system_action('clear')
 
+    cnt_modules = 0
     file_type = 'obs.py'
     any_file = os.listdir('.')
     modules = []
@@ -56,11 +39,23 @@ def update():   # Обновление программы
         system_action('clear')
         print(red + '        Missing module \n' + mc)
         check_modules = input(yellow + ' - Check modules? (y/n): ' + mc)
+        print('\n')
         if check_modules == 'y':
-            check_modules_from_repository()
+            for item in range(len(stock_modules)):
+                if stock_modules[item] not in modules:
+                    print('[', red, 'Missing module', mc, ']', stock_modules[item])
+                    sleep(.8)
+                else:
+                    print('[', green, 'OK', mc, ']', stock_modules[item])
+                    sleep(.5)
             for i in range(len(stock_modules)):
                 actions_for_install(stock_modules[i])
-        print(green + '\n The missing module has been installed! \n\n' + mc)
+            print(green + '\n The missing module has been installed! \n\n' + mc)
+            sleep(1)
+            os.system(remove_main_folder)
+            system_action('restart')
+        else:
+            quit()
 
     if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):
 
@@ -76,6 +71,6 @@ def update():   # Обновление программы
             os.system(remove_main_folder)
     else:
         system_action('clear')
-        print(yellow + ' -- Nothing to upgrade, you have latest update -- ' + mc)
+        print(yellow + ' -- You are using the latest version of the program -- ' + mc)
         os.system(remove_main_folder)
         sleep(.7)
