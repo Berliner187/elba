@@ -3,13 +3,13 @@ from time import sleep
 from main import system_action, show_decryption_data, decryption_block
 
 
-__version__ = '1.0.10'   # Версия модуля
+__version__ = '1.1.0'   # Версия модуля
 
 
 yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
 stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
-                 'stars_obs.py', 'del_resource_obs.py',
-                 'notes_obs.py', 'change_password_obs.py', 'confirm_password_obs.py']
+                 'stars_obs.py', 'del_resource_obs.py', 'notes_obs.py',
+                 'change_password_obs.py', 'confirm_password_obs.py']
 
 
 def update():   # Обновление программы
@@ -59,14 +59,16 @@ def update():   # Обновление программы
 
     if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):
 
-        print(green + '   A new version of the program is available ' + mc)
+        print(green + '\n   A new version of the program is available ' + mc)
         install_or_no = input(yellow + ' - Install new version program? (y/n): ' + mc)
         if install_or_no == 'y':
 
             actions_for_install(main_file)
             actions_for_install('update_obs.py')
+            for i in range(len(stock_modules)):
+                actions_for_install(stock_modules[i])
 
-            system_action('either')
+            system_action('restart')
         else:
             os.system(remove_main_folder)
     else:

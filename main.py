@@ -187,7 +187,7 @@ def decryption_block(master_password):
                 sleep(.4)
                 system_action('either')  # Restart program
             elif change_resource_or_actions == '-c':
-                change_master_password(master_password)
+                change_master_password()
             elif change_resource_or_actions == '-d':    # Удаление ресурса
                 delete_resource()
                 show_decryption_data(master_password)  # Вывод ресурсов
