@@ -13,7 +13,7 @@ symbols_for_password = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234
 
 yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
 
-file_hash_password = 'volare/.hash_password.dat'
+file_hash_password = 'volare/.hash_password.dat'    # Файл с хешем
 check_file_hash_password = os.path.exists(file_hash_password)
 check_file_date_base = os.path.exists('volare/main_data.dat')
 
