@@ -2,7 +2,8 @@ from main import system_action, show_decryption_data
 from csv import DictReader, DictWriter
 from enc_obs import enc_data, dec_data
 from time import sleep
-from shutil import copyfile 
+from shutil import copyfile
+import os
 
 
 __version__ = '1.0.4'
