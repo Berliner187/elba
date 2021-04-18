@@ -1,12 +1,11 @@
-from stars_obs import hide_password
+from stdiomask import getpass
 import random
 from time import sleep
 import os
-from main import system_action
-from werkzeug import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 
 
-__version__ = '1.0.2'
+__version__ = '1.0.3'
 
 # List of all symbols for password
 symbols_for_password = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-='
@@ -17,14 +16,15 @@ file_hash_password = 'volare/.hash_password.dat'    # Файл с хешем
 check_file_hash_password = os.path.exists(file_hash_password)
 check_file_date_base = os.path.exists('volare/main_data.dat')
 
+
 def confirm_user_password(type_pas, cnt=0):
     """ Подтвержение пользовательского пароля """
     def user_input_password():
         print(blue + '\n Minimum password length 8 characters' + mc)
-        user_password = hide_password('\n Password: ')
+        user_password = getpass('\n Password: ')
         if user_password == 'x':
             quit()
-        user_confirm_password = hide_password(' Confirm password: ')  # hide_password(' Confirm password: ')
+        user_confirm_password = getpass(' Confirm password: ')  # hide_password(' Confirm password: ')
         if user_password != user_confirm_password or len(user_password) < 8:
             print(red + '\n Error of confirm. Try again \n' + mc)
             user_input_password()
