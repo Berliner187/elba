@@ -2,9 +2,10 @@ from main import system_action, show_decryption_data
 from csv import DictReader, DictWriter
 from enc_obs import enc_data, dec_data
 from time import sleep
+from shutil import copyfile 
 
 
-__version__ = '1.0.3'
+__version__ = '1.0.4'
 
 
 yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
