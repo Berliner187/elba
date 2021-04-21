@@ -6,7 +6,7 @@ from shutil import copyfile
 import os
 
 
-__version__ = '1.0.4'
+__version__ = '1.0.5'
 
 
 yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
@@ -15,7 +15,6 @@ fields_for_notes = ['name_note', 'note']
 
 
 def notes(master_password):
-    pass
     system_action('clear')
     while True:     # Старт цикла для работы с заметками
         def show():     # Показ сохраненных заметок
