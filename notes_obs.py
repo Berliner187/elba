@@ -1,15 +1,19 @@
+# Собственные модули
 from main import system_action, show_decryption_data
-from csv import DictReader, DictWriter
 from enc_obs import enc_data, dec_data
+# Встроенные модули
+from csv import DictReader, DictWriter
 from time import sleep
 from shutil import copyfile
-import os
+from os import system
 
 
-__version__ = '1.0.5'
+__version__ = '1.0.6'   # Версия модуля
 
 
-yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
+yellow, blue, purple = "\033[32m", "\033[0m", "\033[31m"
+green, mc, red = "\033[32m", "\033[0m", "\033[31m"
+
 file_notes = 'volare/' + 'notes.csv'   # Файл с заметками
 fields_for_notes = ['name_note', 'note']
 
@@ -18,8 +22,8 @@ def notes(master_password):
     system_action('clear')
     while True:     # Старт цикла для работы с заметками
         def show():     # Показ сохраненных заметок
-            with open(file_notes, encoding='utf-8') as notes:
-                reader_notes = DictReader(notes, delimiter=',')
+            with open(file_notes, encoding='utf-8') as notes_file:
+                reader_notes = DictReader(notes_file, delimiter=',')
                 print(yellow + '       ---  Saved notes --- ', '\n' * 3 + mc)
                 number_note = 0     # Номер заметки
                 for name in reader_notes:   # Перебор названий заметок
@@ -74,7 +78,6 @@ def notes(master_password):
                 new_file_notes = 'new_note.dat'
                 with open(new_file_notes, mode="a", encoding='utf-8') as new_notes:
                     write_note = DictWriter(new_notes, fieldnames=fields_for_notes)
-                    write_note.writeheader()
                     for j in range(cnt_note-2):
                         write_note.writerow({
                             'name_note': mas_name_note_rm[j],
@@ -82,7 +85,7 @@ def notes(master_password):
                     new_notes.close()
                 # Замена старого файла на актуальный
                 copyfile(new_file_notes, file_notes)  # Старый записывается новым файлом
-                os.system('rm ' + new_file_notes)  # Удаление нового файла
+                system('rm ' + new_file_notes)  # Удаление нового файла
                 system_action('clear')
                 show()
             else:   # Вывод дешифрованных данных по выбранной цифре
@@ -101,3 +104,6 @@ def notes(master_password):
                                   dec_data(line_of_note["note"], master_password), mc)
             work()  # Рекурсия
         work()  # Запуск
+
+
+notes('kozak022')
