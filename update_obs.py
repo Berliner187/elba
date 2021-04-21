@@ -47,11 +47,13 @@ def update():   # Обновление программы
         elif cnt_modules > 1:
             text_about_missing('Missing modules')
         for item in range(len(stock_modules)):
+            def template_text_modules(color, message):
+                print('[', color, message, mc, ']', stock_modules[item])
             if stock_modules[item] not in modules:  # Вывод отсутствующего модуля
-                print('[', red, 'Missing module', mc, ']', stock_modules[item])
+                template_text_modules(red, 'Missing module')
                 sleep(.8)
             else:   # Вывод состояния ОК
-                print('[', green, 'OK', mc, ']', stock_modules[item])
+                template_text_modules(green, 'OK')
                 sleep(.5)
         for i in range(len(stock_modules)):
             actions_for_install(stock_modules[i])
@@ -60,8 +62,6 @@ def update():   # Обновление программы
         print(green + '\n The missing module has been installed! \n\n' + mc)
         sleep(1)
         system_action('restart')
-    else:
-        quit()
 
     if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):    # Если размеры файлов не совпадают
 
