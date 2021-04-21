@@ -3,10 +3,12 @@ from time import sleep
 from main import system_action, show_decryption_data, decryption_block
 
 
-__version__ = '1.1.0'   # Версия модуля
+__version__ = '1.1.1'   # Версия модуля
 
-
-yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
+# Цвета
+yellow, blue, purple = "\033[33m", "\033[36m", "\033[35m"
+green, mc, red = "\033[32m", "\033[0m", "\033[31m"
+# Модули для работы программы
 stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
                  'stars_obs.py', 'del_resource_obs.py', 'notes_obs.py',
                  'change_password_obs.py', 'confirm_password_obs.py']
@@ -15,8 +17,8 @@ stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
 def update():   # Обновление программы
     main_file = 'main.py'  # Главный файл программы
     new_folder_el = 'elba/'    # Новая папка из репозитория проекта
-    remove_main_folder = 'rm -r elba/ -f'
-    os.system('git clone https://github.com/Berliner187/elba')
+    remove_main_folder = 'rm -r elba/ -f'   # Удаление новой папки
+    os.system('git clone https://github.com/Berliner187/elba')  # Репозиторий
     system_action('clear')
 
     def actions_for_install(program_file):  # Действия для установки
@@ -37,25 +39,27 @@ def update():   # Обновление программы
 
     if cnt_modules != 0:
         system_action('clear')
-        print(red + '        Missing module \n' + mc)
-        check_modules = input(yellow + ' - Check modules? (y/n): ' + mc)
-        print('\n')
-        if check_modules == 'y':
-            for item in range(len(stock_modules)):
-                if stock_modules[item] not in modules:
-                    print('[', red, 'Missing module', mc, ']', stock_modules[item])
-                    sleep(.8)
-                else:
-                    print('[', green, 'OK', mc, ']', stock_modules[item])
-                    sleep(.5)
-            for i in range(len(stock_modules)):
-                actions_for_install(stock_modules[i])
-            print(green + '\n The missing module has been installed! \n\n' + mc)
-            sleep(1)
-            os.system(remove_main_folder)
-            system_action('restart')
-        else:
-            quit()
+        def text_about_missing(text):
+            print(red + '       ' + text + '\n' + mc)
+        if cnt_modules == 1:
+            text_about_missing('Missing module')
+        elif cnt_modules > 1:
+            text_about_missing('Missing modules')
+        for item in range(len(stock_modules)):
+            if stock_modules[item] not in modules:
+                print('[', red, 'Missing module', mc, ']', stock_modules[item])
+                sleep(.8)
+            else:
+                print('[', green, 'OK', mc, ']', stock_modules[item])
+                sleep(.5)
+        for i in range(len(stock_modules)):
+            actions_for_install(stock_modules[i])
+        print(green + '\n The missing module has been installed! \n\n' + mc)
+        sleep(1)
+        os.system(remove_main_folder)
+        system_action('restart')
+    else:
+        quit()
 
     if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):
 
