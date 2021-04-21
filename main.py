@@ -20,13 +20,13 @@ from shutil import copyfile
 from csv import DictReader, DictWriter
 
 
-__version__ = 'v1.5.1.4'    # Version program
+__version__ = 'v1.5.1.5'    # Version program
 
 
 def show_name_program():
     print(blue,
           "\n || Password Manager and Keeper of Notes ||",
-          __version__, 
+          __version__,
           "\n || Stable For Linux || \n || by Berliner187   ||", '\n' * 3, mc)
     elba()  # Вывод логотипа
 
@@ -37,9 +37,6 @@ def system_action(action):
         os.execv(sys.executable, [sys.executable] + sys.argv)
     elif action == 'clear':
         os.system('cls' if os.name == 'nt' else 'clear')
-    elif action == 'either':
-        os.system('cls' if os.name == 'nt' else 'clear')
-        os.execv(sys.executable, [sys.executable] + sys.argv)
 
 
 # Colours
@@ -104,7 +101,7 @@ def show_decryption_data(master_password):
               '\n  - Enter "-n" to go to notes'
               '\n  - Enter "-u" to update program'
               '\n  - Enter "-z" to remove ALL data',
-              yellow, 
+              yellow,
               '\n Select resource by number \n', mc)
 
 
@@ -167,7 +164,7 @@ def decryption_block(master_password):
             change_type_of_password(resource, login, master_password)
             show_decryption_data(master_password)
 
-    if check_file_date_base == bool(True):
+    if check_file_date_base == bool(True):  # При последущих запусках юзер работает тут
         # Decryption mechanism
         change_resource_or_actions = input('\n Change: ')
         try:
@@ -185,7 +182,7 @@ def decryption_block(master_password):
                 system_action('clear')  # Clearing terminal
                 print('\n', green, ' -- Restart -- ', mc)
                 sleep(.4)
-                system_action('either')  # Restart program
+                system_action('restart')  # Restart program
             elif change_resource_or_actions == '-c':
                 change_master_password()
             elif change_resource_or_actions == '-d':    # Удаление ресурса
@@ -222,7 +219,7 @@ def decryption_block(master_password):
         except ValueError:
             show_decryption_data(master_password)   # Показ содежимого
         decryption_block(master_password)  # Рекусрия под-главной функции
-    else:
+    else:   # При первом запуске юзер работатет тут
         add_resource_data()
         system_action('restart')
 
@@ -272,6 +269,7 @@ if __name__ == '__main__':
         from notes_obs import notes
         from change_password_obs import change_master_password
         from confirm_password_obs import confirm_user_password
+
         try:
             from werkzeug.security import generate_password_hash, check_password_hash
         except ModuleNotFoundError:

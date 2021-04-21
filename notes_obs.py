@@ -1,4 +1,4 @@
-from main import system_action, show_decryption_data
+from main import system_action, show_decryption_data, main_folder
 from csv import DictReader, DictWriter
 from enc_obs import enc_data, dec_data
 from time import sleep
@@ -6,11 +6,11 @@ from shutil import copyfile
 import os
 
 
-__version__ = '1.0.4'
+__version__ = '1.0.6'
 
 
 yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
-file_notes = 'volare/' + 'notes.csv'   # Файл с заметками
+file_notes = main_folder + 'notes.csv'   # Файл с заметками
 fields_for_notes = ['name_note', 'note']
 
 
@@ -18,8 +18,8 @@ def notes(master_password):
     system_action('clear')
     while True:     # Старт цикла для работы с заметками
         def show():     # Показ сохраненных заметок
-            with open(file_notes, encoding='utf-8') as notes:
-                reader_notes = DictReader(notes, delimiter=',')
+            with open(file_notes, encoding='utf-8') as notes_file:
+                reader_notes = DictReader(notes_file, delimiter=',')
                 print(yellow + '       ---  Saved notes --- ', '\n' * 3 + mc)
                 number_note = 0     # Номер заметки
                 for name in reader_notes:   # Перебор названий заметок

@@ -3,7 +3,7 @@ from time import sleep
 from main import system_action, show_decryption_data, decryption_block
 
 
-__version__ = '1.1.1'   # Версия модуля
+__version__ = '1.1.2'   # Версия модуля
 
 # Цвета
 yellow, blue, purple = "\033[33m", "\033[36m", "\033[35m"
@@ -26,11 +26,11 @@ def update():   # Обновление программы
 
     system_action('clear')
 
-    cnt_modules = 0
-    file_type = 'obs.py'
-    any_file = os.listdir('.')
-    modules = []
-    for file in any_file:
+    cnt_modules = 0     # Счетчик отсутствующих модулей
+    file_type = 'obs.py'    # Модули заканчиваются на *obs.py
+    any_file = os.listdir('.')  # Поиск в текущей папке
+    modules = []    # Массив для установленных модулей
+    for file in any_file:   # Итерация модулей
         if file.endswith(file_type):
             modules.append(file)
     for j in range(len(stock_modules)):
@@ -39,6 +39,7 @@ def update():   # Обновление программы
 
     if cnt_modules != 0:
         system_action('clear')
+
         def text_about_missing(text):
             print(red + '       ' + text + '\n' + mc)
         if cnt_modules == 1:
@@ -46,22 +47,23 @@ def update():   # Обновление программы
         elif cnt_modules > 1:
             text_about_missing('Missing modules')
         for item in range(len(stock_modules)):
-            if stock_modules[item] not in modules:
+            if stock_modules[item] not in modules:  # Вывод отсутствующего модуля
                 print('[', red, 'Missing module', mc, ']', stock_modules[item])
                 sleep(.8)
-            else:
+            else:   # Вывод состояния ОК
                 print('[', green, 'OK', mc, ']', stock_modules[item])
                 sleep(.5)
         for i in range(len(stock_modules)):
             actions_for_install(stock_modules[i])
+
+        os.system(remove_main_folder)
         print(green + '\n The missing module has been installed! \n\n' + mc)
         sleep(1)
-        os.system(remove_main_folder)
         system_action('restart')
     else:
         quit()
 
-    if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):
+    if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):    # Если размеры файлов не совпадают
 
         print(green + '\n   A new version of the program is available ' + mc)
         install_or_no = input(yellow + ' - Install new version program? (y/n): ' + mc)

@@ -1,17 +1,19 @@
 from csv import DictReader, DictWriter
 from shutil import copyfile
 import os
+# Импорт главной папки
+from main import main_folder
 
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 
 yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
 fields_for_main_data = ['resource', 'login', 'password']
 
 
 def delete_resource():
-	print(blue + '\n -- Change by number resource -- \n' + mc)
+	print(blue + '\n -- Change by number -- \n' + mc)
 	change_res_by_num = int(input(yellow + ' - Resource number: ' + mc))
-	file_date_base = 'volare/main_data.dat'
+	file_date_base = main_folder + 'main_data.dat'
 	# Выгрузка старого
 	with open(file_date_base, encoding='utf-8') as saved_resource:
 		reader = DictReader(saved_resource, delimiter=',')
