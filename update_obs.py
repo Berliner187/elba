@@ -1,13 +1,13 @@
 import os
 from time import sleep
 from main import system_action, show_decryption_data, decryption_block, download_from_repository
-
-
-__version__ = '1.1.3'   # Версия модуля
-
 # Цвета
-yellow, blue, purple = "\033[33m", "\033[36m", "\033[35m"
-green, mc, red = "\033[32m", "\033[0m", "\033[31m"
+from main import yellow, blue, purple, green, red, mc
+
+
+__version__ = '1.1.4'   # Версия модуля
+
+
 # Модули для работы программы
 stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
                  'stars_obs.py', 'del_resource_obs.py', 'notes_obs.py',
@@ -60,7 +60,7 @@ def update():   # Обновление программы
         print(green + '\n The missing module has been installed! \n\n' + mc)
         sleep(1)
         system_action('restart')
-        
+
     if os.path.exists(new_folder_el):
         if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):    # Если размеры файлов не совпадают
             print(green + '\n   A new version of the program is available ' + mc)
@@ -79,3 +79,6 @@ def update():   # Обновление программы
             print(yellow + ' -- You are using the latest version of the program -- ' + mc)
             os.system(remove_main_folder)
             sleep(.7)
+    else:
+        print(yellow + ' - New folder not found... ' + mc)
+        quit()
