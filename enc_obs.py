@@ -97,7 +97,7 @@ def enc_data(anything, master_password):   # Encryption by two levels
     crypto_1 = enc_with_AES(anything, master_password)
     # crypto_2 = enc_with_only_base64(crypto_1, master_password)
     # total = enc_mask_level(str(crypto_1))
-    return str(crypto_1)
+    return crypto_1
 
 
 def dec_data(anything, master_password):   # Decryption by two levels
@@ -105,3 +105,41 @@ def dec_data(anything, master_password):   # Decryption by two levels
     # decryption_2 = dec_with_only_base64(anything, master_password)
     total = dec_with_AES(anything, master_password)
     return total
+
+
+from csv import DictWriter, DictReader
+
+password = 'password'
+__enc__ = enc_data('password', password)
+
+file_dat = 'enc_data.dat'
+file_csv = 'enc_data.csv'
+
+# if os.path.exists(file_csv) == bool(False):
+#     with open(file_csv, 'wb') as encryption:
+#         writer = DictWriter(encryption, fieldnames=['col_1', 'col_2', 'col_3'])
+#         writer.writeheader()
+#         writer.writerow({
+#             'col_1': 'resource',
+#             'col_2': 'login',
+#             'col_3': __enc__
+#         })
+#
+# else:
+#     with open(file_csv, 'rb') as from_file:
+#         reader = DictReader(from_file)
+#         for item in reader:
+#             decryption = dec_data(item['col_3'], password)
+#             print(decryption)
+
+if os.path.exists(file_dat) == bool(False):
+    with open(file_dat, 'wb') as file:
+        file.write(__enc__)
+        file.close()
+else:
+    with open(file_dat, 'rb') as from_file:
+        enc_from_file = from_file.readline()
+        print(enc_from_file)
+        __dec__ = dec_data(enc_from_file, password)
+        print(__dec__)
+        from_file.close()

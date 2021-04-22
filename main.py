@@ -69,31 +69,32 @@ if check_file_notes == bool(False):     # Создание файла с зам�
 
 
 def save_data_to_file(resource, login, password, master_password):
-    data = {
-        "data_about_resource": {
-            "resource": enc_data(resource, master_password),
-            "login": enc_data(login, master_password),
-            "password": enc_data(password, master_password)
-        }
-    }
-    """ Шифрование логина и пароля. Запись в csv-файл """
-    with open("data_file.json", "a") as write_file:
-        json.dump(data, write_file)
-    # with open(file_date_base, mode="a", encoding='utf-8') as data:
-    #     writer = DictWriter(data, fieldnames=fields_for_main_data, delimiter=';')
-    #     if check_file_date_base == bool(False):
-    #         writer.writeheader()    # Запись заголовков
-    #     # Шифрование данных ресурса и запись в файл
-    #     writer.writerow({
-    #         fields_for_main_data[0]: enc_data(resource, master_password),
-    #         fields_for_main_data[1]: enc_data(login, master_password),
-    #         fields_for_main_data[2]: enc_data(password, master_password)})
+    # Смена формата хранения на JSON
+    # data = {
+    #     "data_about_resource": {
+    #         "resource": enc_data(resource, master_password),
+    #         "login": enc_data(login, master_password),
+    #         "password": enc_data(password, master_password)
+    #     }
+    # }
+    # """ Шифрование логина и пароля. Запись в csv-файл """
+    # with open("data_file.json", "a") as write_file:
+    #     json.dump(data, write_file)
+    with open(file_date_base, mode="a", encoding='utf-8') as data:
+        writer = DictWriter(data, fieldnames=fields_for_main_data, delimiter=';')
+        if check_file_date_base == bool(False):
+            writer.writeheader()    # Запись заголовков
+        # Шифрование данных ресурса и запись в файл
+        writer.writerow({
+            fields_for_main_data[0]: enc_data(resource, master_password),
+            fields_for_main_data[1]: enc_data(login, master_password),
+            fields_for_main_data[2]: enc_data(password, master_password)})
 
 
 def show_decryption_data(master_password):
     """ Показ всех сохраненных ресурсов """
     system_action('clear')
-    with open(file_date_base, encoding='utf-8') as data:
+    with open(file_date_base, mode='r', encoding='utf-8') as data:
         s = 0
         reader = DictReader(data, delimiter=';')
         print(yellow + '\n   --- Saved resources ---   ' + '\n'*3 + mc)
