@@ -1,7 +1,10 @@
 import os
 import datetime
+# Проприетарный модуль шифрования
 from enc_obs import enc_data, dec_data
+# Главная папка и файл с ник-неймом
 from main import main_folder, file_self_name
+# Цвета из главного файла
 from main import yellow, blue, purple, green, mc, red
 
 

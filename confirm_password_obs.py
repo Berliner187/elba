@@ -1,7 +1,7 @@
 import random
 from time import sleep
 import os
-# Сторонние модули
+# Сторонние модули (хэш пароля и скрытие ввода пароля)
 from werkzeug.security import generate_password_hash
 from stdiomask import getpass
 # Импорт констант из главного файла

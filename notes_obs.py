@@ -1,4 +1,7 @@
 from main import system_action, show_decryption_data, main_folder
+from main import yellow, blue, purple, green, red, mc
+# Импорт переменных для работы с заметками
+from main import file_notes, fields_for_notes
 from csv import DictReader, DictWriter
 from enc_obs import enc_data, dec_data
 from time import sleep
@@ -6,12 +9,7 @@ from shutil import copyfile
 import os
 
 
-__version__ = '1.0.6'
-
-
-yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
-file_notes = main_folder + 'notes.csv'   # Файл с заметками
-fields_for_notes = ['name_note', 'note']
+__version__ = '1.0.7'
 
 
 def notes(master_password):
