@@ -1,13 +1,13 @@
 from csv import DictReader, DictWriter
 from shutil import copyfile
 import os
-# Импорт главной папки
-from main import main_folder
+# Импорт главной папки и файла с данными
+from main import main_folder, fields_for_main_data
+# Импорт цветов
+from main import yellow, blue, purple, green, mc, red
 
-__version__ = '1.0.1'
 
-yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
-fields_for_main_data = ['resource', 'login', 'password']
+__version__ = '1.0.2'	# Версия модуля
 
 
 def delete_resource():
@@ -35,9 +35,9 @@ def delete_resource():
 		writer.writeheader()
 		for i in range(cnt - 2):
 			writer.writerow({
-				'resource': mas_res[i],
-				'login': mas_log[i],
-				'password': mas_pas[i]
+				fields_for_main_data[0]: mas_res[i],
+				fields_for_main_data[1]: mas_log[i],
+				fields_for_main_data[2]: mas_pas[i]
 			})
 		new_data.close()
 	copyfile(new_file_date_base, file_date_base)    # Старый записывается новым файлом

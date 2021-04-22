@@ -1,23 +1,19 @@
-from main import system_action
-from werkzeug.security import generate_password_hash, check_password_hash
+# Локальные модули
+from main import system_action, fields_for_main_data
+from main import main_folder, file_date_base, file_hash_password
+from main import yellow, blue, purple, green, red, mc
 from csv import DictReader, DictWriter
 from enc_obs import enc_data, dec_data
-from stars_obs import hide_password
+# Сторонние модули
+from werkzeug.security import generate_password_hash, check_password_hash
+from stdiomask import getpass
+# Встроенные модули
 from time import sleep
 from shutil import copyfile
 import os
 
 
-__version__ = '1.0.2'
-
-
-main_folder = 'volare/'
-file_date_base = main_folder + 'main_data.dat'
-file_hash_password = main_folder + '.hash_password.dat'     # Файл с хэшем пароля
-
-fields_for_main_data = ['resource', 'login', 'password']
-
-yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
+__version__ = '1.0.4'
 
 
 def change_master_password():
@@ -25,8 +21,8 @@ def change_master_password():
 
     def user_input_password():
         print(blue + '\n Minimum password length 8 characters' + mc)
-        user_password = hide_password('\n Password: ')
-        user_confirm_password = hide_password(' Confirm password: ')  # hide_password(' Confirm password: ')
+        user_password = getpass('\n Password: ')
+        user_confirm_password = getpass(' Confirm password: ')  # hide_password(' Confirm password: ')
         cnt_trying = 0
         if (user_password != user_confirm_password) or (len(user_password) or len(user_confirm_password)) < 8:
             print(red + '\n Error of confirm. Try again \n' + mc)
@@ -37,7 +33,7 @@ def change_master_password():
             return user_confirm_password
     # Сверяются хеши паролей
     try:
-        confirm_master_password = hide_password(yellow + ' -- Enter your master-password: ' + mc)
+        confirm_master_password = getpass(yellow + ' -- Enter your master-password: ' + mc)
         open_file_with_hash = open(file_hash_password).readline()
         check_master_password = check_password_hash(open_file_with_hash, confirm_master_password)
 
@@ -46,7 +42,7 @@ def change_master_password():
             sleep(1)
             system_action('restart')
         else:
-            print('[' + green + ' OK ' + mc + ']')
+            print('       [' + green + ' OK ' + mc + ']')
             sleep(.6)
             system_action('clear')
             print(blue + '\n   Pick a new master-password \n' + mc)

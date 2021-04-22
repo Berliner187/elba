@@ -1,12 +1,11 @@
-import datetime
 import os
+import datetime
 from enc_obs import enc_data, dec_data
+from main import main_folder, file_self_name
+from main import yellow, blue, purple, green, mc, red
 
 
-__version__ = '1.0.1'
-yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
-main_folder = 'volare/'
-file_self_name = main_folder + ".self_name.dat"  # Файл с именем (никнеймом)
+__version__ = '1.0.2'
 
 
 def greeting(master_password):   # Greating Depending On Date Time

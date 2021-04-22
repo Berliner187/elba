@@ -14,13 +14,12 @@
 
 import os
 import sys
-import random
 from time import sleep
-from shutil import copyfile
 from csv import DictReader, DictWriter
+from stdiomask import getpass
 
 
-__version__ = 'v1.5.1.6'    # Version program
+__version__ = 'v1.5.1.7'    # Version program
 
 
 def show_name_program():
@@ -39,10 +38,10 @@ def system_action(action):
         os.system('cls' if os.name == 'nt' else 'clear')
 
 
-# Colours
-yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
+# Цвета в терминале
+yellow, blue, purple, green, red, mc = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[31m", "\033[0m"
 
-# Files for work program
+# Файлы для работы программы
 main_folder = 'volare/'     # Mi fa volare
 file_date_base = main_folder + "main_data.dat"     # Файл, в котором лежат пароли
 file_lister = main_folder + ".lister.dat"   # Файл со строками
@@ -52,8 +51,8 @@ file_notes = main_folder + 'notes.csv'   # Файл с заметками
 file_version = main_folder + '.version.log'  # Файл с версией программы
 
 fields_for_logs = ['version', 'datetime', 'modules', 'status']     # Столбцы файла с логами
-fields_for_main_data = ['resource', 'login', 'password']
-fields_for_notes = ['name_note', 'note']
+fields_for_main_data = ['resource', 'login', 'password']    # Столбцы для файла с ресурсами
+fields_for_notes = ['name_note', 'note']    # Столбцы для файла с заметками
 
 check_file_hash_password = os.path.exists(file_hash_password)
 check_file_date_base = os.path.exists(file_date_base)    # Проверка этого файла на наличие
@@ -108,7 +107,7 @@ def show_decryption_data(master_password):
 def point_of_entry():    # Auth Confirm Password
     """ Получение мастер-пароля """
     show_name_program()     # Показывает название программы и выводит логотип
-    master_password = hide_password(yellow + '\n -- Your master-password: ' + mc)
+    master_password = getpass(yellow + '\n -- Your master-password: ' + mc)
     if master_password == 'x':  # Досрочный выход из программы
         quit()
     elif master_password == 'r':
@@ -271,12 +270,12 @@ if __name__ == '__main__':
         from update_obs import update
     except ModuleNotFoundError:
         download_from_repository()
+        
     try:
         # Локальные модули
         from logo_obs import elba
         from enc_obs import enc_data, dec_data
         from datetime_obs import greeting
-        from stars_obs import hide_password
         from del_resource_obs import delete_resource
         from notes_obs import notes
         from change_password_obs import change_master_password
@@ -290,8 +289,10 @@ if __name__ == '__main__':
             quit()
 
         launcher()  # Запуск главной направляющей функции
+
     except ModuleNotFoundError:
         update()
+        
     except ValueError:
         print(red, '\n' + ' --- Critical error, program is restarted --- ', mc)
         sleep(1)

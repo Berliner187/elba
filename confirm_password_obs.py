@@ -1,20 +1,18 @@
-from stdiomask import getpass
 import random
 from time import sleep
 import os
+# Сторонние модули
 from werkzeug.security import generate_password_hash
+from stdiomask import getpass
+# Импорт констант из главного файла
+from main import yellow, blue, purple, green, red, mc
+from main import file_hash_password, check_file_hash_password, check_file_date_base
 
 
-__version__ = '1.0.3'
+__version__ = '1.0.4'
 
 # List of all symbols for password
 symbols_for_password = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-='
-
-yellow, blue, purple, green, mc, red = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[0m", "\033[31m"
-
-file_hash_password = 'volare/.hash_password.dat'    # Файл с хешем
-check_file_hash_password = os.path.exists(file_hash_password)
-check_file_date_base = os.path.exists('volare/main_data.dat')
 
 
 def confirm_user_password(type_pas, cnt=0):
