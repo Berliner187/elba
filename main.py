@@ -19,14 +19,14 @@ from csv import DictReader, DictWriter
 from stdiomask import getpass
 
 
-__version__ = 'v1.5.1.8'    # Version program
+__version__ = 'v1.6.0.0'    # Version program
 
 
 def show_name_program():
     print(blue,
           "\n || Password Manager and Keeper of Notes ||",
           __version__,
-          "\n || Stable For Linux || \n || by Berliner187   ||", '\n' * 3, mc)
+          "\n || BETA For Linux || \n || by Berliner187   ||", '\n' * 3, mc)
     elba()  # Вывод логотипа
 
 
@@ -64,21 +64,30 @@ if os.path.exists(main_folder) == bool(False):
 
 if check_file_notes == bool(False):     # Создание файла с заметками
     with open(file_notes, mode="a", encoding='utf-8') as file_for_notes:
-        open_note = DictWriter(file_for_notes, fieldnames=fields_for_notes)
+        open_note = DictWriter(file_for_notes, fieldnames=fields_for_notes, delimiter=';')
         open_note.writeheader()
 
 
 def save_data_to_file(resource, login, password, master_password):
+    data = {
+        "data_about_resource": {
+            "resource": enc_data(resource, master_password),
+            "login": enc_data(login, master_password),
+            "password": enc_data(password, master_password)
+        }
+    }
     """ Шифрование логина и пароля. Запись в csv-файл """
-    with open(file_date_base, mode="a", encoding='utf-8') as data:
-        writer = DictWriter(data, fieldnames=fields_for_main_data)
-        if check_file_date_base == bool(False):
-            writer.writeheader()    # Запись заголовков
-        # Шифрование данных ресурса и запись в файл
-        writer.writerow({
-            fields_for_main_data[0]: enc_data(resource, master_password),
-            fields_for_main_data[1]: enc_data(login, master_password),
-            fields_for_main_data[2]: enc_data(password, master_password)})
+    with open("data_file.json", "a") as write_file:
+        json.dump(data, write_file)
+    # with open(file_date_base, mode="a", encoding='utf-8') as data:
+    #     writer = DictWriter(data, fieldnames=fields_for_main_data, delimiter=';')
+    #     if check_file_date_base == bool(False):
+    #         writer.writeheader()    # Запись заголовков
+    #     # Шифрование данных ресурса и запись в файл
+    #     writer.writerow({
+    #         fields_for_main_data[0]: enc_data(resource, master_password),
+    #         fields_for_main_data[1]: enc_data(login, master_password),
+    #         fields_for_main_data[2]: enc_data(password, master_password)})
 
 
 def show_decryption_data(master_password):
@@ -86,7 +95,7 @@ def show_decryption_data(master_password):
     system_action('clear')
     with open(file_date_base, encoding='utf-8') as data:
         s = 0
-        reader = DictReader(data, delimiter=',')
+        reader = DictReader(data, delimiter=';')
         print(yellow + '\n   --- Saved resources ---   ' + '\n'*3 + mc)
         for line in reader:
             decryption_res = dec_data(line["resource"], master_password)
@@ -199,7 +208,7 @@ def decryption_block(master_password):
                     pass
             else:
                 with open(file_date_base, encoding='utf-8') as profiles:
-                    reader = DictReader(profiles, delimiter=',')
+                    reader = DictReader(profiles, delimiter=';')
                     s = 0
                     for line in reader:  # Iterating over lines file
                         s += 1
@@ -247,16 +256,16 @@ def launcher():
               '\n                     этой программы                      ', mc)
 
         master_password = confirm_user_password('master')  # Создание мастер-пароля
-        greeting(master_password)  # Вывод приветствия
-        sleep(.5)
+        # greeting(master_password)  # Вывод приветствия
+        # sleep(.5)
         decryption_block(master_password)
         system_action('restart')
     else:
         # Если файл уже создан, выводтся содержимое и дальнейшее взаимодействие с программой происходит тут
         master_password = point_of_entry()  # Ввод пароля
         system_action('clear')  # Очистка терминала
-        greeting(master_password)  # Вывод приветствия
-        sleep(.5)
+        # greeting(master_password)  # Вывод приветствия
+        # sleep(.5)
         system_action('clear')  # Очистка терминала
         show_decryption_data(master_password)       # Показ содержимого файла с ресурсами
         decryption_block(master_password)  # Старт цикла
@@ -269,34 +278,34 @@ if __name__ == '__main__':
     except ModuleNotFoundError:
         download_from_repository()
         
+    # try:
+    # Локальные модули
+    from logo_obs import elba
+    from enc_obs import enc_data, dec_data
+    # from datetime_obs import greeting
+    from del_resource_obs import delete_resource
+    from notes_obs import notes
+    from change_password_obs import change_master_password
+    from confirm_password_obs import confirm_user_password
+
     try:
-        # Локальные модули
-        from logo_obs import elba
-        from enc_obs import enc_data, dec_data
-        from datetime_obs import greeting
-        from del_resource_obs import delete_resource
-        from notes_obs import notes
-        from change_password_obs import change_master_password
-        from confirm_password_obs import confirm_user_password
-
-        try:
-            from werkzeug.security import generate_password_hash, check_password_hash
-        except ModuleNotFoundError:
-            print(red + 'Missing module: ' + green + 'werkzeug' + mc)
-            sleep(1)
-            quit()
-
-        launcher()  # Запуск главной направляющей функции
-
+        from werkzeug.security import generate_password_hash, check_password_hash
     except ModuleNotFoundError:
-        update()
-        
-    except ValueError:
-        print(red, '\n' + ' --- Critical error, program is restarted --- ', mc)
+        print(red + 'Missing module: ' + green + 'werkzeug' + mc)
         sleep(1)
-        system_action('clear')
-        print(red + ' -- You can try to update the program -- \n' + mc)
-        change = input(yellow + ' - Update? (y/n): ' + mc)
-        if change == 'y':  # Если получает запрос от юзера
-            update()
-        system_action('restart')
+        quit()
+
+    launcher()  # Запуск главной направляющей функции
+
+    # except ModuleNotFoundError:
+    #     update()
+        
+    # except ValueError:
+    #     print(red, '\n' + ' --- Critical error, program is restarted --- ', mc)
+    #     sleep(1)
+    #     system_action('clear')
+    #     print(red + ' -- You can try to update the program -- \n' + mc)
+    #     change = input(yellow + ' - Update? (y/n): ' + mc)
+    #     if change == 'y':  # Если получает запрос от юзера
+    #         update()
+    #     system_action('restart')
