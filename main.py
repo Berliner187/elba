@@ -148,15 +148,14 @@ def data_for_resource():
     print(green, '\n   --- Add new resource ---   ', '\n' * 3, mc)  # Текст запроса ввода данных о ресурсе
     resource = input(yellow + ' Resource: ' + mc)
     login = input(yellow + ' Login: ' + mc)
-    url = input(yellow + ' URL adress: ')
-    return resource, login, url
+    return resource, login
 
 
 def decryption_block(master_password):
     """ Show resources and decrypt them with keys """
     def add_resource_data():
         resource, login = data_for_resource()
-        change_type_of_password(resource, login, url, master_password)
+        change_type_of_password(resource, login, master_password)
         if check_file_date_base:
             show_decryption_data(master_password)
         else:
