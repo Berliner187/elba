@@ -1,9 +1,9 @@
 import os
 from time import sleep
-from main import system_action, show_decryption_data, decryption_block
+from main import system_action, show_decryption_data, decryption_block, download_from_repository
 
 
-__version__ = '1.1.2'   # Версия модуля
+__version__ = '1.1.3'   # Версия модуля
 
 # Цвета
 yellow, blue, purple = "\033[33m", "\033[36m", "\033[35m"
@@ -16,10 +16,10 @@ stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
 
 def update():   # Обновление программы
     main_file = 'main.py'  # Главный файл программы
-    new_folder_el = 'elba/'    # Новая папка из репозитория проекта
-    remove_main_folder = 'rm -r elba/ -f'   # Удаление новой папки
-    os.system('git clone https://github.com/Berliner187/elba')  # Репозиторий
-    system_action('clear')
+    new_folder_el = 'elba/'  # Новая папка из репозитория проекта
+    remove_main_folder = 'rm -r elba/ -f'  # Удаление новой папки
+    if os.path.exists(new_folder_el):
+        download_from_repository()
 
     def actions_for_install(program_file):  # Действия для установки
         os.system('cp ' + new_folder_el + program_file + ' . ; ')
@@ -36,7 +36,7 @@ def update():   # Обновление программы
     for j in range(len(stock_modules)):
         if stock_modules[j] not in modules:
             cnt_modules += 1
-
+    print(cnt_modules)
     if cnt_modules != 0:
         system_action('clear')
 

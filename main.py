@@ -20,7 +20,7 @@ from shutil import copyfile
 from csv import DictReader, DictWriter
 
 
-__version__ = 'v1.5.1.5'    # Version program
+__version__ = 'v1.5.1.6'    # Version program
 
 
 def show_name_program():
@@ -224,6 +224,15 @@ def decryption_block(master_password):
         system_action('restart')
 
 
+def download_from_repository():
+    os.system('git clone https://github.com/Berliner187/elba')  # Репозиторий
+    system_action('clear')
+    if os.path.exists('update_obs.py') == bool(False):
+        os.system('mv elba/update_obs.py .')
+        os.system('rm elba')
+        system_action('restart')
+
+
 def launcher():
     """ The main function responsible for the operation of the program """
     if check_file_date_base == bool(False):   # Если файла нет, идет создание файла с ресурсами
@@ -258,7 +267,10 @@ def launcher():
 
 if __name__ == '__main__':
     system_action('clear')
-    from update_obs import update
+    try:
+        from update_obs import update
+    except ModuleNotFoundError:
+        download_from_repository()
     try:
         # Локальные модули
         from logo_obs import elba
