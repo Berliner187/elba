@@ -3,16 +3,16 @@ from enc_obs import enc_data, dec_data
 
 
 password = 'password'
-__enc__ = enc_data('secure_data', password)
+# __enc__ = enc_data('secure_data', password)
 
 file_dat = 'enc_data.dat'
 file_csv = 'enc_data.csv'
 
 json_str = [
     {
-        "resource": enc_data('Github', password),
-        "login": enc_data('login', password),
-        "password": enc_data('password', password)
+        "resource": str(enc_data('Github', password)),
+        "login": str(enc_data('login', password)),
+        "password": str(enc_data('password', password))
     },
     {
         "resource": "w",
@@ -24,7 +24,7 @@ json_str = [
     }
 ]
 
-items = json.loads(json_str)
+items = json.loads(str(json_str))
 item = items[0]
 
 print(item['resource'], item['login'])

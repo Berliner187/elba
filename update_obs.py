@@ -81,4 +81,4 @@ def update():   # Обновление программы
             sleep(.7)
     else:
         print(yellow + ' - New folder not found... ' + mc)
-        quit()
+        download_from_repository()
