@@ -1,19 +1,18 @@
 import json
+from enc_obs import enc_data, dec_data
 
 
-data_db = [
+password = 'password'
+__enc__ = enc_data('secure_data', password)
+
+file_dat = 'enc_data.dat'
+file_csv = 'enc_data.csv'
+
+json_str = [
     {
-        "resource": 'Github',
-        "login": 'login',
-        "password": 'cn8ev78ewv'
-        }
-    ]
-
-json_str = """
-[
-    {
-        "resource": "Github",
-        "login": "oop0022"
+        "resource": enc_data('Github', password),
+        "login": enc_data('login', password),
+        "password": enc_data('password', password)
     },
     {
         "resource": "w",
@@ -23,7 +22,7 @@ json_str = """
         "resource": "e",
         "year": "3333"
     }
-]"""
+]
 
 items = json.loads(json_str)
 item = items[0]
