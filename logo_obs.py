@@ -129,7 +129,7 @@ def position_total():
     # print(CLEAR_COLOR)
 
 
-def elba():
+def animation():
     while True:
         position_0()
         position_1()
@@ -149,6 +149,17 @@ def elba():
         position_2()
         position_1()
         position_0()
-        # position_total()
 
-elba()
+
+def elba():     # Фунция вывода только логотипа
+    print(PURPLE)
+    print("  _____                      ______                        ")
+    print(" |            |             |      \            /\         ")
+    print(" |            |             |       \          /  \        ")
+    print(" |            |             |       /         /    \       ")
+    print(" |------      |             |______/         /______\      ")
+    print(" |            |             |       \       /        \     ")
+    print(" |            |             |        \     /          \    ")
+    print(" |            |             |         |   /            \   ")
+    print(" |__________  |__________   |_________/  /              \  ")
+    print(CLEAR_COLOR)
