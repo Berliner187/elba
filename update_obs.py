@@ -5,7 +5,7 @@ from main import system_action, show_decryption_data, decryption_block, download
 from main import yellow, blue, purple, green, red, mc
 
 
-__version__ = '1.1.4'   # Версия модуля
+__version__ = '1.1.5'   # Версия модуля
 
 
 # Модули для работы программы
@@ -53,10 +53,12 @@ def update():   # Обновление программы
                 template_text_modules(green, 'OK')
                 sleep(.5)
 
+        actions_for_install('main.py')
+        actions_for_install('update_obs.py')
         for i in range(len(stock_modules)):
             actions_for_install(stock_modules[i])
 
-        os.system(remove_main_folder)
+        os.remove(new_folder_el)
         print(green + '\n The missing module has been installed! \n\n' + mc)
         sleep(1)
         system_action('restart')
