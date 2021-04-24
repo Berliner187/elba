@@ -112,7 +112,7 @@ def point_of_entry():    # Auth Confirm Password
         quit()
     elif master_password == 'r':
         system_action('restart')
-    elif master_password == 'a':
+    elif master_password == 'a':    # Показ анимации
         animation()
     # Проверка хэша пароля
     with open(file_hash_password, 'r') as hash_pas_from_file:
