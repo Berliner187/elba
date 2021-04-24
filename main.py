@@ -228,7 +228,7 @@ def download_from_repository():
     system_action('clear')
     if os.path.exists('update_obs.py') == bool(False):
         os.system('mv elba/update_obs.py .')
-        os.system('rm elba')
+        os.system('rm -r elba')
         system_action('restart')
 
 
