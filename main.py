@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 from stdiomask import getpass
 
 
-__version__ = 'v1.5.1.8'    # Version program
+__version__ = 'v1.5.1.9'    # Version program
 
 
 def show_name_program():
@@ -112,6 +112,8 @@ def point_of_entry():    # Auth Confirm Password
         quit()
     elif master_password == 'r':
         system_action('restart')
+    elif master-password == 'a':
+        animation()
     # Проверка хэша пароля
     with open(file_hash_password, 'r') as hash_pas_from_file:
         hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
@@ -271,7 +273,7 @@ if __name__ == '__main__':
         
     try:
         # Локальные модули
-        from logo_obs import elba
+        from logo_obs import elba, animation
         from enc_obs import enc_data, dec_data
         from datetime_obs import greeting
         from del_resource_obs import delete_resource
