@@ -8,35 +8,35 @@ YELLOW, BLUE, PURPLE, GREEN, RED, CLEAR_COLOR = "\033[33m", "\033[36m", "\033[35
 def clear():
     system('clear')
 
+TIMER = .08
+STRING_LINE = "___________________________________________________________ \n"
+STRING_BOTTOM_0 = " |__________  |__________   |_________/  /              \  "
+STRING_BOTTOM_1 = " |            |             |         |   /            \   "
 
-# def template(string, cnt_str):
-#     clear()
-#     print("___________________________________________________________ \n" * cnt_str)
-#     print(string)
-#     cnt_str -= 1
-#     sleep(.25)
 
-TIMER = .13
+def template(string, cnt_str):
+    clear()
+    print(STRING_LINE * cnt_str)
+    print(string)
+    sleep(TIMER)
 
 
 def position_0():
-    clear()
     print(PURPLE)
-    print("___________________________________________________________ \n" * 9)
-    sleep(TIMER)
+    template(STRING_LINE, 9)
 
 
 def position_1():
     clear()
-    print("___________________________________________________________ \n" * 8)
-    print(" |__________  |__________   |_________/  /              \  ")
+    print(STRING_LINE * 8)
+    print(STRING_BOTTOM_1)
     sleep(TIMER)
 
 
 
 def position_2():
     clear()
-    print("___________________________________________________________ \n" * 7)
+    print(STRING_LINE * 7)
     print(" |            |             |         |   /            \   ")
     print(" |__________  |__________   |_________/  /              \  ")
     sleep(TIMER)
@@ -45,7 +45,7 @@ def position_2():
 
 def position_3():
     clear()
-    print("___________________________________________________________ \n" * 6)
+    print(STRING_LINE * 6)
     print(" |            |             |        \     /          \    ")
     print(" |            |             |         |   /            \   ")
     print(" |__________  |__________   |_________/  /              \  ")
@@ -54,7 +54,7 @@ def position_3():
 
 def position_4():
     clear()
-    print("___________________________________________________________ \n" * 5)
+    print(STRING_LINE * 5)
     print(" |            |             |       \       /        \     ")
     print(" |            |             |        \     /          \    ")
     print(" |            |             |         |   /            \   ")
@@ -65,7 +65,7 @@ def position_4():
 
 def position_5():
     clear()
-    print("___________________________________________________________ \n" * 4)
+    print(STRING_LINE * 4)
     print(" |------      |             |______/         /______\      ")
     print(" |            |             |       \       /        \     ")
     print(" |            |             |        \     /          \    ")
@@ -76,7 +76,7 @@ def position_5():
 
 def position_6():
     clear()
-    print("___________________________________________________________ \n" * 3)
+    print(STRING_LINE * 3)
     print(" |            |             |       /         /    \       ")
     print(" |------      |             |______/         /______\      ")
     print(" |            |             |       \       /        \     ")
@@ -88,7 +88,7 @@ def position_6():
 
 def position_7():
     clear()
-    print("___________________________________________________________ \n" * 2)
+    print(STRING_LINE * 2)
     print(" |            |             |       \          /  \        ")
     print(" |            |             |       /         /    \       ")
     print(" |------      |             |______/         /______\      ")
@@ -101,7 +101,7 @@ def position_7():
 
 def position_8():
     clear()
-    print("___________________________________________________________ \n")
+    print(STRING_LINE)
     print(" |            |             |      \            /\         ")
     print(" |            |             |       \          /  \        ")
     print(" |            |             |       /         /    \       ")
@@ -128,6 +128,19 @@ def position_total():
     sleep(TIMER)
     # print(CLEAR_COLOR)
 
+def author():
+    print(YELLOW)
+    print("  ___                ___                                                                     ")
+    print(" |   \              |   \                                                  ___   ____        ")  
+    print(" |    \             |    \   __    __        o          __   __      /|   |   |      /       ")
+    print(" |____/   \  /      |____/  |     |  \  |    |  |\   | |    |  \      |   |___|     /        ")
+    print(" |    \    \/       |    \  |__   |__/  |    |  | \  | |__  |__/      |   |   |    /         ")
+    print(" |     |   /        |     | |     |  \  |    |  |  \ | |    |  \      |   |   |   /          ")
+    print(" |_____/  /         |_____/ |___  |   \ |___ |  |   \| |___ |   \     |   |___|  /           ")
+    print('\n'*3)
+    
+
+
 
 def animation():
     while True:
@@ -141,14 +154,14 @@ def animation():
         position_7()
         position_8()
         position_total()
-        position_7()
-        position_6()
-        position_5()
-        position_4()
-        position_3()
-        position_2()
-        position_1()
-        position_0()
+        # position_7()
+        # position_6()
+        # position_5()
+        # position_4()
+        # position_3()
+        # position_2()
+        # position_1()
+        # position_0()
 
 
 def elba():     # Фунция вывода только логотипа

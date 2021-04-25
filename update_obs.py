@@ -5,7 +5,7 @@ from main import system_action, show_decryption_data, decryption_block, download
 from main import yellow, blue, purple, green, red, mc
 
 
-__version__ = '1.1.5'   # Версия модуля
+__version__ = '1.1.6'   # Версия модуля
 
 
 # Модули для работы программы
@@ -15,6 +15,7 @@ stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
 
 
 def update():   # Обновление программы
+    """ Модуль установки новых версий модулей и самой программы  """
     main_file = 'main.py'  # Главный файл программы
     new_folder_el = 'elba/'  # Новая папка из репозитория проекта
     remove_main_folder = 'rm -r ' + new_folder_el + ' -f'  # Удаление новой папки
@@ -58,12 +59,12 @@ def update():   # Обновление программы
         for i in range(len(stock_modules)):
             actions_for_install(stock_modules[i])
 
-        os.remove(new_folder_el)
+        os.remove(remove_main_folder)
         print(green + '\n The missing module has been installed! \n\n' + mc)
         sleep(1)
         system_action('restart')
 
-    if os.path.exists(new_folder_el):
+    if os.path.exists(new_folder_el) == bool(True):
         if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):    # Если размеры файлов не совпадают
             print(green + '\n   A new version of the program is available ' + mc)
             install_or_no = input(yellow + ' - Install new version program? (y/n): ' + mc)
@@ -79,6 +80,12 @@ def update():   # Обновление программы
         else:
             system_action('clear')
             print(yellow + ' -- You are using the latest version of the program -- ' + mc)
+
+            actions_for_install('update_obs.py')
+            for module in range(len(stock_modules)):
+                actions_for_install(stock_modules[module])
+
+            system_action('restart')
             os.system(remove_main_folder)
             sleep(.7)
     else:
