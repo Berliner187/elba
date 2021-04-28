@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 from stdiomask import getpass
 
 
-__version__ = 'v1.5.1.10'    # Version program
+__version__ = 'v1.5.1.11'    # Version program
 
 
 def show_name_program():
@@ -230,7 +230,7 @@ def download_from_repository():
     system_action('clear')
     if os.path.exists('update_obs.py') == bool(False):
         os.system('mv elba/update_obs.py .')
-        os.system('rm -r elba')
+        os.remove('elba/')
         system_action('restart')
 
 
@@ -271,8 +271,10 @@ if __name__ == '__main__':
     try:
         from update_obs import update
     except ModuleNotFoundError:
+        print(red + ' - Module "update" does not exist - ' + mc)
+        sleep(1)
         download_from_repository()
-        
+
     try:
         # Локальные модули
         from logo_obs import elba, animation, author
@@ -294,7 +296,7 @@ if __name__ == '__main__':
 
     except ModuleNotFoundError:
         update()
-        
+
     except ValueError:
         print(red, '\n' + ' --- Critical error, program is restarted --- ', mc)
         sleep(1)
