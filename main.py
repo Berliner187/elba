@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 from stdiomask import getpass
 
 
-__version__ = 'v1.5.1.11'    # Version program
+__version__ = 'v1.5.1.110'    # Version program
 
 
 def show_name_program():
@@ -230,7 +230,7 @@ def download_from_repository():
     system_action('clear')
     if os.path.exists('update_obs.py') == bool(False):
         os.system('mv elba/update_obs.py .')
-        os.remove('elba/')
+        os.system('rm -r elba/ -f')
         system_action('restart')
 
 
