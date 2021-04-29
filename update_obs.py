@@ -21,6 +21,7 @@ def update():   # Обновление программы
     remove_main_folder = 'rm -r ' + new_folder_el + ' -f'  # Удаление новой папки
     download_from_repository()  # Загрузка проекта из репозитория
 
+    # Проверка наличия модулей
     cnt_modules = 0     # Счетчик отсутствующих модулей
     file_type = 'obs.py'    # Модули заканчиваются на *obs.py
     any_file = os.listdir('.')  # Поиск в текущей папке

@@ -272,6 +272,7 @@ if __name__ == '__main__':
         from update_obs import update
     except ModuleNotFoundError as error:
         print(error)
+        print('-----')
         print(red + ' - Module "update" does not exist - ' + mc)
         sleep(1)
         download_from_repository()
