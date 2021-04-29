@@ -49,7 +49,7 @@ def update():   # Обновление программы
             def template_text_modules(color, message):
                 print('[', color, message, mc, ']', stock_modules[item])
             if stock_modules[item] not in modules:  # Вывод отсутствующего модуля
-                template_text_modules(red, 'Missing module')
+                template_text_modules(red, 'FAILED')
                 sleep(.8)
             else:   # Вывод состояния ОК
                 template_text_modules(green, 'OK')
