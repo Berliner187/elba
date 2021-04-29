@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 from stdiomask import getpass
 
 
-__version__ = 'v1.5.1.11'    # Version program
+__version__ = 'v1.5.1.110'    # Version program
 
 
 def show_name_program():
@@ -225,12 +225,12 @@ def decryption_block(master_password):
         system_action('restart')
 
 
-def download_from_repository():
+def download_from_repository(): # Загрузка из репозитория модуля обновлений
     os.system('git clone https://github.com/Berliner187/elba')  # Репозиторий
     system_action('clear')
     if os.path.exists('update_obs.py') == bool(False):
         os.system('mv elba/update_obs.py .')
-        os.remove('elba/')
+        os.system('rm -r elba/ -f')
         system_action('restart')
 
 
@@ -270,7 +270,8 @@ if __name__ == '__main__':
     system_action('clear')
     try:
         from update_obs import update
-    except ModuleNotFoundError:
+    except ModuleNotFoundError as error:
+        print(error)
         print(red + ' - Module "update" does not exist - ' + mc)
         sleep(1)
         download_from_repository()

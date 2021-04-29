@@ -5,7 +5,7 @@ from main import system_action, show_decryption_data, decryption_block, download
 from main import yellow, blue, purple, green, red, mc
 
 
-__version__ = '1.1.7'   # Версия модуля
+__version__ = '1.1.8'   # Версия модуля
 
 
 # Модули для работы программы
@@ -59,7 +59,7 @@ def update():   # Обновление программы
         for i in range(len(stock_modules)):
             actions_for_install(stock_modules[i])
 
-        os.remove(new_folder_el)
+        os.system(remove_main_folder)
         print(green + '\n The missing module has been installed! \n\n' + mc)
         sleep(1)
         system_action('restart')
