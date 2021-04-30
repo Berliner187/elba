@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 from stdiomask import getpass
 
 
-__version__ = 'v1.5.1.110'    # Version program
+__version__ = 'v1.5.1.111'    # Version program
 
 
 def show_name_program():
@@ -39,7 +39,8 @@ def system_action(action):
 
 
 # Цвета в терминале
-yellow, blue, purple, green, red, mc = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[31m", "\033[0m"
+yellow, blue, purple = "\033[33m", "\033[36m", "\033[35m"
+green, red, mc = "\033[32m", "\033[31m", "\033[0m"
 
 # Файлы для работы программы
 main_folder = 'volare/'     # Mi fa volare
@@ -149,14 +150,15 @@ def change_type_of_password(resource, login, master_password):
 def data_for_resource():
     """ Данные для сохранения (ресурс, логин) """
     system_action('clear')
-    print(green, '\n   --- Add new resource ---   ', '\n' * 3, mc)  # Текст запроса ввода данных о ресурсе
+    print(green, '\n   --- Add new resource ---   ', '\n' * 3, mc)
     resource = input(yellow + ' Resource: ' + mc)
     login = input(yellow + ' Login: ' + mc)
     return resource, login
 
 
 def decryption_block(master_password):
-    """ Show resources and decrypt them with keys """
+    """ Цикл с выводом сохраненных ресурсов """
+
     def add_resource_data():
         resource, login = data_for_resource()
         change_type_of_password(resource, login, master_password)
@@ -165,9 +167,11 @@ def decryption_block(master_password):
         else:
             system_action('restart')
 
-    if check_file_date_base == bool(True):  # При последущих запусках юзер работает тут
-        # Decryption mechanism
-        change_resource_or_actions = input('\n Change: ')
+    if check_file_date_base is False:   # При первом запуске
+        add_resource_data()
+        system_action('restart')
+    else:  # При последущих запусках программа работает тут
+        change_resource_or_actions = input('\n Change: ')   # Выбор действия
         try:
             if change_resource_or_actions == '-a':  # Добавление нового ресурса
                 add_resource_data()
@@ -194,7 +198,7 @@ def decryption_block(master_password):
             elif change_resource_or_actions == '-z':    # Удаление всех данных пользователя
                 system_action('clear')
                 print(red + '\n\n - Are you sure you want to delete all data? - ' + mc)
-                change_yes_or_no = input(yellow + ' - Remove ALL data? (y/n): ' + mc)   # Запрос подтверждения
+                change_yes_or_no = input(yellow + ' - Remove ALL data? (y/n): ' + mc)
                 if change_yes_or_no == 'y':
                     os.system('rm -r elba/')   # Удаление папки
                     system_action('clear')
@@ -211,8 +215,10 @@ def decryption_block(master_password):
                             system_action('clear')
                             show_decryption_data(master_password)
 
-                            def resource_template(type_data, value):  # Шаблон вывода данных о ресурсе
-                                print(yellow, type_data + ':', green, dec_data(line[value], master_password), mc)
+                            def resource_template(type_data, value):
+                                """ Шаблон вывода данных о ресурсе """
+                                print(yellow, type_data + ':', 
+                                    green, dec_data(line[value], master_password), mc)
 
                             resource_template('Resource', 'resource')
                             resource_template('Login   ', 'login')
@@ -220,9 +226,6 @@ def decryption_block(master_password):
         except ValueError:
             show_decryption_data(master_password)   # Показ содежимого
         decryption_block(master_password)  # Рекусрия под-главной функции
-    else:   # При первом запуске юзер работатет тут
-        add_resource_data()
-        system_action('restart')
 
 
 def download_from_repository(): # Загрузка из репозитория модуля обновлений
@@ -236,7 +239,7 @@ def download_from_repository(): # Загрузка из репозитория �
 
 def launcher():
     """ The main function responsible for the operation of the program """
-    if check_file_date_base == bool(False):   # Если файла нет, идет создание файла с ресурсами
+    if check_file_date_base == bool(False):
         show_name_program()
         print(blue,
               "\n  - Encrypt your passwords with one master-password -    "
@@ -256,7 +259,7 @@ def launcher():
         decryption_block(master_password)
         system_action('restart')
     else:
-        # Если файл уже создан, выводтся содержимое и дальнейшее взаимодействие с программой происходит тут
+        # Если файл уже создан
         master_password = point_of_entry()  # Ввод пароля
         system_action('clear')  # Очистка терминала
         greeting(master_password)  # Вывод приветствия
@@ -297,6 +300,8 @@ if __name__ == '__main__':
         launcher()  # Запуск главной направляющей функции
 
     except ModuleNotFoundError:
+        print(red + ' - Error in import local modules -' + mc)
+        sleep(1)
         update()
 
     except ValueError:
