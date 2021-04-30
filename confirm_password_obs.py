@@ -9,7 +9,7 @@ from main import yellow, blue, purple, green, red, mc
 from main import file_hash_password, check_file_hash_password, check_file_date_base
 
 
-__version__ = '1.0.4'
+__version__ = '1.0.5'
 
 # Символы, используемые для генерирования пароля
 symbols_for_password = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-='
@@ -26,7 +26,7 @@ def confirm_user_password(type_pas):
         user_confirm_password = getpass(' Confirm password: ')  # hide_password(' Confirm password: ')
         if user_password != user_confirm_password or len(user_password) < 8:
             print(red + '\n Error of confirm. Try again \n' + mc)
-            user_input_password()
+            quit()
         else:
             return user_password
 
@@ -51,16 +51,12 @@ def confirm_user_password(type_pas):
     elif type_pas == 'master':  # Мастер пароль
         master_password = user_input_password()
         # Хэш сохраняется в файл
-        if (check_file_hash_password == bool(False)) and (check_file_date_base == bool(False)):  # Создание хэша
+        if (check_file_hash_password == bool(False)) and (check_file_hash_password == bool(False)):  # Создание хэша
             hash_to_file = generate_password_hash(master_password)
             with open(file_hash_password, 'w') as hash_pas:
                 hash_pas.write(hash_to_file)
                 hash_pas.close()
             return master_password
-        elif check_file_hash_password == bool(False) and check_file_date_base == bool(True):
-            print(red + ' - Not confirmed - ' + mc)
-            sleep(2)
-            quit()
         elif check_file_date_base and check_file_hash_password == bool(True):
             return master_password
     elif type_pas == 'gen_new':     # Генерирование нового пароля

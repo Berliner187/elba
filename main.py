@@ -19,14 +19,15 @@ from csv import DictReader, DictWriter
 from stdiomask import getpass
 
 
-__version__ = 'v1.5.1.111'    # Version program
+__version__ = 'ALPHA v1.5.1.112'    # Version program
 
 
 def show_name_program():
     print(blue,
           "\n || Password Manager and Keeper of Notes ||",
           __version__,
-          "\n || Stable For Linux || \n || by Berliner187   ||", '\n' * 3, mc)
+          "\n || Stable For Linux || "
+          "\n || by Berliner187   ||", '\n' * 3, mc)
     elba()  # Вывод логотипа
 
 
@@ -60,7 +61,7 @@ check_file_date_base = os.path.exists(file_date_base)    # Проверка эт
 check_file_lister = os.path.exists(file_lister)   # Проверка этого файла на наличие
 check_file_notes = os.path.exists(file_notes)   # Проверка на наличие файла с заметками
 
-if os.path.exists(main_folder) == bool(False):
+if os.path.exists(main_folder) == bool(False):  # Папка с данными программф
     os.mkdir(main_folder)
 
 if check_file_notes == bool(False):     # Создание файла с заметками
@@ -217,8 +218,8 @@ def decryption_block(master_password):
 
                             def resource_template(type_data, value):
                                 """ Шаблон вывода данных о ресурсе """
-                                print(yellow, type_data + ':', 
-                                    green, dec_data(line[value], master_password), mc)
+                                print(yellow, type_data + ':', green, 
+                                    dec_data(line[value], master_password), mc)
 
                             resource_template('Resource', 'resource')
                             resource_template('Login   ', 'login')
