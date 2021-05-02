@@ -38,6 +38,3 @@ def greeting(master_password):   # Greating Depending On Date Time
         template_greeting('Good evening,')
     elif 86399 <= time_now < 14400:  # Condition night
         template_greeting('Good night,')
-
-
-greeting('kozak022')
