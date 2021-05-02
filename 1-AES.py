@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
 import base64
 import hashlib
 import random
 import os
+from stdiomask import getpass
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from Crypto.Cipher import AES
@@ -39,23 +41,18 @@ class AESCipher(object):
         return s[:-ord(s[len(s) - 1:])]
 
 
-def gen_key():
-    lister = 'zxcvbnmasdfghjklqwertyuiop1234567890'
-    key = ''
-    for i in range(16):
-        key += random.choice(lister)
-    return key
-
-
 if __name__ == '__main__':
-    message = "Confidence information"
 
-    __file__ = 'data.dat'
-    __hash__ = 'hash.dat'
+    FOLDER = 'aes_data/'
+    if os.path.exists(FOLDER) == bool(False):
+        os.mkdir(FOLDER)
+    __file__ = FOLDER + 'data.dat'
+    __hash__ = FOLDER + 'hash.dat'
 
-    __key__ = input(' - Password: ')  # 'zxcvbnmasdfghjklqwertyuiop1234567890'
+    __key__ = getpass(' - Password: ')  # 'zxcvbnmasdfghjklqwertyuiop1234567890'
 
     if os.path.exists(__file__) == bool(False):
+        message = input(' - Message: ')
         hash_to_file = generate_password_hash(__key__)
         with open(__hash__, 'w') as hash_pas:
             hash_pas.write(hash_to_file)
@@ -71,22 +68,21 @@ if __name__ == '__main__':
         with open(__file__, 'a') as write_space:
             write_space.write('\n')
             write_space.close()
-
     else:
         with open(__hash__, 'r') as load_hash:
             hash_password = check_password_hash(load_hash.readline(), __key__)
             load_hash.close()
 
-        if hash_password:
-            with open(__file__, 'ab') as enc_data:
-                aes = AESCipher(__key__)
-                payload = aes.encrypt(message)
-                enc_data.write(payload)
-                enc_data.close()
-
-            with open(__file__, 'a') as write_space:
-                write_space.write('\n')
-                write_space.close()
+        if hash_password == bool(True):
+            # with open(__file__, 'ab') as enc_data:
+            #     aes = AESCipher(__key__)
+            #     payload = aes.encrypt(message)
+            #     enc_data.write(payload)
+            #     enc_data.close()
+            #
+            # with open(__file__, 'a') as write_space:
+            #     write_space.write('\n')
+            #     write_space.close()
 
             with open(__file__, 'rb') as read_file:
                 payload = read_file.readlines()

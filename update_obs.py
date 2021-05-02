@@ -2,7 +2,7 @@ import os
 from time import sleep
 from main import system_action, show_decryption_data, decryption_block, download_from_repository
 # Цвета
-from main import yellow, blue, purple, green, red, mc
+from main import *
 
 
 __version__ = '1.1.4'   # Версия модуля
@@ -38,14 +38,14 @@ def update():   # Обновление программы
         system_action('clear')
 
         def text_about_missing(text):
-            print(red + '       ' + text + '\n' + mc)
+            print(red + '       ' + text + '\n' + DEFAULT_COLOR)
         if cnt_modules == 1:
             text_about_missing('Missing module')
         elif cnt_modules > 1:
             text_about_missing('Missing modules')
         for item in range(len(stock_modules)):
             def template_text_modules(color, message):
-                print('[', color, message, mc, ']', stock_modules[item])
+                print('[', color, message, DEFAULT_COLOR, ']', stock_modules[item])
             if stock_modules[item] not in modules:  # Вывод отсутствующего модуля
                 template_text_modules(red, 'Missing module')
                 sleep(.8)
@@ -57,14 +57,15 @@ def update():   # Обновление программы
             actions_for_install(stock_modules[i])
 
         os.system(remove_main_folder)
-        print(green + '\n The missing module has been installed! \n\n' + mc)
+        print(green + '\n The missing module has been installed! \n\n' + DEFAULT_COLOR)
         sleep(1)
         system_action('restart')
 
     if os.path.exists(new_folder_el):
-        if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):    # Если размеры файлов не совпадают
-            print(green + '\n   A new version of the program is available ' + mc)
-            install_or_no = input(yellow + ' - Install new version program? (y/n): ' + mc)
+        # Обновление, если суммы файлов не совпадают
+        if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):
+            print(green + '\n   A new version of the program is available ' + DEFAULT_COLOR)
+            install_or_no = input(yellow + ' - Install new version program? (y/n): ' + DEFAULT_COLOR)
             if install_or_no == 'y':
 
                 actions_for_install(main_file)
@@ -76,9 +77,9 @@ def update():   # Обновление программы
                 os.system(remove_main_folder)
         else:
             system_action('clear')
-            print(yellow + ' -- You are using the latest version of the program -- ' + mc)
+            print(yellow + ' -- You are using the latest version of the program -- ' + DEFAULT_COLOR)
             os.system(remove_main_folder)
             sleep(.7)
     else:
-        print(yellow + ' - New folder not found... ' + mc)
+        print(yellow + ' - New folder not found... ' + DEFAULT_COLOR)
         download_from_repository()

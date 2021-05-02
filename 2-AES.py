@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import base64
 import hashlib
 import random
@@ -49,7 +50,7 @@ def gen_key():
 
 
 if __name__ == '__main__':
-    message = "Confidence information"
+    message = "Security"
 
     __file__ = 'data.csv'
     __hash__ = 'hash.dat'
