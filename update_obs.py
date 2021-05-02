@@ -1,16 +1,14 @@
 import os
 from time import sleep
-from main import system_action, show_decryption_data, decryption_block, download_from_repository
-# Цвета
 from main import *
 
 
-__version__ = '1.1.4'   # Версия модуля
+__version__ = '1.2.0'   # Версия модуля
 
 
 # Модули для работы программы
 stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
-                 'stars_obs.py', 'del_resource_obs.py', 'notes_obs.py',
+                 'del_resource_obs.py', 'notes_obs.py',
                  'change_password_obs.py', 'confirm_password_obs.py']
 
 

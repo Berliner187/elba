@@ -19,16 +19,16 @@ from csv import DictReader, DictWriter
 from stdiomask import getpass
 
 
-__version__ = 'DELTA v0.0.0.1'    # Version program
+__version__ = 'DELTA v0.0.0.2'    # Version program
 
 
 def show_name_program():
-    print(blue,
+    print(BLUE,
           "\n || Password Manager and Keeper of Notes ||",
           "\n || Stable For Linux || "
           "\n || by Berliner187   || ", 
           __version__,
-          '\n' * 3, mc)
+          '\n' * 3, DEFAULT_COLOR)
     elba()  # Вывод логотипа
 
 
@@ -88,12 +88,12 @@ def show_decryption_data(master_password):
     with open(FILE_FOR_RESOURCE, encoding='utf-8') as data:
         s = 0
         reader = DictReader(data, delimiter=',')
-        print(yellow + '\n   --- Saved resources ---   ' + '\n'*3 + mc)
+        print(YELLOW + '\n   --- Saved resources ---   ' + '\n'*3 + DEFAULT_COLOR)
         for line in reader:
             decryption_res = dec_data(line["resource"], master_password)
             s += 1
             print(str(s) + '.', decryption_res)    # Decryption resource
-        print(blue +
+        print(BLUE +
               '\n  - Enter "-r" to restart, "-x" to exit'
               '\n  - Enter "-a" to add new resource'
               '\n  - Enter "-c" to change master-password '
@@ -101,14 +101,14 @@ def show_decryption_data(master_password):
               '\n  - Enter "-n" to go to notes'
               '\n  - Enter "-u" to update program'
               '\n  - Enter "-z" to remove ALL data',
-              yellow,
-              '\n Select resource by number \n', mc)
+              YELLOW,
+              '\n Select resource by number \n', DEFAULT_COLOR)
 
 
 def point_of_entry():    # Auth Confirm Password
     """ Получение мастер-пароля """
     show_name_program()     # Показывает название программы и выводит логотип
-    master_password = getpass(yellow + '\n -- Your master-password: ' + mc)
+    master_password = getpass(YELLOW + '\n -- Your master-password: ' + DEFAULT_COLOR)
     if master_password == 'x':  # Досрочный выход из программы
         quit()
     elif master_password == 'r':
@@ -121,7 +121,7 @@ def point_of_entry():    # Auth Confirm Password
     with open(FILE_WITH_HASH, 'r') as hash_pas_from_file:
         hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
         if hash_password == bool(False):    # Если хеши не совпадают
-            print(red + '\n --- Wrong password --- ' + mc)
+            print(RED + '\n --- Wrong password --- ' + DEFAULT_COLOR)
             sleep(1)
             system_action('restart')
         else:   # Если совпали
@@ -131,8 +131,8 @@ def point_of_entry():    # Auth Confirm Password
 def change_type_of_password(resource, login, master_password):
     """ Выбор пароля: генерирование нового или сохранение пользовательского """
     print('\n',
-          green + ' 1' + yellow + ' - Generation new password \n',
-          green + ' 2' + yellow + ' - Save your password      \n', mc)
+          GREEN + ' 1' + YELLOW + ' - Generation new password \n',
+          GREEN + ' 2' + YELLOW + ' - Save your password      \n', DEFAULT_COLOR)
 
     change_type = int(input('Change (1/2): '))
     if change_type == 1:  # Генерирование пароля и сохранение в файл
@@ -142,7 +142,7 @@ def change_type_of_password(resource, login, master_password):
         password = confirm_user_password('self')
         save_data_to_file(resource, login, password, master_password)
     else:   # Если ошибка выбора
-        print(red + '  -- Error of change. Please, change again --  ' + mc)
+        print(RED + '  -- Error of change. Please, change again --  ' + DEFAULT_COLOR)
         change_type_of_password(resource, login, master_password)
     system_action('clear')
 
@@ -150,9 +150,9 @@ def change_type_of_password(resource, login, master_password):
 def data_for_resource():
     """ Данные для сохранения (ресурс, логин) """
     system_action('clear')
-    print(green, '\n   --- Add new resource ---   ', '\n' * 3, mc)
-    resource = input(yellow + ' Resource: ' + mc)
-    login = input(yellow + ' Login: ' + mc)
+    print(GREEN, '\n   --- Add new resource ---   ', '\n' * 3, DEFAULT_COLOR)
+    resource = input(YELLOW + ' Resource: ' + DEFAULT_COLOR)
+    login = input(YELLOW + ' Login: ' + DEFAULT_COLOR)
     return resource, login
 
 
@@ -181,11 +181,11 @@ def decryption_block(master_password):
                 show_decryption_data(master_password)
             elif change_resource_or_actions == '-x':  # Условие выхода
                 system_action('clear')  # Clearing terminal
-                print(blue, ' --- Program is closet --- \n', mc)
+                print(BLUE, ' --- Program is closet --- \n', DEFAULT_COLOR)
                 sys.exit()  # Exit
             elif change_resource_or_actions == '-r':  # Условие перезапуска
                 system_action('clear')  # Clearing terminal
-                print('\n', green, ' -- Restart -- ', mc)
+                print('\n', GREEN, ' -- Restart -- ', DEFAULT_COLOR)
                 sleep(.4)
                 system_action('restart')  # Restart program
             elif change_resource_or_actions == '-c':
@@ -197,8 +197,8 @@ def decryption_block(master_password):
                 notes(master_password)
             elif change_resource_or_actions == '-z':    # Удаление всех данных пользователя
                 system_action('clear')
-                print(red + '\n\n - Are you sure you want to delete all data? - ' + mc)
-                change_yes_or_no = input(yellow + ' - Remove ALL data? (y/n): ' + mc)
+                print(RED + '\n\n - Are you sure you want to delete all data? - ' + DEFAULT_COLOR)
+                change_yes_or_no = input(YELLOW + ' - Remove ALL data? (y/n): ' + DEFAULT_COLOR)
                 if change_yes_or_no == 'y':
                     os.system('rm -r elba/')   # Удаление папки
                     system_action('clear')
@@ -217,8 +217,10 @@ def decryption_block(master_password):
 
                             def resource_template(type_data, value):
                                 """ Шаблон вывода данных о ресурсе """
-                                print(yellow, type_data + ':', green, 
-                                    dec_data(line[value], master_password), mc)
+                                print(YELLOW,
+                                      type_data + ':',
+                                      GREEN, dec_data(line[value], master_password),
+                                      DEFAULT_COLOR)
 
                             resource_template('Resource', 'resource')
                             resource_template('Login   ', 'login')
@@ -241,17 +243,17 @@ def launcher():
     """ The main function responsible for the operation of the program """
     if CHECK_FILE_FOR_RESOURCE == bool(False):
         show_name_program()
-        print(blue,
+        print(BLUE,
               "\n  - Encrypt your passwords with one master-password -    "
               "\n  -           No resources saved. Add them!         -  \n"
               "\n ----                That's easy!                 ---- \n",
-              red,
+              RED,
               "\n         Программа не поддерживает русский язык          ",
-              yellow,
+              YELLOW,
               '\n --              Создание мастер-пароля               -- '
               '\n --    Только не используйте свой банковский пароль,  -- '
               '\n          я не сильно вкладывался в безопасность         '
-              '\n                     этой программы                      ', mc)
+              '\n                     этой программы                      ', DEFAULT_COLOR)
 
         master_password = confirm_user_password('master')  # Создание мастер-пароля
         greeting(master_password)  # Вывод приветствия
@@ -276,7 +278,7 @@ if __name__ == '__main__':
     except ModuleNotFoundError as error:
         print(error)
         print('-----')
-        print(red + ' - Module "update" does not exist - ' + mc)
+        print(RED + ' - Module "update" does not exist - ' + DEFAULT_COLOR)
         sleep(1)
         download_from_repository()
 
@@ -293,23 +295,23 @@ if __name__ == '__main__':
         try:
             from werkzeug.security import generate_password_hash, check_password_hash
         except ModuleNotFoundError:
-            print(red + 'Missing module: ' + green + 'werkzeug' + mc)
+            print(RED + 'Missing module: ' + GREEN + 'werkzeug' + DEFAULT_COLOR)
             sleep(1)
             quit()
 
         launcher()  # Запуск главной направляющей функции
 
     except ModuleNotFoundError:
-        print(red + ' - Error in import local modules -' + mc)
+        print(RED + ' - Error in import local modules -' + DEFAULT_COLOR)
         sleep(1)
         update()
 
     except ValueError:
-        print(red, '\n' + ' --- Critical error, program is restarted --- ', mc)
+        print(RED, '\n' + ' --- Critical error, program is restarted --- ', DEFAULT_COLOR)
         sleep(1)
         system_action('clear')
-        print(red + ' -- You can try to update the program -- \n' + mc)
-        change = input(yellow + ' - Update? (y/n): ' + mc)
+        print(RED + ' -- You can try to update the program -- \n' + DEFAULT_COLOR)
+        change = input(YELLOW + ' - Update? (y/n): ' + DEFAULT_COLOR)
         if change == 'y':  # Если получает запрос от юзера
             update()
         system_action('restart')

@@ -1,7 +1,5 @@
 # Локальные модули
-from main import system_action, fields_for_main_data
-from main import main_folder, file_date_base, file_hash_password
-from main import YELLOW, BLUE, PURPLE, GREEN, RED, DEFAULT_COLOR
+from main import *
 from csv import DictReader, DictWriter
 from enc_obs import enc_data, dec_data
 # Сторонние модули

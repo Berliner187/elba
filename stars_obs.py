@@ -4,7 +4,6 @@ import termios
 
 
 def get_something():
-    fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
     try:
         tty.setraw(sys.stdin.fileno())

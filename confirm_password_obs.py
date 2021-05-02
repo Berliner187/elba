@@ -5,8 +5,7 @@ import os
 from werkzeug.security import generate_password_hash
 from stdiomask import getpass
 # Импорт констант из главного файла
-from main import yellow, blue, purple, GREEN, red, mc
-from main import file_hash_password, check_file_hash_password, check_file_date_base
+from main import *
 
 
 __version__ = '1.0.5'
