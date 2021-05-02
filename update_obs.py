@@ -1,6 +1,7 @@
+from main import *
+
 import os
 from time import sleep
-from main import *
 
 
 __version__ = '1.2.0'   # Версия модуля
@@ -36,7 +37,7 @@ def update():   # Обновление программы
         system_action('clear')
 
         def text_about_missing(text):
-            print(red + '       ' + text + '\n' + DEFAULT_COLOR)
+            print(RED + '       ' + text + '\n' + DEFAULT_COLOR)
         if cnt_modules == 1:
             text_about_missing('Missing module')
         elif cnt_modules > 1:
@@ -45,24 +46,24 @@ def update():   # Обновление программы
             def template_text_modules(color, message):
                 print('[', color, message, DEFAULT_COLOR, ']', stock_modules[item])
             if stock_modules[item] not in modules:  # Вывод отсутствующего модуля
-                template_text_modules(red, 'Missing module')
+                template_text_modules(RED, 'Missing module')
                 sleep(.8)
             else:   # Вывод состояния ОК
-                template_text_modules(green, 'OK')
+                template_text_modules(GREEN, 'OK')
                 sleep(.5)
 
         for i in range(len(stock_modules)):
             actions_for_install(stock_modules[i])
 
         os.system(remove_main_folder)
-        print(green + '\n The missing module has been installed! \n\n' + DEFAULT_COLOR)
+        print(GREEN + '\n The missing module has been installed! \n\n' + DEFAULT_COLOR)
         sleep(1)
         system_action('restart')
 
     if os.path.exists(new_folder_el):
         # Обновление, если суммы файлов не совпадают
         if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):
-            print(green + '\n   A new version of the program is available ' + DEFAULT_COLOR)
+            print(GREEN + '\n   A new version of the program is available ' + DEFAULT_COLOR)
             install_or_no = input(yellow + ' - Install new version program? (y/n): ' + DEFAULT_COLOR)
             if install_or_no == 'y':
 

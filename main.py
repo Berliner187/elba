@@ -16,10 +16,9 @@ import os
 import sys
 from time import sleep
 from csv import DictReader, DictWriter
-from stdiomask import getpass
 
 
-__version__ = 'DELTA v0.0.0.2'    # Version program
+__version__ = 'DELTA v0.0.0.3'    # Version program
 
 
 def show_name_program():
@@ -59,6 +58,8 @@ fields_for_notes = ['name_note', 'note']    # Столбцы для файла �
 # Проверка файлов на наличие
 CHECK_FILE_WITH_HASH = os.path.exists(FILE_WITH_HASH)
 CHECK_FILE_FOR_RESOURCE = os.path.exists(FILE_FOR_RESOURCE)
+
+REPOSITORY = 'git clone https://github.com/Berliner187/elba'
 
 if os.path.exists(FOLDER_WITH_DATA) == bool(False):  # Папка с данными программы
     os.mkdir(FOLDER_WITH_DATA)
@@ -230,8 +231,9 @@ def decryption_block(master_password):
         decryption_block(master_password)  # Рекусрия под-главной функции
 
 
-def download_from_repository(): # Загрузка из репозитория модуля обновлений
-    os.system('git clone https://github.com/Berliner187/elba')  # Репозиторий
+def download_from_repository():
+    """ Загрузка и установка из репозитория модуля обновлений """
+    os.system(REPOSITORY)
     system_action('clear')
     if os.path.exists('update_obs.py') == bool(False):
         os.system('mv elba/update_obs.py .')
@@ -277,7 +279,7 @@ if __name__ == '__main__':
         from update_obs import update
     except ModuleNotFoundError as error:
         print(error)
-        print('-----')
+        print('--------')
         print(RED + ' - Module "update" does not exist - ' + DEFAULT_COLOR)
         sleep(1)
         download_from_repository()
@@ -294,8 +296,9 @@ if __name__ == '__main__':
 
         try:
             from werkzeug.security import generate_password_hash, check_password_hash
+            from stdiomask import getpass
         except ModuleNotFoundError:
-            print(RED + 'Missing module: ' + GREEN + 'werkzeug' + DEFAULT_COLOR)
+            print(RED + 'Missing module: ' + GREEN + 'werkzeug or stdiomask' + DEFAULT_COLOR)
             sleep(1)
             quit()
 

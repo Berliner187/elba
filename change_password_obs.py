@@ -1,11 +1,11 @@
-# Локальные модули
 from main import *
+
 from csv import DictReader, DictWriter
 from enc_obs import enc_data, dec_data
-# Сторонние модули
+
 from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
-# Встроенные модули
+
 from time import sleep
 from shutil import copyfile
 import os

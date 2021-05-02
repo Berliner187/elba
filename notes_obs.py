@@ -1,7 +1,8 @@
 from main import *
-# Импорт переменных для работы с заметками
-from csv import DictReader, DictWriter
+
 from enc_obs import enc_data, dec_data
+
+from csv import DictReader, DictWriter
 from time import sleep
 from shutil import copyfile
 import os
