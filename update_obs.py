@@ -28,7 +28,7 @@ def update():   # Обновление программы
         if file.endswith(file_type):
             installed_modules.append(file)
     for j in range(len(stock_modules)):
-        if stock_modules[j] not in modules:
+        if stock_modules[j] not in installed_modules:
             cnt_modules += 1    # Счет отсутствующих модулей
 
     def actions_for_install(program_file):  # Действия для установки

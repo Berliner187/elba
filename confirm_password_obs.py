@@ -56,7 +56,7 @@ def confirm_user_password(type_pas):
                 hash_pas.write(hash_to_file)
                 hash_pas.close()
             return master_password
-        elif check_file_date_base and CHECK_FILE_WITH_HASH == bool(True):
+        elif CHECK_FILE_FOR_RESOURCE and CHECK_FILE_WITH_HASH == bool(True):
             return master_password
     elif type_pas == 'gen_new':     # Генерирование нового пароля
         password = generation_new_password()
