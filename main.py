@@ -243,7 +243,7 @@ def download_from_repository():
 
 def launcher():
     """ The main function responsible for the operation of the program """
-    if CHECK_FILE_FOR_RESOURCE == bool(False):
+    if CHECK_FILE_FOR_RESOURCE is False:
         show_name_program()
         print(BLUE,
               "\n  - Encrypt your passwords with one master-password -    "
