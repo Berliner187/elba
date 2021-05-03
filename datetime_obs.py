@@ -1,8 +1,8 @@
+from main import *
+from enc_obs import enc_data, dec_data
+
 import os
 import datetime
-# Проприетарный модуль шифрования
-from enc_obs import enc_data, dec_data
-from main import *
 
 
 __version__ = '1.0.2'
@@ -13,7 +13,7 @@ def greeting(master_password):   # Greating Depending On Date Time
     def get_name():
         if os.path.exists(FILE_USER_NAME) == bool(False):  # Создание файла с именем
             with open(FILE_USER_NAME, "w") as self_name:
-                name = input(yellow + '\n -- Your name or nickname: ' + DEFAULT_COLOR)
+                name = input(YELLOW + '\n -- Your name or nickname: ' + DEFAULT_COLOR)
                 enc_name = enc_data(name, master_password)
                 self_name.write(enc_name)
                 self_name.close()
