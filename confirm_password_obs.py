@@ -63,3 +63,26 @@ def confirm_user_password(type_pas):
         print(YELLOW + ' - Your new password - ' + GREEN + password + mc + ' - success saved' + mc)
         sleep(2)
         return password
+
+
+def point_of_entry():    # Auth Confirm Password
+    """ Получение мастер-пароля """
+    show_name_program()     # Показывает название программы и выводит логотип
+    master_password = getpass(YELLOW + '\n -- Your master-password: ' + DEFAULT_COLOR)
+    if master_password == 'x':  # Досрочный выход из программы
+        quit()
+    elif master_password == 'r':
+        system_action('restart')
+    elif master_password == 'a':    # Показ анимации
+        animation()
+    elif master_password == 'n':
+        author()
+    # Проверка хэша пароля
+    with open(FILE_WITH_HASH, 'r') as hash_pas_from_file:
+        hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
+        if hash_password == bool(False):    # Если хеши не совпадают
+            print(RED + '\n --- Wrong password --- ' + DEFAULT_COLOR)
+            sleep(1)
+            system_action('restart')
+        else:   # Если совпали
+            return master_password

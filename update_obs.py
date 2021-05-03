@@ -14,21 +14,22 @@ stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
 
 
 def update():   # Обновление программы
-    main_file = 'main.py'  # Главный файл программы
-    new_folder_el = 'elba/'  # Новая папка из репозитория проекта
+    main_file = 'main.py'
+    new_folder_el = 'elba/'
     remove_main_folder = 'rm -r ' + new_folder_el + ' -f'  # Удаление новой папки
     download_from_repository()  # Загрузка проекта из репозитория
 
-    cnt_modules = 0     # Счетчик отсутствующих модулей
-    file_type = 'obs.py'    # Модули заканчиваются на *obs.py
-    any_file = os.listdir('.')  # Поиск в текущей папке
-    modules = []    # Массив для установленных модулей
-    for file in any_file:   # Итерация модулей
+    # Проверка отсутствующих модулей
+    cnt_modules = 0
+    file_type = 'obs.py'
+    any_file = os.listdir('.')
+    installed_modules = []
+    for file in any_file:
         if file.endswith(file_type):
-            modules.append(file)
+            installed_modules.append(file)
     for j in range(len(stock_modules)):
         if stock_modules[j] not in modules:
-            cnt_modules += 1
+            cnt_modules += 1    # Счет отсутствующих модулей
 
     def actions_for_install(program_file):  # Действия для установки
         os.system('cp ' + new_folder_el + program_file + ' . ; ')
@@ -36,12 +37,10 @@ def update():   # Обновление программы
     if cnt_modules != 0:
         system_action('clear')
 
-        def text_about_missing(text):
-            print(RED + '       ' + text + '\n' + DEFAULT_COLOR)
         if cnt_modules == 1:
-            text_about_missing('Missing module')
+            print(RED + '       ' + text + '\n' + DEFAULT_COLOR)
         elif cnt_modules > 1:
-            text_about_missing('Missing modules')
+            print(RED + '       ' + text + '\n' + DEFAULT_COLOR)
         for item in range(len(stock_modules)):
             def template_text_modules(color, message):
                 print('[', color, message, DEFAULT_COLOR, ']', stock_modules[item])
@@ -71,7 +70,9 @@ def update():   # Обновление программы
                 actions_for_install('update_obs.py')
                 for i in range(len(stock_modules)):
                     actions_for_install(stock_modules[i])
+                print(GREEN + "  - Successfully installed! - ")
                 system_action('restart')
+                os.system(remove_main_folder)
             else:
                 os.system(remove_main_folder)
         else:

@@ -18,7 +18,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'DELTA v0.0.0.3'    # Version program
+__version__ = 'DELTA v0.0.0.4'    # Version program
 
 
 def show_name_program():
@@ -298,7 +298,11 @@ if __name__ == '__main__':
             from werkzeug.security import generate_password_hash, check_password_hash
             from stdiomask import getpass
         except ModuleNotFoundError:
-            print(RED + 'Missing module: ' + GREEN + 'werkzeug or stdiomask' + DEFAULT_COLOR)
+            print(
+                RED + 'Missing module: ' +
+                GREEN + 'werkzeug or stdiomask' +
+                DEFAULT_COLOR
+            )
             sleep(1)
             quit()
 
@@ -313,8 +317,9 @@ if __name__ == '__main__':
         print(RED, '\n' + ' --- Critical error, program is restarted --- ', DEFAULT_COLOR)
         sleep(1)
         system_action('clear')
+        # Попытка обновиться, если возникает ошибка
         print(RED + ' -- You can try to update the program -- \n' + DEFAULT_COLOR)
         change = input(YELLOW + ' - Update? (y/n): ' + DEFAULT_COLOR)
-        if change == 'y':  # Если получает запрос от юзера
+        if change == 'y':
             update()
         system_action('restart')

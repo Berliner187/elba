@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 from time import sleep
 from os import system
-
-YELLOW, BLUE, PURPLE, GREEN, RED, CLEAR_COLOR = "\033[33m", "\033[36m", "\033[35m", "\033[32m", "\033[31m", "\033[0m"
+from main import *
 
 
 def clear():
@@ -175,4 +174,4 @@ def elba():     # Фунция вывода только логотипа
     print(" |            |             |        \     /          \    ")
     print(" |            |             |         |   /            \   ")
     print(" |__________  |__________   |_________/  /              \  ")
-    print(CLEAR_COLOR)
+    print(DEFAULT_COLOR)
