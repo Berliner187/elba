@@ -18,7 +18,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'DELTA v0.0.0.4'    # Version program
+__version__ = 'DELTA v0.0.0.5'    # Version program
 
 
 def show_name_program():
@@ -137,10 +137,10 @@ def change_type_of_password(resource, login, master_password):
 
     change_type = int(input('Change (1/2): '))
     if change_type == 1:  # Генерирование пароля и сохранение в файл
-        password = confirm_user_password('gen_new')
+        password = actions_with_password('gen_new')
         save_data_to_file(resource, login, password, master_password)
     elif change_type == 2:  # Сохранение пользовательского пароля
-        password = confirm_user_password('self')
+        password = actions_with_password('self')
         save_data_to_file(resource, login, password, master_password)
     else:   # Если ошибка выбора
         print(RED + '  -- Error of change. Please, change again --  ' + DEFAULT_COLOR)
@@ -257,7 +257,7 @@ def launcher():
               '\n          я не сильно вкладывался в безопасность         '
               '\n                     этой программы                      ', DEFAULT_COLOR)
 
-        master_password = confirm_user_password('master')  # Создание мастер-пароля
+        master_password = actions_with_password('master')  # Создание мастер-пароля
         greeting(master_password)  # Вывод приветствия
         sleep(.5)
         decryption_block(master_password)
@@ -292,7 +292,7 @@ if __name__ == '__main__':
         from del_resource_obs import delete_resource
         from notes_obs import notes
         from change_password_obs import change_master_password
-        from confirm_password_obs import confirm_user_password
+        from confirm_password_obs import actions_with_password
 
         try:
             from werkzeug.security import generate_password_hash, check_password_hash
