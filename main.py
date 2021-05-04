@@ -59,7 +59,7 @@ fields_for_notes = ['name_note', 'note']    # Столбцы для файла �
 CHECK_FILE_WITH_HASH = os.path.exists(FILE_WITH_HASH)
 CHECK_FILE_FOR_RESOURCE = os.path.exists(FILE_FOR_RESOURCE)
 
-REPOSITORY = 'git clone https://github.com/Berliner187/elba -b delta'
+REPOSITORY = 'git clone https://github.com/Berliner187/elba'
 
 if os.path.exists(FOLDER_WITH_DATA) == bool(False):  # Папка с данными программы
     os.mkdir(FOLDER_WITH_DATA)
