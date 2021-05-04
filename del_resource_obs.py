@@ -5,12 +5,12 @@ import os
 from main import *
 
 
-__version__ = '1.1.0'  # Версия модуля
+__version__ = '1.1.1'  # Версия модуля
 
 
 def delete_resource():
-	print(blue + '\n -- Change by number -- \n' + mc)
-	change_res_by_num = int(input(yellow + ' - Resource number: ' + mc))
+	print(BLUE + '\n -- Change by number -- \n' + DEFAULT_COLOR)
+	change_res_by_num = int(input(YELLOW + ' - Resource number: ' + DEFAULT_COLOR))
 	# Выгрузка старого
 	with open(FILE_FOR_RESOURCE, encoding='utf-8') as saved_resource:
 		reader = DictReader(saved_resource, delimiter=',')
@@ -38,4 +38,4 @@ def delete_resource():
 			})
 		new_data.close()
 	copyfile(NEW_FILE_FOR_RESOURCE, FILE_FOR_RESOURCE)    # Старый записывается новым файлом
-	os.system('rm ' + new_FILE_FOR_RESOURCE)   # Удаление нового файла
+	os.system('rm ' + NEW_FILE_FOR_RESOURCE)   # Удаление нового файла

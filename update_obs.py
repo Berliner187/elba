@@ -38,7 +38,7 @@ def update():   # Обновление программы
         system_action('clear')
 
         if cnt_modules == 1:
-            print(RED + '  Missing modules \n' + DEFAULT_COLOR)
+            print(RED + '  Missing module \n' + DEFAULT_COLOR)
         elif cnt_modules > 1:
             print(RED + '  Missing modules \n' + DEFAULT_COLOR)
         for item in range(len(stock_modules)):
@@ -46,7 +46,7 @@ def update():   # Обновление программы
                 print('[', color, message, DEFAULT_COLOR, ']', stock_modules[item])
             if stock_modules[item] not in installed_modules:  # Вывод отсутствующего модуля
                 template_text_modules(RED, 'FAILED')
-                sleep(.8)
+                sleep(.5)
             else:   # Вывод состояния ОК
                 template_text_modules(GREEN, 'OK')
                 sleep(.5)
