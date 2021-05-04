@@ -3,7 +3,7 @@ from main import *
 import os
 
 
-__version__ = 'v1.0.0'
+__version__ = 'v1.0.1'
 
 
 def size_all():
@@ -49,7 +49,7 @@ def size_all():
     for item in os.listdir(user_folder):
         if item.endswith(".csv") or item.endswith(".dat"):
             size_user_data += os.path.getsize(user_folder + item)
-    
+
     size_program += size_mod_cache  # Вычисление всего веса
     print('\n Данные пользователя заняли', YELLOW,
         size_user_data, 'Байт', DEFAULT_COLOR)
@@ -58,4 +58,4 @@ def size_all():
     print('\n Кэш модулей занял', YELLOW,
         rounding(size_mod_cache) , 'Килобайт', DEFAULT_COLOR)
     print('\n Итого весь проект занимает', YELLOW,
-        rounding(size_program), 'Килобайт в ПЗУ \n', DEFAULT_COLOR)
+        rounding(size_program + size_user_data), 'Килобайт в ПЗУ \n', DEFAULT_COLOR)
