@@ -4,7 +4,7 @@ import os
 from time import sleep
 
 
-__version__ = '1.2.2'   # Версия модуля
+__version__ = '1.2.3'   # Версия модуля
 
 
 # Модули для работы программы
@@ -38,9 +38,9 @@ def update():   # Обновление программы
         system_action('clear')
 
         if cnt_modules == 1:
-            print(RED + '       ' + text + '\n' + DEFAULT_COLOR)
+            print(RED + '  Missing modules \n' + DEFAULT_COLOR)
         elif cnt_modules > 1:
-            print(RED + '       ' + text + '\n' + DEFAULT_COLOR)
+            print(RED + '  Missing modules \n' + DEFAULT_COLOR)
         for item in range(len(stock_modules)):
             def template_text_modules(color, message):
                 print('[', color, message, DEFAULT_COLOR, ']', stock_modules[item])
