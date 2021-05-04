@@ -1,31 +1,29 @@
-# Локальные модули
-from main import system_action, fields_for_main_data
-from main import main_folder, file_date_base, file_hash_password
-from main import yellow, blue, purple, green, red, mc
+from main import *
+
 from csv import DictReader, DictWriter
 from enc_obs import enc_data, dec_data
-# Сторонние модули
+
 from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
-# Встроенные модули
+
 from time import sleep
 from shutil import copyfile
 import os
 
 
-__version__ = '1.0.4'
+__version__ = '1.1.1'
 
 
 def change_master_password():
     system_action('clear')
 
     def user_input_password():
-        print(blue + '\n Minimum password length 8 characters' + mc)
+        print(BLUE + '\n Minimum password length 8 characters' + DEFAULT_COLOR)
         user_password = getpass('\n Password: ')
         user_confirm_password = getpass(' Confirm password: ')  # hide_password(' Confirm password: ')
         cnt_trying = 0
         if (user_password != user_confirm_password) or (len(user_password) or len(user_confirm_password)) < 8:
-            print(red + '\n Error of confirm. Try again \n' + mc)
+            print(red + '\n Error of confirm. Try again \n' + DEFAULT_COLOR)
             cnt_trying += 1
             if cnt_trying == 1:
                 quit()
@@ -33,22 +31,22 @@ def change_master_password():
             return user_confirm_password
     # Сверяются хеши паролей
     try:
-        confirm_master_password = getpass(yellow + ' -- Enter your master-password: ' + mc)
-        open_file_with_hash = open(file_hash_password).readline()
+        confirm_master_password = getpass(YELLOW + ' -- Enter your master-password: ' + DEFAULT_COLOR)
+        open_file_with_hash = open(FILE_WITH_HASH).readline()
         check_master_password = check_password_hash(open_file_with_hash, confirm_master_password)
 
         if check_master_password == bool(False):
-            print(red + '\n --- Wrong password --- ' + mc)
+            print(RED + '\n --- Wrong password --- ' + DEFAULT_COLOR)
             sleep(1)
             system_action('restart')
         else:
-            print('       [' + green + ' OK ' + mc + ']')
+            print('        [' + GREEN + ' OK ' + DEFAULT_COLOR + ']')
             sleep(.6)
             system_action('clear')
-            print(blue + '\n   Pick a new master-password \n' + mc)
+            print(BLUE + '\n   Pick a new master-password \n' + DEFAULT_COLOR)
             new_master_password = user_input_password()
             cnt = 0
-            with open(file_date_base, mode='r', encoding='utf-8') as saved_resource:  # Выгружается старый файл
+            with open(FILE_FOR_RESOURCE, mode='r', encoding='utf-8') as saved_resource:  # Выгружается старый файл
                 reader_resources = DictReader(saved_resource, delimiter=',')
                 mas_res, mas_log, mas_pas = [], [], []
                 new_file_data_base = 'main_data.dat'
@@ -78,11 +76,11 @@ def change_master_password():
                         fields_for_main_data[1]: mas_log[i],
                         fields_for_main_data[2]: mas_pas[i]
                     })
-            copyfile(new_file_data_base, file_date_base)    # Перезапись старого файла новым
+            copyfile(new_file_data_base, FILE_FOR_RESOURCE)    # Перезапись старого файла новым
             os.system('rm ' + new_file_data_base)   # Удаление нового файла
 
             new_hash = generate_password_hash(new_master_password)
-            with open(file_hash_password, 'w') as hash_pas:
+            with open(FILE_WITH_HASH, 'w') as hash_pas:
                 hash_pas.write(new_hash)
                 hash_pas.close()
 

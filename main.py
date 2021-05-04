@@ -16,18 +16,18 @@ import os
 import sys
 from time import sleep
 from csv import DictReader, DictWriter
-from stdiomask import getpass
 
 
-__version__ = 'ALPHA v1.5.1.112'    # Version program
+__version__ = 'BETA v0.1.0.0'    # Version program
 
 
 def show_name_program():
-    print(blue,
+    print(BLUE,
           "\n || Password Manager and Keeper of Notes ||",
-          __version__,
           "\n || Stable For Linux || "
-          "\n || by Berliner187   ||", '\n' * 3, mc)
+          "\n || by Berliner187   || ", 
+          __version__,
+          '\n' * 3, DEFAULT_COLOR)
     elba()  # Вывод логотипа
 
 
@@ -40,41 +40,41 @@ def system_action(action):
 
 
 # Цвета в терминале
-yellow, blue, purple = "\033[33m", "\033[36m", "\033[35m"
-green, red, mc = "\033[32m", "\033[31m", "\033[0m"
+YELLOW, BLUE, PURPLE = "\033[33m", "\033[36m", "\033[35m"
+GREEN, RED, DEFAULT_COLOR = "\033[32m", "\033[31m", "\033[0m"
 
 # Файлы для работы программы
-main_folder = 'volare/'     # Mi fa volare
-file_date_base = main_folder + "main_data.dat"     # Файл, в котором лежат пароли
-file_lister = main_folder + ".lister.dat"   # Файл со строками
-file_self_name = main_folder + ".self_name.dat"  # Файл с именем (никнеймом)
-file_hash_password = main_folder + '.hash_password.dat'     # Файл с хэшем пароля
-file_notes = main_folder + 'notes.csv'   # Файл с заметками
-file_version = main_folder + '.version.log'  # Файл с версией программы
+FOLDER_WITH_DATA = 'volare/'     # Mi fa volare
+FILE_FOR_RESOURCE = FOLDER_WITH_DATA + "main_data.dat"     # Файл, в котором лежат пароли
+FILE_USER_NAME = FOLDER_WITH_DATA + ".self_name.dat"  # Файл с именем (никнеймом)
+FILE_WITH_HASH = FOLDER_WITH_DATA + '.hash_password.dat'     # Файл с хэшем пароля
+FILE_FOR_NOTES = FOLDER_WITH_DATA + 'notes.csv'   # Файл с заметками
+file_version = FOLDER_WITH_DATA + '.version.log'  # Файл с версией программы
 
-fields_for_logs = ['version', 'datetime', 'modules', 'status']     # Столбцы файла с логами
+fields_for_logs = ['version', 'date', 'modules', 'status']     # Столбцы файла с логами
 fields_for_main_data = ['resource', 'login', 'password']    # Столбцы для файла с ресурсами
 fields_for_notes = ['name_note', 'note']    # Столбцы для файла с заметками
 
-check_file_hash_password = os.path.exists(file_hash_password)
-check_file_date_base = os.path.exists(file_date_base)    # Проверка этого файла на наличие
-check_file_lister = os.path.exists(file_lister)   # Проверка этого файла на наличие
-check_file_notes = os.path.exists(file_notes)   # Проверка на наличие файла с заметками
+# Проверка файлов на наличие
+CHECK_FILE_WITH_HASH = os.path.exists(FILE_WITH_HASH)
+CHECK_FILE_FOR_RESOURCE = os.path.exists(FILE_FOR_RESOURCE)
 
-if os.path.exists(main_folder) == bool(False):  # Папка с данными программф
-    os.mkdir(main_folder)
+REPOSITORY = 'git clone https://github.com/Berliner187/elba -b delta'
 
-if check_file_notes == bool(False):     # Создание файла с заметками
-    with open(file_notes, mode="a", encoding='utf-8') as file_for_notes:
+if os.path.exists(FOLDER_WITH_DATA) == bool(False):  # Папка с данными программы
+    os.mkdir(FOLDER_WITH_DATA)
+
+if os.path.exists(FILE_FOR_NOTES) == bool(False):     # Создание файла с заметками
+    with open(FILE_FOR_NOTES, mode="a", encoding='utf-8') as file_for_notes:
         open_note = DictWriter(file_for_notes, fieldnames=fields_for_notes)
         open_note.writeheader()
 
 
 def save_data_to_file(resource, login, password, master_password):
     """ Шифрование логина и пароля. Запись в csv-файл """
-    with open(file_date_base, mode="a", encoding='utf-8') as data:
+    with open(FILE_FOR_RESOURCE, mode="a", encoding='utf-8') as data:
         writer = DictWriter(data, fieldnames=fields_for_main_data)
-        if check_file_date_base == bool(False):
+        if CHECK_FILE_FOR_RESOURCE == bool(False):
             writer.writeheader()    # Запись заголовков
         # Шифрование данных ресурса и запись в файл
         writer.writerow({
@@ -86,15 +86,15 @@ def save_data_to_file(resource, login, password, master_password):
 def show_decryption_data(master_password):
     """ Показ всех сохраненных ресурсов """
     system_action('clear')
-    with open(file_date_base, encoding='utf-8') as data:
+    with open(FILE_FOR_RESOURCE, encoding='utf-8') as data:
         s = 0
         reader = DictReader(data, delimiter=',')
-        print(yellow + '\n   --- Saved resources ---   ' + '\n'*3 + mc)
+        print(YELLOW + '\n   --- Saved resources ---   ' + '\n'*3 + DEFAULT_COLOR)
         for line in reader:
             decryption_res = dec_data(line["resource"], master_password)
             s += 1
             print(str(s) + '.', decryption_res)    # Decryption resource
-        print(blue +
+        print(BLUE +
               '\n  - Enter "-r" to restart, "-x" to exit'
               '\n  - Enter "-a" to add new resource'
               '\n  - Enter "-c" to change master-password '
@@ -102,14 +102,14 @@ def show_decryption_data(master_password):
               '\n  - Enter "-n" to go to notes'
               '\n  - Enter "-u" to update program'
               '\n  - Enter "-z" to remove ALL data',
-              yellow,
-              '\n Select resource by number \n', mc)
+              YELLOW,
+              '\n Select resource by number \n', DEFAULT_COLOR)
 
 
 def point_of_entry():    # Auth Confirm Password
     """ Получение мастер-пароля """
     show_name_program()     # Показывает название программы и выводит логотип
-    master_password = getpass(yellow + '\n -- Your master-password: ' + mc)
+    master_password = getpass(YELLOW + '\n -- Your master-password: ' + DEFAULT_COLOR)
     if master_password == 'x':  # Досрочный выход из программы
         quit()
     elif master_password == 'r':
@@ -119,10 +119,10 @@ def point_of_entry():    # Auth Confirm Password
     elif master_password == 'n':
         author()
     # Проверка хэша пароля
-    with open(file_hash_password, 'r') as hash_pas_from_file:
+    with open(FILE_WITH_HASH, 'r') as hash_pas_from_file:
         hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
         if hash_password == bool(False):    # Если хеши не совпадают
-            print(red + '\n --- Wrong password --- ' + mc)
+            print(RED + '\n --- Wrong password --- ' + DEFAULT_COLOR)
             sleep(1)
             system_action('restart')
         else:   # Если совпали
@@ -132,18 +132,18 @@ def point_of_entry():    # Auth Confirm Password
 def change_type_of_password(resource, login, master_password):
     """ Выбор пароля: генерирование нового или сохранение пользовательского """
     print('\n',
-          green + ' 1' + yellow + ' - Generation new password \n',
-          green + ' 2' + yellow + ' - Save your password      \n', mc)
+          GREEN + ' 1' + YELLOW + ' - Generation new password \n',
+          GREEN + ' 2' + YELLOW + ' - Save your password      \n', DEFAULT_COLOR)
 
     change_type = int(input('Change (1/2): '))
     if change_type == 1:  # Генерирование пароля и сохранение в файл
-        password = confirm_user_password('gen_new')
+        password = actions_with_password('gen_new')
         save_data_to_file(resource, login, password, master_password)
     elif change_type == 2:  # Сохранение пользовательского пароля
-        password = confirm_user_password('self')
+        password = actions_with_password('self')
         save_data_to_file(resource, login, password, master_password)
     else:   # Если ошибка выбора
-        print(red + '  -- Error of change. Please, change again --  ' + mc)
+        print(RED + '  -- Error of change. Please, change again --  ' + DEFAULT_COLOR)
         change_type_of_password(resource, login, master_password)
     system_action('clear')
 
@@ -151,9 +151,9 @@ def change_type_of_password(resource, login, master_password):
 def data_for_resource():
     """ Данные для сохранения (ресурс, логин) """
     system_action('clear')
-    print(green, '\n   --- Add new resource ---   ', '\n' * 3, mc)
-    resource = input(yellow + ' Resource: ' + mc)
-    login = input(yellow + ' Login: ' + mc)
+    print(GREEN, '\n   --- Add new resource ---   ', '\n' * 3, DEFAULT_COLOR)
+    resource = input(YELLOW + ' Resource: ' + DEFAULT_COLOR)
+    login = input(YELLOW + ' Login: ' + DEFAULT_COLOR)
     return resource, login
 
 
@@ -163,12 +163,12 @@ def decryption_block(master_password):
     def add_resource_data():
         resource, login = data_for_resource()
         change_type_of_password(resource, login, master_password)
-        if check_file_date_base:
+        if CHECK_FILE_FOR_RESOURCE:
             show_decryption_data(master_password)
         else:
             system_action('restart')
 
-    if check_file_date_base is False:   # При первом запуске
+    if CHECK_FILE_FOR_RESOURCE is False:   # При первом запуске
         add_resource_data()
         system_action('restart')
     else:  # При последущих запусках программа работает тут
@@ -182,11 +182,11 @@ def decryption_block(master_password):
                 show_decryption_data(master_password)
             elif change_resource_or_actions == '-x':  # Условие выхода
                 system_action('clear')  # Clearing terminal
-                print(blue, ' --- Program is closet --- \n', mc)
+                print(BLUE, ' --- Program is closet --- \n', DEFAULT_COLOR)
                 sys.exit()  # Exit
             elif change_resource_or_actions == '-r':  # Условие перезапуска
                 system_action('clear')  # Clearing terminal
-                print('\n', green, ' -- Restart -- ', mc)
+                print('\n', GREEN, ' -- Restart -- ', DEFAULT_COLOR)
                 sleep(.4)
                 system_action('restart')  # Restart program
             elif change_resource_or_actions == '-c':
@@ -198,8 +198,8 @@ def decryption_block(master_password):
                 notes(master_password)
             elif change_resource_or_actions == '-z':    # Удаление всех данных пользователя
                 system_action('clear')
-                print(red + '\n\n - Are you sure you want to delete all data? - ' + mc)
-                change_yes_or_no = input(yellow + ' - Remove ALL data? (y/n): ' + mc)
+                print(RED + '\n\n - Are you sure you want to delete all data? - ' + DEFAULT_COLOR)
+                change_yes_or_no = input(YELLOW + ' - Remove ALL data? (y/n): ' + DEFAULT_COLOR)
                 if change_yes_or_no == 'y':
                     os.system('rm -r elba/')   # Удаление папки
                     system_action('clear')
@@ -207,7 +207,7 @@ def decryption_block(master_password):
                 else:
                     pass
             else:
-                with open(file_date_base, encoding='utf-8') as profiles:
+                with open(FILE_FOR_RESOURCE, encoding='utf-8') as profiles:
                     reader = DictReader(profiles, delimiter=',')
                     s = 0
                     for line in reader:  # Iterating over lines file
@@ -218,8 +218,10 @@ def decryption_block(master_password):
 
                             def resource_template(type_data, value):
                                 """ Шаблон вывода данных о ресурсе """
-                                print(yellow, type_data + ':', green, 
-                                    dec_data(line[value], master_password), mc)
+                                print(YELLOW,
+                                      type_data + ':',
+                                      GREEN, dec_data(line[value], master_password),
+                                      DEFAULT_COLOR)
 
                             resource_template('Resource', 'resource')
                             resource_template('Login   ', 'login')
@@ -229,8 +231,9 @@ def decryption_block(master_password):
         decryption_block(master_password)  # Рекусрия под-главной функции
 
 
-def download_from_repository(): # Загрузка из репозитория модуля обновлений
-    os.system('git clone https://github.com/Berliner187/elba')  # Репозиторий
+def download_from_repository():
+    """ Загрузка и установка из репозитория модуля обновлений """
+    os.system(REPOSITORY)
     system_action('clear')
     if os.path.exists('update_obs.py') == bool(False):
         os.system('mv elba/update_obs.py .')
@@ -240,21 +243,21 @@ def download_from_repository(): # Загрузка из репозитория �
 
 def launcher():
     """ The main function responsible for the operation of the program """
-    if check_file_date_base == bool(False):
+    if CHECK_FILE_FOR_RESOURCE is False:
         show_name_program()
-        print(blue,
+        print(BLUE,
               "\n  - Encrypt your passwords with one master-password -    "
               "\n  -           No resources saved. Add them!         -  \n"
               "\n ----                That's easy!                 ---- \n",
-              red,
+              RED,
               "\n         Программа не поддерживает русский язык          ",
-              yellow,
+              YELLOW,
               '\n --              Создание мастер-пароля               -- '
               '\n --    Только не используйте свой банковский пароль,  -- '
               '\n          я не сильно вкладывался в безопасность         '
-              '\n                     этой программы                      ', mc)
+              '\n                     этой программы                      ', DEFAULT_COLOR)
 
-        master_password = confirm_user_password('master')  # Создание мастер-пароля
+        master_password = actions_with_password('master')  # Создание мастер-пароля
         greeting(master_password)  # Вывод приветствия
         sleep(.5)
         decryption_block(master_password)
@@ -276,8 +279,8 @@ if __name__ == '__main__':
         from update_obs import update
     except ModuleNotFoundError as error:
         print(error)
-        print('-----')
-        print(red + ' - Module "update" does not exist - ' + mc)
+        print('--------')
+        print(RED + ' - Module "update" does not exist - ' + DEFAULT_COLOR)
         sleep(1)
         download_from_repository()
 
@@ -289,28 +292,34 @@ if __name__ == '__main__':
         from del_resource_obs import delete_resource
         from notes_obs import notes
         from change_password_obs import change_master_password
-        from confirm_password_obs import confirm_user_password
+        from confirm_password_obs import actions_with_password
 
         try:
             from werkzeug.security import generate_password_hash, check_password_hash
+            from stdiomask import getpass
         except ModuleNotFoundError:
-            print(red + 'Missing module: ' + green + 'werkzeug' + mc)
+            print(
+                RED + 'Missing module: ' +
+                GREEN + 'werkzeug or stdiomask' +
+                DEFAULT_COLOR
+            )
             sleep(1)
             quit()
 
         launcher()  # Запуск главной направляющей функции
 
     except ModuleNotFoundError:
-        print(red + ' - Error in import local modules -' + mc)
+        print(RED + ' - Error in import local modules -' + DEFAULT_COLOR)
         sleep(1)
         update()
 
     except ValueError:
-        print(red, '\n' + ' --- Critical error, program is restarted --- ', mc)
+        print(RED, '\n' + ' --- Critical error, program is restarted --- ', DEFAULT_COLOR)
         sleep(1)
         system_action('clear')
-        print(red + ' -- You can try to update the program -- \n' + mc)
-        change = input(yellow + ' - Update? (y/n): ' + mc)
-        if change == 'y':  # Если получает запрос от юзера
+        # Попытка обновиться, если возникает ошибка
+        print(RED + ' -- You can try to update the program -- \n' + DEFAULT_COLOR)
+        change = input(YELLOW + ' - Update? (y/n): ' + DEFAULT_COLOR)
+        if change == 'y':
             update()
         system_action('restart')

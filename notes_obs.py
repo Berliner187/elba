@@ -1,43 +1,42 @@
-from main import system_action, show_decryption_data, main_folder
-from main import yellow, blue, purple, green, red, mc
-# Импорт переменных для работы с заметками
-from main import file_notes, fields_for_notes
-from csv import DictReader, DictWriter
+from main import *
+
 from enc_obs import enc_data, dec_data
+
+from csv import DictReader, DictWriter
 from time import sleep
 from shutil import copyfile
 import os
 
 
-__version__ = '1.0.7'
+__version__ = '1.1.0'
 
 
 def notes(master_password):
     system_action('clear')
     while True:     # Старт цикла для работы с заметками
         def show():     # Показ сохраненных заметок
-            with open(file_notes, encoding='utf-8') as notes_file:
+            with open(FILE_FOR_NOTES, encoding='utf-8') as notes_file:
                 reader_notes = DictReader(notes_file, delimiter=',')
-                print(yellow + '       ---  Saved notes --- ', '\n' * 3 + mc)
+                print(YELLOW + '       ---  Saved notes --- ', '\n' * 3 + DEFAULT_COLOR)
                 number_note = 0     # Номер заметки
                 for name in reader_notes:   # Перебор названий заметок
                     number_note += 1
                     dec_name_note = dec_data(name["name_note"], master_password)
                     # Вывод названий заметок и их порядкового номера
                     print(str(number_note) + '.', dec_name_note)
-                print(blue + '\n  - Press "Enter" to go back'
+                print(BLUE + '\n  - Press "Enter" to go back'
                              '\n  - Enter "-a" to add new note'
                              '\n  - Enter "-d" to remove note',
-                      yellow, '\n Select note by number', mc)
+                      YELLOW, '\n Select note by number', DEFAULT_COLOR)
         show()
 
         def add_new():  # Добавление новой заметки
             system_action('clear')
-            print(blue + '    ---  Add new note  --- \n\n')
-            with open(file_notes, mode="a", encoding='utf-8') as data_note:
+            print(BLUE + '    ---  Add new note  --- \n\n')
+            with open(FILE_FOR_NOTES, mode="a", encoding='utf-8') as data_note:
                 writer_note_add = DictWriter(data_note, fieldnames=fields_for_notes)
-                name_note = input(yellow + ' - Note name: ' + mc)
-                note = input(purple + ' - Note: ' + mc)
+                name_note = input(YELLOW + ' - Note name: ' + DEFAULT_COLOR)
+                note = input(PURPLE + ' - Note: ' + DEFAULT_COLOR)
                 enc_name_note = enc_data(name_note, master_password)
                 enc_note = enc_data(note, master_password)
                 writer_note_add.writerow({
@@ -53,10 +52,10 @@ def notes(master_password):
             if change_action == '-a':   # Пользователь выбирает добавление новой заметки
                 add_new()
             elif change_action == '-d':  # Пользователь выбирает удаление старой заметки
-                print(blue + '\n -- ' + 'Change by number note' + ' -- \n' + mc)
-                change_note_by_num = int(input(yellow + ' - Resource number: ' + mc))
+                print(BLUE + '\n -- ' + 'Change by number note' + ' -- \n' + DEFAULT_COLOR)
+                change_note_by_num = int(input(YELLOW + ' - Resource number: ' + DEFAULT_COLOR))
                 # Выгрузка старого
-                with open(file_notes, encoding='utf-8') as saved_note:
+                with open(FILE_FOR_NOTES, encoding='utf-8') as saved_note:
                     read_note = DictReader(saved_note, delimiter=',')
                     mas_name_note_rm, mas_note_rm = [], []
                     cnt_note = 0
@@ -69,8 +68,8 @@ def notes(master_password):
                             mas_note_rm.append(row_note["note"])
                     saved_note.close()
                 # Перенос в новый файл
-                new_file_notes = 'new_note.dat'
-                with open(new_file_notes, mode="a", encoding='utf-8') as new_notes:
+                NEW_FILE_FOR_NOTES = 'new_note.dat'
+                with open(new_FILE_FOR_NOTES, mode="a", encoding='utf-8') as new_notes:
                     write_note = DictWriter(new_notes, fieldnames=fields_for_notes)
                     for j in range(cnt_note-2):
                         write_note.writerow({
@@ -78,12 +77,12 @@ def notes(master_password):
                             'note': mas_note_rm[j]})
                     new_notes.close()
                 # Замена старого файла на актуальный
-                copyfile(new_file_notes, file_notes)  # Старый записывается новым файлом
-                os.system('rm ' + new_file_notes)  # Удаление нового файла
+                copyfile(NEW_FILE_FOR_NOTES, FILE_FOR_NOTES)  # Старый записывается новым файлом
+                os.system('rm ' + new_FILE_FOR_NOTES)  # Удаление нового файла
                 system_action('clear')
                 show()
             else:   # Вывод дешифрованных данных по выбранной цифре
-                with open(file_notes, encoding='utf-8') as saved_note:  # Открытие в csv-формате
+                with open(FILE_FOR_NOTES, encoding='utf-8') as saved_note:  # Открытие в csv-формате
                     read_note = DictReader(saved_note, delimiter=',')   # Чтение библиоткой csv
                     count = 0   # Счетчик
                     for line_of_note in read_note:
@@ -92,9 +91,9 @@ def notes(master_password):
                             system_action('clear')
                             show()  # Показываются сохраненные имена заметок
                             # Выводится зашифрованный вид выбранной заметки
-                            print(yellow, '\n Name:', green,
-                                  dec_data(line_of_note["name_note"], master_password), mc,
-                                  yellow, '\n Note:', green,
-                                  dec_data(line_of_note["note"], master_password), mc)
+                            print(YELLOW, '\n Name:', green,
+                                  dec_data(line_of_note["name_note"], master_password), DEFAULT_COLOR,
+                                  YELLOW, '\n Note:', green,
+                                  dec_data(line_of_note["note"], master_password), DEFAULT_COLOR)
             work()  # Рекурсия
         work()  # Запуск
