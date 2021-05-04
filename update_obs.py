@@ -4,7 +4,7 @@ import os
 from time import sleep
 
 
-__version__ = '1.2.1'   # Версия модуля
+__version__ = '1.2.2'   # Версия модуля
 
 
 # Модули для работы программы
@@ -63,7 +63,7 @@ def update():   # Обновление программы
         # Обновление, если суммы файлов не совпадают
         if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):
             print(GREEN + '\n   A new version of the program is available ' + DEFAULT_COLOR)
-            install_or_no = input(yellow + ' - Install new version program? (y/n): ' + DEFAULT_COLOR)
+            install_or_no = input(YELLOW + ' - Install new version program? (y/n): ' + DEFAULT_COLOR)
             if install_or_no == 'y':
 
                 actions_for_install(main_file)
@@ -77,9 +77,9 @@ def update():   # Обновление программы
                 os.system(remove_main_folder)
         else:
             system_action('clear')
-            print(yellow + ' -- You are using the latest version of the program -- ' + DEFAULT_COLOR)
+            print(YELLOW + ' -- You are using the latest version of the program -- ' + DEFAULT_COLOR)
             os.system(remove_main_folder)
             sleep(.7)
     else:
-        print(yellow + ' - New folder not found... ' + DEFAULT_COLOR)
+        print(YELLOW + ' - New folder not found... ' + DEFAULT_COLOR)
         download_from_repository()
