@@ -3,6 +3,9 @@ from main import *
 import os
 
 
+__version__ = 'v1.0.0'
+
+
 def size_all():
     print(BLUE, "\n\n - Объем, занимаемый программой - ", DEFAULT_COLOR)
     size_mod_cache = 0
