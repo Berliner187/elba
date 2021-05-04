@@ -18,7 +18,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'BETA v0.1.0.0'    # Version program
+__version__ = 'BETA v0.1.0.1'    # Version program
 
 
 def show_name_program():
@@ -204,8 +204,10 @@ def decryption_block(master_password):
                     os.system('rm -r elba/')   # Удаление папки
                     system_action('clear')
                     quit()
-                else:
-                    pass
+            elif change_resource_or_actions == '-s':
+                from get_size_obs import size_all
+                size_all()
+                decryption_block(master_password)
             else:
                 with open(FILE_FOR_RESOURCE, encoding='utf-8') as profiles:
                     reader = DictReader(profiles, delimiter=',')
