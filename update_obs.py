@@ -4,7 +4,7 @@ import os
 from time import sleep
 
 
-__version__ = '1.2.3'   # Версия модуля
+__version__ = '1.2.4'   # Версия модуля
 
 
 # Модули для работы программы
@@ -44,8 +44,8 @@ def update():   # Обновление программы
         for item in range(len(stock_modules)):
             def template_text_modules(color, message):
                 print('[', color, message, DEFAULT_COLOR, ']', stock_modules[item])
-            if stock_modules[item] not in modules:  # Вывод отсутствующего модуля
-                template_text_modules(RED, 'Missing module')
+            if stock_modules[item] not in installed_modules:  # Вывод отсутствующего модуля
+                template_text_modules(RED, 'FAILED')
                 sleep(.8)
             else:   # Вывод состояния ОК
                 template_text_modules(GREEN, 'OK')
