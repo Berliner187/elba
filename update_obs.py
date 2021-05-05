@@ -4,7 +4,7 @@ import os
 from time import sleep
 
 
-__version__ = '1.2.4'   # Версия модуля
+__version__ = '1.2.5'   # Версия модуля
 
 
 # Модули для работы программы
@@ -24,15 +24,21 @@ def update():   # Обновление программы
     file_type = 'obs.py'
     any_file = os.listdir('.')
     installed_modules = []
+
     for file in any_file:
         if file.endswith(file_type):
             installed_modules.append(file)
-    for j in range(len(stock_modules)):
-        if stock_modules[j] not in installed_modules:
-            cnt_modules += 1    # Счет отсутствующих модулей
 
-    def actions_for_install(program_file):  # Действия для установки
+    for j in range(len(stock_modules)):    # Счет отсутствующих модулей
+        if stock_modules[j] not in installed_modules:
+            cnt_modules += 1
+
+    def template_for_install(program_file):  # Действия для установки
         os.system('cp ' + new_folder_el + program_file + ' . ; ')
+
+    def template_question(text):
+        question = input(YELLOW + ' - ' + text + ' (y/n): ' + DEFAULT_COLOR)
+        return question
 
     if cnt_modules != 0:
         system_action('clear')
@@ -44,15 +50,15 @@ def update():   # Обновление программы
         for item in range(len(stock_modules)):
             def template_text_modules(color, message):
                 print('[', color, message, DEFAULT_COLOR, ']', stock_modules[item])
-            if stock_modules[item] not in installed_modules:  # Вывод отсутствующего модуля
+            if stock_modules[item] not in installed_modules:
                 template_text_modules(RED, 'FAILED')
                 sleep(.5)
-            else:   # Вывод состояния ОК
+            else:
                 template_text_modules(GREEN, 'OK')
                 sleep(.5)
 
         for i in range(len(stock_modules)):
-            actions_for_install(stock_modules[i])
+            template_for_install(stock_modules[i])
 
         os.system(remove_main_folder)
         print(GREEN + '\n The missing module has been installed! \n\n' + DEFAULT_COLOR)
@@ -63,21 +69,26 @@ def update():   # Обновление программы
         # Обновление, если суммы файлов не совпадают
         if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):
             print(GREEN + '\n   A new version of the program is available ' + DEFAULT_COLOR)
-            install_or_no = input(YELLOW + ' - Install new version program? (y/n): ' + DEFAULT_COLOR)
+            install_or_no = template_question(' - Install new version program?')
             if install_or_no == 'y':
-
-                actions_for_install(main_file)
-                actions_for_install('update_obs.py')
+                template_for_install(main_file)
+                template_for_install('update_obs.py')
                 for i in range(len(stock_modules)):
-                    actions_for_install(stock_modules[i])
+                    template_for_install(stock_modules[i])
+
                 print(GREEN + "  - Successfully installed! - ")
-                system_action('restart')
                 os.system(remove_main_folder)
+                system_action('restart')
             else:
                 os.system(remove_main_folder)
         else:
             system_action('clear')
             print(YELLOW + ' -- You are using the latest version of the program -- ' + DEFAULT_COLOR)
+            
+            for get_sum_item in stock_modules:  # Сверяются суммы файлов
+                if os.path.exists(get_sum_item) != os.path.exists(new_folder_el + get_sum_item):
+                    template_for_install(module)
+
             os.system(remove_main_folder)
             sleep(.7)
     else:
