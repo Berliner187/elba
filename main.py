@@ -18,7 +18,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'BETA v0.1.0.1'    # Version program
+__version__ = 'BETA v0.1.0.2'    # Version program
 
 
 def show_name_program():
@@ -49,7 +49,7 @@ FILE_FOR_RESOURCE = FOLDER_WITH_DATA + "main_data.dat"     # Файл, в кот
 FILE_USER_NAME = FOLDER_WITH_DATA + ".self_name.dat"  # Файл с именем (никнеймом)
 FILE_WITH_HASH = FOLDER_WITH_DATA + '.hash_password.dat'     # Файл с хэшем пароля
 FILE_FOR_NOTES = FOLDER_WITH_DATA + 'notes.csv'   # Файл с заметками
-file_version = FOLDER_WITH_DATA + '.version.log'  # Файл с версией программы
+FILE_LOG = FOLDER_WITH_DATA + '.file.log'  # Файл с версией программы
 
 fields_for_logs = ['version', 'date', 'modules', 'status']     # Столбцы файла с логами
 fields_for_main_data = ['resource', 'login', 'password']    # Столбцы для файла с ресурсами
@@ -183,7 +183,7 @@ def decryption_block(master_password):
             elif change_resource_or_actions == '-x':  # Условие выхода
                 system_action('clear')  # Clearing terminal
                 print(BLUE, ' --- Program is closet --- \n', DEFAULT_COLOR)
-                sys.exit()  # Exit
+                quit()  # Exit
             elif change_resource_or_actions == '-r':  # Условие перезапуска
                 system_action('clear')  # Clearing terminal
                 print('\n', GREEN, ' -- Restart -- ', DEFAULT_COLOR)
@@ -312,7 +312,7 @@ if __name__ == '__main__':
 
     except ModuleNotFoundError:
         print(RED + ' - Error in import local modules -' + DEFAULT_COLOR)
-        sleep(1)
+        sleep(.5)
         update()
 
     except ValueError:

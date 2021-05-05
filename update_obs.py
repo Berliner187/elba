@@ -4,7 +4,7 @@ import os
 from time import sleep
 
 
-__version__ = '1.2.5'   # Версия модуля
+__version__ = '1.2.6'   # Версия модуля
 
 
 # Модули для работы программы
@@ -24,7 +24,6 @@ def update():   # Обновление программы
     file_type = 'obs.py'
     any_file = os.listdir('.')
     installed_modules = []
-
     for file in any_file:
         if file.endswith(file_type):
             installed_modules.append(file)
@@ -47,6 +46,7 @@ def update():   # Обновление программы
             print(RED + '  Missing module \n' + DEFAULT_COLOR)
         elif cnt_modules > 1:
             print(RED + '  Missing modules \n' + DEFAULT_COLOR)
+
         for item in range(len(stock_modules)):
             def template_text_modules(color, message):
                 print('[', color, message, DEFAULT_COLOR, ']', stock_modules[item])
@@ -77,10 +77,8 @@ def update():   # Обновление программы
                     template_for_install(stock_modules[i])
 
                 print(GREEN + "  - Successfully installed! - ")
-                os.system(remove_main_folder)
-                system_action('restart')
-            else:
-                os.system(remove_main_folder)
+            os.system(remove_main_folder)
+            system_action('restart')
         else:
             system_action('clear')
             print(YELLOW + ' -- You are using the latest version of the program -- ' + DEFAULT_COLOR)
