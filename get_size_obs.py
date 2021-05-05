@@ -3,7 +3,7 @@ from main import *
 import os
 
 
-__version__ = 'v1.0.2'
+__version__ = 'v1.0.3'
 
 
 def size_all():
@@ -64,7 +64,8 @@ def size_all():
     else:
         user_measure = 'Байт'
 
+    total_data = size_program + size_user_data + os.path.getsize('get_size_obs.py')
     template_output('Данные пользователя заняли', size_user_data, user_measure)
     template_output('Файлы программы заняли', rounding(size_program - size_mod_cache), 'Килобайт')
     template_output('Кэш модулей занял', rounding(size_mod_cache), 'Килобайт')
-    template_output('Итого весь проект занимает', rounding(size_program + size_user_data), 'Килобайт в ПЗУ')
+    template_output('Итого весь проект занимает', rounding(total_data), 'Килобайт в ПЗУ')
