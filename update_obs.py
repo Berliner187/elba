@@ -66,7 +66,7 @@ def update():   # Обновление программы
         system_action('restart')
 
     if os.path.exists(new_folder_el):
-        # Обновление, если суммы файлов не совпадают
+        # Обновление, если суммы не совпадают
         if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):
             print(GREEN + '\n   A new version of the program is available ' + DEFAULT_COLOR)
             install_or_no = template_question(' - Install new version program?')
