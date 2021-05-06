@@ -18,7 +18,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'BETA v0.1.0.3'    # Version program
+__version__ = 'BETA v0.1.1.1'    # Version program
 
 
 def show_name_program():
@@ -257,6 +257,29 @@ def download_from_repository():
         system_action('restart')
 
 
+def write_log(cause, status):   # Функция записи в файл версии
+
+    def get_date():      # Получение и форматирование текущего времени
+        hms = datetime.datetime.today()  # Дата и время
+        day, month, year = hms.day, hms.month, hms.year     # Число, месяц, год
+        hour = hms.hour  # Формат часов
+        minute = hms.minute  # Формат минут
+        second = hms.second  # Формат секунд
+        time_format = str(hour) + ':' + str(minute) + ':' + str(second)
+        date_format = str(day) + '.' + str(month) + '.' + str(year)
+        total = str(time_format) + '-' + str(date_format)
+        return ''.join(total)
+
+    with open(FILE_LOG, mode="a", encoding='utf-8') as log_data:
+        log_writer = DictWriter(log_data, fieldnames=fields_for_log, delimiter=';')
+
+        log_writer.writerow({
+            fields_for_log[0]: __version__,     # Запись версии
+            fields_for_log[1]: get_date(),     # Запись даты и времени
+            fields_for_log[2]: cause,     # Запись причины
+            fields_for_log[3]: status})  # Запись статуса
+
+
 def launcher():
     """ The main function responsible for the operation of the program """
     if os.path.exists(FILE_LOG) is False:
@@ -316,7 +339,6 @@ if __name__ == '__main__':
         from notes_obs import notes
         from change_password_obs import change_master_password
         from confirm_password_obs import actions_with_password
-        from logs_obs import write_log
 
         try:
             from werkzeug.security import generate_password_hash, check_password_hash
@@ -335,9 +357,9 @@ if __name__ == '__main__':
 
     except ModuleNotFoundError as error:
         print(RED + ' - Error in import local modules -' + DEFAULT_COLOR)
-        write_log(error, 'CRASH')
         sleep(.5)
         update()
+        write_log(error, 'CRASH')
 
     except ValueError as error:
         write_log(error, 'CRASH')
