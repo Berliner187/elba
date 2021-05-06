@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'BETA v0.1.1.3'    # Version program
+__version__ = 'BETA v0.1.1.4'    # Version program
 
 
 def show_name_program():
@@ -223,6 +223,7 @@ def decryption_block(master_password):
                             line[fields_for_log[3]]
                         )
                 print(YELLOW + " - Press Enter to exit - " + DEFAULT_COLOR)
+                
             elif change_resource_or_actions == '-i':
                 """ Вывод информации о версиях модулей """
                 from change_password_obs import __version__ as change_password_ver
@@ -250,6 +251,9 @@ def decryption_block(master_password):
                 teplate_version_module('notes_obs', notes_ver)
                 teplate_version_module('update_obs', update_ver)
 
+            elif change_resource_or_actions == '-om':
+                """ Оптимизация кэшей путем удаления ненужного байт-кода """
+                os.system("rm -r __pycache__/")
 
             else:
                 with open(FILE_FOR_RESOURCE, encoding='utf-8') as profiles:
@@ -286,8 +290,8 @@ def download_from_repository():
         system_action('restart')
 
 
-def write_log(cause, status):   # Функция записи в файл версии
-
+def write_log(cause, status):
+    """ Логирование """
     def get_date():      # Получение и форматирование текущего времени
         hms = datetime.datetime.today()  # Дата и время
         day, month, year = hms.day, hms.month, hms.year     # Число, месяц, год
