@@ -16,6 +16,7 @@ import os
 import sys
 from time import sleep
 from csv import DictReader, DictWriter
+import datetime
 
 
 __version__ = 'BETA v0.1.1.1'    # Version program
