@@ -3,7 +3,7 @@ from main import *
 import os
 
 
-__version__ = 'v1.0.3'
+__version__ = '1.0.4'
 
 
 def size_all():
@@ -48,14 +48,15 @@ def size_all():
     user_folder = FOLDER_WITH_DATA
     size_user_data = 0
     for item in os.listdir(user_folder):
-        if item.endswith(".csv") or item.endswith(".dat"):
+        if item.endswith(".csv") or item.endswith(".dat") or item.endswith(".log"):
             size_user_data += os.path.getsize(user_folder + item)
 
     size_program += size_mod_cache  # Вычисление всего веса
+    size_logs = os.path.getsize(user_folder + '.file.log')
 
     def template_output(text, value, measure):
         """ Шаблон вывода информации """
-        print('\n ', text, YELLOW, value, measure, DEFAULT_COLOR)
+        print(text, YELLOW, value, measure, DEFAULT_COLOR)
 
     if size_user_data > 2**10:
         size_user_data /= 2**10
@@ -64,7 +65,8 @@ def size_all():
     else:
         user_measure = 'Байт'
 
-    total_data = size_program + size_user_data + os.path.getsize('get_size_obs.py')
+    total_data = size_program + size_user_data + os.path.getsize('get_size_obs.py') + size_logs
+    template_output('Лог-файлы заняли', rounding(size_logs), 'Килобайт')
     template_output('Данные пользователя заняли', size_user_data, user_measure)
     template_output('Файлы программы заняли', rounding(size_program - size_mod_cache), 'Килобайт')
     template_output('Кэш модулей занял', rounding(size_mod_cache), 'Килобайт')

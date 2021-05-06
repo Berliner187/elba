@@ -4,7 +4,7 @@ import os
 from time import sleep
 
 
-__version__ = '1.2.9'   # Версия модуля
+__version__ = '1.2.10'   # Версия модуля
 
 
 # Модули для работы программы
@@ -92,7 +92,7 @@ def update():   # Обновление программы
             print(YELLOW + ' -- You are using the latest version of the program -- ' + DEFAULT_COLOR)
             
             for get_sum_item in stock_modules:  # Сверяются суммы файлов
-                if os.path.exists(get_sum_item) != os.path.exists(new_folder_el + get_sum_item):
+                if os.path.exists(new_folder_el + get_sum_item) != os.path.exists(get_sum_item):
                     template_for_install(module)
                 write_log('Upgrade modules', 'OK')
 
