@@ -18,7 +18,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'BETA v0.1.0.2'    # Version program
+__version__ = 'BETA v0.1.0.3'    # Version program
 
 
 def show_name_program():
