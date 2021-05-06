@@ -184,6 +184,7 @@ def decryption_block(master_password):
             elif change_resource_or_actions == '-x':  # Условие выхода
                 system_action('clear')  # Clearing terminal
                 print(BLUE, ' --- Program is closet --- \n', DEFAULT_COLOR)
+                write_log("Exit", "OK")
                 quit()  # Exit
             elif change_resource_or_actions == '-r':  # Условие перезапуска
                 system_action('clear')  # Clearing terminal
