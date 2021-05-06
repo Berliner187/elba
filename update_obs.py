@@ -2,15 +2,17 @@ from main import *
 
 import os
 from time import sleep
+from logs_obs import write_log
 
 
-__version__ = '1.2.6'   # Версия модуля
+__version__ = '1.2.7'   # Версия модуля
 
 
 # Модули для работы программы
 stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
                  'del_resource_obs.py', 'notes_obs.py', 'get_size_obs.py',
-                 'change_password_obs.py', 'confirm_password_obs.py']
+                 'change_password_obs.py', 'confirm_password_obs.py', 
+                 'logs_obs.py']
 
 
 def update():   # Обновление программы
@@ -33,25 +35,31 @@ def update():   # Обновление программы
             cnt_modules += 1
 
     def template_for_install(program_file):  # Действия для установки
-        os.system('cp ' + new_folder_el + program_file + ' . ; ')
+        os.system('mv ' + new_folder_el + program_file + ' . ')
 
     def template_question(text):
         question = input(YELLOW + ' - ' + text + ' (y/n): ' + DEFAULT_COLOR)
         return question
 
+    def teplate_red_text(text):
+        print(RED, text, ' \n', DEFAULT_COLOR)
+
     if cnt_modules != 0:
         system_action('clear')
 
         if cnt_modules == 1:
-            print(RED + '  Missing module \n' + DEFAULT_COLOR)
+            teplate_red_text('Missing module')
+            write_log('MissingModule', 'ERROR')
         elif cnt_modules > 1:
-            print(RED + '  Missing modules \n' + DEFAULT_COLOR)
+            teplate_red_text('Missing modules')
+            write_log('MissingModules', 'ERROR')
 
         for item in range(len(stock_modules)):
             def template_text_modules(color, message):
                 print('[', color, message, DEFAULT_COLOR, ']', stock_modules[item])
             if stock_modules[item] not in installed_modules:
                 template_text_modules(RED, 'FAILED')
+                write_log(stock_modules[item], 'FAILED')
                 sleep(.5)
             else:
                 template_text_modules(GREEN, 'OK')
@@ -70,13 +78,15 @@ def update():   # Обновление программы
         if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):
             print(GREEN + '\n   A new version of the program is available ' + DEFAULT_COLOR)
             install_or_no = template_question(' - Install new version program?')
+
             if install_or_no == 'y':
                 template_for_install(main_file)
                 template_for_install('update_obs.py')
                 for i in range(len(stock_modules)):
                     template_for_install(stock_modules[i])
-
                 print(GREEN + "  - Successfully installed! - ")
+                write_log('Update', 'OK')
+
             os.system(remove_main_folder)
             system_action('restart')
         else:
@@ -86,9 +96,11 @@ def update():   # Обновление программы
             for get_sum_item in stock_modules:  # Сверяются суммы файлов
                 if os.path.exists(get_sum_item) != os.path.exists(new_folder_el + get_sum_item):
                     template_for_install(module)
+                write_log('Upgrade modules', 'OK')
 
             os.system(remove_main_folder)
             sleep(.7)
     else:
         print(YELLOW + ' - New folder not found... ' + DEFAULT_COLOR)
+        write_log('FolderNotFound', 'ERROR')
         download_from_repository()

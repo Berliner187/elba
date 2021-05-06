@@ -51,7 +51,7 @@ FILE_WITH_HASH = FOLDER_WITH_DATA + '.hash_password.dat'     # Файл с хэ�
 FILE_FOR_NOTES = FOLDER_WITH_DATA + 'notes.csv'   # Файл с заметками
 FILE_LOG = FOLDER_WITH_DATA + '.file.log'  # Файл с версией программы
 
-fields_for_logs = ['version', 'date', 'modules', 'status']     # Столбцы файла с логами
+fields_for_log = ['version', 'date', 'cause', 'status']     # Столбцы файла с логами
 fields_for_main_data = ['resource', 'login', 'password']    # Столбцы для файла с ресурсами
 fields_for_notes = ['name_note', 'note']    # Столбцы для файла с заметками
 
@@ -208,6 +208,20 @@ def decryption_block(master_password):
                 from get_size_obs import size_all
                 size_all()
                 decryption_block(master_password)
+            elif change_resource_or_actions == '-l':
+                system_action("clear")
+                print(GREEN + "\n Log program from file \n" + DEFAULT_COLOR)
+                with open(FILE_LOG, 'r') as log_data:
+                    reader_log = DictReader(log_data, delimiter=';')
+                    for line in reader_log:
+                        print(
+                            line[fields_for_log[0]],
+                            line[fields_for_log[1]],
+                            line[fields_for_log[2]],
+                            line[fields_for_log[3]]
+                        )
+                print(YELLOW + " - Press Enter to exit - " + DEFAULT_COLOR)
+
             else:
                 with open(FILE_FOR_RESOURCE, encoding='utf-8') as profiles:
                     reader = DictReader(profiles, delimiter=',')
@@ -245,6 +259,12 @@ def download_from_repository():
 
 def launcher():
     """ The main function responsible for the operation of the program """
+    if os.path.exists(FILE_LOG) is False:
+        with open(FILE_LOG, mode="a", encoding='utf-8') as data:
+            logg_writer = DictWriter(data, fieldnames=fields_for_log, delimiter=';')
+            logg_writer.writeheader()
+        write_log('First Start', 'START')
+
     if CHECK_FILE_FOR_RESOURCE is False:
         show_name_program()
         print(BLUE,
@@ -263,6 +283,7 @@ def launcher():
         greeting(master_password)  # Вывод приветствия
         sleep(.5)
         decryption_block(master_password)
+        write_log('---', 'OK')
         system_action('restart')
     else:
         # Если файл уже создан
@@ -271,6 +292,7 @@ def launcher():
         greeting(master_password)  # Вывод приветствия
         sleep(.5)
         system_action('clear')  # Очистка терминала
+        write_log('Subsequent launch', 'OK')
         show_decryption_data(master_password)       # Показ содержимого файла с ресурсами
         decryption_block(master_password)  # Старт цикла
 
@@ -280,8 +302,7 @@ if __name__ == '__main__':
     try:
         from update_obs import update
     except ModuleNotFoundError as error:
-        print(error)
-        print('--------')
+        write_log(error, 'CRASH')
         print(RED + ' - Module "update" does not exist - ' + DEFAULT_COLOR)
         sleep(1)
         download_from_repository()
@@ -295,11 +316,13 @@ if __name__ == '__main__':
         from notes_obs import notes
         from change_password_obs import change_master_password
         from confirm_password_obs import actions_with_password
+        from logs_obs import write_log
 
         try:
             from werkzeug.security import generate_password_hash, check_password_hash
             from stdiomask import getpass
-        except ModuleNotFoundError:
+        except ModuleNotFoundError as error:
+            write_log(error, 'CRASH')
             print(
                 RED + 'Missing module: ' +
                 GREEN + 'werkzeug or stdiomask' +
@@ -310,12 +333,14 @@ if __name__ == '__main__':
 
         launcher()  # Запуск главной направляющей функции
 
-    except ModuleNotFoundError:
+    except ModuleNotFoundError as error:
         print(RED + ' - Error in import local modules -' + DEFAULT_COLOR)
+        write_log(error, 'CRASH')
         sleep(.5)
         update()
 
-    except ValueError:
+    except ValueError as error:
+        write_log(error, 'CRASH')
         print(RED, '\n' + ' --- Critical error, program is restarted --- ', DEFAULT_COLOR)
         sleep(1)
         system_action('clear')
