@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'BETA v0.1.1.1'    # Version program
+__version__ = 'BETA v0.1.1.2'    # Version program
 
 
 def show_name_program():
@@ -325,8 +325,8 @@ if __name__ == '__main__':
     system_action('clear')
     try:
         from update_obs import update
-    except ModuleNotFoundError as error:
-        write_log(error, 'CRASH')
+    except ModuleNotFoundError as update_obs_error:
+        write_log(update_obs_error, 'CRASH UPDATE')
         print(RED + ' - Module "update" does not exist - ' + DEFAULT_COLOR)
         sleep(1)
         download_from_repository()
@@ -360,10 +360,10 @@ if __name__ == '__main__':
         print(RED + ' - Error in import local modules -' + DEFAULT_COLOR)
         sleep(.5)
         update()
-        write_log(error, 'CRASH')
+        write_log(error, 'CRASH LOCAL MODULES')
 
     except ValueError as error:
-        write_log(error, 'CRASH')
+        write_log(error, 'CRITICAL CRASH')
         print(RED, '\n' + ' --- Critical error, program is restarted --- ', DEFAULT_COLOR)
         sleep(1)
         system_action('clear')

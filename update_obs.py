@@ -2,10 +2,9 @@ from main import *
 
 import os
 from time import sleep
-from logs_obs import write_log
 
 
-__version__ = '1.2.8'   # Версия модуля
+__version__ = '1.2.9'   # Версия модуля
 
 
 # Модули для работы программы
@@ -34,7 +33,7 @@ def update():   # Обновление программы
             cnt_modules += 1
 
     def template_for_install(program_file):  # Действия для установки
-        os.system('mv ' + new_folder_el + program_file + ' . ')
+        os.system('cp ' + new_folder_el + program_file + ' . ')
 
     def template_question(text):
         question = input(YELLOW + ' - ' + text + ' (y/n): ' + DEFAULT_COLOR)
