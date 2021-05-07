@@ -4,7 +4,7 @@ import os
 from time import sleep
 
 
-__version__ = '1.2.12'   # Версия модуля
+__version__ = '1.2.13'   # Версия модуля
 
 
 # Модули для работы программы
@@ -94,9 +94,9 @@ def update():   # Обновление программы
             print(YELLOW + ' -- You are using the latest version of the program -- ' + DEFAULT_COLOR)
             
             for module in stock_modules:  # Сверяются суммы файлов
-                if os.path.exists(new_folder_el + module) != os.path.exists(module):
+                if os.path.getsize(new_folder_el + module) != os.path.getsize(module):
                     template_for_install(module)
-                write_log('Upgrade modules', 'OK')
+                write_log('Upgrade ' + module, 'OK')
 
             os.system(remove_main_folder)
             sleep(.7)
