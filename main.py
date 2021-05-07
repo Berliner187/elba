@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'BETA v0.1.1.4'    # Version program
+__version__ = 'BETA v0.1.1.5'    # Version program
 
 
 def show_name_program():
@@ -107,10 +107,20 @@ def show_decryption_data(master_password):
               '\n Select resource by number \n', DEFAULT_COLOR)
 
 
-def point_of_entry():    # Auth Confirm Password
+def point_of_entry():   # Точка входа в систему
     """ Получение мастер-пароля """
-    show_name_program()     # Показывает название программы и выводит логотип
-    master_password = getpass(YELLOW + '\n -- Your master-password: ' + DEFAULT_COLOR)
+
+    def texmplate_wrong_message(value_left):
+        print(RED, '\n  ---  Wrong password --- ', 
+            BLUE, "\n\n Attempts left:", RED, value_left, DEFAULT_COLOR)
+        sleep(1)
+
+    def starter_elements(color, text):
+        show_name_program()     # Выводит название и логотип
+        master_password = getpass(color + '\n ' + text + DEFAULT_COLOR)
+        return master_password
+
+    master_password = starter_elements(YELLOW, ' -- Your master-password: ')
     if master_password == 'x':  # Досрочный выход из программы
         quit()
     elif master_password == 'r':
@@ -119,15 +129,31 @@ def point_of_entry():    # Auth Confirm Password
         animation()
     elif master_password == 'n':
         author()
+
     # Проверка хэша пароля
     with open(FILE_WITH_HASH, 'r') as hash_pas_from_file:
         hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
-        if hash_password == bool(False):    # Если хеши не совпадают
-            print(RED + '\n --- Wrong password --- ' + DEFAULT_COLOR)
-            sleep(1)
-            system_action('restart')
-        else:   # Если совпали
-            return master_password
+    cnt_left = 2    # Счет оставшихся попыток
+
+    if hash_password is False:    # Если хеши не совпадают
+        texmplate_wrong_message(cnt_left)
+        while hash_password is False:
+            cnt_left -= 1
+            system_action('clear')
+            master_password = starter_elements(YELLOW, ' -- Your master-password: ')
+            file_hash = open(FILE_WITH_HASH)
+            hash_password = check_password_hash(file_hash.readline(), master_password)
+            if cnt_left == 0:
+                system_action('clear')
+                print(RED + " -- Limit is exceeded -- " + DEFAULT_COLOR)
+                sleep(2**10)
+                quit()
+            if hash_password is True:
+                return master_password
+            else:
+                texmplate_wrong_message(cnt_left)
+    else:
+        return master_password
 
 
 def change_type_of_password(resource, login, master_password):
