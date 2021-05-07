@@ -4,7 +4,7 @@ import os
 from time import sleep
 
 
-__version__ = '1.2.10'   # Версия модуля
+__version__ = '1.2.11'   # Версия модуля
 
 
 # Модули для работы программы
@@ -82,7 +82,9 @@ def update():   # Обновление программы
                 template_for_install('update_obs.py')
                 for i in range(len(stock_modules)):
                     template_for_install(stock_modules[i])
-                print(GREEN + "  - Successfully installed! - ")
+                system_action('clear')
+                print(GREEN + "\n\n    - Successfully installed! - ")
+                sleep(.7)
                 write_log('Update', 'OK')
 
             os.system(remove_main_folder)
