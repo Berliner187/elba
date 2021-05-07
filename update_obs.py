@@ -4,7 +4,7 @@ import os
 from time import sleep
 
 
-__version__ = '1.2.14 TEST 4'   # Версия модуля
+__version__ = '1.2.14 TEST 5'   # Версия модуля
 
 
 # Модули для работы программы
@@ -14,6 +14,14 @@ stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
 
 
 def update():   # Обновление программы
+    # BITX02020020xxx
+    # BITX02020020xxx
+    # BITX02020020xxx
+    # BITX02020020xxx
+    # BITX02020020xxx
+    # BITX02020020xxx
+    # BITX02020020xxx
+    # BITX02020020xxx
     main_file = 'main.py'
     new_folder_el = 'elba/'
     remove_main_folder = 'rm -r ' + new_folder_el + ' -f'  # Удаление новой папки
