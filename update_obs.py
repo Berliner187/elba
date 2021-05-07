@@ -4,7 +4,7 @@ import os
 from time import sleep
 
 
-__version__ = '1.2.13'   # Версия модуля
+__version__ = '1.2.13 TEST'   # Версия модуля
 
 
 # Модули для работы программы
