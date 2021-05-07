@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'BETA v0.1.1.5'    # Version program
+__version__ = 'BETA v0.1.1.6'    # Version program
 
 
 def show_name_program():
@@ -277,9 +277,12 @@ def decryption_block(master_password):
                 teplate_version_module('notes_obs', notes_ver)
                 teplate_version_module('update_obs', update_ver)
 
-            elif change_resource_or_actions == '-om':
+            elif change_resource_or_actions == '-dm':
                 """ Оптимизация кэшей путем удаления ненужного байт-кода """
                 os.system("rm -r __pycache__/")
+                system_action('clear')
+                print(GREEN + "\n" * 3, "    Success delete cache" + DEFAULT_COLOR)
+                print(YELLOW + "   Press Enter to go back  " + DEFAULT_COLOR)
 
             else:
                 with open(FILE_FOR_RESOURCE, encoding='utf-8') as profiles:
@@ -390,6 +393,19 @@ if __name__ == '__main__':
         download_from_repository()
 
     try:
+        from werkzeug.security import generate_password_hash, check_password_hash
+        from stdiomask import getpass
+    except ModuleNotFoundError as error:
+        write_log(error, 'CRASH')
+        print(
+            RED + 'Missing module: ' +
+            GREEN + 'werkzeug or stdiomask' +
+            DEFAULT_COLOR
+        )
+        sleep(1)
+        quit()
+
+    try:
         # Локальные модули
         from logo_obs import elba, animation, author
         from enc_obs import enc_data, dec_data
@@ -399,26 +415,13 @@ if __name__ == '__main__':
         from change_password_obs import change_master_password
         from confirm_password_obs import actions_with_password
 
-        try:
-            from werkzeug.security import generate_password_hash, check_password_hash
-            from stdiomask import getpass
-        except ModuleNotFoundError as error:
-            write_log(error, 'CRASH')
-            print(
-                RED + 'Missing module: ' +
-                GREEN + 'werkzeug or stdiomask' +
-                DEFAULT_COLOR
-            )
-            sleep(1)
-            quit()
-
         launcher()  # Запуск главной направляющей функции
 
     except ModuleNotFoundError as error:
-        print(RED + ' - Error in import local modules -' + DEFAULT_COLOR)
+        print(RED + ' - Error in import modules -' + DEFAULT_COLOR)
         sleep(.5)
         update()
-        write_log(error, 'CRASH LOCAL MODULES')
+        write_log(error, 'CRASH MODULES')
 
     except ValueError as error:
         write_log(error, 'CRITICAL CRASH')
