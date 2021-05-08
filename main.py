@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'DELTA v0.2.1.0'    # Version program
+__version__ = 'DELTA v0.2.1.1'    # Version program
 
 
 def show_name_program():
@@ -118,9 +118,8 @@ def show_decryption_data(master_password):
     print(BLUE +
           '\n  - Enter "-r" to restart, "-x" to exit'
           '\n  - Enter "-a" to add new resource',
-          RED, '\n  - Enter "-c" to change master-password !',
-          BLUE,
-          RED, '\n  - Enter "-d" to remove resource        !',
+          RED, '\n  - Enter "-c" to change master-password !', BLUE,
+          '\n  - Enter "-d" to remove resource',
           BLUE,
           RED, '\n  - Enter "-n" to go to notes            !',
           BLUE,
