@@ -119,7 +119,7 @@ def point_of_entry():   # Точка входа в систему
         show_name_program()     # Выводит название и логотип
         master_password = getpass(color + '\n ' + text + DEFAULT_COLOR)
         if master_password == 'x':  # Досрочный выход из программы
-        quit()
+            quit()
         elif master_password == 'r':
             system_action('restart')
         elif master_password == 'a':    # Показ анимации
