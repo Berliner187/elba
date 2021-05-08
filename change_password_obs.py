@@ -20,7 +20,7 @@ def change_master_password():
     def user_input_password():
         print(BLUE + '\n Minimum password length 8 characters' + DEFAULT_COLOR)
         user_password = getpass('\n Password: ')
-        user_confirm_password = getpass(' Confirm password: ')  # hide_password(' Confirm password: ')
+        user_confirm_password = getpass(' Confirm password: ')
         cnt_trying = 0
         if (user_password != user_confirm_password) or (len(user_password) or len(user_confirm_password)) < 8:
             print(red + '\n Error of confirm. Try again \n' + DEFAULT_COLOR)
@@ -40,7 +40,7 @@ def change_master_password():
             sleep(1)
             system_action('restart')
         else:
-            print('        [' + GREEN + ' OK ' + DEFAULT_COLOR + ']')
+            print(GREEN + ' -- Success confirm -- ' + DEFAULT_COLOR)
             sleep(.6)
             system_action('clear')
             print(BLUE + '\n   Pick a new master-password \n' + DEFAULT_COLOR)

@@ -20,7 +20,7 @@ import datetime
 from enc_obs import enc_only_base64, dec_only_base64, enc_aes, dec_aes
 
 
-__version__ = 'DELTA v0.2.0.0 Alpha'    # Version program
+__version__ = 'DELTA v0.2.0.1 Alpha'    # Version program
 
 
 def show_name_program():
@@ -104,9 +104,11 @@ def show_decryption_data(master_password):
     """ Показ всех сохраненных ресурсов """
     system_action('clear')
     print("\n\n")
-    print(PURPLE, "     _________________________________")
-    print(PURPLE, "    /\/| ", YELLOW, "\/                 \/", PURPLE, " |\/\ ")
-    print(PURPLE, "   /\/\|", YELLOW, " \/ Saved resources \/ ", PURPLE, "|/\/\ ", '\n'*5 + DEFAULT_COLOR)
+    print(PURPLE, "     ___________________________________")
+    print(PURPLE, "    /\/| ", YELLOW, "\/                   \/", PURPLE, " |\/\ ")
+    print(PURPLE, "   /\/\|", YELLOW, " \/  Saved resources  \/ ", PURPLE, "|/\/\ ", DEFAULT_COLOR)
+    print(YELLOW, "           \/                   \/ ", DEFAULT_COLOR)
+    print('\n'*5)
 
     s = 0
     for resource in os.listdir(FOLDER_WITH_RESOURCES):
@@ -311,9 +313,12 @@ def decryption_block(master_password):
                         login_from_file = FOLDER_WITH_RESOURCES + resource_in_folder + '/' + FILE_LOGIN
                         password_from_file = FOLDER_WITH_RESOURCES + resource_in_folder + '/' + FILE_PASSWORD
 
-                        print(YELLOW, 'Resource:', DEFAULT_COLOR, dec_aes(resource_from_file, master_password))
-                        print(YELLOW, 'Login   :', DEFAULT_COLOR, dec_aes(login_from_file, master_password))
-                        print(YELLOW, 'Password:', DEFAULT_COLOR, dec_aes(password_from_file, master_password))
+                        def template_print_decryption_data(data_type, value):
+                            print(BLUE, data_type, YELLOW, dec_aes(value, master_password), DEFAULT_COLOR)
+
+                        template_print_decryption_data('Resource --->', resource_from_file)
+                        template_print_decryption_data('Login ------>', login_from_file)
+                        template_print_decryption_data('Password --->', password_from_file)
 
         except ValueError:
             show_decryption_data(master_password)   # Показ содежимого
@@ -359,7 +364,7 @@ def launcher():
         with open(FILE_LOG, mode="a", encoding='utf-8') as data:
             logs_writer = DictWriter(data, fieldnames=fields_for_log, delimiter=';')
             logs_writer.writeheader()
-        write_log('First Start', 'START')
+        write_log('First launch', 'OK')
 
     if CHECK_FILE_FOR_RESOURCE is False:
         os.mkdir(FOLDER_WITH_RESOURCES)
