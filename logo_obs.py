@@ -4,6 +4,9 @@ from os import system
 from main import *
 
 
+__version__ = '1.1.0'
+
+
 def clear():
     system('clear')
 

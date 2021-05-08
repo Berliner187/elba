@@ -1,4 +1,9 @@
 from base64 import urlsafe_b64encode,urlsafe_b64decode
+
+
+__version__ = '1.0.0'
+
+
 q=bin
 g=int
 l=len

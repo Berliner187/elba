@@ -11,7 +11,7 @@ from shutil import copyfile
 import os
 
 
-__version__ = '1.1.2'
+__version__ = '1.1.1'
 
 
 def change_master_password():
@@ -23,7 +23,7 @@ def change_master_password():
         user_confirm_password = getpass(' Confirm password: ')  # hide_password(' Confirm password: ')
         cnt_trying = 0
         if (user_password != user_confirm_password) or (len(user_password) or len(user_confirm_password)) < 8:
-            print(RED + '\n Error of confirm. Try again \n' + DEFAULT_COLOR)
+            print(red + '\n Error of confirm. Try again \n' + DEFAULT_COLOR)
             cnt_trying += 1
             if cnt_trying == 1:
                 quit()
