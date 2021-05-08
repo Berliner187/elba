@@ -1,9 +1,4 @@
 
-*.pyc
-*.pyc
-*.pyc
-volare/.file.log
-volare/.hash_password.dat
-volare/.self_name.dat
-volare/main_data.dat
-volare/notes.csv
+*.log
+*.dat
+*.csv

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-    Password Manager Stable For Linux (SFL)
+    Password Manager For Linux (SFL)
     Elba - Password manager and keeper notes
     Resources and notes related to them are encrypted with a single password
     Copyright (C) 2021  by Berliner187
@@ -19,14 +19,14 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'BETA v0.1.1.6'    # Version program
+__version__ = 'BETA v0.1.1.7'    # Version program
 
 
 def show_name_program():
     print(BLUE,
           "\n || Password Manager and Keeper of Notes ||",
-          "\n || Stable For Linux || "
-          "\n || by Berliner187   || ", 
+          "\n || Version For Linux || "
+          "\n || by Berliner187    || ", 
           __version__,
           '\n' * 3, DEFAULT_COLOR)
     elba()  # Вывод логотипа
@@ -118,22 +118,22 @@ def point_of_entry():   # Точка входа в систему
     def starter_elements(color, text):
         show_name_program()     # Выводит название и логотип
         master_password = getpass(color + '\n ' + text + DEFAULT_COLOR)
+        if master_password == 'x':  # Досрочный выход из программы
+        quit()
+        elif master_password == 'r':
+            system_action('restart')
+        elif master_password == 'a':    # Показ анимации
+            animation()
+        elif master_password == 'n':
+            author()
         return master_password
 
     master_password = starter_elements(YELLOW, ' -- Your master-password: ')
-    if master_password == 'x':  # Досрочный выход из программы
-        quit()
-    elif master_password == 'r':
-        system_action('restart')
-    elif master_password == 'a':    # Показ анимации
-        animation()
-    elif master_password == 'n':
-        author()
 
     # Проверка хэша пароля
     with open(FILE_WITH_HASH, 'r') as hash_pas_from_file:
         hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
-    cnt_left = 2    # Счет оставшихся попыток
+    cnt_left = 3    # Счет оставшихся попыток
 
     if hash_password is False:    # Если хеши не совпадают
         texmplate_wrong_message(cnt_left)
@@ -419,9 +419,9 @@ if __name__ == '__main__':
 
     except ModuleNotFoundError as error:
         print(RED + ' - Error in import modules -' + DEFAULT_COLOR)
+        write_log(error, 'CRASH MODULES')
         sleep(.5)
         update()
-        write_log(error, 'CRASH MODULES')
 
     except ValueError as error:
         write_log(error, 'CRITICAL CRASH')
@@ -433,4 +433,5 @@ if __name__ == '__main__':
         change = input(YELLOW + ' - Update? (y/n): ' + DEFAULT_COLOR)
         if change == 'y':
             update()
+        os.system('del' if os.name == 'nt' else 'rm')
         system_action('restart')
