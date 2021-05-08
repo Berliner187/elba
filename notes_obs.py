@@ -1,6 +1,7 @@
 from main import *
 
-from enc_obs import enc_data, dec_data
+# from enc_obs import enc_aes, dec_aes
+from enc_obs import enc_only_base64, dec_only_base64
 
 from csv import DictReader, DictWriter
 from time import sleep
@@ -8,7 +9,7 @@ from shutil import copyfile
 import os
 
 
-__version__ = '1.1.1'
+__version__ = '2.0.0 ON DEVELOPMENT STAGE'
 
 
 def notes(master_password):
@@ -21,7 +22,7 @@ def notes(master_password):
                 number_note = 0     # Номер заметки
                 for name in reader_notes:   # Перебор названий заметок
                     number_note += 1
-                    dec_name_note = dec_data(name["name_note"], master_password)
+                    dec_name_note = dec_only_base64(name["name_note"], master_password)
                     # Вывод названий заметок и их порядкового номера
                     print(str(number_note) + '.', dec_name_note)
                 print(BLUE + '\n  - Press "Enter" to go back'
@@ -37,8 +38,8 @@ def notes(master_password):
                 writer_note_add = DictWriter(data_note, fieldnames=fields_for_notes)
                 name_note = input(YELLOW + ' - Note name: ' + DEFAULT_COLOR)
                 note = input(PURPLE + ' - Note: ' + DEFAULT_COLOR)
-                enc_name_note = enc_data(name_note, master_password)
-                enc_note = enc_data(note, master_password)
+                enc_name_note = enc_only_base64(name_note, master_password)
+                enc_note = enc_only_base64(note, master_password)
                 writer_note_add.writerow({
                     'name_note': enc_name_note,
                     'note': enc_note})
@@ -92,8 +93,8 @@ def notes(master_password):
                             show()  # Показываются сохраненные имена заметок
                             # Выводится зашифрованный вид выбранной заметки
                             print(YELLOW, '\n Name:', GREEN,
-                                  dec_data(line_of_note["name_note"], master_password), DEFAULT_COLOR,
+                                  dec_only_base64(line_of_note["name_note"], master_password), DEFAULT_COLOR,
                                   YELLOW, '\n Note:', GREEN,
-                                  dec_data(line_of_note["note"], master_password), DEFAULT_COLOR)
+                                  dec_only_base64(line_of_note["note"], master_password), DEFAULT_COLOR)
             work()  # Рекурсия
         work()  # Запуск

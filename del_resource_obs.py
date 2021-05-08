@@ -5,7 +5,7 @@ import os
 from main import *
 
 
-__version__ = '1.1.1'  # Версия модуля
+__version__ = '2.0.0 ON DEVELOPMENT STAGE'  # Версия модуля
 
 
 def delete_resource():

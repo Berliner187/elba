@@ -1,7 +1,7 @@
 from main import *
 
 from csv import DictReader, DictWriter
-from enc_obs import enc_data, dec_data
+from enc_obs import enc_aes, dec_aes
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
@@ -11,7 +11,7 @@ from shutil import copyfile
 import os
 
 
-__version__ = '1.1.1'
+__version__ = '2.0.0 ON DEVELOPMENT STAGE'
 
 
 def change_master_password():
@@ -53,14 +53,14 @@ def change_master_password():
                 for item in reader_resources:
                     cnt += 1    # Счетчик для нового файла
                     # Дешифрование старым паролем
-                    dec_res = dec_data(item["resource"], confirm_master_password)
-                    dec_log = dec_data(item["login"], confirm_master_password)
-                    dec_pas = dec_data(item["password"], confirm_master_password)
+                    dec_res = dec_aes(item["resource"], confirm_master_password)
+                    dec_log = dec_aes(item["login"], confirm_master_password)
+                    dec_pas = dec_aes(item["password"], confirm_master_password)
 
                     # Шифрование новым паролем
-                    enc_res = enc_data(dec_res, new_master_password)
-                    enc_log = enc_data(dec_log, new_master_password)
-                    enc_pas = enc_data(dec_pas, new_master_password)
+                    enc_res = enc_aes(dec_res, new_master_password)
+                    enc_log = enc_aes(dec_log, new_master_password)
+                    enc_pas = enc_aes(dec_pas, new_master_password)
 
                     # Добавление зашифрованных данных в массивы
                     mas_res.append(enc_res)
