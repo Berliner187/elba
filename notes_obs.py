@@ -8,7 +8,7 @@ from shutil import copyfile
 import os
 
 
-__version__ = '1.1.0'
+__version__ = '1.1.1'
 
 
 def notes(master_password):
@@ -42,7 +42,7 @@ def notes(master_password):
                 writer_note_add.writerow({
                     'name_note': enc_name_note,
                     'note': enc_note})
-            print(green, '   -- Success saved! --')
+            print(GREEN, '   -- Success saved! --')
             sleep(.3)
             system_action('clear')
             show()
@@ -91,9 +91,9 @@ def notes(master_password):
                             system_action('clear')
                             show()  # Показываются сохраненные имена заметок
                             # Выводится зашифрованный вид выбранной заметки
-                            print(YELLOW, '\n Name:', green,
+                            print(YELLOW, '\n Name:', GREEN,
                                   dec_data(line_of_note["name_note"], master_password), DEFAULT_COLOR,
-                                  YELLOW, '\n Note:', green,
+                                  YELLOW, '\n Note:', GREEN,
                                   dec_data(line_of_note["note"], master_password), DEFAULT_COLOR)
             work()  # Рекурсия
         work()  # Запуск

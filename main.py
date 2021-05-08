@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-    Password Manager Stable For Linux (SFL)
+    Password Manager For Linux (SFL)
     Elba - Password manager and keeper notes
     Resources and notes related to them are encrypted with a single password
     Copyright (C) 2021  by Berliner187
@@ -16,16 +16,17 @@ import os
 import sys
 from time import sleep
 from csv import DictReader, DictWriter
+import datetime
 
 
-__version__ = 'BETA v0.1.0.0'    # Version program
+__version__ = 'BETA v0.1.1.7'    # Version program
 
 
 def show_name_program():
     print(BLUE,
           "\n || Password Manager and Keeper of Notes ||",
-          "\n || Stable For Linux || "
-          "\n || by Berliner187   || ", 
+          "\n || Version For Linux || "
+          "\n || by Berliner187    || ", 
           __version__,
           '\n' * 3, DEFAULT_COLOR)
     elba()  # Вывод логотипа
@@ -49,9 +50,9 @@ FILE_FOR_RESOURCE = FOLDER_WITH_DATA + "main_data.dat"     # Файл, в кот
 FILE_USER_NAME = FOLDER_WITH_DATA + ".self_name.dat"  # Файл с именем (никнеймом)
 FILE_WITH_HASH = FOLDER_WITH_DATA + '.hash_password.dat'     # Файл с хэшем пароля
 FILE_FOR_NOTES = FOLDER_WITH_DATA + 'notes.csv'   # Файл с заметками
-file_version = FOLDER_WITH_DATA + '.version.log'  # Файл с версией программы
+FILE_LOG = FOLDER_WITH_DATA + '.file.log'  # Файл с версией программы
 
-fields_for_logs = ['version', 'date', 'modules', 'status']     # Столбцы файла с логами
+fields_for_log = ['version', 'date', 'cause', 'status']     # Столбцы файла с логами
 fields_for_main_data = ['resource', 'login', 'password']    # Столбцы для файла с ресурсами
 fields_for_notes = ['name_note', 'note']    # Столбцы для файла с заметками
 
@@ -59,7 +60,7 @@ fields_for_notes = ['name_note', 'note']    # Столбцы для файла �
 CHECK_FILE_WITH_HASH = os.path.exists(FILE_WITH_HASH)
 CHECK_FILE_FOR_RESOURCE = os.path.exists(FILE_FOR_RESOURCE)
 
-REPOSITORY = 'git clone https://github.com/Berliner187/elba -b delta'
+REPOSITORY = 'git clone https://github.com/Berliner187/elba'
 
 if os.path.exists(FOLDER_WITH_DATA) == bool(False):  # Папка с данными программы
     os.mkdir(FOLDER_WITH_DATA)
@@ -106,27 +107,53 @@ def show_decryption_data(master_password):
               '\n Select resource by number \n', DEFAULT_COLOR)
 
 
-def point_of_entry():    # Auth Confirm Password
+def point_of_entry():   # Точка входа в систему
     """ Получение мастер-пароля """
-    show_name_program()     # Показывает название программы и выводит логотип
-    master_password = getpass(YELLOW + '\n -- Your master-password: ' + DEFAULT_COLOR)
-    if master_password == 'x':  # Досрочный выход из программы
-        quit()
-    elif master_password == 'r':
-        system_action('restart')
-    elif master_password == 'a':    # Показ анимации
-        animation()
-    elif master_password == 'n':
-        author()
+
+    def texmplate_wrong_message(value_left):
+        print(RED, '\n  ---  Wrong password --- ', 
+            BLUE, "\n\n Attempts left:", RED, value_left, DEFAULT_COLOR)
+        sleep(1)
+
+    def starter_elements(color, text):
+        show_name_program()     # Выводит название и логотип
+        master_password = getpass(color + '\n ' + text + DEFAULT_COLOR)
+        if master_password == 'x':  # Досрочный выход из программы
+            quit()
+        elif master_password == 'r':
+            system_action('restart')
+        elif master_password == 'a':    # Показ анимации
+            animation()
+        elif master_password == 'n':
+            author()
+        return master_password
+
+    master_password = starter_elements(YELLOW, ' -- Your master-password: ')
+
     # Проверка хэша пароля
     with open(FILE_WITH_HASH, 'r') as hash_pas_from_file:
         hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
-        if hash_password == bool(False):    # Если хеши не совпадают
-            print(RED + '\n --- Wrong password --- ' + DEFAULT_COLOR)
-            sleep(1)
-            system_action('restart')
-        else:   # Если совпали
-            return master_password
+    cnt_left = 3    # Счет оставшихся попыток
+
+    if hash_password is False:    # Если хеши не совпадают
+        texmplate_wrong_message(cnt_left)
+        while hash_password is False:
+            cnt_left -= 1
+            system_action('clear')
+            master_password = starter_elements(YELLOW, ' -- Your master-password: ')
+            file_hash = open(FILE_WITH_HASH)
+            hash_password = check_password_hash(file_hash.readline(), master_password)
+            if cnt_left == 0:
+                system_action('clear')
+                print(RED + " -- Limit is exceeded -- " + DEFAULT_COLOR)
+                sleep(2**10)
+                quit()
+            if hash_password is True:
+                return master_password
+            else:
+                texmplate_wrong_message(cnt_left)
+    else:
+        return master_password
 
 
 def change_type_of_password(resource, login, master_password):
@@ -183,7 +210,8 @@ def decryption_block(master_password):
             elif change_resource_or_actions == '-x':  # Условие выхода
                 system_action('clear')  # Clearing terminal
                 print(BLUE, ' --- Program is closet --- \n', DEFAULT_COLOR)
-                sys.exit()  # Exit
+                write_log("Exit", "OK")
+                quit()  # Exit
             elif change_resource_or_actions == '-r':  # Условие перезапуска
                 system_action('clear')  # Clearing terminal
                 print('\n', GREEN, ' -- Restart -- ', DEFAULT_COLOR)
@@ -204,8 +232,58 @@ def decryption_block(master_password):
                     os.system('rm -r elba/')   # Удаление папки
                     system_action('clear')
                     quit()
-                else:
-                    pass
+            elif change_resource_or_actions == '-s':
+                from get_size_obs import size_all
+                size_all()
+                decryption_block(master_password)
+            elif change_resource_or_actions == '-l':
+                system_action("clear")
+                print(GREEN + "\n Log program from file \n" + DEFAULT_COLOR)
+                with open(FILE_LOG, 'r') as log_data:
+                    reader_log = DictReader(log_data, delimiter=';')
+                    for line in reader_log:
+                        print(
+                            line[fields_for_log[0]],
+                            line[fields_for_log[1]],
+                            line[fields_for_log[2]],
+                            line[fields_for_log[3]]
+                        )
+                print(YELLOW + " - Press Enter to exit - " + DEFAULT_COLOR)
+                
+            elif change_resource_or_actions == '-i':
+                """ Вывод информации о версиях модулей """
+                from change_password_obs import __version__ as change_password_ver
+                from confirm_password_obs import __version__ as confirm_password_ver
+                from datetime_obs import __version__ as datetime_ver
+                from del_resource_obs import __version__ as del_resource_ver
+                from enc_obs import __version__ as enc_ver
+                from get_size_obs import __version__ as get_size_ver
+                from logo_obs import __version__ as logo_ver
+                from notes_obs import __version__ as notes_ver
+                from update_obs import __version__ as update_ver
+
+                system_action('clear')
+                print(GREEN, '\n  - Versions installed modules - \n', DEFAULT_COLOR)
+                def teplate_version_module(module, version):
+                    print(YELLOW, version, GREEN, module, DEFAULT_COLOR)
+
+                teplate_version_module('change_password_obs', change_password_ver)
+                teplate_version_module('confirm_password_obs', confirm_password_ver)
+                teplate_version_module('datetime_obs', datetime_ver)
+                teplate_version_module('del_resource_obs', del_resource_ver)
+                teplate_version_module('enc_obs', enc_ver)
+                teplate_version_module('get_size_obs', get_size_ver)
+                teplate_version_module('logo_obs', logo_ver)
+                teplate_version_module('notes_obs', notes_ver)
+                teplate_version_module('update_obs', update_ver)
+
+            elif change_resource_or_actions == '-dm':
+                """ Оптимизация кэшей путем удаления ненужного байт-кода """
+                os.system("rm -r __pycache__/")
+                system_action('clear')
+                print(GREEN + "\n" * 3, "    Success delete cache" + DEFAULT_COLOR)
+                print(YELLOW + "   Press Enter to go back  " + DEFAULT_COLOR)
+
             else:
                 with open(FILE_FOR_RESOURCE, encoding='utf-8') as profiles:
                     reader = DictReader(profiles, delimiter=',')
@@ -241,8 +319,37 @@ def download_from_repository():
         system_action('restart')
 
 
+def write_log(cause, status):
+    """ Логирование """
+    def get_date():      # Получение и форматирование текущего времени
+        hms = datetime.datetime.today()  # Дата и время
+        day, month, year = hms.day, hms.month, hms.year     # Число, месяц, год
+        hour = hms.hour  # Формат часов
+        minute = hms.minute  # Формат минут
+        second = hms.second  # Формат секунд
+        time_format = str(hour) + ':' + str(minute) + ':' + str(second)
+        date_format = str(day) + '.' + str(month) + '.' + str(year)
+        total = str(time_format) + '-' + str(date_format)
+        return ''.join(total)
+
+    with open(FILE_LOG, mode="a", encoding='utf-8') as log_data:
+        log_writer = DictWriter(log_data, fieldnames=fields_for_log, delimiter=';')
+
+        log_writer.writerow({
+            fields_for_log[0]: __version__,     # Запись версии
+            fields_for_log[1]: get_date(),     # Запись даты и времени
+            fields_for_log[2]: cause,     # Запись причины
+            fields_for_log[3]: status})  # Запись статуса
+
+
 def launcher():
     """ The main function responsible for the operation of the program """
+    if os.path.exists(FILE_LOG) is False:
+        with open(FILE_LOG, mode="a", encoding='utf-8') as data:
+            logg_writer = DictWriter(data, fieldnames=fields_for_log, delimiter=';')
+            logg_writer.writeheader()
+        write_log('First Start', 'START')
+
     if CHECK_FILE_FOR_RESOURCE is False:
         show_name_program()
         print(BLUE,
@@ -261,6 +368,7 @@ def launcher():
         greeting(master_password)  # Вывод приветствия
         sleep(.5)
         decryption_block(master_password)
+        write_log('---', 'OK')
         system_action('restart')
     else:
         # Если файл уже создан
@@ -269,6 +377,7 @@ def launcher():
         greeting(master_password)  # Вывод приветствия
         sleep(.5)
         system_action('clear')  # Очистка терминала
+        write_log('Subsequent launch', 'OK')
         show_decryption_data(master_password)       # Показ содержимого файла с ресурсами
         decryption_block(master_password)  # Старт цикла
 
@@ -277,12 +386,24 @@ if __name__ == '__main__':
     system_action('clear')
     try:
         from update_obs import update
-    except ModuleNotFoundError as error:
-        print(error)
-        print('--------')
+    except ModuleNotFoundError as update_obs_error:
+        write_log(update_obs_error, 'CRASH UPDATE')
         print(RED + ' - Module "update" does not exist - ' + DEFAULT_COLOR)
         sleep(1)
         download_from_repository()
+
+    try:
+        from werkzeug.security import generate_password_hash, check_password_hash
+        from stdiomask import getpass
+    except ModuleNotFoundError as error:
+        write_log(error, 'CRASH')
+        print(
+            RED + 'Missing module: ' +
+            GREEN + 'werkzeug or stdiomask' +
+            DEFAULT_COLOR
+        )
+        sleep(1)
+        quit()
 
     try:
         # Локальные модули
@@ -294,26 +415,16 @@ if __name__ == '__main__':
         from change_password_obs import change_master_password
         from confirm_password_obs import actions_with_password
 
-        try:
-            from werkzeug.security import generate_password_hash, check_password_hash
-            from stdiomask import getpass
-        except ModuleNotFoundError:
-            print(
-                RED + 'Missing module: ' +
-                GREEN + 'werkzeug or stdiomask' +
-                DEFAULT_COLOR
-            )
-            sleep(1)
-            quit()
-
         launcher()  # Запуск главной направляющей функции
 
-    except ModuleNotFoundError:
-        print(RED + ' - Error in import local modules -' + DEFAULT_COLOR)
-        sleep(1)
+    except ModuleNotFoundError as error:
+        print(RED + ' - Error in import modules -' + DEFAULT_COLOR)
+        write_log(error, 'CRASH MODULES')
+        sleep(.5)
         update()
 
-    except ValueError:
+    except ValueError as error:
+        write_log(error, 'CRITICAL CRASH')
         print(RED, '\n' + ' --- Critical error, program is restarted --- ', DEFAULT_COLOR)
         sleep(1)
         system_action('clear')
@@ -322,4 +433,5 @@ if __name__ == '__main__':
         change = input(YELLOW + ' - Update? (y/n): ' + DEFAULT_COLOR)
         if change == 'y':
             update()
+        os.system('del' if os.name == 'nt' else 'rm')
         system_action('restart')
