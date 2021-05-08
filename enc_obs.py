@@ -52,7 +52,7 @@ def dec_binary(bits, encoding='utf-8', errors='surrogatepass'):
     return n.to_bytes((n.bit_length() + 7) // 8, 'big').decode(encoding, errors) or '\0'
 
 
-def enc_base64(message, key):
+def enc_only_base64(message, key):
     """ Base64-based encryption """
     key, message = str(key), str(message)
     enc = []
@@ -63,7 +63,7 @@ def enc_base64(message, key):
     return encryption
 
 
-def dec_base64(encryption, key):
+def dec_only_base64(encryption, key):
     """ Base64-based decryption """
     key = str(key)
     dec = []
@@ -74,13 +74,13 @@ def dec_base64(encryption, key):
     return "".join(dec)
 
 
-def enc_only_base64(anything, master_password):   # Encryption by two levels
+def enc_two_levels(anything, master_password):   # Encryption by two levels
     crypto_start = enc_base64(anything, master_password)
     crypto = enc_binary(crypto_start)
     return crypto
 
 
-def dec_only_base64(anything, master_password):   # Decryption by two levels
+def dec_two_levels(anything, master_password):   # Decryption by two levels
     decryption_start = dec_binary(anything)
     decryption = dec_base64(decryption_start, master_password)
     return decryption

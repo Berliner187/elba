@@ -17,17 +17,16 @@ import sys
 from time import sleep
 from csv import DictReader, DictWriter
 import datetime
-from enc_obs import enc_only_base64, dec_only_base64, enc_aes, dec_aes
 
 
-__version__ = 'DELTA v0.2.0.1 Alpha'    # Version program
+__version__ = 'DELTA v0.2.1.0'    # Version program
 
 
 def show_name_program():
     print(BLUE,
           "\n || Password Manager and Keeper of Notes ||",
-          "\n || Version For Linux || "
-          "\n || by Berliner187    || ", 
+          "\n || Alpha For Linux  || "
+          "\n || by Berliner187   || ",
           __version__,
           '\n' * 3, DEFAULT_COLOR)
     elba()  # Вывод логотипа
@@ -47,13 +46,15 @@ GREEN, RED, DEFAULT_COLOR = "\033[32m", "\033[31m", "\033[0m"
 
 # Файлы для работы программы
 FOLDER_WITH_DATA = 'volare/'     # Mi fa volare
-FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + "resources/"     # Файл, в котором ресурсы
+FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + "resources/"     # Папка с папками ресурсов
 FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'   # Файл с заметками
 FOLDERS = [FOLDER_WITH_DATA, FOLDER_WITH_NOTES]
 
 FILE_RESOURCE = 'resource.dat'
 FILE_LOGIN = 'login.dat'
 FILE_PASSWORD = 'password.dat'
+
+FILE_NOTE_ITSELF = 'note_itself.dat'
 
 FILE_USER_NAME = FOLDER_WITH_DATA + ".self_name.dat"  # Файл с именем (никнеймом)
 FILE_WITH_HASH = FOLDER_WITH_DATA + '.hash_password.dat'     # Файл с хэшем пароля
@@ -103,7 +104,6 @@ def save_data_to_file(resource, login, password, master_password):
 def show_decryption_data(master_password):
     """ Показ всех сохраненных ресурсов """
     system_action('clear')
-    print("\n\n")
     print(PURPLE, "     ___________________________________")
     print(PURPLE, "    /\/| ", YELLOW, "\/                   \/", PURPLE, " |\/\ ")
     print(PURPLE, "   /\/\|", YELLOW, " \/  Saved resources  \/ ", PURPLE, "|/\/\ ", DEFAULT_COLOR)
@@ -430,6 +430,7 @@ if __name__ == '__main__':
         from notes_obs import notes
         from change_password_obs import change_master_password
         from confirm_password_obs import actions_with_password
+        from enc_obs import enc_only_base64, dec_only_base64, enc_aes, dec_aes
 
         launcher()  # Запуск главной направляющей функции
 
