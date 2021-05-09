@@ -19,14 +19,15 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'DELTA v0.2.1.0'    # Version program
+__version__ = 'DELTA v0.2.1.2 '    # Version program
 
 
 def show_name_program():
     print(BLUE,
           "\n || Password Manager and Keeper of Notes ||",
-          "\n || Alpha For Linux  || "
-          "\n || by Berliner187   || ",
+          "\n || Beta For Linux  || "
+          "\n || by Berliner187  || ", YELLOW,
+          "\n\n || Ferga Kangaroo  || ", BLUE,
           __version__,
           '\n' * 3, DEFAULT_COLOR)
     elba()  # Вывод логотипа
@@ -81,6 +82,7 @@ for folder in FOLDERS:
 
 
 def save_data_to_file(resource, login, password, master_password):
+    from enc_obs import enc_only_base64, enc_aes
     """ Шифрование логина и пароля. Запись в директорию с ресурсами """
     enc_name_folder = enc_only_base64(resource, master_password)
     enc_name_folder += '/'
@@ -117,10 +119,9 @@ def show_decryption_data(master_password):
         print(PURPLE, str(s) + '.', YELLOW, decryption_res, DEFAULT_COLOR)    # Decryption resource
     print(BLUE +
           '\n  - Enter "-r" to restart, "-x" to exit'
-          '\n  - Enter "-a" to add new resource',
-          RED, '\n  - Enter "-c" to change master-password !',
-          BLUE,
-          RED, '\n  - Enter "-d" to remove resource        !',
+          '\n  - Enter "-a" to add new resource'
+          '\n  - Enter "-c" to change master-password'
+          '\n  - Enter "-d" to remove resource',
           BLUE,
           RED, '\n  - Enter "-n" to go to notes            !',
           BLUE,
@@ -382,7 +383,7 @@ def launcher():
               '\n                     этой программы                      ', DEFAULT_COLOR)
 
         master_password = actions_with_password('master')  # Создание мастер-пароля
-        greeting(master_password)  # Вывод приветствия
+        greeting(master_password, False)  # Вывод приветствия
         sleep(.5)
         decryption_block(master_password)
         write_log('---', 'OK')
@@ -391,7 +392,7 @@ def launcher():
         # Если файл уже создан
         master_password = point_of_entry()  # Ввод пароля
         system_action('clear')  # Очистка терминала
-        greeting(master_password)  # Вывод приветствия
+        greeting(master_password, False)  # Вывод приветствия
         sleep(.5)
         system_action('clear')  # Очистка терминала
         write_log('Subsequent launch', 'OK')

@@ -5,21 +5,23 @@ import os
 import datetime
 
 
-__version__ = '1.1.0'
+__version__ = '1.1.1'
 
 
-def greeting(master_password):   # Greating Depending On Date Time
+def greeting(master_password, status):   # Greating Depending On Date Time
     """ Фунция вывода приветствия в зависимости от времени суток """
     def get_name():
+        if status is True:
+            name = input(YELLOW + '\n -- Your name or nickname: ' + DEFAULT_COLOR)
+            enc_aes(FILE_USER_NAME, name, master_password)
+            return name
         if os.path.exists(FILE_USER_NAME) == bool(False):  # Создание файла с именем
-            with open(FILE_USER_NAME, "w") as self_name:
-                name = input(YELLOW + '\n -- Your name or nickname: ' + DEFAULT_COLOR)
-                enc_aes(FILE_USER_NAME, name, master_password)
-                return name
+            name = input(YELLOW + '\n -- Your name or nickname: ' + DEFAULT_COLOR)
+            enc_aes(FILE_USER_NAME, name, master_password)
+            return name
         else:  # Чтение из файла с именем и вывод в консоль
-            with open(FILE_USER_NAME, "r") as self_name:
-                name = dec_aes(FILE_USER_NAME, master_password)
-                return name
+            name = dec_aes(FILE_USER_NAME, master_password)
+            return name
 
     def template_greeting(times_of_day):
         print('\n', GREEN, times_of_day, get_name(), DEFAULT_COLOR)

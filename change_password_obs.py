@@ -1,7 +1,8 @@
 from main import *
 
 from csv import DictReader, DictWriter
-from enc_obs import enc_aes, dec_aes
+from enc_obs import enc_aes, dec_aes, enc_only_base64, dec_only_base64
+from datetime_obs import greeting
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
@@ -11,7 +12,7 @@ from shutil import copyfile
 import os
 
 
-__version__ = '2.0.0 ON DEVELOPMENT STAGE'
+__version__ = '2.0.0'
 
 
 def change_master_password():
@@ -19,16 +20,35 @@ def change_master_password():
 
     def user_input_password():
         print(BLUE + '\n Minimum password length 8 characters' + DEFAULT_COLOR)
-        user_password = getpass('\n Password: ')
-        user_confirm_password = getpass(' Confirm password: ')
-        cnt_trying = 0
-        if (user_password != user_confirm_password) or (len(user_password) or len(user_confirm_password)) < 8:
-            print(red + '\n Error of confirm. Try again \n' + DEFAULT_COLOR)
-            cnt_trying += 1
-            if cnt_trying == 1:
+
+        def input_password():
+            password = getpass(YELLOW + 'Password: ' + DEFAULT_COLOR)
+            confirm_pas = getpass(YELLOW + 'Confirm: ' + DEFAULT_COLOR)
+            if confirm_pas == 'x':
                 quit()
+            return password, confirm_pas
+
+        user_password, user_confirm_password = input_password()
+
+        if (user_password != user_confirm_password) or (len(user_password) or len(user_confirm_password)) < 8:
+            print(RED + '\n Error of confirm. Try again \n' + DEFAULT_COLOR)
+
+            # Условия принятия и подтверждения пароля
+            password, confirm_pas = input_password()
+            if (password == confirm_pas) and (len(password and confirm_pas) >= 8):
+                return password
+            else:
+                print(RED + '\n Error in confirm \n' + DEFAULT_COLOR)
+                while (password != confirm_pas) or (len(password or confirm_pas < 8)):
+                    password, confirm_pas = input_password()
+                    if (password == confirm_pas) and (len(password and confirm_pas) >= 8):
+                        return password
+                    else:
+                        print(RED + '\n Error in confirm \n' + DEFAULT_COLOR)
+
         elif (user_password == user_confirm_password) and (len(user_password) and len(user_confirm_password)) >= 8:
             return user_confirm_password
+
     # Сверяются хеши паролей
     try:
         confirm_master_password = getpass(YELLOW + ' -- Enter your master-password: ' + DEFAULT_COLOR)
@@ -38,52 +58,54 @@ def change_master_password():
         if check_master_password == bool(False):
             print(RED + '\n --- Wrong password --- ' + DEFAULT_COLOR)
             sleep(1)
-            system_action('restart')
+            decryption_block(None)
         else:
-            print(GREEN + ' -- Success confirm -- ' + DEFAULT_COLOR)
+            system_action('clear')
+            print(GREEN + '\n\n  --  Success confirm  -- ' + DEFAULT_COLOR)
             sleep(.6)
             system_action('clear')
             print(BLUE + '\n   Pick a new master-password \n' + DEFAULT_COLOR)
             new_master_password = user_input_password()
-            cnt = 0
-            with open(FILE_FOR_RESOURCE, mode='r', encoding='utf-8') as saved_resource:  # Выгружается старый файл
-                reader_resources = DictReader(saved_resource, delimiter=',')
-                mas_res, mas_log, mas_pas = [], [], []
-                new_file_data_base = 'main_data.dat'
-                for item in reader_resources:
-                    cnt += 1    # Счетчик для нового файла
-                    # Дешифрование старым паролем
-                    dec_res = dec_aes(item["resource"], confirm_master_password)
-                    dec_log = dec_aes(item["login"], confirm_master_password)
-                    dec_pas = dec_aes(item["password"], confirm_master_password)
 
-                    # Шифрование новым паролем
-                    enc_res = enc_aes(dec_res, new_master_password)
-                    enc_log = enc_aes(dec_log, new_master_password)
-                    enc_pas = enc_aes(dec_pas, new_master_password)
+            mas_resources, mas_login, mas_password = [], [], []
 
-                    # Добавление зашифрованных данных в массивы
-                    mas_res.append(enc_res)
-                    mas_log.append(enc_log)
-                    mas_pas.append(enc_pas)
+            def path_to_resource(file_type):
+                path = FOLDER_WITH_RESOURCES + resource_dir + '/' + file_type
+                return path
 
-            with open(new_file_data_base, mode="a", encoding='utf-8') as data:  # Запись в новый файл
-                new_writer = DictWriter(data, fieldnames=fields_for_main_data)
-                new_writer.writeheader()
-                for i in range(cnt):
-                    new_writer.writerow({
-                        fields_for_main_data[0]: mas_res[i],
-                        fields_for_main_data[1]: mas_log[i],
-                        fields_for_main_data[2]: mas_pas[i]
-                    })
-            copyfile(new_file_data_base, FILE_FOR_RESOURCE)    # Перезапись старого файла новым
-            os.system('rm ' + new_file_data_base)   # Удаление нового файла
+            def template_append_data(file_type, massive, confirm_master_password):
+                path = path_to_resource(file_type)
+                dec_data = dec_aes(path, confirm_master_password)
+                massive.append(dec_data)
+
+            for resource_dir in os.listdir(FOLDER_WITH_RESOURCES):
+                for resource_file in os.listdir(FOLDER_WITH_RESOURCES + resource_dir + '/'):
+
+                    if resource_file == FILE_RESOURCE:
+                        template_append_data(FILE_RESOURCE, mas_resources, confirm_master_password)
+
+                    elif resource_file == FILE_LOGIN:
+                        template_append_data(FILE_LOGIN, mas_login, confirm_master_password)
+
+                    elif resource_file == FILE_PASSWORD:
+                        template_append_data(FILE_PASSWORD, mas_password, confirm_master_password)
+
+            for old_resource in os.listdir(FOLDER_WITH_RESOURCES):
+                os.system("rm -r " + FOLDER_WITH_RESOURCES + old_resource)
+
+            for i in range(len(mas_resources)):
+                save_data_to_file(mas_resources[i], mas_login[i], mas_password[i], new_master_password)
 
             new_hash = generate_password_hash(new_master_password)
             with open(FILE_WITH_HASH, 'w') as hash_pas:
                 hash_pas.write(new_hash)
                 hash_pas.close()
 
+        greeting(new_master_password, True)
+
+        system_action('clear')
+        print(GREEN + '\n\n    -  Password changed successfully!  - ' + DEFAULT_COLOR)
+        sleep(1)
         system_action('restart')
     except TypeError:
         pass
