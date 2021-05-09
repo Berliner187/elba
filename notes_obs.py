@@ -15,8 +15,10 @@ __version__ = '2.0.1 ON DEVELOPMENT STAGE'
 def notes(master_password):
     system_action('clear')
     while True:     # Старт цикла для работы с заметками
+
         def show():     # Показ сохраненных заметок
-            file_for_note = FOLDER_WITH_NOTES + name_note
+            def path_to_note(name_note):
+                return FOLDER_WITH_NOTES + name_note
             with open(file_for_note, encoding='utf-8') as notes_file:
                 reader_notes = DictReader(notes_file, delimiter=',')
                 print(YELLOW + '       ---  Saved notes --- ', '\n' * 3 + DEFAULT_COLOR)
