@@ -4,7 +4,7 @@ import os
 from time import sleep
 
 
-__version__ = '1.2.16'   # Версия модуля
+__version__ = '1.2.17'   # Версия модуля
 
 
 # Модули для работы программы
@@ -16,7 +16,8 @@ stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
 def update():   # Обновление программы
     main_file = 'main.py'
     new_folder_el = 'elba/'
-    remove_main_folder = template_remove_folder(new_folder_el)  # Удаление новой папки
+    remove_arg = template_remove_folder()
+    remove_main_folder = remove_arg + new_folder_el  # Удаление новой папки
     download_from_repository()  # Загрузка проекта из репозитория
 
     # Проверка отсутствующих модулей

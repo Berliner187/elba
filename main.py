@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'DELTA v0.2.1.2 '    # Version program
+__version__ = 'DELTA v0.2.1.3 '    # Version program
 
 
 def show_name_program():
@@ -81,8 +81,8 @@ for folder in FOLDERS:
         os.mkdir(folder)
 
 
-def template_remove_folder(some_folder):
-    os.system('del' if os.name == 'nt' else 'rm' + some_folder + ' -f')
+def template_remove_folder():
+    os.system('del' if os.name == 'nt' else 'rm')
 
 
 def save_data_to_file(resource, login, password, master_password):
