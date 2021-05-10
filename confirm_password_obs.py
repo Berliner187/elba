@@ -8,23 +8,26 @@ from werkzeug.security import generate_password_hash
 from stdiomask import getpass
 
 
-__version__ = '1.1.0'
+__version__ = '1.1.1'
 
 # Символы, используемые для генерирования пароля
 symbols_for_password = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-='
 
 
-def actions_with_password(type_pas):
-    """ Подтвержение пользовательского пароля """
+def create_and_confirm_user_password():
+    print(BLUE + '\n Minimum password length 8 characters' + DEFAULT_COLOR)
 
-    def confirm_password():
-        """ Подтверждение пароля """
-        def input_password():
-            password = getpass(YELLOW + 'Password: ' + DEFAULT_COLOR)
-            confirm_pas = getpass(YELLOW + 'Confirm: ' + DEFAULT_COLOR)
-            if confirm_pas == 'x':
-                quit()
-            return password, confirm_pas
+    def input_password():
+        password_from_user = getpass(YELLOW + 'Password: ' + DEFAULT_COLOR)
+        confirm_password_from_user = getpass(YELLOW + 'Confirm: ' + DEFAULT_COLOR)
+        if confirm_password_from_user == 'x':
+            quit()
+        return password_from_user, confirm_password_from_user
+
+    user_password, user_confirm_password = input_password()
+
+    if (user_password != user_confirm_password) or (len(user_password) or len(user_confirm_password)) < 8:
+        print(RED + '\n Error of confirm. Try again \n' + DEFAULT_COLOR)
 
         # Условия принятия и подтверждения пароля
         password, confirm_pas = input_password()
@@ -39,6 +42,12 @@ def actions_with_password(type_pas):
                 else:
                     print(RED + '\n Error in confirm \n' + DEFAULT_COLOR)
 
+    elif (user_password == user_confirm_password) and (len(user_password) and len(user_confirm_password)) >= 8:
+        return user_confirm_password
+
+
+def actions_with_password(type_pas):
+    """ Подтвержение пользовательского пароля """
 
     def generation_new_password():
         """ Функция создания случайного пароля """
@@ -57,14 +66,14 @@ def actions_with_password(type_pas):
     print(BLUE, '\n\n - Minimum Length password is 8 symbols', DEFAULT_COLOR)
     if type_pas == 'self':  # Собсвенный пароль для ресурса
         print(BLUE, ' - Pick a self password: ', DEFAULT_COLOR)
-        password = confirm_password()
+        password = create_and_confirm_user_password()
         print(BLUE + ' - Your password success saved' + DEFAULT_COLOR)
         sleep(1)
         return password
 
     elif type_pas == 'master':  # Мастер пароль
         print(BLUE + ' - Pick a master-password - \n')
-        master_password = confirm_password()
+        master_password = create_and_confirm_user_password()
         # Хэш сохраняется в файл
         if (CHECK_FILE_WITH_HASH is False) and (CHECK_FILE_WITH_HASH is False):
             """ Создание хэша пароля и запись его в файл """
@@ -79,8 +88,8 @@ def actions_with_password(type_pas):
 
     elif type_pas == 'gen_new':     # Генерирование нового пароля
         password = generation_new_password()
-        print(YELLOW + ' - Your new password - ', 
-            GREEN, password, DEFAULT_COLOR, 
-            ' - success saved', DEFAULT_COLOR)
+        print(YELLOW + ' - Your new password - ',
+              GREEN, password, YELLOW,
+              ' - success saved', DEFAULT_COLOR)
         sleep(2)
         return password

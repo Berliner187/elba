@@ -18,15 +18,15 @@ __version__ = '2.0.0'
 def change_master_password():
     system_action('clear')
 
-    def user_input_password():
+    def create_and_confirm_user_password():
         print(BLUE + '\n Minimum password length 8 characters' + DEFAULT_COLOR)
 
         def input_password():
-            password = getpass(YELLOW + 'Password: ' + DEFAULT_COLOR)
-            confirm_pas = getpass(YELLOW + 'Confirm: ' + DEFAULT_COLOR)
-            if confirm_pas == 'x':
+            password_from_user = getpass(YELLOW + 'Password: ' + DEFAULT_COLOR)
+            confirm_password_from_user = getpass(YELLOW + 'Confirm: ' + DEFAULT_COLOR)
+            if confirm_password_from_user == 'x':
                 quit()
-            return password, confirm_pas
+            return password_from_user, confirm_password_from_user
 
         user_password, user_confirm_password = input_password()
 
@@ -65,7 +65,7 @@ def change_master_password():
             sleep(.6)
             system_action('clear')
             print(BLUE + '\n   Pick a new master-password \n' + DEFAULT_COLOR)
-            new_master_password = user_input_password()
+            new_master_password = create_and_confirm_user_password()
 
             mas_resources, mas_login, mas_password = [], [], []
 

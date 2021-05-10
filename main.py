@@ -25,9 +25,9 @@ __version__ = 'DELTA v0.2.1.2 '    # Version program
 def show_name_program():
     print(BLUE,
           "\n || Password Manager and Keeper of Notes ||",
-          "\n || Beta For Linux  || "
-          "\n || by Berliner187  || ", YELLOW,
-          "\n\n || Ferga Kangaroo  || ", BLUE,
+          "\n || Beta For Linux || "
+          "\n || by Berliner187 || ", YELLOW,
+          "\n\n || Ferga Kangaroo || ", BLUE,
           __version__,
           '\n' * 3, DEFAULT_COLOR)
     elba()  # Вывод логотипа
