@@ -4,7 +4,7 @@ import os
 from time import sleep
 
 
-__version__ = '1.2.15'   # Версия модуля
+__version__ = '1.2.16'   # Версия модуля
 
 
 # Модули для работы программы
@@ -16,7 +16,7 @@ stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
 def update():   # Обновление программы
     main_file = 'main.py'
     new_folder_el = 'elba/'
-    remove_main_folder = 'rm -r ' + new_folder_el + ' -f'  # Удаление новой папки
+    remove_main_folder = template_remove_folder(new_folder_el)  # Удаление новой папки
     download_from_repository()  # Загрузка проекта из репозитория
 
     # Проверка отсутствующих модулей
@@ -39,17 +39,17 @@ def update():   # Обновление программы
         question = input(YELLOW + ' - ' + text + ' (y/n): ' + DEFAULT_COLOR)
         return question
 
-    def teplate_red_text(text):
+    def template_red_text(text):
         print(RED, text, ' \n', DEFAULT_COLOR)
 
     if cnt_modules != 0:
         system_action('clear')
 
         if cnt_modules == 1:
-            teplate_red_text('Missing module')
+            template_red_text('Missing module')
             write_log('MissingModule', 'ERROR')
         elif cnt_modules > 1:
-            teplate_red_text('Missing modules')
+            template_red_text('Missing modules')
             write_log('MissingModules', 'ERROR')
 
         for item in range(len(stock_modules)):

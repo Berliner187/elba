@@ -45,7 +45,7 @@ def system_action(action):
 YELLOW, BLUE, PURPLE = "\033[33m", "\033[36m", "\033[35m"
 GREEN, RED, DEFAULT_COLOR = "\033[32m", "\033[31m", "\033[0m"
 
-# Файлы для работы программы
+# Константы
 FOLDER_WITH_DATA = 'volare/'     # Mi fa volare
 FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + "resources/"     # Папка с папками ресурсов
 FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'   # Файл с заметками
@@ -79,6 +79,10 @@ def path_to_resource_data(enc_resource):
 for folder in FOLDERS:
     if os.path.exists(folder) is False:
         os.mkdir(folder)
+
+
+def template_remove_folder(some_folder):
+    os.system('del' if os.name == 'nt' else 'rm' + some_folder + ' -f')
 
 
 def save_data_to_file(resource, login, password, master_password):
