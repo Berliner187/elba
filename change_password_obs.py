@@ -3,6 +3,7 @@ from main import *
 from csv import DictReader, DictWriter
 from enc_obs import enc_aes, dec_aes, enc_only_base64, dec_only_base64
 from datetime_obs import greeting
+from confirm_password_obs import create_and_confirm_user_password
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
@@ -12,42 +13,11 @@ from shutil import copyfile
 import os
 
 
-__version__ = '2.0.0'
+__version__ = '2.0.1'
 
 
 def change_master_password():
     system_action('clear')
-
-    def create_and_confirm_user_password():
-        print(BLUE + '\n Minimum password length 8 characters' + DEFAULT_COLOR)
-
-        def input_password():
-            password_from_user = getpass(YELLOW + 'Password: ' + DEFAULT_COLOR)
-            confirm_password_from_user = getpass(YELLOW + 'Confirm: ' + DEFAULT_COLOR)
-            if confirm_password_from_user == 'x':
-                quit()
-            return password_from_user, confirm_password_from_user
-
-        user_password, user_confirm_password = input_password()
-
-        if (user_password != user_confirm_password) or (len(user_password) or len(user_confirm_password)) < 8:
-            print(RED + '\n Error of confirm. Try again \n' + DEFAULT_COLOR)
-
-            # Условия принятия и подтверждения пароля
-            password, confirm_pas = input_password()
-            if (password == confirm_pas) and (len(password and confirm_pas) >= 8):
-                return password
-            else:
-                print(RED + '\n Error in confirm \n' + DEFAULT_COLOR)
-                while (password != confirm_pas) or (len(password or confirm_pas < 8)):
-                    password, confirm_pas = input_password()
-                    if (password == confirm_pas) and (len(password and confirm_pas) >= 8):
-                        return password
-                    else:
-                        print(RED + '\n Error in confirm \n' + DEFAULT_COLOR)
-
-        elif (user_password == user_confirm_password) and (len(user_password) and len(user_confirm_password)) >= 8:
-            return user_confirm_password
 
     # Сверяются хеши паролей
     try:
@@ -73,9 +43,9 @@ def change_master_password():
                 path = FOLDER_WITH_RESOURCES + resource_dir + '/' + file_type
                 return path
 
-            def template_append_data(file_type, massive, confirm_master_password):
+            def template_append_data(file_type, massive, confirmed_master_password):
                 path = path_to_resource(file_type)
-                dec_data = dec_aes(path, confirm_master_password)
+                dec_data = dec_aes(path, confirmed_master_password)
                 massive.append(dec_data)
 
             for resource_dir in os.listdir(FOLDER_WITH_RESOURCES):
@@ -101,7 +71,7 @@ def change_master_password():
                 hash_pas.write(new_hash)
                 hash_pas.close()
 
-        greeting(new_master_password, True)
+            greeting(new_master_password, True)
 
         system_action('clear')
         print(GREEN + '\n\n    -  Password changed successfully!  - ' + DEFAULT_COLOR)
