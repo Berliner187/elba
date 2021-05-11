@@ -19,14 +19,15 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'BETA v0.1.1.7'    # Version program
+__version__ = 'SOURCE v0.1.1.8'    # Version program
 
 
 def show_name_program():
     print(BLUE,
           "\n || Password Manager and Keeper of Notes ||",
-          "\n || Version For Linux || "
-          "\n || by Berliner187    || ", 
+          "\n || Stable For Linux  || "
+          "\n || by Berliner187    || \n", YELLOW,
+          "\n || Adeona Mindally   ||", BLUE,
           __version__,
           '\n' * 3, DEFAULT_COLOR)
     elba()  # Вывод логотипа
@@ -175,20 +176,14 @@ def change_type_of_password(resource, login, master_password):
     system_action('clear')
 
 
-def data_for_resource():
-    """ Данные для сохранения (ресурс, логин) """
-    system_action('clear')
-    print(GREEN, '\n   --- Add new resource ---   ', '\n' * 3, DEFAULT_COLOR)
-    resource = input(YELLOW + ' Resource: ' + DEFAULT_COLOR)
-    login = input(YELLOW + ' Login: ' + DEFAULT_COLOR)
-    return resource, login
-
-
 def decryption_block(master_password):
     """ Цикл с выводом сохраненных ресурсов """
 
     def add_resource_data():
-        resource, login = data_for_resource()
+        system_action('clear')
+        print(GREEN, '\n   --- Add new resource ---   ', '\n' * 3, DEFAULT_COLOR)
+        resource = input(YELLOW + ' Resource: ' + DEFAULT_COLOR)
+        login = input(YELLOW + ' Login: ' + DEFAULT_COLOR)
         change_type_of_password(resource, login, master_password)
         if CHECK_FILE_FOR_RESOURCE:
             show_decryption_data(master_password)
@@ -264,6 +259,7 @@ def decryption_block(master_password):
 
                 system_action('clear')
                 print(GREEN, '\n  - Versions installed modules - \n', DEFAULT_COLOR)
+
                 def teplate_version_module(module, version):
                     print(YELLOW, version, GREEN, module, DEFAULT_COLOR)
 
@@ -395,13 +391,9 @@ if __name__ == '__main__':
     try:
         from werkzeug.security import generate_password_hash, check_password_hash
         from stdiomask import getpass
-    except ModuleNotFoundError as error:
-        write_log(error, 'CRASH')
-        print(
-            RED + 'Missing module: ' +
-            GREEN + 'werkzeug or stdiomask' +
-            DEFAULT_COLOR
-        )
+    except ModuleNotFoundError as lib_error:
+        write_log(lib_error, 'CRASH')
+        print(lib_error)
         sleep(1)
         quit()
 
