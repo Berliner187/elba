@@ -3,9 +3,7 @@ from main import *
 import os
 from time import sleep
 
-
-__version__ = '1.2.17'   # Версия модуля
-
+__version__ = '1.3.1'  # Версия модуля
 
 # Модули для работы программы
 stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
@@ -13,11 +11,9 @@ stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
                  'change_password_obs.py', 'confirm_password_obs.py']
 
 
-def update():   # Обновление программы
+def update():  # Обновление программы
     main_file = 'main.py'
     new_folder_el = 'elba/'
-    remove_arg = template_remove_folder()
-    remove_main_folder = remove_arg + new_folder_el  # Удаление новой папки
     download_from_repository()  # Загрузка проекта из репозитория
 
     # Проверка отсутствующих модулей
@@ -29,7 +25,7 @@ def update():   # Обновление программы
         if file.endswith(file_type):
             installed_modules.append(file)
 
-    for j in range(len(stock_modules)):    # Счет отсутствующих модулей
+    for j in range(len(stock_modules)):  # Счет отсутствующих модулей
         if stock_modules[j] not in installed_modules:
             cnt_modules += 1
 
@@ -56,6 +52,7 @@ def update():   # Обновление программы
         for item in range(len(stock_modules)):
             def template_text_modules(color, message):
                 print('[', color, message, DEFAULT_COLOR, ']', stock_modules[item])
+
             if stock_modules[item] not in installed_modules:
                 template_text_modules(RED, 'FAILED')
                 write_log(stock_modules[item], 'FAILED')
@@ -67,7 +64,7 @@ def update():   # Обновление программы
         for i in range(len(stock_modules)):
             template_for_install(stock_modules[i])
 
-        os.system(remove_main_folder)
+        template_remove_folder(new_folder_el)
         print(GREEN + '\n The missing module has been installed! \n\n' + DEFAULT_COLOR)
         sleep(1)
         system_action('restart')
@@ -88,21 +85,22 @@ def update():   # Обновление программы
                 sleep(.7)
                 write_log('Update', 'OK')
 
-            os.system(remove_main_folder)
+            template_remove_folder(new_folder_el)
             system_action('restart')
         else:
             system_action('clear')
             print(YELLOW + ' -- You are using the latest version of the program -- ' + DEFAULT_COLOR)
-            
+
             template_for_install('update_obs.py')
             for module in stock_modules:  # Сверяются суммы файлов
                 if os.path.getsize(new_folder_el + module) != os.path.getsize(module):
                     template_for_install(module)
                     write_log('Upgrade ' + module, 'OK')
 
-            os.system(remove_main_folder)
+            template_remove_folder(new_folder_el)
             sleep(.7)
     else:
         print(YELLOW + ' - New folder not found... ' + DEFAULT_COLOR)
-        write_log('FolderNotFound', 'ERROR')
+        write_log('Folder Not Found', 'CRITICAL ERROR')
+        sleep(1)
         download_from_repository()

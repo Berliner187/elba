@@ -37,8 +37,12 @@ def system_action(action):
     """ Restart Program or Clear terminal """
     if action == 'restart':
         os.execv(sys.executable, [sys.executable] + sys.argv)
-    elif action == 'clear':
+    if action == 'clear':
         os.system('cls' if os.name == 'nt' else 'clear')
+
+
+def template_remove_folder(some_folder):
+    os.system('rmdir ' + some_folder if os.name == 'nt' else 'rm -r ' + some_folder + ' -f')
 
 
 # Цвета в терминале
@@ -46,6 +50,7 @@ YELLOW, BLUE, PURPLE = "\033[33m", "\033[36m", "\033[35m"
 GREEN, RED, DEFAULT_COLOR = "\033[32m", "\033[31m", "\033[0m"
 
 # Константы
+NEW_FOLDER_ELBA = 'elba/'
 FOLDER_WITH_DATA = 'volare/'     # Mi fa volare
 FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + "resources/"     # Папка с папками ресурсов
 FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'   # Файл с заметками
@@ -79,10 +84,6 @@ def path_to_resource_data(enc_resource):
 for folder in FOLDERS:
     if os.path.exists(folder) is False:
         os.mkdir(folder)
-
-
-def template_remove_folder():
-    os.system('del' if os.name == 'nt' else 'rm')
 
 
 def save_data_to_file(resource, login, password, master_password):
@@ -252,7 +253,7 @@ def decryption_block(master_password):
                 print(RED + '\n\n - Are you sure you want to delete all data? - ' + DEFAULT_COLOR)
                 change_yes_or_no = input(YELLOW + ' - Remove ALL data? (y/n): ' + DEFAULT_COLOR)
                 if change_yes_or_no == 'y':
-                    os.system('rm -r elba/')   # Удаление папки
+                    template_remove_folder(NEW_FOLDER_ELBA)
                     system_action('clear')
                     quit()
             elif change_resource_or_actions == '-s':
@@ -336,7 +337,7 @@ def download_from_repository():
     system_action('clear')
     if os.path.exists('update_obs.py') == bool(False):
         os.system('mv elba/update_obs.py .')
-        os.system('rm -r elba/ -f')
+        template_remove_folder('elba')
         system_action('restart')
 
 
