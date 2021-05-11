@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'DELTA v0.2.1.3 '    # Version program
+__version__ = 'DELTA v0.2.1.4'    # Version program
 
 
 def show_name_program():
@@ -139,7 +139,7 @@ def show_decryption_data(master_password):
 def point_of_entry():   # Точка входа в систему
     """ Получение мастер-пароля """
 
-    def texmplate_wrong_message(value_left):
+    def template_wrong_message(value_left):
         print(RED, '\n  ---  Wrong password --- ',
               BLUE, "\n\n Attempts left:", RED, value_left, DEFAULT_COLOR)
         sleep(1)
@@ -165,7 +165,7 @@ def point_of_entry():   # Точка входа в систему
     cnt_left = 3    # Счет оставшихся попыток
 
     if hash_password is False:    # Если хеши не совпадают
-        texmplate_wrong_message(cnt_left)
+        template_wrong_message(cnt_left)
         while hash_password is False:
             cnt_left -= 1
             system_action('clear')
@@ -180,7 +180,7 @@ def point_of_entry():   # Точка входа в систему
             if hash_password is True:
                 return master_password
             else:
-                texmplate_wrong_message(cnt_left)
+                template_wrong_message(cnt_left)
     else:
         return master_password
 
@@ -227,27 +227,34 @@ def decryption_block(master_password):
         try:
             if change_resource_or_actions == '-a':  # Добавление нового ресурса
                 add_resource_data()
+
             elif change_resource_or_actions == '-u':    # Обновление программы из репозитория
                 system_action('clear')
                 update()
                 show_decryption_data(master_password)
-            elif change_resource_or_actions == '-x':  # Условие выхода
-                system_action('clear')  # Clearing terminal
+
+            elif change_resource_or_actions == '-x':  # Выход
+                system_action('clear')
                 print(BLUE, ' --- Program is closet --- \n', DEFAULT_COLOR)
                 write_log("Exit", "OK")
-                quit()  # Exit
-            elif change_resource_or_actions == '-r':  # Условие перезапуска
-                system_action('clear')  # Clearing terminal
+                quit()
+
+            elif change_resource_or_actions == '-r':  # Перезапуск
+                system_action('clear')
                 print('\n', GREEN, ' -- Restart -- ', DEFAULT_COLOR)
                 sleep(.4)
-                system_action('restart')  # Restart program
+                system_action('restart')
+
             elif change_resource_or_actions == '-c':
                 change_master_password()
+
             elif change_resource_or_actions == '-d':    # Удаление ресурса
                 delete_resource()
-                show_decryption_data(master_password)  # Вывод ресурсов
+                show_decryption_data(master_password)
+
             elif change_resource_or_actions == '-n':    # Добавление зашифрованных заметок
                 notes(master_password)
+
             elif change_resource_or_actions == '-z':    # Удаление всех данных пользователя
                 system_action('clear')
                 print(RED + '\n\n - Are you sure you want to delete all data? - ' + DEFAULT_COLOR)
@@ -256,6 +263,7 @@ def decryption_block(master_password):
                     template_remove_folder(NEW_FOLDER_ELBA)
                     system_action('clear')
                     quit()
+
             elif change_resource_or_actions == '-s':
                 from get_size_obs import size_all
                 size_all()
@@ -302,14 +310,15 @@ def decryption_block(master_password):
                 template_version_module('update_obs', update_ver)
 
             elif change_resource_or_actions == '-dm':  # Удаление кэша
-                os.system("rm -r __pycache__/")
+                template_remove_folder('rm -r __pycache__/')
                 system_action('clear')
                 print(GREEN + "\n" * 3, "    Success delete cache" + DEFAULT_COLOR)
-                print(YELLOW + "   Press Enter to go back  " + DEFAULT_COLOR)
+                sleep(1)
+                system_action('restart')
 
             else:
                 s = 0
-                for resource_in_folder in os.listdir(FOLDER_WITH_RESOURCES):  # Iterating over lines file
+                for resource_in_folder in os.listdir(FOLDER_WITH_RESOURCES):  # Вывод данных ресурса
                     s += 1
                     if s == int(change_resource_or_actions):
                         system_action('clear')
@@ -346,10 +355,7 @@ def write_log(cause, status):
     def get_date():      # Получение и форматирование текущего времени
         hms = datetime.datetime.today()  # Дата и время
         day, month, year = hms.day, hms.month, hms.year     # Число, месяц, год
-        hour = hms.hour  # Формат часов
-        minute = hms.minute  # Формат минут
-        second = hms.second  # Формат секунд
-        time_format = str(hour) + ':' + str(minute) + ':' + str(second)
+        time_format = str(hms.hour) + ':' + str(hms.minute) + ':' + str(hms.second)
         date_format = str(day) + '.' + str(month) + '.' + str(year)
         total = str(time_format) + '-' + str(date_format)
         return ''.join(total)
@@ -361,7 +367,8 @@ def write_log(cause, status):
             fields_for_log[0]: __version__,     # Запись версии
             fields_for_log[1]: get_date(),     # Запись даты и времени
             fields_for_log[2]: cause,     # Запись причины
-            fields_for_log[3]: status})  # Запись статуса
+            fields_for_log[3]: status
+        })  # Запись статуса
 
 
 def launcher():
@@ -418,13 +425,11 @@ if __name__ == '__main__':
     try:
         from werkzeug.security import generate_password_hash, check_password_hash
         from stdiomask import getpass
-    except ModuleNotFoundError as error:
-        write_log(error, 'CRASH')
-        print(
-            RED + 'Missing module: ' +
-            GREEN + 'werkzeug or stdiomask' +
-            DEFAULT_COLOR
-        )
+    except ModuleNotFoundError as error_module:
+        write_log(error_module, 'CRASH')
+        print(RED + 'Error: \n' + str(error_module) + DEFAULT_COLOR)
+        print('\n')
+        print(YELLOW + "Please, install module/modules with PIP and restart the program" + DEFAULT_COLOR)
         sleep(1)
         quit()
 
