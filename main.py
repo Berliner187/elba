@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'DELTA v0.2.1.4'    # Version program
+__version__ = 'DELTA v0.2.1.5'    # Version program
 
 
 def show_name_program():
@@ -28,8 +28,7 @@ def show_name_program():
           "\n || Beta For Linux || "
           "\n || by Berliner187 || ", YELLOW,
           "\n\n || Ferga Kangaroo || ", BLUE,
-          __version__,
-          '\n' * 3, DEFAULT_COLOR)
+          __version__)
     elba()  # Вывод логотипа
 
 
@@ -299,6 +298,7 @@ def decryption_block(master_password):
                 def template_version_module(module, version):
                     print(YELLOW, version, GREEN, module, DEFAULT_COLOR)
 
+                template_version_module('program', __version__)
                 template_version_module('change_password_obs', change_password_ver)
                 template_version_module('confirm_password_obs', confirm_password_ver)
                 template_version_module('datetime_obs', datetime_ver)
@@ -362,6 +362,8 @@ def write_log(cause, status):
 
     with open(FILE_LOG, mode="a", encoding='utf-8') as log_data:
         log_writer = DictWriter(log_data, fieldnames=fields_for_log, delimiter=';')
+        if os.path.exists(FILE_LOG) is False:
+            log_writer.writeheader()
 
         log_writer.writerow({
             fields_for_log[0]: __version__,     # Запись версии
