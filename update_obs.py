@@ -3,7 +3,7 @@ from main import *
 import os
 from time import sleep
 
-__version__ = '1.3.1'  # Версия модуля
+__version__ = '1.3.2'  # Версия модуля
 
 # Модули для работы программы
 stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
@@ -30,7 +30,7 @@ def update():  # Обновление программы
             cnt_modules += 1
 
     def template_for_install(program_file):  # Действия для установки
-        os.system('cp ' + new_folder_el + program_file + ' . ')
+        os.system('mv ' + new_folder_el + program_file + ' . ')
 
     def template_question(text):
         question = input(YELLOW + ' - ' + text + ' (y/n): ' + DEFAULT_COLOR)
@@ -101,6 +101,6 @@ def update():  # Обновление программы
             sleep(.7)
     else:
         print(YELLOW + ' - New folder not found... ' + DEFAULT_COLOR)
-        write_log('Folder Not Found', 'CRITICAL ERROR')
+        write_log('New folder not exist', 'ERROR: Not Found Folder')
         sleep(1)
         download_from_repository()
