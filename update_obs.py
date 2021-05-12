@@ -5,11 +5,6 @@ from time import sleep
 
 __version__ = '1.3.2'  # Версия модуля
 
-# Модули для работы программы
-stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
-                 'del_resource_obs.py', 'notes_obs.py', 'get_size_obs.py',
-                 'change_password_obs.py', 'confirm_password_obs.py']
-
 
 def update():  # Обновление программы
     main_file = 'main.py'

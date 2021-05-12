@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'DELTA v0.2.1.5'    # Version program
+__version__ = 'DELTA v0.2.1.6'    # Version program
 
 
 def show_name_program():
@@ -65,6 +65,10 @@ FILE_USER_NAME = FOLDER_WITH_DATA + ".self_name.dat"  # Файл с именем
 FILE_WITH_HASH = FOLDER_WITH_DATA + '.hash_password.dat'     # Файл с хэшем пароля
 FILE_LOG = FOLDER_WITH_DATA + '.file.log'  # Файл с версией программы
 
+# Модули для работы программы
+stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
+                 'del_resource_obs.py', 'notes_obs.py', 'get_size_obs.py',
+                 'change_password_obs.py', 'confirm_password_obs.py']
 fields_for_log = ['version', 'date', 'cause', 'status']     # Столбцы файла с логами
 fields_for_main_data = ['resource', 'login', 'password']    # Столбцы для файла с ресурсами
 fields_for_notes = ['name_note', 'note']    # Столбцы для файла с заметками
@@ -76,63 +80,9 @@ CHECK_FILE_FOR_RESOURCE = os.path.exists(FOLDER_WITH_RESOURCES)
 REPOSITORY = 'git clone https://github.com/Berliner187/elba -b delta'
 
 
-def path_to_resource_data(enc_resource):
-    return FOLDER_WITH_RESOURCES + enc_resource
-
-
 for folder in FOLDERS:
     if os.path.exists(folder) is False:
         os.mkdir(folder)
-
-
-def save_data_to_file(resource, login, password, master_password):
-    from enc_obs import enc_only_base64, enc_aes
-    """ Шифрование логина и пароля. Запись в директорию с ресурсами """
-    enc_name_folder = enc_only_base64(resource, master_password)
-    enc_name_folder += '/'
-
-    if os.path.exists(path_to_resource_data(enc_name_folder)) is False:
-        os.mkdir(path_to_resource_data(enc_name_folder))
-
-    resource_folder = path_to_resource_data(enc_name_folder)
-    login_folder = path_to_resource_data(enc_name_folder)
-    password_folder = path_to_resource_data(enc_name_folder)
-
-    resource_file = resource_folder + FILE_RESOURCE
-    login_file = login_folder + FILE_LOGIN
-    password_file = password_folder + FILE_PASSWORD
-
-    enc_aes(resource_file, resource, master_password)
-    enc_aes(login_file, login, master_password)
-    enc_aes(password_file, password, master_password)
-
-
-def show_decryption_data(master_password):
-    """ Показ всех сохраненных ресурсов """
-    system_action('clear')
-    print(PURPLE, "     ___________________________________")
-    print(PURPLE, "    /\/| ", YELLOW, "\/                   \/", PURPLE, " |\/\ ")
-    print(PURPLE, "   /\/\|", YELLOW, " \/  Saved resources  \/ ", PURPLE, "|/\/\ ", DEFAULT_COLOR)
-    print(YELLOW, "           \/                   \/ ", DEFAULT_COLOR)
-    print('\n'*5)
-
-    s = 0
-    for resource in os.listdir(FOLDER_WITH_RESOURCES):
-        decryption_res = dec_only_base64(resource, master_password)
-        s += 1
-        print(PURPLE, str(s) + '.', YELLOW, decryption_res, DEFAULT_COLOR)    # Decryption resource
-    print(BLUE +
-          '\n  - Enter "-r" to restart, "-x" to exit'
-          '\n  - Enter "-a" to add new resource'
-          '\n  - Enter "-c" to change master-password'
-          '\n  - Enter "-d" to remove resource',
-          BLUE,
-          RED, '\n  - Enter "-n" to go to notes            !',
-          BLUE,
-          '\n  - Enter "-u" to update program'
-          '\n  - Enter "-z" to remove ALL data',
-          YELLOW,
-          '\n Select resource by number \n', DEFAULT_COLOR)
 
 
 def point_of_entry():   # Точка входа в систему
@@ -214,7 +164,7 @@ def decryption_block(master_password):
         login = input(YELLOW + ' Login: ' + DEFAULT_COLOR)
         change_type_of_password(resource, login, master_password)
         if CHECK_FILE_FOR_RESOURCE:
-            show_decryption_data(master_password)
+            show_decryption_data(master_password, 'resource')
         else:
             system_action('restart')
 
@@ -230,7 +180,7 @@ def decryption_block(master_password):
             elif change_resource_or_actions == '-u':    # Обновление программы из репозитория
                 system_action('clear')
                 update()
-                show_decryption_data(master_password)
+                show_decryption_data(master_password, 'resource')
 
             elif change_resource_or_actions == '-x':  # Выход
                 system_action('clear')
@@ -249,7 +199,7 @@ def decryption_block(master_password):
 
             elif change_resource_or_actions == '-d':    # Удаление ресурса
                 delete_resource()
-                show_decryption_data(master_password)
+                show_decryption_data(master_password, 'resource')
 
             elif change_resource_or_actions == '-n':    # Добавление зашифрованных заметок
                 notes(master_password)
@@ -264,9 +214,11 @@ def decryption_block(master_password):
                     quit()
 
             elif change_resource_or_actions == '-s':
-                from get_size_obs import size_all
+                from get_size_obs import size_all, get_versions
+                get_versions()
                 size_all()
                 decryption_block(master_password)
+
             elif change_resource_or_actions == '-l':
                 system_action("clear")
                 print(GREEN + "\n Log program from file \n" + DEFAULT_COLOR)
@@ -281,34 +233,6 @@ def decryption_block(master_password):
                         )
                 print(YELLOW + " - Press Enter to exit - " + DEFAULT_COLOR)
                 
-            elif change_resource_or_actions == '-i':    # Показ версий модулей
-                from change_password_obs import __version__ as change_password_ver
-                from confirm_password_obs import __version__ as confirm_password_ver
-                from datetime_obs import __version__ as datetime_ver
-                from del_resource_obs import __version__ as del_resource_ver
-                from enc_obs import __version__ as enc_ver
-                from get_size_obs import __version__ as get_size_ver
-                from logo_obs import __version__ as logo_ver
-                from notes_obs import __version__ as notes_ver
-                from update_obs import __version__ as update_ver
-
-                system_action('clear')
-                print(GREEN, '\n  - Versions installed modules - \n', DEFAULT_COLOR)
-
-                def template_version_module(module, version):
-                    print(YELLOW, version, GREEN, module, DEFAULT_COLOR)
-
-                template_version_module('program', __version__)
-                template_version_module('change_password_obs', change_password_ver)
-                template_version_module('confirm_password_obs', confirm_password_ver)
-                template_version_module('datetime_obs', datetime_ver)
-                template_version_module('del_resource_obs', del_resource_ver)
-                template_version_module('enc_obs', enc_ver)
-                template_version_module('get_size_obs', get_size_ver)
-                template_version_module('logo_obs', logo_ver)
-                template_version_module('notes_obs', notes_ver)
-                template_version_module('update_obs', update_ver)
-
             elif change_resource_or_actions == '-dm':  # Удаление кэша
                 template_remove_folder('rm -r __pycache__/')
                 system_action('clear')
@@ -322,7 +246,7 @@ def decryption_block(master_password):
                     s += 1
                     if s == int(change_resource_or_actions):
                         system_action('clear')
-                        show_decryption_data(master_password)
+                        show_decryption_data(master_password, 'resource')
 
                         resource_from_file = FOLDER_WITH_RESOURCES + resource_in_folder + '/' + FILE_RESOURCE
                         login_from_file = FOLDER_WITH_RESOURCES + resource_in_folder + '/' + FILE_LOGIN
@@ -336,7 +260,7 @@ def decryption_block(master_password):
                         template_print_decryption_data('Password --->', password_from_file)
 
         except ValueError:
-            show_decryption_data(master_password)   # Показ содежимого
+            show_decryption_data(master_password, 'resource')   # Показ содежимого
         decryption_block(master_password)  # Рекусрия под-главной функции
 
 
@@ -410,7 +334,7 @@ def launcher():
         sleep(.5)
         system_action('clear')  # Очистка терминала
         write_log('Subsequent launch', 'OK')
-        show_decryption_data(master_password)       # Показ содержимого файла с ресурсами
+        show_decryption_data(master_password, 'resource')       # Показ содержимого файла с ресурсами
         decryption_block(master_password)  # Старт цикла
 
 
@@ -444,6 +368,7 @@ if __name__ == '__main__':
         from change_password_obs import change_master_password
         from confirm_password_obs import actions_with_password
         from enc_obs import enc_only_base64, dec_only_base64, enc_aes, dec_aes
+        from enc_obs import save_data_to_file, show_decryption_data
 
         launcher()  # Запуск главной направляющей функции
 

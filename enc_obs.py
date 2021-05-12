@@ -3,14 +3,17 @@ import base64
 import hashlib
 import random
 import os
+
 from stdiomask import getpass
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from Crypto.Cipher import AES
 import Crypto.Random
 
+from main import *
 
-__version__ = '2.0.0'
+
+__version__ = '2.0.1'
 
 
 class AESCipher(object):
@@ -104,3 +107,56 @@ def dec_aes(__file__, __key__):
         for item in payload:
             aes = AESCipher(__key__)
             return aes.decrypt(item)
+
+
+def save_data_to_file(resource, login, password, master_password):
+    def path_to_resource_data(enc_resource):
+        return FOLDER_WITH_RESOURCES + enc_resource
+    enc_name_folder = enc_only_base64(resource, master_password) + '/'
+
+    if os.path.exists(path_to_resource_data(enc_name_folder)) is False:
+        os.mkdir(path_to_resource_data(enc_name_folder))
+
+    resource_folder = path_to_resource_data(enc_name_folder)
+    login_folder = path_to_resource_data(enc_name_folder)
+    password_folder = path_to_resource_data(enc_name_folder)
+
+    resource_file = resource_folder + FILE_RESOURCE
+    login_file = login_folder + FILE_LOGIN
+    password_file = password_folder + FILE_PASSWORD
+
+    enc_aes(resource_file, resource, master_password)
+    enc_aes(login_file, login, master_password)
+    enc_aes(password_file, password, master_password)
+
+
+def show_decryption_data(master_password, category):
+    system_action('clear')
+    print(PURPLE, "     ___________________________________")
+    print(PURPLE, "    /\/| ", YELLOW, "\/                   \/", PURPLE, " |\/\ ")
+    print(PURPLE, "   /\/\|", YELLOW, " \/  Saved resources  \/ ", PURPLE, "|/\/\ ", DEFAULT_COLOR)
+    print(YELLOW, "           \/                   \/ ", DEFAULT_COLOR)
+    print('\n'*5)
+
+    s = 0
+    type_folder = ''
+    if category == 'resource':
+        type_folder = FOLDER_WITH_RESOURCES
+    if category == 'note':
+        type_folder = FOLDER_WITH_NOTES
+    for category in os.listdir(type_folder):
+        decryption_data = dec_only_base64(category, master_password)
+        s += 1
+        print(PURPLE, str(s) + '.', YELLOW, decryption_data, DEFAULT_COLOR)
+    print(BLUE +
+          '\n  - Enter "-r" to restart, "-x" to exit'
+          '\n  - Enter "-a" to add new resource'
+          '\n  - Enter "-c" to change master-password'
+          '\n  - Enter "-d" to remove resource',
+          BLUE,
+          RED, '\n  - Enter "-n" to go to notes            !',
+          BLUE,
+          '\n  - Enter "-u" to update program'
+          '\n  - Enter "-z" to remove ALL data',
+          YELLOW,
+          '\n Select resource by number \n', DEFAULT_COLOR)
