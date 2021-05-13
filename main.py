@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'DELTA v0.2.1.6'    # Version program
+__version__ = 'DELTA v0.2.1.7'    # Version program
 
 
 def show_name_program():
@@ -222,15 +222,15 @@ def decryption_block(master_password):
             elif change_resource_or_actions == '-l':
                 system_action("clear")
                 print(GREEN + "\n Log program from file \n" + DEFAULT_COLOR)
-                with open(FILE_LOG, 'r') as log_data:
-                    reader_log = DictReader(log_data, delimiter=';')
-                    for line in reader_log:
-                        print(
-                            line[fields_for_log[0]],
-                            line[fields_for_log[1]],
-                            line[fields_for_log[2]],
-                            line[fields_for_log[3]]
-                        )
+                log_data = open(FILE_LOG, 'r')
+                reader_log = DictReader(log_data, delimiter=';')
+                for line in reader_log:
+                    print(
+                        line[fields_for_log[0]],
+                        line[fields_for_log[1]],
+                        line[fields_for_log[2]],
+                        line[fields_for_log[3]]
+                    )
                 print(YELLOW + " - Press Enter to exit - " + DEFAULT_COLOR)
                 
             elif change_resource_or_actions == '-dm':  # Удаление кэша
@@ -379,6 +379,7 @@ if __name__ == '__main__':
         update()
 
     except ValueError as error:
+        print(error)
         write_log(error, 'CRITICAL CRASH')
         print(RED, '\n' + ' --- Critical error, program is restarted --- ', DEFAULT_COLOR)
         sleep(1)
@@ -388,5 +389,4 @@ if __name__ == '__main__':
         change = input(YELLOW + ' - Update? (y/n): ' + DEFAULT_COLOR)
         if change == 'y':
             update()
-        os.system('del' if os.name == 'nt' else 'rm')
         system_action('restart')

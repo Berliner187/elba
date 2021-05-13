@@ -1,4 +1,5 @@
 from main import *
+from enc_obs import save_data_to_file
 
 from csv import DictReader, DictWriter
 from enc_obs import enc_aes, dec_aes, enc_only_base64, dec_only_base64
@@ -13,7 +14,7 @@ from shutil import copyfile
 import os
 
 
-__version__ = '2.0.1'
+__version__ = '2.0.2'
 
 
 def change_master_password():

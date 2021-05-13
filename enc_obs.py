@@ -144,10 +144,12 @@ def show_decryption_data(master_password, category):
         type_folder = FOLDER_WITH_RESOURCES
     if category == 'note':
         type_folder = FOLDER_WITH_NOTES
-    for category in os.listdir(type_folder):
-        decryption_data = dec_only_base64(category, master_password)
+    for category_item in os.listdir(type_folder):
+        decryption_data = dec_only_base64(category_item, master_password)
         s += 1
         print(PURPLE, str(s) + '.', YELLOW, decryption_data, DEFAULT_COLOR)
+    if s == 0:
+        print(YELLOW + '\n    No ' + category + 's' + ' saved \n')
     print(BLUE +
           '\n  - Enter "-r" to restart, "-x" to exit'
           '\n  - Enter "-a" to add new resource'
