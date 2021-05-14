@@ -72,6 +72,7 @@ def update():  # Обновление программы
         def template_for_copy(item_program):
             os.system('cp ' + item_program + ' ' + old_elba + elba_version)
 
+        # Создание резервной копии
         if os.path.exists(old_elba) is False:
             os.mkdir(old_elba)
         if os.path.exists(old_elba + elba_version) is False:
@@ -85,7 +86,6 @@ def update():  # Обновление программы
             install_or_no = template_question(' - Install new version program?')
 
             if install_or_no == 'y':
-
                 template_for_install(main_file)
                 template_for_install('update_obs.py')
                 for i in range(len(stock_modules)):
