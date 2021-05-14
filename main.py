@@ -19,14 +19,14 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.2.1.8'    # Version program
+__version__ = 'v0.2.1.9'    # Version program
 
 
 def show_name_program():
     print(BLUE,
           "\n || Password Manager and Keeper of Notes ||",
           "\n || Delta For Linux || "
-          "\n || by Berliner187 || ", YELLOW,
+          "\n || by Berliner187  || ", YELLOW,
           "\n\n || Ferga Kangaroo || ", BLUE,
           __version__)
     elba()  # Вывод логотипа
@@ -67,7 +67,6 @@ FILE_WITH_HASH = FOLDER_WITH_DATA + '.hash_password.dat'     # Файл с хэ�
 FILE_LOG = FOLDER_WITH_DATA + '.file.log'  # Файл с версией программы
 
 # Модули для работы программы
-main_modules = ['main.py', 'update_obs.py']
 stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
                  'del_resource_obs.py', 'notes_obs.py', 'get_size_obs.py',
                  'change_password_obs.py', 'confirm_password_obs.py']
@@ -96,20 +95,20 @@ def point_of_entry():   # Точка входа в систему
               BLUE, "\n\n Attempts left:", RED, value_left, DEFAULT_COLOR)
         sleep(1)
 
-    def starter_elements(color, text):
+    def get_master_password(color, text):
         show_name_program()     # Выводит название и логотип
-        master_password = getpass(color + '\n ' + text + DEFAULT_COLOR)
-        if master_password == 'x':  # Досрочный выход из программы
+        user_master_password = getpass(color + '\n ' + text + DEFAULT_COLOR)
+        if user_master_password == 'x':  # Досрочный выход из программы
             quit()
-        elif master_password == 'r':
+        elif user_master_password == 'r':
             system_action('restart')
-        elif master_password == 'a':    # Показ анимации
+        elif user_master_password == 'a':    # Показ анимации
             animation()
-        elif master_password == 'n':
+        elif user_master_password == 'n':
             author()
-        return master_password
+        return user_master_password
 
-    master_password = starter_elements(YELLOW, ' -- Your master-password: ')
+    master_password = get_master_password(YELLOW, ' -- Your master-password: ')
 
     # Проверка хэша пароля
     with open(FILE_WITH_HASH, 'r') as hash_pas_from_file:
@@ -121,7 +120,7 @@ def point_of_entry():   # Точка входа в систему
         while hash_password is False:
             cnt_left -= 1
             system_action('clear')
-            master_password = starter_elements(YELLOW, ' -- Your master-password: ')
+            master_password = get_master_password(YELLOW, ' -- Your master-password: ')
             file_hash = open(FILE_WITH_HASH)
             hash_password = check_password_hash(file_hash.readline(), master_password)
             if cnt_left == 0:
@@ -280,7 +279,6 @@ def download_from_repository():
     system_action('clear')
     if os.path.exists('update_obs.py') == bool(False):
         os.system('mv elba/update_obs.py .')
-        template_remove_folder('elba')
         system_action('restart')
 
 

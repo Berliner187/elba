@@ -125,7 +125,7 @@ def install_old_saved_version():
     for version in os.listdir(old_elba):
         s += 1
         print(str(s), '-', YELLOW + version + DEFAULT_COLOR)
-    print(BLUE + " - Change version by number - " + DEFAULT_COLOR)
+    print(BLUE + "\n\n  - Change version by number - " + DEFAULT_COLOR)
     change = int(input(YELLOW + "(1/" + str(s) + "): " + DEFAULT_COLOR))
     cnt = 0
     for need_version_folder in os.listdir(old_elba):
@@ -133,3 +133,4 @@ def install_old_saved_version():
         if cnt == change:
             template_install_old(need_version_folder)
     print(GREEN + ' - Success roll back! - ' + DEFAULT_COLOR)
+    sleep(1)
