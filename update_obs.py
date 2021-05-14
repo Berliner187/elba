@@ -4,7 +4,7 @@ from main import __version__ as elba_version
 import os
 from time import sleep
 
-__version__ = '1.4.1'  # Версия модуля
+__version__ = '1.4.2'  # Версия модуля
 
 
 main_file = 'main.py'
@@ -126,7 +126,7 @@ def install_old_saved_version():
         s += 1
         print(str(s), '-', YELLOW + version + DEFAULT_COLOR)
     print(BLUE + "\n\n  - Change version by number - " + DEFAULT_COLOR)
-    change = int(input(YELLOW + "(1/" + str(s) + "): " + DEFAULT_COLOR))
+    change = int(input(YELLOW + "(1-" + str(s) + "): " + DEFAULT_COLOR))
     cnt = 0
     for need_version_folder in os.listdir(old_elba):
         cnt += 1
