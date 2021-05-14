@@ -3,12 +3,12 @@ from main import *
 import os
 
 
-__version__ = '1.0.5'
+__version__ = '1.1.0'
 
 
 def get_versions():
     from change_password_obs import __version__ as change_password_ver
-    from confirm_password_obs import __version__ as confirm_password_ver
+    from actions_with_password_obs import __version__ as actions_with_password_ver
     from datetime_obs import __version__ as datetime_ver
     from del_resource_obs import __version__ as del_resource_ver
     from enc_obs import __version__ as enc_ver
@@ -25,7 +25,7 @@ def get_versions():
 
     template_version_module('program', __version__)
     template_version_module('change_password_obs', change_password_ver)
-    template_version_module('confirm_password_obs', confirm_password_ver)
+    template_version_module('confirm_password_obs', actions_with_password_ver)
     template_version_module('datetime_obs', datetime_ver)
     template_version_module('del_resource_obs', del_resource_ver)
     template_version_module('enc_obs', enc_ver)

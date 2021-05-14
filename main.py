@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.2.1.9'    # Version program
+__version__ = 'v0.2.1.10'    # Version program
 
 
 def show_name_program():
@@ -69,7 +69,7 @@ FILE_LOG = FOLDER_WITH_DATA + '.file.log'  # Файл с версией прог
 # Модули для работы программы
 stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
                  'del_resource_obs.py', 'notes_obs.py', 'get_size_obs.py',
-                 'change_password_obs.py', 'confirm_password_obs.py']
+                 'change_password_obs.py', 'actions_with_password_obs.py']
 
 fields_for_log = ['version', 'date', 'cause', 'status']     # Столбцы файла с логами
 fields_for_main_data = ['resource', 'login', 'password']    # Столбцы для файла с ресурсами
@@ -136,25 +136,6 @@ def point_of_entry():   # Точка входа в систему
         return master_password
 
 
-def change_type_of_password(resource, login, master_password):
-    """ Выбор пароля: генерирование нового или сохранение пользовательского """
-    print('\n',
-          GREEN + ' 1' + YELLOW + ' - Generation new password \n',
-          GREEN + ' 2' + YELLOW + ' - Save your password      \n', DEFAULT_COLOR)
-
-    change_type = int(input('Change (1/2): '))
-    if change_type == 1:  # Генерирование пароля и сохранение в файл
-        password = actions_with_password('gen_new')
-        save_data_to_file(resource, login, password, master_password)
-    elif change_type == 2:  # Сохранение пользовательского пароля
-        password = actions_with_password('self')
-        save_data_to_file(resource, login, password, master_password)
-    else:   # Если ошибка выбора
-        print(RED + '  -- Error of change. Please, change again --  ' + DEFAULT_COLOR)
-        change_type_of_password(resource, login, master_password)
-    system_action('clear')
-
-
 def decryption_block(master_password):
     """ Цикл с выводом сохраненных ресурсов """
 
@@ -164,7 +145,7 @@ def decryption_block(master_password):
         print(GREEN, '\n   --- Add new resource ---   ', '\n' * 3, DEFAULT_COLOR)
         resource = input(YELLOW + ' Resource: ' + DEFAULT_COLOR)
         login = input(YELLOW + ' Login: ' + DEFAULT_COLOR)
-        change_type_of_password(resource, login, master_password)
+        choice_generation_or_save_self_password(resource, login, master_password)
         if CHECK_FILE_FOR_RESOURCE:
             show_decryption_data(master_password, 'resource')
         else:
@@ -374,13 +355,14 @@ if __name__ == '__main__':
         from del_resource_obs import delete_resource
         from notes_obs import notes
         from change_password_obs import change_master_password
-        from confirm_password_obs import actions_with_password
+        from actions_with_password_obs import actions_with_password, choice_generation_or_save_self_password
         from enc_obs import enc_only_base64, dec_only_base64, enc_aes, dec_aes
         from enc_obs import save_data_to_file, show_decryption_data
 
         launcher()  # Запуск главной направляющей функции
 
     except ModuleNotFoundError as error:
+        print(error)
         print(RED + ' - Error in import modules -' + DEFAULT_COLOR)
         write_log(error, 'CRASH MODULES')
         sleep(.5)

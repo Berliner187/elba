@@ -4,7 +4,7 @@ from enc_obs import save_data_to_file
 from csv import DictReader, DictWriter
 from enc_obs import enc_aes, dec_aes, enc_only_base64, dec_only_base64
 from datetime_obs import greeting
-from confirm_password_obs import create_and_confirm_user_password
+from actions_with_password_obs import create_and_confirm_user_password
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
