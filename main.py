@@ -19,13 +19,13 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'DELTA v0.2.1.7'    # Version program
+__version__ = 'v0.2.1.8'    # Version program
 
 
 def show_name_program():
     print(BLUE,
           "\n || Password Manager and Keeper of Notes ||",
-          "\n || Beta For Linux || "
+          "\n || Delta For Linux || "
           "\n || by Berliner187 || ", YELLOW,
           "\n\n || Ferga Kangaroo || ", BLUE,
           __version__)
@@ -53,6 +53,7 @@ NEW_FOLDER_ELBA = 'elba/'
 FOLDER_WITH_DATA = 'volare/'     # Mi fa volare
 FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + "resources/"     # Папка с папками ресурсов
 FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'   # Файл с заметками
+old_elba = FOLDER_WITH_DATA + 'old/'  # Старые версии программы
 FOLDERS = [FOLDER_WITH_DATA, FOLDER_WITH_NOTES]
 
 FILE_RESOURCE = 'resource.dat'
@@ -66,9 +67,11 @@ FILE_WITH_HASH = FOLDER_WITH_DATA + '.hash_password.dat'     # Файл с хэ�
 FILE_LOG = FOLDER_WITH_DATA + '.file.log'  # Файл с версией программы
 
 # Модули для работы программы
+main_modules = ['main.py', 'update_obs.py']
 stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
                  'del_resource_obs.py', 'notes_obs.py', 'get_size_obs.py',
                  'change_password_obs.py', 'confirm_password_obs.py']
+
 fields_for_log = ['version', 'date', 'cause', 'status']     # Столбцы файла с логами
 fields_for_main_data = ['resource', 'login', 'password']    # Столбцы для файла с ресурсами
 fields_for_notes = ['name_note', 'note']    # Столбцы для файла с заметками
@@ -240,6 +243,12 @@ def decryption_block(master_password):
                 sleep(1)
                 system_action('restart')
 
+            elif change_resource_or_actions == '-o':    # Установка старой сохраненной версии
+                if os.path.exists(old_elba) is False:
+                    print(YELLOW + ' - No versions saved - ' + DEFAULT_COLOR)
+                else:
+                    install_old_saved_version()
+
             else:
                 s = 0
                 for resource_in_folder in os.listdir(FOLDER_WITH_RESOURCES):  # Вывод данных ресурса
@@ -341,7 +350,7 @@ def launcher():
 if __name__ == '__main__':
     system_action('clear')
     try:
-        from update_obs import update
+        from update_obs import update, install_old_saved_version
     except ModuleNotFoundError as update_obs_error:
         write_log(update_obs_error, 'CRASH UPDATE')
         print(RED + ' - Module "update" does not exist - ' + DEFAULT_COLOR)
@@ -385,8 +394,8 @@ if __name__ == '__main__':
         sleep(1)
         system_action('clear')
         # Попытка обновиться, если возникает ошибка
-        print(RED + ' -- You can try to update the program -- \n' + DEFAULT_COLOR)
-        change = input(YELLOW + ' - Update? (y/n): ' + DEFAULT_COLOR)
+        print(RED + ' -- You can try roll back -- \n' + DEFAULT_COLOR)
+        change = input(YELLOW + ' - Roll back? (y/n): ' + DEFAULT_COLOR)
         if change == 'y':
-            update()
+            install_old_saved_version()
         system_action('restart')
