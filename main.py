@@ -248,6 +248,7 @@ def decryption_block(master_password):
                     print(YELLOW + ' - No versions saved - ' + DEFAULT_COLOR)
                 else:
                     install_old_saved_version()
+                    system_action('restart')
 
             else:
                 s = 0
