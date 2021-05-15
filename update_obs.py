@@ -93,13 +93,13 @@ def update():  # Обновление программы
                 system_action('clear')
                 print(GREEN + "\n\n    - Successfully installed! - ")
                 sleep(.7)
-                write_log('Update', 'OK')
+                write_log('Upgrade', 'OK')
 
             template_remove_folder(new_folder_el)
             system_action('restart')
         else:
             system_action('clear')
-            print(YELLOW + ' -- You are using the latest version of the program -- ' + DEFAULT_COLOR)
+            template_some_message(YELLOW, ' -- You are using the latest version of the program -- ')
 
             template_for_install('update_obs.py')
             for module in stock_modules:

@@ -1,7 +1,6 @@
 from main import *
 
-# from enc_obs import enc_aes, dec_aes
-from enc_obs import enc_only_base64, dec_only_base64
+from enc_obs import *
 
 from csv import DictReader, DictWriter
 from time import sleep
@@ -16,7 +15,7 @@ def notes(master_password):
     system_action('clear')
     while True:     # Старт цикла для работы с заметками
 
-        def show():     # Показ сохраненных заметок
+        show_decryption_data(master_password, category)
             def path_to_note(name_note):
                 return FOLDER_WITH_NOTES + name_note
             with open(file_for_note, encoding='utf-8') as notes_file:

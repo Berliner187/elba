@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.2.1.10'    # Version program
+__version__ = 'v0.2.1.11'    # Version program
 
 
 def show_name_program():
@@ -41,7 +41,12 @@ def system_action(action):
 
 
 def template_remove_folder(some_folder):
-    os.system('rmdir ' + some_folder if os.name == 'nt' else 'rm -r ' + some_folder + ' -f')
+    os.system('rmdir ' + some_folder if os.name == 'nt'
+    else 'rm -r ' + some_folder + ' -f')
+
+
+def template_some_message(color, message):
+    print(color, '\n\n', message, DEFAULT_COLOR)
 
 
 # Цвета в терминале
@@ -49,9 +54,9 @@ YELLOW, BLUE, PURPLE = "\033[33m", "\033[36m", "\033[35m"
 GREEN, RED, DEFAULT_COLOR = "\033[32m", "\033[31m", "\033[0m"
 
 # Константы
-NEW_FOLDER_ELBA = 'elba/'
+FOLDER_ELBA = 'elba/'
 FOLDER_WITH_DATA = 'volare/'     # Mi fa volare
-FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + "resources/"     # Папка с папками ресурсов
+FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + "resources/"
 FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'   # Файл с заметками
 old_elba = FOLDER_WITH_DATA + 'old/'  # Старые версии программы
 FOLDERS = [FOLDER_WITH_DATA, FOLDER_WITH_NOTES]
@@ -62,8 +67,8 @@ FILE_PASSWORD = 'password.dat'
 
 FILE_NOTE_ITSELF = 'note_itself.dat'
 
-FILE_USER_NAME = FOLDER_WITH_DATA + ".self_name.dat"  # Файл с именем (никнеймом)
-FILE_WITH_HASH = FOLDER_WITH_DATA + '.hash_password.dat'     # Файл с хэшем пароля
+FILE_USER_NAME = FOLDER_WITH_DATA + ".self_name.dat"  # Файл с никнеймом
+FILE_WITH_HASH = FOLDER_WITH_DATA + '.hash_password.dat'  # Файл с хэшем пароля
 FILE_LOG = FOLDER_WITH_DATA + '.file.log'  # Файл с версией программы
 
 # Модули для работы программы
@@ -71,9 +76,8 @@ stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
                  'del_resource_obs.py', 'notes_obs.py', 'get_size_obs.py',
                  'change_password_obs.py', 'actions_with_password_obs.py']
 
-fields_for_log = ['version', 'date', 'cause', 'status']     # Столбцы файла с логами
-fields_for_main_data = ['resource', 'login', 'password']    # Столбцы для файла с ресурсами
-fields_for_notes = ['name_note', 'note']    # Столбцы для файла с заметками
+# Столбцы файла с логами
+fields_for_log = ['version', 'date', 'cause', 'status']
 
 # Проверка файлов на наличие
 CHECK_FILE_WITH_HASH = os.path.exists(FILE_WITH_HASH)
@@ -95,9 +99,10 @@ def point_of_entry():   # Точка входа в систему
               BLUE, "\n\n Attempts left:", RED, value_left, DEFAULT_COLOR)
         sleep(1)
 
-    def get_master_password(color, text):
+    def get_master_password():
         show_name_program()     # Выводит название и логотип
-        user_master_password = getpass(color + '\n ' + text + DEFAULT_COLOR)
+        user_master_password = getpass(YELLOW +
+        '\n -- Your master-password: ' + DEFAULT_COLOR)
         if user_master_password == 'x':  # Досрочный выход из программы
             quit()
         elif user_master_password == 'r':
@@ -108,11 +113,12 @@ def point_of_entry():   # Точка входа в систему
             author()
         return user_master_password
 
-    master_password = get_master_password(YELLOW, ' -- Your master-password: ')
+    master_password = get_master_password()
 
     # Проверка хэша пароля
     with open(FILE_WITH_HASH, 'r') as hash_pas_from_file:
-        hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
+        hash_password = check_password_hash(hash_pas_from_file.readline(),
+        master_password)
     cnt_left = 3    # Счет оставшихся попыток
 
     if hash_password is False:    # Если хеши не совпадают
@@ -120,9 +126,10 @@ def point_of_entry():   # Точка входа в систему
         while hash_password is False:
             cnt_left -= 1
             system_action('clear')
-            master_password = get_master_password(YELLOW, ' -- Your master-password: ')
+            master_password = get_master_password()
             file_hash = open(FILE_WITH_HASH)
-            hash_password = check_password_hash(file_hash.readline(), master_password)
+            hash_password = check_password_hash(file_hash.readline(),
+            master_password)
             if cnt_left == 0:
                 system_action('clear')
                 print(RED + " -- Limit is exceeded -- " + DEFAULT_COLOR)
@@ -160,7 +167,7 @@ def decryption_block(master_password):
             if change_resource_or_actions == '-a':  # Добавление нового ресурса
                 add_resource_data()
 
-            elif change_resource_or_actions == '-u':    # Обновление программы из репозитория
+            elif change_resource_or_actions == '-u':    # Обновление программы
                 system_action('clear')
                 update()
                 show_decryption_data(master_password, 'resource')
@@ -184,15 +191,16 @@ def decryption_block(master_password):
                 delete_resource()
                 show_decryption_data(master_password, 'resource')
 
-            elif change_resource_or_actions == '-n':    # Добавление зашифрованных заметок
+            elif change_resource_or_actions == '-n':    # Добавление заметок
                 notes(master_password)
 
-            elif change_resource_or_actions == '-z':    # Удаление всех данных пользователя
+            elif change_resource_or_actions == '-z':    # Удаление всех данных
                 system_action('clear')
-                print(RED + '\n\n - Are you sure you want to delete all data? - ' + DEFAULT_COLOR)
+                template_some_message(RED,
+                ' - Are you sure you want to delete all data? - ')
                 change_yes_or_no = input(YELLOW + ' - Remove ALL data? (y/n): ' + DEFAULT_COLOR)
                 if change_yes_or_no == 'y':
-                    template_remove_folder(NEW_FOLDER_ELBA)
+                    template_remove_folder(FOLDER_ELBA)
                     system_action('clear')
                     quit()
 
@@ -215,7 +223,7 @@ def decryption_block(master_password):
                         line[fields_for_log[3]]
                     )
                 print(YELLOW + " - Press Enter to exit - " + DEFAULT_COLOR)
-                
+
             elif change_resource_or_actions == '-dm':  # Удаление кэша
                 template_remove_folder('rm -r __pycache__/')
                 system_action('clear')
@@ -238,16 +246,20 @@ def decryption_block(master_password):
                         system_action('clear')
                         show_decryption_data(master_password, 'resource')
 
-                        resource_from_file = FOLDER_WITH_RESOURCES + resource_in_folder + '/' + FILE_RESOURCE
-                        login_from_file = FOLDER_WITH_RESOURCES + resource_in_folder + '/' + FILE_LOGIN
-                        password_from_file = FOLDER_WITH_RESOURCES + resource_in_folder + '/' + FILE_PASSWORD
+                        path_to_resource = FOLDER_WITH_RESOURCES + resource_in_folder
+                        resource_from_file = path_to_resource + '/' + FILE_RESOURCE
+                        login_from_file = path_to_resource + '/' + FILE_LOGIN
+                        password_from_file = path_to_resource + '/' + FILE_PASSWORD
 
                         def template_print_decryption_data(data_type, value):
                             print(BLUE, data_type, YELLOW, dec_aes(value, master_password), DEFAULT_COLOR)
 
-                        template_print_decryption_data('Resource --->', resource_from_file)
-                        template_print_decryption_data('Login ------>', login_from_file)
-                        template_print_decryption_data('Password --->', password_from_file)
+                        template_print_decryption_data('Resource --->',
+                        resource_from_file)
+                        template_print_decryption_data('Login ------>',
+                        login_from_file)
+                        template_print_decryption_data('Password --->',
+                        password_from_file)
 
         except ValueError:
             show_decryption_data(master_password, 'resource')   # Показ содежимого
@@ -295,6 +307,7 @@ def launcher():
         write_log('First launch', 'OK')
 
     if CHECK_FILE_FOR_RESOURCE is False:
+        # Если нет ресурсов
         os.mkdir(FOLDER_WITH_RESOURCES)
         show_name_program()
         print(BLUE,
@@ -316,15 +329,15 @@ def launcher():
         write_log('---', 'OK')
         system_action('restart')
     else:
-        # Если файл уже создан
-        master_password = point_of_entry()  # Ввод пароля
-        system_action('clear')  # Очистка терминала
-        greeting(master_password, False)  # Вывод приветствия
+        # Если есть ресурсы
+        master_password = point_of_entry()
+        system_action('clear')
+        greeting(master_password, False)
         sleep(.5)
-        system_action('clear')  # Очистка терминала
+        system_action('clear')
         write_log('Subsequent launch', 'OK')
-        show_decryption_data(master_password, 'resource')       # Показ содержимого файла с ресурсами
-        decryption_block(master_password)  # Старт цикла
+        show_decryption_data(master_password, 'resource')
+        decryption_block(master_password)
 
 
 if __name__ == '__main__':
@@ -344,7 +357,8 @@ if __name__ == '__main__':
         write_log(error_module, 'CRASH')
         print(RED + 'Error: \n' + str(error_module) + DEFAULT_COLOR)
         print('\n')
-        print(YELLOW + "Please, install module/modules with PIP and restart the program" + DEFAULT_COLOR)
+        template_some_message(YELLOW,
+        "Please, install module/modules with PIP and restart the program")
         sleep(1)
         quit()
 

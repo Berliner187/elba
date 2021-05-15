@@ -134,7 +134,7 @@ def show_decryption_data(master_password, category):
     system_action('clear')
     print(PURPLE, "     ___________________________________")
     print(PURPLE, "    /\/| ", YELLOW, "\/                   \/", PURPLE, " |\/\ ")
-    print(PURPLE, "   /\/\|", YELLOW, " \/  Saved resources  \/ ", PURPLE, "|/\/\ ", DEFAULT_COLOR)
+    print(PURPLE, "   /\/\|", YELLOW, " \/  Saved " + category + 's' + "  \/ ", PURPLE, "|/\/\ ", DEFAULT_COLOR)
     print(YELLOW, "           \/                   \/ ", DEFAULT_COLOR)
     print('\n'*5)
 
