@@ -367,7 +367,7 @@ if __name__ == '__main__':
         from logo_obs import elba, animation, author
         from datetime_obs import greeting
         from del_resource_obs import delete_resource
-        from notes_obs import notes
+        # from notes_obs import notes
         from change_password_obs import change_master_password
         from actions_with_password_obs import actions_with_password, choice_generation_or_save_self_password
         from enc_obs import enc_only_base64, dec_only_base64, enc_aes, dec_aes
