@@ -101,8 +101,9 @@ def point_of_entry():   # Точка входа в систему
 
     def get_master_password():
         show_name_program()     # Выводит название и логотип
-        user_master_password = getpass(YELLOW +
-        '\n -- Your master-password: ' + DEFAULT_COLOR)
+        user_master_password = getpass(
+            YELLOW + '\n -- Your master-password: ' + DEFAULT_COLOR
+        )
         if user_master_password == 'x':  # Досрочный выход из программы
             quit()
         elif user_master_password == 'r':
@@ -117,8 +118,7 @@ def point_of_entry():   # Точка входа в систему
 
     # Проверка хэша пароля
     with open(FILE_WITH_HASH, 'r') as hash_pas_from_file:
-        hash_password = check_password_hash(hash_pas_from_file.readline(),
-        master_password)
+        hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
     cnt_left = 3    # Счет оставшихся попыток
 
     if hash_password is False:    # Если хеши не совпадают
@@ -128,14 +128,13 @@ def point_of_entry():   # Точка входа в систему
             system_action('clear')
             master_password = get_master_password()
             file_hash = open(FILE_WITH_HASH)
-            hash_password = check_password_hash(file_hash.readline(),
-            master_password)
+            hash_password = check_password_hash(file_hash.readline(), master_password)
             if cnt_left == 0:
                 system_action('clear')
                 print(RED + " -- Limit is exceeded -- " + DEFAULT_COLOR)
                 sleep(2**10)
                 quit()
-            if hash_password is True:
+            if hash_password:
                 return master_password
             else:
                 template_wrong_message(cnt_left)
@@ -196,8 +195,7 @@ def decryption_block(master_password):
 
             elif change_resource_or_actions == '-z':    # Удаление всех данных
                 system_action('clear')
-                template_some_message(RED,
-                ' - Are you sure you want to delete all data? - ')
+                template_some_message(RED, ' - Are you sure you want to delete all data? - ')
                 change_yes_or_no = input(YELLOW + ' - Remove ALL data? (y/n): ' + DEFAULT_COLOR)
                 if change_yes_or_no == 'y':
                     template_remove_folder(FOLDER_ELBA)
@@ -254,12 +252,12 @@ def decryption_block(master_password):
                         def template_print_decryption_data(data_type, value):
                             print(BLUE, data_type, YELLOW, dec_aes(value, master_password), DEFAULT_COLOR)
 
-                        template_print_decryption_data('Resource --->',
-                        resource_from_file)
-                        template_print_decryption_data('Login ------>',
-                        login_from_file)
-                        template_print_decryption_data('Password --->',
-                        password_from_file)
+                        template_print_decryption_data(
+                            'Resource --->', resource_from_file)
+                        template_print_decryption_data(
+                            'Login ------>', login_from_file)
+                        template_print_decryption_data(
+                            'Password --->', password_from_file)
 
         except ValueError:
             show_decryption_data(master_password, 'resource')   # Показ содежимого
@@ -270,7 +268,7 @@ def download_from_repository():
     """ Загрузка и установка из репозитория модуля обновлений """
     os.system(REPOSITORY)
     system_action('clear')
-    if os.path.exists('update_obs.py') == bool(False):
+    if os.path.exists('update_obs.py') is False:
         os.system('mv elba/update_obs.py .')
         system_action('restart')
 
