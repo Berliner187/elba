@@ -183,7 +183,7 @@ def decryption_block(master_password):
                 sleep(.4)
                 system_action('restart')
 
-            elif change_resource_or_actions == '-c':
+            elif change_resource_or_actions == '-c':    # Смена мастер-пароля
                 change_master_password()
 
             elif change_resource_or_actions == '-d':    # Удаление ресурса
@@ -313,12 +313,13 @@ def launcher():
               "\n  -           No resources saved. Add them!         -  \n"
               "\n ----                That's easy!                 ---- \n",
               RED,
-              "\n         Программа не поддерживает русский язык          ",
+              "\n          Программа не поддерживает русский язык         ",
               YELLOW,
-              '\n --              Создание мастер-пароля               -- '
+              '\n --              Pick a master-password               -- '
               '\n --    Только не используйте свой банковский пароль,  -- '
               '\n          я не сильно вкладывался в безопасность         '
-              '\n                     этой программы                      ', DEFAULT_COLOR)
+              '\n                     этой программы                      ',
+              DEFAULT_COLOR)
 
         master_password = actions_with_password('master')  # Создание мастер-пароля
         greeting(master_password, False)  # Вывод приветствия
@@ -355,8 +356,9 @@ if __name__ == '__main__':
         write_log(error_module, 'CRASH')
         print(RED + 'Error: \n' + str(error_module) + DEFAULT_COLOR)
         print('\n')
-        template_some_message(YELLOW,
-        "Please, install module/modules with PIP and restart the program")
+        template_some_message(
+            YELLOW, "Please, install module/modules with PIP and restart the program"
+        )
         sleep(1)
         quit()
 
@@ -383,7 +385,7 @@ if __name__ == '__main__':
     except ValueError as error:
         print(error)
         write_log(error, 'CRITICAL CRASH')
-        print(RED, '\n' + ' --- Critical error, program is restarted --- ', DEFAULT_COLOR)
+        print(RED, '\n --- Critical error, program is restarted --- ', DEFAULT_COLOR)
         sleep(1)
         system_action('clear')
         # Попытка обновиться, если возникает ошибка

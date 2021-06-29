@@ -10,7 +10,7 @@ from werkzeug.security import generate_password_hash
 from stdiomask import getpass
 
 
-__version__ = '1.1.2'
+__version__ = '1.1.3'
 
 # Символы, используемые для генерирования пароля
 symbols_for_password = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-='
@@ -37,7 +37,7 @@ def create_and_confirm_user_password():
             return password
         else:
             print(RED + '\n Error in confirm \n' + DEFAULT_COLOR)
-            while (password != confirm_pas) or (len(password or confirm_pas < 8)):
+            while (password != confirm_pas) or (len(password or confirm_pas) < 8):
                 password, confirm_pas = input_password()
                 if (password == confirm_pas) and (len(password and confirm_pas) >= 8):
                     return password
@@ -53,9 +53,8 @@ def actions_with_password(type_pas):
 
     def generation_new_password():
         """ Функция создания случайного пароля """
-        length_new_pas = int(input(YELLOW +
-                                   ' - Length: ' +
-                                   DEFAULT_COLOR))
+        length_new_pas = int(input(
+            YELLOW + ' - Length: ' + DEFAULT_COLOR))
         if length_new_pas > 8:
             new_password = ''
             for i in range(length_new_pas):
@@ -88,9 +87,9 @@ def actions_with_password(type_pas):
 
     elif type_pas == 'gen_new':     # Генерирование нового пароля
         password = generation_new_password()
-        print(YELLOW + ' - Your new password - ',
-              GREEN, password, YELLOW,
-              ' - success saved', DEFAULT_COLOR)
+        print(
+            YELLOW + ' - Your new password -', GREEN, password, YELLOW, '- success saved', DEFAULT_COLOR
+        )
         sleep(2)
         return password
 
@@ -99,8 +98,8 @@ def choice_generation_or_save_self_password(resource, login, master_password):
     """ Выбор пароля: генерирование нового или сохранение пользовательского """
     print('\n',
           GREEN + ' 1' + YELLOW + ' - Generation new password \n',
-          GREEN + ' 2' + YELLOW + ' - Save your password      \n', DEFAULT_COLOR)
-
+          GREEN + ' 2' + YELLOW + ' - Save your password      \n', DEFAULT_COLOR
+          )
     change_type = int(input('Change (1/2): '))
     if change_type == 1:  # Генерирование пароля и сохранение в файл
         password = actions_with_password('gen_new')
