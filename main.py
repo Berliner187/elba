@@ -102,9 +102,9 @@ def point_of_entry():   # Точка входа в систему
 
     def get_master_password():
         show_name_program()     # Выводит название и логотип
-        user_master_password = 'kozak022'#getpass(
-            # YELLOW + '\n -- Your master-password: ' + DEFAULT_COLOR
-        # )
+        user_master_password = getpass(
+            YELLOW + '\n -- Your master-password: ' + DEFAULT_COLOR
+        )
         if user_master_password == 'x':  # Досрочный выход из программы
             quit()
         elif user_master_password == 'r':
