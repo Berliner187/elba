@@ -162,7 +162,7 @@ def decryption_block(master_password):
         add_resource_data()
         system_action('restart')
     else:  # При последущих запусках программа работает тут
-        change_resource_or_actions = input('\n Change: ')   # Выбор действия
+        change_resource_or_actions = input('\n Change action: ')   # Выбор действия
         try:
             if change_resource_or_actions == '-a':  # Добавление нового ресурса
                 add_resource_data()
@@ -192,6 +192,7 @@ def decryption_block(master_password):
                 show_decryption_data(master_password, 'resource')
 
             elif change_resource_or_actions == '-n':    # Добавление заметок
+                show_decryption_data(master_password, 'note')
                 notes(master_password)
 
             elif change_resource_or_actions == '-z':    # Удаление всех данных
@@ -230,7 +231,7 @@ def decryption_block(master_password):
                 sleep(1)
                 system_action('restart')
 
-            elif change_resource_or_actions == '-o':    # Установка старой сохраненной версии
+            elif change_resource_or_actions == '-o':    # Откат к старой сохраненной версии
                 if os.path.exists(old_elba) is False:
                     print(YELLOW + ' - No versions saved - ' + DEFAULT_COLOR)
                 else:

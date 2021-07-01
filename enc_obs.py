@@ -175,7 +175,7 @@ def show_decryption_data(master_password, category):
               '\n  - Enter "-a" to add new resource'
               '\n  - Enter "-c" to change master-password'
               '\n  - Enter "-d" to remove resource',
-              '\n  - Enter "-n" to go to notes            !'
+              '\n  - Enter "-n" to go to notes'
               '\n  - Enter "-u" to update program'
               '\n  - Enter "-z" to remove ALL data',
               YELLOW,
@@ -184,6 +184,6 @@ def show_decryption_data(master_password, category):
         print(BLUE + '\n  - Press "Enter" to go back'
                      '\n  - Enter "-a" to add new note'
                      '\n  - Enter "-d" to remove note',
-              YELLOW, '\n Select note by number', DEFAULT_COLOR)
+              YELLOW, '\n Select note by number \n', DEFAULT_COLOR)
     if s == 0:
         print(YELLOW + '\n    No ' + category + 's' + ' saved \n')

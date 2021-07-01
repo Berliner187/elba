@@ -9,12 +9,10 @@ from shutil import copyfile
 import os
 
 
-__version__ = '2.0.0 BETA'
+__version__ = '2.0.0'
 
 
 def notes(master_password):
-    system_action('clear')
-    show_decryption_data(master_password, 'note')
 
     def add_new():  # Добавление новой заметки
         system_action('clear')
@@ -25,32 +23,40 @@ def notes(master_password):
         print(GREEN, '   -- Success saved! --')
         sleep(.3)
         system_action('clear')
+        show_decryption_data(master_password, 'note')
         notes(master_password)
 
-    def launcher_notes():     # Работа в лейбле с заметками
-        change_action = input('\n - Change: ')  # Выбор между действиями
+    change_action = input('\n - Change action: ')  # Выбор между действиями
+
+    try:
         if change_action == '-a':   # Пользователь выбирает добавление новой заметки
             add_new()
         elif change_action == '-d':  # Пользователь выбирает удаление старой заметки
             delete_resource('note')
-            launcher_notes()
+            show_decryption_data(master_password, 'note')
+            notes(master_password)
+        elif change_action == '-b':
+            show_decryption_data(master_password, 'resource')
+            decryption_block(master_password)
+        else:
+            cnt = 0
+            for note_in_folder in os.listdir(FOLDER_WITH_NOTES):
+                cnt += 1
+                if cnt == int(change_action):
+                    system_action('clear')
+                    show_decryption_data(master_password, 'note')
 
-        cnt = 0
-        for note_in_folder in os.listdir(FOLDER_WITH_NOTES):
-            cnt += 1
-            if cnt == int(change_action):
-                system_action('clear')
-                show_decryption_data(master_password, 'note')
+                    path_to_note = FOLDER_WITH_NOTES + note_in_folder
+                    name_note_from_file = path_to_note + '/' + FILE_NOTE_NAME
+                    note_itself_from_file = path_to_note + '/' + FILE_NOTE_ITSELF
 
-                path_to_note = FOLDER_WITH_NOTES + note_in_folder
-                name_note_from_file = path_to_note + '/' + FILE_NOTE_NAME
-                note_itself_from_file = path_to_note + '/' + FILE_NOTE_ITSELF
+                    def template_print_decryption_data(data_type, value):
+                        print(BLUE, data_type, YELLOW, dec_aes(value, master_password), DEFAULT_COLOR)
 
-                def template_print_decryption_data(data_type, value):
-                    print(BLUE, data_type, YELLOW, dec_aes(value, master_password), DEFAULT_COLOR)
-
-                template_print_decryption_data(
-                    'Name note --->', name_note_from_file)
-                template_print_decryption_data(
-                    'Note itself --->', note_itself_from_file)
-    launcher_notes()
+                    template_print_decryption_data(
+                        'Note name ----->', name_note_from_file)
+                    template_print_decryption_data(
+                        'Note itself --->', note_itself_from_file)
+    except ValueError:
+        show_decryption_data(master_password, 'note')
+    notes(master_password)
