@@ -27,7 +27,7 @@ def show_name_program():
           "\n || Password Manager and Keeper of Notes ||",
           "\n || Delta For Linux || "
           "\n || by Berliner187  || ", YELLOW,
-          "\n\n || Ferga Kangaroo || ", BLUE,
+          "\n\n || Ferga Kangaroo  || ", BLUE,
           __version__)
     elba()  # Вывод логотипа
 
@@ -41,8 +41,7 @@ def system_action(action):
 
 
 def template_remove_folder(some_folder):
-    os.system('rmdir ' + some_folder if os.name == 'nt'
-    else 'rm -r ' + some_folder + ' -f')
+    os.system('rmdir ' + some_folder if os.name == 'nt' else 'rm -r ' + some_folder + ' -f')
 
 
 def template_some_message(color, message):

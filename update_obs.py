@@ -5,7 +5,7 @@ from enc_obs import show_decryption_data
 import os
 from time import sleep
 
-__version__ = '1.4.2'  # Версия модуля
+__version__ = '1.4.3'  # Версия модуля
 
 main_file = 'main.py'
 new_folder_el = 'elba/'
