@@ -7,14 +7,23 @@ from time import sleep
 
 __version__ = '1.4.2'  # Версия модуля
 
-
 main_file = 'main.py'
 new_folder_el = 'elba/'
 
 
 def update():  # Обновление программы
-    download_from_repository()  # Загрузка проекта из репозитория
 
+    def template_for_install(program_file):  # Действия для установки
+        os.system('mv ' + new_folder_el + program_file + ' . ')
+
+    def template_question(text):
+        question = input(YELLOW + ' - ' + text + ' (y/n): ' + DEFAULT_COLOR)
+        return question
+
+    def template_red_text(text):
+        print(RED, text, ' \n', DEFAULT_COLOR)
+
+    download_from_repository()  # Загрузка проекта из репозитория
     # Проверка отсутствующих модулей
     cnt_modules = 0
     file_type = 'obs.py'
@@ -28,16 +37,6 @@ def update():  # Обновление программы
         if stock_modules[j] not in installed_modules:
             cnt_modules += 1
 
-    def template_for_install(program_file):  # Действия для установки
-        os.system('mv ' + new_folder_el + program_file + ' . ')
-
-    def template_question(text):
-        question = input(YELLOW + ' - ' + text + ' (y/n): ' + DEFAULT_COLOR)
-        return question
-
-    def template_red_text(text):
-        print(RED, text, ' \n', DEFAULT_COLOR)
-
     if cnt_modules != 0:
         system_action('clear')
 
@@ -48,24 +47,42 @@ def update():  # Обновление программы
             template_red_text('Missing modules')
             write_log('MissingModules', 'ERROR')
 
-        for item in range(len(stock_modules)):
+        for item_number in range(len(stock_modules)):
             def template_text_modules(color, message):
-                print('[', color, message, DEFAULT_COLOR, ']', stock_modules[item])
+                print('[', color, message, DEFAULT_COLOR, ']', stock_modules[item_number])
 
-            if stock_modules[item] not in installed_modules:
+            if stock_modules[item_number] not in installed_modules:
                 template_text_modules(RED, 'FAILED')
-                write_log(stock_modules[item], 'FAILED')
+                write_log(stock_modules[item_number], 'FAILED')
                 sleep(.5)
             else:
                 template_text_modules(GREEN, 'OK')
                 sleep(.5)
 
-        for i in range(len(stock_modules)):
-            template_for_install(stock_modules[i])
+        for module_check in range(len(stock_modules)):
+            template_for_install(stock_modules[module_check])
 
         template_remove_folder(new_folder_el)
         print(GREEN + '\n The missing module has been installed! \n\n' + DEFAULT_COLOR)
         sleep(1)
+        system_action('restart')
+
+    # Проверка версии на обновление
+    if os.path.getsize(main_file) != __version__:
+        print(GREEN + '\n   A new version of the program is available ' + DEFAULT_COLOR)
+        install_or_no = template_question(' - Install new version program?')
+
+        if install_or_no == 'y':
+            template_for_install(main_file)
+            template_for_install('update_obs.py')
+            for i in range(len(stock_modules)):
+                template_for_install(stock_modules[i])
+            system_action('clear')
+            print(GREEN + "\n\n    - Successfully installed! - ")
+            sleep(.7)
+            write_log('Upgrade', 'OK')
+
+        template_remove_folder(new_folder_el)
         system_action('restart')
 
     if os.path.exists(new_folder_el):
@@ -81,23 +98,6 @@ def update():  # Обновление программы
             for item in os.listdir('.'):
                 if item.endswith('.py'):
                     template_for_copy(item)
-
-        if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):
-            print(GREEN + '\n   A new version of the program is available ' + DEFAULT_COLOR)
-            install_or_no = template_question(' - Install new version program?')
-
-            if install_or_no == 'y':
-                template_for_install(main_file)
-                template_for_install('update_obs.py')
-                for i in range(len(stock_modules)):
-                    template_for_install(stock_modules[i])
-                system_action('clear')
-                print(GREEN + "\n\n    - Successfully installed! - ")
-                sleep(.7)
-                write_log('Upgrade', 'OK')
-
-            template_remove_folder(new_folder_el)
-            system_action('restart')
         else:
             system_action('clear')
             template_some_message(YELLOW, ' -- You are using the latest version of the program -- ')
