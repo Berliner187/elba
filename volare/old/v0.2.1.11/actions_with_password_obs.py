@@ -106,7 +106,7 @@ def choice_generation_or_save_self_password(resource, login, master_password):
         save_data_to_file(resource, login, password, master_password, 'resource')
     elif change_type == 2:  # Сохранение пользовательского пароля
         password = actions_with_password('self')
-        save_data_to_file(resource, login, password, master_password, 'resource')
+        save_data_to_file(resource, login, password, master_password, None)
     else:   # Если ошибка выбора
         print(RED + '  -- Error of change. Please, change again --  ' + DEFAULT_COLOR)
         choice_generation_or_save_self_password(resource, login, master_password)

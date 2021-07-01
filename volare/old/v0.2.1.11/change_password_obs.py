@@ -65,7 +65,7 @@ def change_master_password():
                 os.system("rm -r " + FOLDER_WITH_RESOURCES + old_resource)
 
             for i in range(len(mas_resources)):
-                save_data_to_file(mas_resources[i], mas_login[i], mas_password[i], new_master_password, 'resource')
+                save_data_to_file(mas_resources[i], mas_login[i], mas_password[i], new_master_password)
 
             new_hash = generate_password_hash(new_master_password)
             with open(FILE_WITH_HASH, 'w') as hash_pas:
