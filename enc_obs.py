@@ -162,7 +162,7 @@ def show_decryption_data(master_password, category):
     type_folder = ''
     if category == 'resource':
         type_folder = FOLDER_WITH_RESOURCES
-    if category == 'note':
+    elif category == 'note':
         type_folder = FOLDER_WITH_NOTES
 
     for category_item in os.listdir(type_folder):
@@ -170,14 +170,17 @@ def show_decryption_data(master_password, category):
         s += 1
         print(PURPLE, str(s) + '.', YELLOW, decryption_data, DEFAULT_COLOR)
     if category == 'resource':
+        backup_message = ''
+        if os.path.exists(OLD_ELBA):
+            backup_message = '\n  - Enter "-o" to rollback'
         print(BLUE +
               '\n  - Enter "-r" to restart, "-x" to exit'
               '\n  - Enter "-a" to add new resource'
               '\n  - Enter "-c" to change master-password'
-              '\n  - Enter "-d" to remove resource',
+              '\n  - Enter "-d" to remove resource'
               '\n  - Enter "-n" to go to notes'
               '\n  - Enter "-u" to update program'
-              '\n  - Enter "-z" to remove ALL data',
+              '\n  - Enter "-z" to remove ALL data', backup_message,
               YELLOW,
               '\n Select resource by number \n', DEFAULT_COLOR)
     if category == 'note':

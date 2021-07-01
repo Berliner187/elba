@@ -58,7 +58,7 @@ FOLDER_ELBA = 'elba/'
 FOLDER_WITH_DATA = 'volare/'     # Mi fa volare
 FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + "resources/"
 FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'   # Файл с заметками
-old_elba = FOLDER_WITH_DATA + 'old/'  # Старые версии программы
+OLD_ELBA = FOLDER_WITH_DATA + 'old/'  # Старые версии программы
 FOLDERS = [FOLDER_WITH_DATA, FOLDER_WITH_NOTES]
 
 FILE_RESOURCE = 'resource.dat'
@@ -232,7 +232,7 @@ def decryption_block(master_password):
                 system_action('restart')
 
             elif change_resource_or_actions == '-o':    # Откат к старой сохраненной версии
-                if os.path.exists(old_elba) is False:
+                if os.path.exists(OLD_ELBA) is False:
                     print(YELLOW + ' - No versions saved - ' + DEFAULT_COLOR)
                 else:
                     install_old_saved_version()
@@ -373,7 +373,7 @@ if __name__ == '__main__':
         from actions_with_password_obs import actions_with_password, choice_generation_or_save_self_password
         from enc_obs import show_decryption_data, dec_aes
 
-        launcher()  # Запуск главной направляющей функции
+        launcher()  # Запуск лончера
 
     except ModuleNotFoundError as error:
         print(error)
