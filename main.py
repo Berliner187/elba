@@ -132,6 +132,7 @@ def point_of_entry():   # Точка входа в систему
             if cnt_left == 0:
                 system_action('clear')
                 print(RED + " -- Limit is exceeded -- " + DEFAULT_COLOR)
+                write_log('Someone tried to enter', 'WARNING')
                 sleep(2**10)
                 quit()
             if hash_password:

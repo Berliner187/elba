@@ -88,13 +88,13 @@ def update():  # Обновление программы
     if os.path.exists(new_folder_el):
 
         def template_for_copy(item_program):
-            os.system('cp ' + item_program + ' ' + old_elba + elba_version)
+            os.system('cp ' + item_program + ' ' + OLD_ELBA + elba_version)
 
         # Создание резервной копии
-        if os.path.exists(old_elba) is False:
-            os.mkdir(old_elba)
-        if os.path.exists(old_elba + elba_version) is False:
-            os.mkdir(old_elba + elba_version)
+        if os.path.exists(OLD_ELBA) is False:
+            os.mkdir(OLD_ELBA)
+        if os.path.exists(OLD_ELBA + elba_version) is False:
+            os.mkdir(OLD_ELBA + elba_version)
             for item in os.listdir('.'):
                 if item.endswith('.py'):
                     template_for_copy(item)
@@ -119,17 +119,17 @@ def update():  # Обновление программы
 
 def install_old_saved_version():
     def template_install_old(version_old_folder):
-        for item in os.listdir(old_elba + version_old_folder):
-            os.system('cp ' + old_elba + version_old_folder + '/' + item + ' ' + '.')
+        for item in os.listdir(OLD_ELBA + version_old_folder):
+            os.system('cp ' + OLD_ELBA + version_old_folder + '/' + item + ' ' + '.')
     s = 0
     system_action('clear')
-    for version in os.listdir(old_elba):
+    for version in os.listdir(OLD_ELBA):
         s += 1
         print(str(s), '-', YELLOW + version + DEFAULT_COLOR)
     print(BLUE + "\n\n  - Change version by number - " + DEFAULT_COLOR)
     change = int(input(YELLOW + "(1-" + str(s) + "): " + DEFAULT_COLOR))
     cnt = 0
-    for need_version_folder in os.listdir(old_elba):
+    for need_version_folder in os.listdir(OLD_ELBA):
         cnt += 1
         if cnt == change:
             template_install_old(need_version_folder)
