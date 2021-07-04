@@ -17,6 +17,7 @@ symbols_for_password = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234
 
 
 def create_and_confirm_user_password():
+    """  """
     print(BLUE + '\n Minimum password length 8 characters' + DEFAULT_COLOR)
 
     def input_password():
@@ -28,21 +29,22 @@ def create_and_confirm_user_password():
 
     user_password, user_confirm_password = input_password()
 
-    if (user_password != user_confirm_password) or (len(user_password) or len(user_confirm_password)) < 8:
-        print(RED + '\n Error of confirm. Try again \n' + DEFAULT_COLOR)
+    if user_password != user_confirm_password:
+        if (len(user_password) or len(user_confirm_password)) < 8:
+            print(RED + '\n Error of confirm. Try again \n' + DEFAULT_COLOR)
 
-        # Условия принятия и подтверждения пароля
-        password, confirm_pas = input_password()
-        if (password == confirm_pas) and (len(password and confirm_pas) >= 8):
-            return password
-        else:
-            print(RED + '\n Error in confirm \n' + DEFAULT_COLOR)
-            while (password != confirm_pas) or (len(password or confirm_pas) < 8):
-                password, confirm_pas = input_password()
-                if (password == confirm_pas) and (len(password and confirm_pas) >= 8):
-                    return password
-                else:
-                    print(RED + '\n Error in confirm \n' + DEFAULT_COLOR)
+            # Условия принятия и подтверждения пароля
+            password, confirm_pas = input_password()
+            if (password == confirm_pas) and (len(password and confirm_pas) >= 8):
+                return password
+            else:
+                print(RED + '\n Error in confirm \n' + DEFAULT_COLOR)
+                while (password != confirm_pas) or (len(password or confirm_pas) < 8):
+                    password, confirm_pas = input_password()
+                    if (password == confirm_pas) and (len(password and confirm_pas) >= 8):
+                        return password
+                    else:
+                        print(RED + '\n Error in confirm \n' + DEFAULT_COLOR)
 
     elif (user_password == user_confirm_password) and (len(user_password) and len(user_confirm_password)) >= 8:
         return user_confirm_password

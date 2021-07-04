@@ -117,8 +117,8 @@ def point_of_entry():   # Точка входа в систему
     master_password = get_master_password()
 
     # Проверка хэша пароля
-    with open(FILE_WITH_HASH, 'r') as hash_pas_from_file:
-        hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
+    hash_pas_from_file = open(FILE_WITH_HASH, 'r')
+    hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
     cnt_left = 3    # Счет оставшихся попыток
 
     if hash_password is False:    # Если хеши не совпадают
