@@ -54,7 +54,8 @@ def actions_with_password(type_pas):
     def generation_new_password():
         """ Функция создания случайного пароля """
         length_new_pas = int(input(
-            YELLOW + ' - Length: ' + DEFAULT_COLOR))
+            YELLOW + ' - Length: ' + DEFAULT_COLOR
+        ))
         if length_new_pas > 8:
             new_password = ''
             for i in range(length_new_pas):
@@ -75,7 +76,7 @@ def actions_with_password(type_pas):
         print(BLUE + ' - Pick a master-password - \n')
         master_password = create_and_confirm_user_password()
         # Хэш сохраняется в файл
-        if (CHECK_FILE_WITH_HASH is False) and (CHECK_FILE_WITH_HASH is False):
+        if (CHECK_FILE_WITH_HASH and CHECK_FILE_WITH_HASH) is False:
             hash_to_file = generate_password_hash(master_password)
             with open(FILE_WITH_HASH, 'w') as hash_pas:
                 hash_pas.write(hash_to_file)

@@ -180,8 +180,8 @@ def decryption_block(master_password):
 
             elif change_resource_or_actions == '-r':  # Перезапуск
                 system_action('clear')
-                print('\n', GREEN, ' -- Restart -- ', DEFAULT_COLOR)
-                sleep(.4)
+                print(GREEN, '\n -- Restart -- ', DEFAULT_COLOR)
+                sleep(.3)
                 system_action('restart')
 
             elif change_resource_or_actions == '-c':    # Смена мастер-пароля
@@ -347,7 +347,7 @@ if __name__ == '__main__':
         from update_obs import update, install_old_saved_version
     except ModuleNotFoundError as update_obs_error:
         write_log(update_obs_error, 'CRASH UPDATE')
-        print(RED + ' - Module "update" does not exist - ' + DEFAULT_COLOR)
+        print(RED, ' - Module "update" does not exist - ', DEFAULT_COLOR)
         sleep(1)
         download_from_repository()
 
@@ -356,7 +356,7 @@ if __name__ == '__main__':
         from stdiomask import getpass
     except ModuleNotFoundError as error_module:
         write_log(error_module, 'CRASH')
-        print(RED + 'Error: \n' + str(error_module) + DEFAULT_COLOR)
+        print(RED, 'Error: \n' + str(error_module), DEFAULT_COLOR)
         print('\n')
         template_some_message(
             YELLOW, "Please, install module/modules with PIP and restart the program"
