@@ -192,8 +192,13 @@ def decryption_block(master_password):
                 show_decryption_data(master_password, 'resource')
 
             elif change_resource_or_actions == '-n':    # Добавление заметок
-                show_decryption_data(master_password, 'note')
-                notes(master_password)
+                try:
+                    show_decryption_data(master_password, 'note')
+                    notes(master_password)
+                except ValueError:
+                    show_decryption_data(master_password, 'resource')
+                    decryption_block(master_password)
+                    raise
 
             elif change_resource_or_actions == '-z':    # Удаление всех данных
                 system_action('clear')
@@ -371,7 +376,8 @@ if __name__ == '__main__':
         from notes_obs import notes
         from change_password_obs import change_master_password
         from actions_with_password_obs import actions_with_password, choice_generation_or_save_self_password
-        from enc_obs import show_decryption_data, dec_aes
+        from enc_obs import dec_aes
+        from show_dec_data_obs import show_decryption_data
 
         launcher()  # Запуск лончера
 

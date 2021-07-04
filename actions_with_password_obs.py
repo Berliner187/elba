@@ -64,7 +64,7 @@ def actions_with_password(type_pas):
                 new_password += random.choice(symbols_for_password)
             return new_password
         else:
-            print(red + '\n Error of confirm. Try again \n' + DEFAULT_COLOR)
+            print(RED + '\n Error of confirm. Try again \n' + DEFAULT_COLOR)
             generation_new_password()
 
     if type_pas == 'self':  # Собсвенный пароль для ресурса

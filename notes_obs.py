@@ -1,6 +1,7 @@
 from main import *
 
 from enc_obs import *
+from show_dec_data_obs import *
 from del_resource_obs import delete_resource
 
 from csv import DictReader, DictWriter
@@ -9,7 +10,7 @@ from shutil import copyfile
 import os
 
 
-__version__ = '2.0.0'
+__version__ = '2.0.1'
 
 
 def notes(master_password):
@@ -26,6 +27,9 @@ def notes(master_password):
         show_decryption_data(master_password, 'note')
         notes(master_password)
 
+    if not(os.listdir(FOLDER_WITH_NOTES)):
+        add_new()
+
     change_action = input('\n - Change action: ')  # Выбор между действиями
 
     if change_action == '-a':   # Пользователь выбирает добавление новой заметки
@@ -34,9 +38,8 @@ def notes(master_password):
         delete_resource('note')
         show_decryption_data(master_password, 'note')
         notes(master_password)
-    elif change_action == '-b':
-        show_decryption_data(master_password, 'resource')
-        decryption_block(master_password)
+    elif change_action == '-x':
+        quit()
     else:
         cnt = 0
         for note_in_folder in os.listdir(FOLDER_WITH_NOTES):
