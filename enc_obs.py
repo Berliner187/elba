@@ -13,7 +13,7 @@ import Crypto.Random
 from main import *
 
 
-__version__ = '2.0.2'
+__version__ = '2.0.3'
 
 
 class AESCipher(object):
@@ -151,9 +151,13 @@ def save_data_to_file(data_1, data_2, data_3, master_password, type_data):
 
 def show_decryption_data(master_password, category):
     system_action('clear')
+    separator = ''
+    if category == 'note':
+        # Костыль
+        separator += '    '
     print(PURPLE, "     ___________________________________")
     print(PURPLE, "    /\/| ", YELLOW, "\/                   \/", PURPLE, " |\/\ ")
-    print(PURPLE, "   /\/\|", YELLOW, " \/  Saved " + category + 's' + "  \/ ", PURPLE, "|/\/\ ", DEFAULT_COLOR)
+    print(PURPLE, "   /\/\|", YELLOW, " \/  Saved " + category + 's' + separator + "  \/ ", PURPLE, "|/\/\ ", DEFAULT_COLOR)
     print(YELLOW, "           \/                   \/ ", DEFAULT_COLOR)
     print('\n'*5)
 

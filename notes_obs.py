@@ -1,7 +1,6 @@
 from main import *
 
 from enc_obs import *
-from enc_obs import show_decryption_data
 from del_resource_obs import delete_resource
 
 from csv import DictReader, DictWriter
