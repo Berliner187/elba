@@ -58,7 +58,6 @@ FOLDER_WITH_DATA = 'volare/'     # Mi fa volare
 FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + "resources/"
 FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'   # Файл с заметками
 OLD_ELBA = FOLDER_WITH_DATA + 'old/'  # Старые версии программы
-FOLDERS = [FOLDER_WITH_DATA, FOLDER_WITH_NOTES]
 
 FILE_RESOURCE = 'resource.dat'
 FILE_LOGIN = 'login.dat'
@@ -87,6 +86,7 @@ CHECK_FILE_FOR_RESOURCE = os.path.exists(FOLDER_WITH_RESOURCES)
 REPOSITORY = 'git clone https://github.com/Berliner187/elba -b delta'
 
 
+FOLDERS = [FOLDER_WITH_DATA, FOLDER_WITH_NOTES]
 for folder in FOLDERS:
     if os.path.exists(folder) is False:
         os.mkdir(folder)
@@ -97,7 +97,8 @@ def point_of_entry():   # Точка входа в систему
 
     def template_wrong_message(value_left):
         print(RED, '\n  ---  Wrong password --- ',
-              BLUE, "\n\n Attempts left:", RED, value_left, DEFAULT_COLOR)
+              BLUE, "\n\n Attempts left:",
+              RED, value_left, DEFAULT_COLOR)
         sleep(1)
 
     def get_master_password():
@@ -193,20 +194,15 @@ def decryption_block(master_password):
                 show_decryption_data(master_password, 'resource')
 
             elif change_resource_or_actions == '-n':    # Добавление заметок
-                try:
-                    show_decryption_data(master_password, 'note')
-                    notes(master_password)
-                except ValueError:
-                    show_decryption_data(master_password, 'resource')
-                    decryption_block(master_password)
-                    raise
+                show_decryption_data(master_password, 'note')
+                notes(master_password)
 
             elif change_resource_or_actions == '-z':    # Удаление всех данных
                 system_action('clear')
                 template_some_message(RED, ' - Are you sure you want to delete all data? - ')
                 change_yes_or_no = input(YELLOW + ' - Remove ALL data? (y/n): ' + DEFAULT_COLOR)
                 if change_yes_or_no == 'y':
-                    template_remove_folder(FOLDER_ELBA)
+                    template_remove_folder(FOLDER_WITH_DATA)
                     system_action('clear')
                     quit()
 
