@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.2.1.12'    # Version program
+__version__ = 'v0.2.1.13'    # Version program
 
 
 def show_name_program():
@@ -74,7 +74,8 @@ FILE_LOG = FOLDER_WITH_DATA + '.file.log'  # Файл с версией прог
 # Модули для работы программы
 stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
                  'del_resource_obs.py', 'notes_obs.py', 'get_size_obs.py',
-                 'change_password_obs.py', 'actions_with_password_obs.py']
+                 'change_password_obs.py', 'actions_with_password_obs.py',
+                 'show_dec_data_obs.py']
 
 # Столбцы файла с логами
 fields_for_log = ['version', 'date', 'cause', 'status']
