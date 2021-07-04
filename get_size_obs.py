@@ -3,7 +3,7 @@ from main import *
 import os
 
 
-__version__ = '1.1.1'
+__version__ = '1.1.2'
 
 
 def get_versions():
@@ -66,15 +66,13 @@ def size_all():
         print(size * 8, 'b', ' ----- ', files[i])
         size_program += size
 
-    size_program -= os.path.getsize('get_size_obs.py')
-
-    print('\n Максимальный объем выделенной памяти в ОЗУ для программы:',
-          33684 / 2**10,
-          'Килобайт')
-
     def rounding(__size__):
         """ Округление и перевод в килобайты """
         return round((__size__ / 2**10), 2)
+
+    print('\n Максимальный объем выделенной памяти в ОЗУ для программы:',
+          rounding(36724 / (2 ** 10)),
+          'Килобайт')
 
     user_folder = FOLDER_WITH_DATA
     size_user_data = 0
