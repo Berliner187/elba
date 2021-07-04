@@ -1,7 +1,7 @@
 from enc_obs import *
 
 
-__version_module__ = '1.0.0'
+__version__ = '1.0.0'
 
 
 def show_decryption_data(master_password, category):
