@@ -95,6 +95,11 @@ def actions_with_password(type_pas):
         )
         sleep(2)
         return password
+    elif type_pas == 'generic':
+        generic = ''
+        for n in range(32):
+            generic += random.choice(symbols_for_password)
+        return generic
 
 
 def choice_generation_or_save_self_password(resource, login, master_password):

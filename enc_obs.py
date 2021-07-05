@@ -109,7 +109,7 @@ def dec_aes(__file__, __key__):
             return aes.decrypt(item)
 
 
-def save_data_to_file(data_1, data_2, data_3, master_password, type_data):
+def save_data_to_file(data_1, data_2, data_3, generic_key, type_data):
 
     def path_to_data_to_save_resource(enc_name_type_folder):
         return FOLDER_WITH_RESOURCES + enc_name_type_folder
@@ -118,7 +118,7 @@ def save_data_to_file(data_1, data_2, data_3, master_password, type_data):
         return FOLDER_WITH_NOTES + enc_name_type_folder
 
     if type_data == 'resource':
-        enc_name_resource_folder = enc_only_base64(data_1, master_password) + '/'  # Шифрование папки с названием
+        enc_name_resource_folder = enc_only_base64(data_1, generic_key) + '/'
         if os.path.exists(path_to_data_to_save_resource(enc_name_resource_folder)) is False:
             os.mkdir(path_to_data_to_save_resource(enc_name_resource_folder))
 
@@ -130,12 +130,12 @@ def save_data_to_file(data_1, data_2, data_3, master_password, type_data):
         login_file = login_folder + FILE_LOGIN
         password_file = password_folder + FILE_PASSWORD
 
-        enc_aes(resource_file, data_1, master_password)
-        enc_aes(login_file, data_2, master_password)
-        enc_aes(password_file, data_3, master_password)
+        enc_aes(resource_file, data_1, generic_key)
+        enc_aes(login_file, data_2, generic_key)
+        enc_aes(password_file, data_3, generic_key)
 
     if type_data == 'note':
-        enc_name_note_folder = enc_only_base64(data_1, master_password) + '/'
+        enc_name_note_folder = enc_only_base64(data_1, generic_key) + '/'
         if os.path.exists(path_to_data_to_save_note(enc_name_note_folder)) is False:
             os.mkdir(path_to_data_to_save_note(enc_name_note_folder))
 
@@ -145,5 +145,5 @@ def save_data_to_file(data_1, data_2, data_3, master_password, type_data):
         name_note_file = name_note + FILE_NOTE_NAME
         note_file = self_note + FILE_NOTE_ITSELF
 
-        enc_aes(name_note_file, data_1, master_password)
-        enc_aes(note_file, data_2, master_password)
+        enc_aes(name_note_file, data_1, generic_key)
+        enc_aes(note_file, data_2, generic_key)

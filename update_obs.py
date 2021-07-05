@@ -77,9 +77,12 @@ def update():  # Обновление программы
             os.mkdir(OLD_ELBA)
         if os.path.exists(OLD_ELBA + elba_version) is False:
             os.mkdir(OLD_ELBA + elba_version)
+            # Копирование файлов программы
             for item in os.listdir('.'):
                 if item.endswith('.py'):
                     template_for_copy(item)
+            # Копирование данных пользователя
+            os.system('cp -r ' + FOLDER_WITH_DATA + ' ' + OLD_ELBA + elba_version)
 
         if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):
             print(GREEN + '\n   A new version of the program is available ' + DEFAULT_COLOR)
@@ -120,6 +123,7 @@ def install_old_saved_version():
     def template_install_old(version_old_folder):
         for item in os.listdir(OLD_ELBA + version_old_folder):
             os.system('cp ' + OLD_ELBA + version_old_folder + '/' + item + ' ' + '.')
+        os.system('cp -r ' + FOLDER_WITH_DATA + ' ' + OLD_ELBA + elba_version)
     s = 0
     system_action('clear')
     for version in os.listdir(OLD_ELBA):

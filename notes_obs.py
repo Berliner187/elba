@@ -10,22 +10,22 @@ from shutil import copyfile
 import os
 
 
-__version__ = '2.0.1'
+__version__ = '2.0.2'
 
 
-def notes(master_password):
+def notes(generic_key):
 
     def add_new():  # Добавление новой заметки
         system_action('clear')
         print(BLUE + '    ---  Add new note  --- \n\n')
         name_note = input(YELLOW + ' - Name note: ' + DEFAULT_COLOR)
         note_itself = input(YELLOW + ' - Note: ' + DEFAULT_COLOR)
-        save_data_to_file(name_note, note_itself, None, master_password, 'note')
+        save_data_to_file(name_note, note_itself, None, generic_key, 'note')
         print(GREEN, '   -- Success saved! --')
         sleep(.3)
         system_action('clear')
-        show_decryption_data(master_password, 'note')
-        notes(master_password)
+        show_decryption_data(generic_key, 'note')
+        notes(generic_key)
 
     if not(os.listdir(FOLDER_WITH_NOTES)):
         add_new()
@@ -36,8 +36,8 @@ def notes(master_password):
         add_new()
     elif change_action == '-d':  # Пользователь выбирает удаление старой заметки
         delete_resource('note')
-        show_decryption_data(master_password, 'note')
-        notes(master_password)
+        show_decryption_data(generic_key, 'note')
+        notes(generic_key)
     elif change_action == '-x':
         quit()
     else:
@@ -46,17 +46,17 @@ def notes(master_password):
             cnt += 1
             if cnt == int(change_action):
                 system_action('clear')
-                show_decryption_data(master_password, 'note')
+                show_decryption_data(generic_key, 'note')
 
                 path_to_note = FOLDER_WITH_NOTES + note_in_folder
                 name_note_from_file = path_to_note + '/' + FILE_NOTE_NAME
                 note_itself_from_file = path_to_note + '/' + FILE_NOTE_ITSELF
 
                 def template_print_decryption_data(data_type, value):
-                    print(BLUE, data_type, YELLOW, dec_aes(value, master_password), DEFAULT_COLOR)
+                    print(BLUE, data_type, YELLOW, dec_aes(value, generic_key), DEFAULT_COLOR)
 
                 template_print_decryption_data(
                     'Note name ----->', name_note_from_file)
                 template_print_decryption_data(
                     'Note itself --->', note_itself_from_file)
-    notes(master_password)
+    notes(generic_key)

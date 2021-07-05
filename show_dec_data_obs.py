@@ -10,11 +10,11 @@ def show_decryption_data(master_password, category):
     if category == 'note':
         # Костыль
         separator += '    '
-    print(PURPLE, "     ___________________________________")
-    print(PURPLE, "    /\/| ", YELLOW, "\/                   \/", PURPLE, " |\/\ ")
-    print(PURPLE, "   /\/\|", YELLOW, " \/  Saved " + category + 's' + separator + "  \/ ", PURPLE, "|/\/\ ", DEFAULT_COLOR)
+    print(BLUE, "     ___________________________________")
+    print(BLUE, "    /\/| ", YELLOW, "\/                   \/", BLUE, " |\/\ ")
+    print(BLUE, "   /\/\|", YELLOW, " \/  Saved " + category + 's' + separator + "  \/ ", BLUE, "|/\/\ ", DEFAULT_COLOR)
     print(YELLOW, "           \/                   \/ ", DEFAULT_COLOR)
-    print('\n'*5)
+    print('\n'*3)
 
     s = 0
 
@@ -27,7 +27,7 @@ def show_decryption_data(master_password, category):
     for category_item in os.listdir(type_folder):
         decryption_data = dec_only_base64(category_item, master_password)
         s += 1
-        print(PURPLE, str(s) + '.', YELLOW, decryption_data, DEFAULT_COLOR)
+        print(BLUE, str(s) + '.', YELLOW, decryption_data, DEFAULT_COLOR)
     if category == 'resource':
         backup_message = ''
         if os.path.exists(OLD_ELBA):

@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.2.1.13'    # Version program
+__version__ = 'v0.3.0.0'
 
 
 def show_name_program():
@@ -58,6 +58,8 @@ FOLDER_WITH_DATA = 'volare/'     # Mi fa volare
 FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + "resources/"
 FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'   # Файл с заметками
 OLD_ELBA = FOLDER_WITH_DATA + 'old/'  # Старые версии программы
+
+FILE_WITH_GENERIC_KEY = FOLDER_WITH_DATA + '.generic-key.dat'
 
 FILE_RESOURCE = 'resource.dat'
 FILE_LOGIN = 'login.dat'
@@ -145,7 +147,7 @@ def point_of_entry():   # Точка входа в систему
         return master_password
 
 
-def decryption_block(master_password):
+def decryption_block(generic_key):
     """ Цикл с выводом сохраненных ресурсов """
 
     def add_resource_data():
@@ -154,9 +156,9 @@ def decryption_block(master_password):
         print(GREEN, '\n   --- Add new resource ---   ', '\n' * 3, DEFAULT_COLOR)
         resource = input(YELLOW + ' Resource: ' + DEFAULT_COLOR)
         login = input(YELLOW + ' Login: ' + DEFAULT_COLOR)
-        choice_generation_or_save_self_password(resource, login, master_password)
+        choice_generation_or_save_self_password(resource, login, generic_key)
         if CHECK_FILE_FOR_RESOURCE:
-            show_decryption_data(master_password, 'resource')
+            show_decryption_data(generic_key, 'resource')
         else:
             system_action('restart')
 
@@ -172,7 +174,7 @@ def decryption_block(master_password):
             elif change_resource_or_actions == '-u':    # Обновление программы
                 system_action('clear')
                 update()
-                show_decryption_data(master_password, 'resource')
+                show_decryption_data(generic_key, 'resource')
 
             elif change_resource_or_actions == '-x':  # Выход
                 system_action('clear')
@@ -191,11 +193,11 @@ def decryption_block(master_password):
 
             elif change_resource_or_actions == '-d':    # Удаление ресурса
                 delete_resource('resource')
-                show_decryption_data(master_password, 'resource')
+                show_decryption_data(generic_key, 'resource')
 
             elif change_resource_or_actions == '-n':    # Добавление заметок
-                show_decryption_data(master_password, 'note')
-                notes(master_password)
+                show_decryption_data(generic_key, 'note')
+                notes(generic_key)
 
             elif change_resource_or_actions == '-z':    # Удаление всех данных
                 system_action('clear')
@@ -210,7 +212,7 @@ def decryption_block(master_password):
                 from get_size_obs import size_all, get_versions
                 get_versions()
                 size_all()
-                decryption_block(master_password)
+                decryption_block(generic_key)
 
             elif change_resource_or_actions == '-l':
                 system_action("clear")
@@ -246,7 +248,7 @@ def decryption_block(master_password):
                     s += 1
                     if s == int(change_resource_or_actions):
                         system_action('clear')
-                        show_decryption_data(master_password, 'resource')
+                        show_decryption_data(generic_key, 'resource')
 
                         path_to_resource = FOLDER_WITH_RESOURCES + resource_in_folder
                         resource_from_file = path_to_resource + '/' + FILE_RESOURCE
@@ -254,7 +256,7 @@ def decryption_block(master_password):
                         password_from_file = path_to_resource + '/' + FILE_PASSWORD
 
                         def template_print_decryption_data(data_type, value):
-                            print(BLUE, data_type, YELLOW, dec_aes(value, master_password), DEFAULT_COLOR)
+                            print(BLUE, data_type, YELLOW, dec_aes(value, generic_key), DEFAULT_COLOR)
 
                         template_print_decryption_data(
                             'Resource --->', resource_from_file)
@@ -264,8 +266,8 @@ def decryption_block(master_password):
                             'Password --->', password_from_file)
 
         except ValueError:
-            show_decryption_data(master_password, 'resource')   # Показ содежимого
-        decryption_block(master_password)  # Рекусрия под-главной функции
+            show_decryption_data(generic_key, 'resource')   # Показ содежимого
+        decryption_block(generic_key)  # Рекусрия под-главной функции
 
 
 def download_from_repository():
@@ -326,21 +328,26 @@ def launcher():
               DEFAULT_COLOR)
 
         master_password = actions_with_password('master')  # Создание мастер-пароля
-        greeting(master_password, False)  # Вывод приветствия
+        # Генерирование generic-key
+        genetic_key = actions_with_password('generic')
+        enc_aes(FILE_WITH_GENERIC_KEY, genetic_key, master_password)
+
+        greeting(genetic_key)  # Вывод приветствия
         sleep(.5)
-        decryption_block(master_password)
+        decryption_block(genetic_key)
         write_log('---', 'OK')
         system_action('restart')
     else:
         # Если есть ресурсы
         master_password = point_of_entry()
+        genetic_key_from_file = dec_aes(FILE_WITH_GENERIC_KEY, master_password)
         system_action('clear')
-        greeting(master_password, False)
+        greeting(genetic_key_from_file)
         sleep(.5)
         system_action('clear')
         write_log('Subsequent launch', 'OK')
-        show_decryption_data(master_password, 'resource')
-        decryption_block(master_password)
+        show_decryption_data(genetic_key_from_file, 'resource')
+        decryption_block(genetic_key_from_file)
 
 
 if __name__ == '__main__':
@@ -373,7 +380,7 @@ if __name__ == '__main__':
         from notes_obs import notes
         from change_password_obs import change_master_password
         from actions_with_password_obs import actions_with_password, choice_generation_or_save_self_password
-        from enc_obs import dec_aes
+        from enc_obs import enc_aes, dec_aes
         from show_dec_data_obs import show_decryption_data
 
         launcher()  # Запуск лончера
