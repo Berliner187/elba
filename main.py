@@ -116,6 +116,9 @@ def point_of_entry():   # Точка входа в систему
             animation()
         elif user_master_password == 'n':
             author()
+        elif user_master_password == 'u':
+            from logo_obs import Ukraine
+            Ukraine()
         return user_master_password
 
     master_password = get_master_password()
