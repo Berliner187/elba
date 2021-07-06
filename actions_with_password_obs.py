@@ -10,7 +10,7 @@ from werkzeug.security import generate_password_hash
 from stdiomask import getpass
 
 
-__version__ = '1.1.4'
+__version__ = '1.1.5'
 
 
 def create_and_confirm_user_password():
@@ -31,18 +31,21 @@ def create_and_confirm_user_password():
             print(RED + '\n Error of confirm. Try again \n' + DEFAULT_COLOR)
             # Условия принятия и подтверждения пароля
             password, confirm_pas = input_password()
-            if (password == confirm_pas) and (len(password and confirm_pas) >= 8):
-                return password
+            if password == confirm_pas:
+                if len(password) >= 8:
+                    if len(confirm_pas) >= 8:
+                        return password
             else:
                 print(RED + '\n Error in confirm \n' + DEFAULT_COLOR)
                 while (password != confirm_pas) or (len(password or confirm_pas) < 8):
                     password, confirm_pas = input_password()
-                    if (password == confirm_pas) and (len(password and confirm_pas) >= 8):
-                        return password
+                    if password == confirm_pas:
+                        if len(password and confirm_pas) >= 8:
+                            return password
                     else:
                         print(RED + '\n Error in confirm \n' + DEFAULT_COLOR)
 
-    elif user_password == user_confirm_password:
+    else:
         if len(user_password):
             if len(user_confirm_password) >= 8:
                 return user_confirm_password
