@@ -4,7 +4,7 @@ from main import __version__ as elba_version
 import os
 from time import sleep
 
-__version__ = '1.4.3'  # Версия модуля
+__version__ = '1.4.4'  # Версия модуля
 
 
 main_file = 'main.py'
@@ -69,8 +69,11 @@ def update():  # Обновление программы
 
     if os.path.exists(new_folder_el):
 
-        def template_for_copy(item_program):
+        def template_for_copy_files(item_program):
             os.system('cp ' + item_program + ' ' + OLD_ELBA + elba_version)
+
+        def template_for_copy_folders(folder_with_data):
+            os.system('cp -r ' + folder_with_data + ' ' + OLD_ELBA + elba_version)
 
         # Создание резервной копии
         if os.path.exists(OLD_ELBA) is False:
@@ -80,9 +83,12 @@ def update():  # Обновление программы
             # Копирование файлов программы
             for item in os.listdir('.'):
                 if item.endswith('.py'):
-                    template_for_copy(item)
+                    template_for_copy_files(item)
             # Копирование данных пользователя
-            os.system('cp -r ' + FOLDER_WITH_DATA + ' ' + OLD_ELBA + elba_version)
+            for folder in FOLDERS:
+                template_for_copy_folders(folder)
+            for file in USER_DATA_IN_FILES:
+                template_for_copy_folders(file)
 
         if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):
             print(GREEN + '\n   A new version of the program is available ' + DEFAULT_COLOR)
@@ -120,10 +126,23 @@ def update():  # Обновление программы
 
 
 def install_old_saved_version():
+
+    def template_for_copy_folders(folder_with_data):
+        os.system('cp -r ' + OLD_ELBA + folder_with_data + ' ' + OLD_ELBA + elba_version)
+
+    def template_for_copy_files(item_program):
+        os.system('cp ' + OLD_ELBA + 'volare/' + item_program + '/' + item + ' ' + '.')
+
     def template_install_old(version_old_folder):
+        # Копирование данных
         for item in os.listdir(OLD_ELBA + version_old_folder):
             os.system('cp ' + OLD_ELBA + version_old_folder + '/' + item + ' ' + '.')
-        os.system('cp -r ' + FOLDER_WITH_DATA + ' ' + OLD_ELBA + elba_version)
+        # Копирование данных пользователя
+        for folder in FOLDERS:
+            template_for_copy_folders(folder)
+        for file in USER_DATA_IN_FILES:
+            template_for_copy_files(file)
+
     s = 0
     system_action('clear')
     for version in os.listdir(OLD_ELBA):

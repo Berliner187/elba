@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.3.0.2'
+__version__ = 'v0.3.0.3'
 
 
 def show_name_program():
@@ -74,6 +74,8 @@ FILE_NOTE_ITSELF = 'note_itself.dat'
 FILE_USER_NAME = FOLDER_WITH_DATA + ".self_name.dat"  # Файл с никнеймом
 FILE_WITH_HASH = FOLDER_WITH_DATA + '.hash_password.dat'  # Файл с хэшем пароля
 FILE_LOG = FOLDER_WITH_DATA + '.file.log'  # Файл с версией программы
+
+USER_DATA_IN_FILES = [FILE_WITH_GENERIC_KEY, FILE_USER_NAME, FILE_WITH_HASH, FILE_LOG]
 
 # Модули для работы программы
 stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
@@ -389,6 +391,9 @@ if __name__ == '__main__':
         print(RED + ' - Error in import modules -' + DEFAULT_COLOR)
         write_log(error, 'CRASH MODULES')
         sleep(.5)
+        update()
+    except ImportError:
+        print(RED + " - Error in local import -")
         update()
 
     except ValueError as error:
