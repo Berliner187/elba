@@ -132,7 +132,7 @@ def install_old_saved_version():
         os.system('cp -r ' + OLD_ELBA + folder_with_data + ' ' + OLD_ELBA + elba_version)
 
     def template_for_copy_files(item_program):
-        os.system('cp ' + OLD_ELBA + 'volare/' + item_program + '/' + item + ' ' + '.')
+        os.system('cp ' + OLD_ELBA + item_program + '/' + item + ' ' + '.')
 
     def template_install_old(version_old_folder):
         # Копирование данных
