@@ -4,7 +4,7 @@ from main import __version__ as elba_version
 import os
 from time import sleep
 
-__version__ = '1.4.5 BETA 03'  # Версия модуля
+__version__ = '1.4.3'  # Версия модуля
 
 
 main_file = 'main.py'
@@ -69,11 +69,8 @@ def update():  # Обновление программы
 
     if os.path.exists(new_folder_el):
 
-        def template_for_copy_files(item_program):
+        def template_for_copy(item_program):
             os.system('cp ' + item_program + ' ' + OLD_ELBA + elba_version)
-
-        def template_for_copy_folders(folder_with_data):
-            os.system('cp -r ' + folder_with_data + ' ' + OLD_ELBA + elba_version)
 
         # Создание резервной копии
         if os.path.exists(OLD_ELBA) is False:
@@ -83,13 +80,9 @@ def update():  # Обновление программы
             # Копирование файлов программы
             for item in os.listdir('.'):
                 if item.endswith('.py'):
-                    template_for_copy_files(item)
+                    template_for_copy(item)
             # Копирование данных пользователя
-            folders_with_main_data = [FOLDER_WITH_RESOURCES, FOLDER_WITH_NOTES]
-            for folder in folders_with_main_data:
-                template_for_copy_folders(folder)
-            for file in USER_DATA_IN_FILES:
-                template_for_copy_folders(file)
+            os.system('cp -r ' + FOLDER_WITH_DATA + ' ' + OLD_ELBA + elba_version)
 
         if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):
             print(GREEN + '\n   A new version of the program is available ' + DEFAULT_COLOR)
@@ -127,6 +120,10 @@ def update():  # Обновление программы
 
 
 def install_old_saved_version():
+    def template_install_old(version_old_folder):
+        for item in os.listdir(OLD_ELBA + version_old_folder):
+            os.system('cp ' + OLD_ELBA + version_old_folder + '/' + item + ' ' + '.')
+        os.system('cp -r ' + FOLDER_WITH_DATA + ' ' + OLD_ELBA + elba_version)
     s = 0
     system_action('clear')
     for version in os.listdir(OLD_ELBA):
@@ -139,16 +136,5 @@ def install_old_saved_version():
         cnt += 1
         if cnt == change:
             template_install_old(need_version_folder)
-
-            for item in os.listdir(OLD_ELBA + version_old_folder):
-                os.system('cp ' + OLD_ELBA + version_old_folder + '/' + item + ' ' + '.')
-
-            # Копирование данных пользователя
-            folders_with_main_data = [FOLDER_WITH_RESOURCES, FOLDER_WITH_NOTES]
-            for folder in folders_with_main_data:
-                os.system('cp -r ' + OLD_ELBA + need_version_folder + folder + '/' + ' ' + '.')
-            for file in USER_DATA_IN_FILES:
-                os.system('cp ' + OLD_ELBA + need_version_folder + file + ' ' + '.')
-
     print(GREEN + ' - Success roll back! - ' + DEFAULT_COLOR)
     sleep(1)
