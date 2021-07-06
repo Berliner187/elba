@@ -17,12 +17,12 @@ symbols_for_password = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234
 
 
 def create_and_confirm_user_password():
-    """  """
+    """ Создание и подтверждение пользовательского пароля """
     print(BLUE + '\n Minimum password length 8 characters' + DEFAULT_COLOR)
 
     def input_password():
         password_from_user = getpass(YELLOW + 'Password: ' + DEFAULT_COLOR)
-        confirm_password_from_user = getpass(YELLOW + 'Confirm: ' + DEFAULT_COLOR)
+        confirm_password_from_user = getpass(YELLOW + 'Confirm:  ' + DEFAULT_COLOR)
         if confirm_password_from_user == 'x':
             quit()
         return password_from_user, confirm_password_from_user
@@ -46,60 +46,67 @@ def create_and_confirm_user_password():
                     else:
                         print(RED + '\n Error in confirm \n' + DEFAULT_COLOR)
 
-    elif (user_password == user_confirm_password) and (len(user_password) and len(user_confirm_password)) >= 8:
-        return user_confirm_password
+    elif user_password == user_confirm_password:
+        if len(user_password):
+            if len(user_confirm_password) >= 8:
+                return user_confirm_password
 
 
-def actions_with_password(type_pas):
+class ActionsWithPassword:
     """ Действия с пользовательскими паролями (в т.ч. мастер-паролем) """
+    def __init__(self, type_password):
+        self.type_pas = type_password
 
-    def generation_new_password():
-        """ Функция создания случайного пароля """
-        length_new_pas = int(input(
-            YELLOW + ' - Length: ' + DEFAULT_COLOR
-        ))
-        if length_new_pas > 8:
-            new_password = ''
-            for i in range(length_new_pas):
-                new_password += random.choice(symbols_for_password)
-            return new_password
-        else:
-            print(RED + '\n Error of confirm. Try again \n' + DEFAULT_COLOR)
-            generation_new_password()
+    def get_password(self):
+        """ Получение паролей """
 
-    if type_pas == 'self':  # Собсвенный пароль для ресурса
-        print(BLUE, ' - Pick a self password: ', DEFAULT_COLOR)
-        password = create_and_confirm_user_password()
-        print(BLUE + ' - Your password success saved' + DEFAULT_COLOR)
-        sleep(1)
-        return password
+        def generation_new_password(length_password):
+            """ Функция создания случайного пароля """
+            if length_password > 8:
+                new_password = ''
+                for i in range(length_password):
+                    new_password += random.choice(symbols_for_password)
+                return new_password
+            else:
+                print(RED + '\n Error of confirm. Try again \n' + DEFAULT_COLOR)
+                generation_new_password(length_password)
 
-    elif type_pas == 'master':  # Мастер пароль
-        print(BLUE + ' - Pick a master-password - \n')
-        master_password = create_and_confirm_user_password()
-        # Хэш сохраняется в файл
-        if (CHECK_FILE_WITH_HASH and CHECK_FILE_WITH_HASH) is False:
-            hash_to_file = generate_password_hash(master_password)
-            with open(FILE_WITH_HASH, 'w') as hash_pas:
-                hash_pas.write(hash_to_file)
-                hash_pas.close()
-            return master_password
+        # Получение собственного пароля для ресурсов
+        if self.type_pas == 'self':
+            print(BLUE, ' - Pick a self password: ', DEFAULT_COLOR)
+            password = create_and_confirm_user_password()
+            print(BLUE + ' - Your password success saved' + DEFAULT_COLOR)
+            sleep(1)
+            return password
 
-        elif (CHECK_FILE_FOR_RESOURCE and CHECK_FILE_WITH_HASH) is True:
-            return master_password
+        # Создание мастер-пароля, создание хеша и сохранение в файл
+        elif self.type_pas == 'master':
+            print(BLUE + ' - Pick a master-password - \n')
+            master_password = create_and_confirm_user_password()
+            # Хэш сохраняется в файл
+            if (CHECK_FILE_WITH_HASH and CHECK_FILE_WITH_HASH) is False:
+                hash_to_file = generate_password_hash(master_password)
+                with open(FILE_WITH_HASH, 'w') as hash_pas:
+                    hash_pas.write(hash_to_file)
+                    hash_pas.close()
+                return master_password
 
-    elif type_pas == 'gen_new':     # Генерирование нового пароля
-        password = generation_new_password()
-        print(
-            YELLOW + ' - Your new password -', GREEN, password, YELLOW, '- success saved', DEFAULT_COLOR
-        )
-        sleep(2)
-        return password
-    elif type_pas == 'generic':
-        generic = ''
-        for n in range(32):
-            generic += random.choice(symbols_for_password)
-        return generic
+            elif (CHECK_FILE_FOR_RESOURCE and CHECK_FILE_WITH_HASH) is True:
+                return master_password
+
+        # Получение нового сгенерированного пароля
+        elif self.type_pas == 'gen_new':
+            length_new_pas = int(input(YELLOW + ' - Length: ' + DEFAULT_COLOR))
+            password = generation_new_password(length_new_pas)
+            print(
+                YELLOW, ' - Your new password -', GREEN, password,
+                YELLOW, '- success saved', DEFAULT_COLOR
+            )
+            sleep(2)
+            return password
+        elif self.type_pas == 'generic':
+            generic = generation_new_password(32)
+            return generic
 
 
 def choice_generation_or_save_self_password(resource, login, master_password):
@@ -110,10 +117,10 @@ def choice_generation_or_save_self_password(resource, login, master_password):
           )
     change_type = int(input('Change (1/2): '))
     if change_type == 1:  # Генерирование пароля и сохранение в файл
-        password = actions_with_password('gen_new')
+        password = ActionsWithPassword('gen_new').get_password()
         save_data_to_file(resource, login, password, master_password, 'resource')
     elif change_type == 2:  # Сохранение пользовательского пароля
-        password = actions_with_password('self')
+        password = ActionsWithPassword('self').get_password()
         save_data_to_file(resource, login, password, master_password, 'resource')
     else:   # Если ошибка выбора
         print(RED + '  -- Error of change. Please, change again --  ' + DEFAULT_COLOR)

@@ -326,9 +326,9 @@ def launcher():
         os.mkdir(FOLDER_WITH_RESOURCES)
         show_name_program()
 
-        master_password = actions_with_password('master')  # Создание мастер-пароля
+        master_password = ActionsWithPassword('master').get_password()  # Создание мастер-пароля
         # Генерирование generic-key
-        genetic_key = actions_with_password('generic')
+        genetic_key = ActionsWithPassword('generic').get_password()
         enc_aes(FILE_WITH_GENERIC_KEY, genetic_key, master_password)
 
         greeting(genetic_key)  # Вывод приветствия
@@ -378,7 +378,7 @@ if __name__ == '__main__':
         from del_resource_obs import delete_resource
         from notes_obs import notes
         from change_password_obs import change_master_password
-        from actions_with_password_obs import actions_with_password, choice_generation_or_save_self_password
+        from actions_with_password_obs import ActionsWithPassword, choice_generation_or_save_self_password
         from enc_obs import enc_aes, dec_aes
         from show_dec_data_obs import show_decryption_data
 
