@@ -4,7 +4,7 @@ from main import __version__ as elba_version
 import os
 from time import sleep
 
-__version__ = '1.4.5 BETA 01'  # Версия модуля
+__version__ = '1.4.5 BETA 02'  # Версия модуля
 
 
 main_file = 'main.py'
@@ -129,10 +129,10 @@ def update():  # Обновление программы
 def install_old_saved_version():
 
     def template_for_copy_folders(folder_with_data):
-        os.system('cp -r ' + OLD_ELBA + folder_with_data + ' ' + OLD_ELBA + elba_version)
+        os.system('cp -r ' + OLD_ELBA + folder_with_data + ' ' + '.')
 
     def template_for_copy_files(item_program):
-        os.system('cp ' + OLD_ELBA + item_program + '/' + item + ' ' + '.')
+        os.system('cp ' + OLD_ELBA + item_program + '/' + ' ' + '.')
 
     def template_install_old(version_old_folder):
         # Копирование данных
