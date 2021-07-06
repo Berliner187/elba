@@ -115,7 +115,7 @@ class ActionsWithPassword:
             return password
         # Получение общего ключа
         elif self.type_pas == 'generic':
-            generic = generation_new_password(32, True)
+            generic = generation_new_password(32, False)
             return generic
 
 

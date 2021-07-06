@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from main import *
 import os
+import sys
 
 
 __version__ = '1.1.2'
@@ -71,7 +72,7 @@ def size_all():
         return round((__size__ / 2**10), 2)
 
     print('\n Максимальный объем выделенной памяти в ОЗУ для программы:',
-          rounding(36724 / (2 ** 10)),
+          rounding(36404),
           'Килобайт')
 
     user_folder = FOLDER_WITH_DATA
