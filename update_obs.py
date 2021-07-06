@@ -4,7 +4,7 @@ from main import __version__ as elba_version
 import os
 from time import sleep
 
-__version__ = '1.4.6 BETA'  # Версия модуля
+__version__ = '1.4.5 BETA 01'  # Версия модуля
 
 
 main_file = 'main.py'
