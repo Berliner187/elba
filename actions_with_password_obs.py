@@ -72,7 +72,7 @@ class ActionsWithPassword:
                 return new_password
             else:
                 print(RED + '\n Error of confirm. Try again \n' + DEFAULT_COLOR)
-                generation_new_password(length_password)
+                generation_new_password(length_password, add_random_symbols)
 
         # Получение собственного пароля для ресурсов
         if self.type_pas == 'self':
