@@ -3,8 +3,10 @@ from time import sleep
 from os import system
 from main import *
 
+import os
 
-__version__ = '1.1.1'
+
+__version__ = '1.1.2'
 
 
 def clear():
@@ -179,7 +181,6 @@ def elba():     # Фунция вывода только логотипа
 
 
 def Ukraine():
-
     system('clear')
     print(BLUE, "  __________________________________________________________")
     print(BLUE, " /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\ ")
@@ -199,3 +200,18 @@ def Ukraine():
     print(YELLOW, "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|")
     print(YELLOW, " -------------------------------------------------------------")
     sleep(100)
+
+
+def first_start_message():
+    print(BLUE,
+          "\n  - Encrypt your passwords with one master-password -    "
+          "\n  -           No resources saved. Add them!         -  \n"
+          "\n ----                That's easy!                 ---- \n",
+          RED,
+          "\n          Программа не поддерживает русский язык         ",
+          YELLOW,
+          '\n --              Pick a master-password               -- '
+          '\n --    Только не используйте свой банковский пароль,  -- '
+          '\n          я не сильно вкладывался в безопасность         '
+          '\n                     этой программы                      ',
+          DEFAULT_COLOR)

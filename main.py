@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.3.0.0'
+__version__ = 'v0.3.0.2'
 
 
 def show_name_program():
@@ -29,6 +29,8 @@ def show_name_program():
           "\n || by Berliner187  || ", YELLOW,
           "\n\n || Ferga Kangaroo  || ", BLUE,
           __version__)
+    if CHECK_FOLDER_FOR_RESOURCE is False:
+        first_start_message()
     elba()  # Вывод логотипа
 
 
@@ -59,6 +61,7 @@ FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + "resources/"
 FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'   # Файл с заметками
 OLD_ELBA = FOLDER_WITH_DATA + 'old/'  # Старые версии программы
 
+FILE_WITH_HASH_GENERIC_KEY = FOLDER_WITH_DATA + '.hash-generic-key.dat'
 FILE_WITH_GENERIC_KEY = FOLDER_WITH_DATA + '.generic-key.dat'
 
 FILE_RESOURCE = 'resource.dat'
@@ -83,7 +86,7 @@ fields_for_log = ['version', 'date', 'cause', 'status']
 
 # Проверка файлов на наличие
 CHECK_FILE_WITH_HASH = os.path.exists(FILE_WITH_HASH)
-CHECK_FILE_FOR_RESOURCE = os.path.exists(FOLDER_WITH_RESOURCES)
+CHECK_FOLDER_FOR_RESOURCE = os.path.exists(FOLDER_WITH_RESOURCES)
 
 REPOSITORY = 'git clone https://github.com/Berliner187/elba -b delta'
 
@@ -123,12 +126,17 @@ def point_of_entry():   # Точка входа в систему
 
     master_password = get_master_password()
 
+    # Удаление данных, если файл с хэшем не существует, но при этом есть сохраненные
+    if os.path.exists(FILE_WITH_HASH) is False and CHECK_FOLDER_FOR_RESOURCE is True:
+        template_remove_folder(FOLDER_WITH_DATA)
+        quit()
+
     # Проверка хэша пароля
     hash_pas_from_file = open(FILE_WITH_HASH, 'r')
     hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
     cnt_left = 3    # Счет оставшихся попыток
 
-    if hash_password is False:    # Если хеши не совпадают
+    if (hash_password and CHECK_FOLDER_FOR_RESOURCE) is False:    # Если хеши не совпадают
         template_wrong_message(cnt_left)
         while hash_password is False:
             cnt_left -= 1
@@ -146,7 +154,7 @@ def point_of_entry():   # Точка входа в систему
                 return master_password
             else:
                 template_wrong_message(cnt_left)
-    else:
+    elif (hash_password and CHECK_FOLDER_FOR_RESOURCE) is True:
         return master_password
 
 
@@ -160,12 +168,12 @@ def decryption_block(generic_key):
         resource = input(YELLOW + ' Resource: ' + DEFAULT_COLOR)
         login = input(YELLOW + ' Login: ' + DEFAULT_COLOR)
         choice_generation_or_save_self_password(resource, login, generic_key)
-        if CHECK_FILE_FOR_RESOURCE:
+        if CHECK_FOLDER_FOR_RESOURCE:
             show_decryption_data(generic_key, 'resource')
         else:
             system_action('restart')
 
-    if CHECK_FILE_FOR_RESOURCE is False:   # При первом запуске
+    if CHECK_FOLDER_FOR_RESOURCE is False:   # При первом запуске
         add_resource_data()
         system_action('restart')
     else:  # При последущих запусках программа работает тут
@@ -313,22 +321,10 @@ def launcher():
             logs_writer.writeheader()
         write_log('First launch', 'OK')
 
-    if CHECK_FILE_FOR_RESOURCE is False:
+    if CHECK_FOLDER_FOR_RESOURCE is False:
         # Если нет ресурсов
         os.mkdir(FOLDER_WITH_RESOURCES)
         show_name_program()
-        print(BLUE,
-              "\n  - Encrypt your passwords with one master-password -    "
-              "\n  -           No resources saved. Add them!         -  \n"
-              "\n ----                That's easy!                 ---- \n",
-              RED,
-              "\n          Программа не поддерживает русский язык         ",
-              YELLOW,
-              '\n --              Pick a master-password               -- '
-              '\n --    Только не используйте свой банковский пароль,  -- '
-              '\n          я не сильно вкладывался в безопасность         '
-              '\n                     этой программы                      ',
-              DEFAULT_COLOR)
 
         master_password = actions_with_password('master')  # Создание мастер-пароля
         # Генерирование generic-key
@@ -377,7 +373,7 @@ if __name__ == '__main__':
 
     try:
         # Локальные модули
-        from logo_obs import elba, animation, author
+        from logo_obs import elba, animation, author, first_start_message
         from datetime_obs import greeting
         from del_resource_obs import delete_resource
         from notes_obs import notes
