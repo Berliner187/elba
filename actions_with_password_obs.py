@@ -10,10 +10,7 @@ from werkzeug.security import generate_password_hash
 from stdiomask import getpass
 
 
-__version__ = '1.1.3'
-
-# Символы, используемые для генерирования пароля
-symbols_for_password = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-='
+__version__ = '1.1.4'
 
 
 def create_and_confirm_user_password():
@@ -32,7 +29,6 @@ def create_and_confirm_user_password():
     if user_password != user_confirm_password:
         if (len(user_password) or len(user_confirm_password)) < 8:
             print(RED + '\n Error of confirm. Try again \n' + DEFAULT_COLOR)
-
             # Условия принятия и подтверждения пароля
             password, confirm_pas = input_password()
             if (password == confirm_pas) and (len(password and confirm_pas) >= 8):
@@ -60,8 +56,12 @@ class ActionsWithPassword:
     def get_password(self):
         """ Получение паролей """
 
-        def generation_new_password(length_password):
+        def generation_new_password(length_password, add_random_symbols):
             """ Функция создания случайного пароля """
+            symbols_for_password = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+            additional_symbols = '!@#$%^&*()_-+=[]{}№;:?'
+            if add_random_symbols:
+                symbols_for_password = symbols_for_password + additional_symbols
             if length_password > 8:
                 new_password = ''
                 for i in range(length_password):
@@ -97,15 +97,22 @@ class ActionsWithPassword:
         # Получение нового сгенерированного пароля
         elif self.type_pas == 'gen_new':
             length_new_pas = int(input(YELLOW + ' - Length: ' + DEFAULT_COLOR))
-            password = generation_new_password(length_new_pas)
+            request_for_adding_characters = input(
+                BLUE + ' - Add additional symbols? (Default: no) (y/n): ' + DEFAULT_COLOR
+            )
+            if request_for_adding_characters == 'y':
+                password = generation_new_password(length_new_pas, True)
+            else:
+                password = generation_new_password(length_new_pas, False)
             print(
                 YELLOW, ' - Your new password -', GREEN, password,
                 YELLOW, '- success saved', DEFAULT_COLOR
             )
             sleep(2)
             return password
+        # Получение общего ключа
         elif self.type_pas == 'generic':
-            generic = generation_new_password(32)
+            generic = generation_new_password(32, True)
             return generic
 
 
