@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.3.0.3'
+__version__ = 'v0.3.0.3 BETA'
 
 
 def show_name_program():
