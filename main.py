@@ -53,13 +53,14 @@ def template_some_message(color, message):
 # Цвета в терминале
 YELLOW, BLUE, PURPLE = "\033[33m", "\033[36m", "\033[35m"
 GREEN, RED, DEFAULT_COLOR = "\033[32m", "\033[31m", "\033[0m"
+DARK_BLUE = BLUE + "\033[6m"
 
 # Константы
 FOLDER_ELBA = 'elba/'
 FOLDER_WITH_DATA = 'volare/'     # Mi fa volare
 FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + "resources/"
 FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'   # Файл с заметками
-OLD_ELBA = FOLDER_WITH_DATA + 'old/'  # Старые версии программы
+OLD_ELBA = 'old_elba/'  # Старые версии программы
 
 FILE_WITH_HASH_GENERIC_KEY = FOLDER_WITH_DATA + '.hash-generic-key.dat'
 FILE_WITH_GENERIC_KEY = FOLDER_WITH_DATA + '.generic-key.dat'

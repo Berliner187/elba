@@ -65,7 +65,6 @@ def position_4():
     sleep(TIMER)
 
 
-
 def position_5():
     clear()
     print(STRING_LINE * 4)
@@ -113,11 +112,11 @@ def position_8():
     print(" |            |             |        \     /          \    ")
     print(" |            |             |         |   /            \   ")
     print(" |__________  |__________   |_________/  /              \  ")
+    author()
     sleep(TIMER)
 
 
-def position_total():
-    clear()
+def logo():
     print("                                                           ")
     print("  _____                      ______                        ")
     print(" |            |             |      \            /\         ")
@@ -128,6 +127,11 @@ def position_total():
     print(" |            |             |        \     /          \    ")
     print(" |            |             |         |   /            \   ")
     print(" |__________  |__________   |_________/  /              \  ")
+
+
+def position_total():
+    clear()
+    logo()
     sleep(TIMER)
     # print(CLEAR_COLOR)
 
@@ -135,13 +139,13 @@ def position_total():
 def author():
     print(YELLOW)
     print("  ___                ___                                                                     ")
-    print(" |   \              |   \                                                  ___   ____        ")  
+    print(" |   \              |   \                                                  ___   ____        ")
     print(" |    \             |    \   __    __        o          __   __      /|   |   |      /       ")
     print(" |____/   \  /      |____/  |     |  \  |    |  |\   | |    |  \      |   |___|     /        ")
     print(" |    \    \/       |    \  |__   |__/  |    |  | \  | |__  |__/      |   |   |    /         ")
     print(" |     |   /        |     | |     |  \  |    |  |  \ | |    |  \      |   |   |   /          ")
     print(" |_____/  /         |_____/ |___  |   \ |___ |  |   \| |___ |   \     |   |___|  /           ")
-    print('\n'*3)
+    print(BLUE, "__________________________________________________________________________________________________")
 
 
 def animation():
@@ -156,6 +160,8 @@ def animation():
         position_7()
         position_8()
         position_total()
+        author()
+        sleep(2)
         position_7()
         position_6()
         position_5()
@@ -167,21 +173,12 @@ def animation():
 
 
 def elba():     # Фунция вывода только логотипа
-    print(PURPLE)
-    print("  _____                      ______                        ")
-    print(" |            |             |      \            /\         ")
-    print(" |            |             |       \          /  \        ")
-    print(" |            |             |       /         /    \       ")
-    print(" |------      |             |______/         /______\      ")
-    print(" |            |             |       \       /        \     ")
-    print(" |            |             |        \     /          \    ")
-    print(" |            |             |         |   /            \   ")
-    print(" |__________  |__________   |_________/  /              \  ")
+    print(DARK_BLUE)
+    logo()
     print(DEFAULT_COLOR)
 
 
 def Ukraine():
-    system('clear')
     print(BLUE, "  __________________________________________________________")
     print(BLUE, " /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\ ")
     print(BLUE, "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|")
@@ -199,7 +196,7 @@ def Ukraine():
     print(YELLOW, "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|")
     print(YELLOW, "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|")
     print(YELLOW, " -------------------------------------------------------------")
-    sleep(100)
+    sleep(2)
 
 
 def first_start_message():

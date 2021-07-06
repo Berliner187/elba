@@ -4,7 +4,7 @@ from main import __version__ as elba_version
 import os
 from time import sleep
 
-__version__ = '1.4.5 BETA 02'  # Версия модуля
+__version__ = '1.4.5 BETA 03'  # Версия модуля
 
 
 main_file = 'main.py'
@@ -127,24 +127,6 @@ def update():  # Обновление программы
 
 
 def install_old_saved_version():
-
-    def template_for_copy_folders(folder_with_data):
-        os.system('cp -r ' + OLD_ELBA + folder_with_data + ' ' + '.')
-
-    def template_for_copy_files(item_program):
-        os.system('cp ' + OLD_ELBA + item_program + '/' + ' ' + '.')
-
-    def template_install_old(version_old_folder):
-        # Копирование данных
-        for item in os.listdir(OLD_ELBA + version_old_folder):
-            os.system('cp ' + OLD_ELBA + version_old_folder + '/' + item + ' ' + '.')
-        # Копирование данных пользователя
-        folders_with_main_data = [FOLDER_WITH_RESOURCES, FOLDER_WITH_NOTES]
-        for folder in folders_with_main_data:
-            template_for_copy_folders(folder)
-        for file in USER_DATA_IN_FILES:
-            template_for_copy_files(file)
-
     s = 0
     system_action('clear')
     for version in os.listdir(OLD_ELBA):
@@ -157,5 +139,16 @@ def install_old_saved_version():
         cnt += 1
         if cnt == change:
             template_install_old(need_version_folder)
+
+            for item in os.listdir(OLD_ELBA + version_old_folder):
+                os.system('cp ' + OLD_ELBA + version_old_folder + '/' + item + ' ' + '.')
+
+            # Копирование данных пользователя
+            folders_with_main_data = [FOLDER_WITH_RESOURCES, FOLDER_WITH_NOTES]
+            for folder in folders_with_main_data:
+                os.system('cp -r ' + OLD_ELBA + need_version_folder + folder + '/' + ' ' + '.')
+            for file in USER_DATA_IN_FILES:
+                os.system('cp ' + OLD_ELBA + need_version_folder + file + ' ' + '.')
+
     print(GREEN + ' - Success roll back! - ' + DEFAULT_COLOR)
     sleep(1)
