@@ -2,9 +2,10 @@
 from main import *
 import os
 import sys
+import json
 
 
-__version__ = '1.1.2'
+__version__ = '1.1.3'
 
 
 def get_versions():
@@ -59,8 +60,6 @@ def size_all():
     for i in range(len(cache_modules)):
         size_mod_cache += os.path.getsize('__pycache__/' + cache_modules[i])
 
-    print('\n')
-
     size_program = 0
     for i in range(len(files)):
         size = os.path.getsize(files[i])
@@ -71,10 +70,6 @@ def size_all():
         """ Округление и перевод в килобайты """
         return round((__size__ / 2**10), 2)
 
-    print('\n Максимальный объем выделенной памяти в ОЗУ для программы:',
-          rounding(36404),
-          'Килобайт')
-
     user_folder = FOLDER_WITH_DATA
     size_user_data = 0
     for item in os.listdir(user_folder):
@@ -84,20 +79,24 @@ def size_all():
     size_program += size_mod_cache  # Вычисление всего веса
     size_logs = os.path.getsize(user_folder + '.file.log')
 
-    def template_output(text, value, measure):
-        """ Шаблон вывода информации """
-        print(text, YELLOW, value, measure, DEFAULT_COLOR)
+    def to_another_measurement_system(some_data_size):
+        if some_data_size > 2**10:
+            some_data_size = rounding(some_data_size)
+            user_measure = 'KiB'
+        else:
+            user_measure = 'B'
+        return YELLOW + str(some_data_size) + ' ' + user_measure + DEFAULT_COLOR
 
-    if size_user_data > 2**10:
-        size_user_data /= 2**10
-        size_user_data = round(size_user_data, 2)
-        user_measure = 'Килобайт'
-    else:
-        user_measure = 'Байт'
+    print('\n')
 
     total_data = size_program + size_user_data + os.path.getsize('get_size_obs.py') + size_logs
-    template_output('Лог-файлы заняли', rounding(size_logs), 'Килобайт')
-    template_output('Данные пользователя заняли', size_user_data, user_measure)
-    template_output('Файлы программы заняли', rounding(size_program - size_mod_cache), 'Килобайт')
-    template_output('Кэш модулей занял', rounding(size_mod_cache), 'Килобайт')
-    template_output('Итого весь проект занимает', rounding(total_data), 'Килобайт в ПЗУ')
+    dic = {
+        'Occupied space in RAM ': to_another_measurement_system(36404),
+        'Log-files occupied    ': to_another_measurement_system(size_logs),
+        'User files occupied   ': to_another_measurement_system(size_user_data),
+        'Files program occupied': to_another_measurement_system(size_program - size_mod_cache),
+        'Cash modules occupied ': to_another_measurement_system(size_mod_cache),
+        'Total program occupied': to_another_measurement_system(total_data)
+    }
+    for text, space in dic.items():
+        print("{0}: {1}".format(text, space))
