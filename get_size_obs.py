@@ -114,6 +114,3 @@ def size_all():
     }
     for text, space_used in data_to_print.items():
         print("{0}: {1}".format(text, space_used))
-
-
-size_all()
