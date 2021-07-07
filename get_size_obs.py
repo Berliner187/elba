@@ -5,7 +5,7 @@ import sys
 from memory_profiler import memory_usage
 
 
-__version__ = '1.2.0'
+__version__ = '1.3.0'
 
 
 def get_versions():
@@ -73,12 +73,15 @@ def size_all():
         print("{0} --- {1}".format(size, file))
 
     # Получение размера пользовательских файлов
+    size_notes = size_resources = 0
     for folder_with_resource in os.listdir(FOLDER_WITH_RESOURCES):
         for file in os.listdir(FOLDER_WITH_RESOURCES + folder_with_resource):
-            size_user_data += os.path.getsize(FOLDER_WITH_RESOURCES + folder_with_resource + '/' + file)
+            size_notes += os.path.getsize(FOLDER_WITH_RESOURCES + folder_with_resource + '/' + file)
+            size_user_data += size_notes
     for folder_with_note in os.listdir(FOLDER_WITH_NOTES):
         for file in os.listdir(FOLDER_WITH_NOTES + folder_with_note):
-            size_user_data += os.path.getsize(FOLDER_WITH_NOTES + folder_with_note + '/' + file)
+            size_resources += os.path.getsize(FOLDER_WITH_NOTES + folder_with_note + '/' + file)
+            size_user_data += size_resources
     for file in os.listdir(FOLDER_WITH_DATA):
         size_user_data += os.path.getsize(FOLDER_WITH_DATA + file)
 
@@ -90,11 +93,11 @@ def size_all():
             __size__ = round((__size__ / (2**20)), 2)
             user_measure = 'MiB'
         elif 2**10 < __size__ < 2**20:
-            user_measure = 'KiB'
             __size__ = round((__size__ / (2**10)), 2)
+            user_measure = 'KiB'
         else:
-            user_measure = 'B'
             __size__ = round(__size__, 2)
+            user_measure = 'B'
 
         return YELLOW + str(__size__) + ' ' + user_measure + DEFAULT_COLOR
 
@@ -108,6 +111,8 @@ def size_all():
         'The program occupies RAM ': to_another_unit_of_measurement(program_in_ram),
         'The log files too        ': to_another_unit_of_measurement(size_logs),
         'User files took          ': to_another_unit_of_measurement(size_user_data),
+        'The notes took           ': to_another_unit_of_measurement(size_notes),
+        'The resources took       ': to_another_unit_of_measurement(size_resources),
         'The program files took up': to_another_unit_of_measurement(size_program),
         'The program cache tok up ': to_another_unit_of_measurement(size_mod_cache),
         'The total program takes  ': to_another_unit_of_measurement(total_data)
