@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.3.0.3'
+__version__ = 'v0.3.0.4'
 
 
 def show_name_program():
@@ -130,9 +130,10 @@ def point_of_entry():   # Точка входа в систему
     master_password = get_master_password()
 
     # Удаление данных, если файл с хэшем не существует, но при этом есть сохраненные
-    if os.path.exists(FILE_WITH_HASH) is False and CHECK_FOLDER_FOR_RESOURCE is True:
-        template_remove_folder(FOLDER_WITH_DATA)
-        quit()
+    if os.path.exists(FILE_WITH_HASH) is False:
+        if CHECK_FOLDER_FOR_RESOURCE is True:
+            template_remove_folder(FOLDER_WITH_DATA)
+            quit()
 
     # Проверка хэша пароля
     hash_pas_from_file = open(FILE_WITH_HASH, 'r')
@@ -326,7 +327,6 @@ def launcher():
 
     if CHECK_FOLDER_FOR_RESOURCE is False:
         # Если нет ресурсов
-        os.mkdir(FOLDER_WITH_RESOURCES)
         show_name_program()
 
         master_password = ActionsWithPassword('master').get_password()  # Создание мастер-пароля
@@ -335,6 +335,7 @@ def launcher():
         enc_aes(FILE_WITH_GENERIC_KEY, genetic_key, master_password)
 
         greeting(genetic_key)  # Вывод приветствия
+        os.mkdir(FOLDER_WITH_RESOURCES)
         sleep(.5)
         decryption_block(genetic_key)
         write_log('---', 'OK')
@@ -357,7 +358,7 @@ if __name__ == '__main__':
     try:
         from update_obs import update, install_old_saved_version
     except ModuleNotFoundError as update_obs_error:
-        write_log(update_obs_error, 'CRASH UPDATE')
+        write_log(update_obs_error, 'FAILED')
         print(RED, ' - Module "update" does not exist - ', DEFAULT_COLOR)
         sleep(1)
         download_from_repository()
@@ -386,7 +387,6 @@ if __name__ == '__main__':
         from show_dec_data_obs import show_decryption_data
 
         launcher()  # Запуск лончера
-
     except ModuleNotFoundError as error:
         print(error)
         print(RED + ' - Error in import modules -' + DEFAULT_COLOR)
@@ -404,8 +404,11 @@ if __name__ == '__main__':
         sleep(1)
         system_action('clear')
         # Попытка обновиться, если возникает ошибка
-        print(RED + ' -- You can try roll back -- \n' + DEFAULT_COLOR)
-        change = input(YELLOW + ' - Roll back? (y/n): ' + DEFAULT_COLOR)
-        if change == 'y':
-            install_old_saved_version()
+        if os.path.exists(OLD_ELBA):
+            print(RED + ' -- You can try roll back -- \n' + DEFAULT_COLOR)
+            change = input(YELLOW + ' - Roll back? (y/n): ' + DEFAULT_COLOR)
+            if change == 'y':
+                install_old_saved_version()
+        else:
+            update()
         system_action('restart')
