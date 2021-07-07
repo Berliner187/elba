@@ -5,7 +5,7 @@ import sys
 from memory_profiler import memory_usage
 
 
-__version__ = '1.3.0'
+__version__ = '1.3.1'
 
 
 def get_versions():
@@ -114,8 +114,8 @@ def size_all():
         'The notes took           ': to_another_unit_of_measurement(size_notes),
         'The resources took       ': to_another_unit_of_measurement(size_resources),
         'The program files took up': to_another_unit_of_measurement(size_program),
-        'The program cache tok up ': to_another_unit_of_measurement(size_mod_cache),
+        'The program cache took up': to_another_unit_of_measurement(size_mod_cache),
         'The total program takes  ': to_another_unit_of_measurement(total_data)
     }
     for text, space_used in data_to_print.items():
-        print("{0}: {1}".format(text, space_used))
+        print("{0}  --->  {1}".format(text, space_used))
