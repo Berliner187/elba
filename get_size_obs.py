@@ -5,7 +5,7 @@ import sys
 from memory_profiler import memory_usage
 
 
-__version__ = '1.3.2'
+__version__ = '1.3.3'
 
 
 def get_versions():
@@ -24,7 +24,7 @@ def get_versions():
     print(GREEN, '\n  - Versions installed modules - \n', DEFAULT_COLOR)
 
     def template_version_module(module, version):
-        print(YELLOW, version, GREEN, module, DEFAULT_COLOR)
+        print(version, ' --- ', module)
 
     template_version_module('program', __version__)
     template_version_module('change_password_obs', change_password_ver)
@@ -68,9 +68,12 @@ def size_all():
     for i in range(len(files)):
         size_program += os.path.getsize(files[i])
         dic_with_files_program[files[i]] = os.path.getsize(files[i]) * 8
-
     for file, size in dic_with_files_program.items():
-        print("{0} --- {1}".format(size, file))
+        if len(str(size)) == 5:
+            size = str(size) + ' '
+        elif len(str(size)) == 4:
+            size = str(size) + '  '
+        print("{0}  ---  {1}".format(size, file))
 
     # Получение размера пользовательских файлов
     size_notes = size_resources = 0
@@ -90,13 +93,13 @@ def size_all():
     def to_another_unit_of_measurement(__size__):
         """ Округление и перевод в единицы измерения """
         if 2**20 < __size__:
-            __size__ = round((__size__ / (2**20)), 2)
+            __size__ = round((__size__ / (2**20)), 1)
             user_measure = 'MiB'
         elif 2**10 < __size__ < 2**20:
-            __size__ = round((__size__ / (2**10)), 2)
+            __size__ = round((__size__ / (2**10)), 1)
             user_measure = 'KiB'
         else:
-            __size__ = round(__size__, 2)
+            __size__ = round(__size__, 1)
             user_measure = 'B'
 
         return YELLOW + str(__size__) + ' ' + user_measure + DEFAULT_COLOR
@@ -106,7 +109,7 @@ def size_all():
     program_in_ram = memory_usage()
     program_in_ram = program_in_ram[0] * 2**20
 
-    total_data = size_program + size_mod_cache + size_user_data + size_logs
+    total_size = size_program + size_mod_cache + size_user_data + size_logs
     data_to_print = {
         'The program occupies RAM ': to_another_unit_of_measurement(program_in_ram),
         'The log files too        ': to_another_unit_of_measurement(size_logs),
@@ -115,7 +118,7 @@ def size_all():
         'The resources took       ': to_another_unit_of_measurement(size_resources),
         'The program files took up': to_another_unit_of_measurement(size_program),
         'The program cache took up': to_another_unit_of_measurement(size_mod_cache),
-        'The total program takes  ': to_another_unit_of_measurement(total_data)
+        'The total program takes  ': to_another_unit_of_measurement(total_size)
     }
     for text, space_used in data_to_print.items():
-        print("{0}  --->  {1}".format(text, space_used))
+        print("{0}  ---  {1}".format(text, space_used))

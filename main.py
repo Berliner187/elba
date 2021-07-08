@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.3.0.4'
+__version__ = 'v0.3.1.0'
 
 
 def show_name_program():
@@ -27,7 +27,7 @@ def show_name_program():
           "\n || Password Manager and Keeper of Notes ||",
           "\n || Delta For Linux || "
           "\n || by Berliner187  || ", YELLOW,
-          "\n\n || Ferga Kangaroo  || ", BLUE,
+          "\n\n || Huppo Walloren  || ", BLUE,
           __version__)
     if CHECK_FOLDER_FOR_RESOURCE is False:
         first_start_message()
@@ -172,6 +172,10 @@ def decryption_block(generic_key):
         resource = input(YELLOW + ' Resource: ' + DEFAULT_COLOR)
         login = input(YELLOW + ' Login: ' + DEFAULT_COLOR)
         choice_generation_or_save_self_password(resource, login, generic_key)
+        # system_action('clear')
+        # print(BLUE + "\n - Change category - " + DEFAULT_COLOR)
+        # print(YELLOW, "  Personal/Work/Study/")
+        # change_category = input(YELLOW + "(1/2/3/4): " + DEFAULT_COLOR)
         if CHECK_FOLDER_FOR_RESOURCE:
             show_decryption_data(generic_key, 'resource')
         else:

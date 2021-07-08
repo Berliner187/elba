@@ -62,7 +62,7 @@ class ActionsWithPassword:
         def generation_new_password(length_password, add_random_symbols):
             """ Функция создания случайного пароля """
             symbols_for_password = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
-            additional_symbols = '!@#$%^&*()_-+=[]{}№;:?'
+            additional_symbols = '!@#$%^&*()_-+[]{}№;:?'
             if add_random_symbols:
                 symbols_for_password = symbols_for_password + additional_symbols
             if length_password > 8:
