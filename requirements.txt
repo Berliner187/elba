@@ -1,3 +1,4 @@
 werkzeug
 stdiomask
 -U PyCryptodome
+memory_profiler
