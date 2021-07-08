@@ -4,8 +4,18 @@ import hashlib
 import random
 import os
 
-from stdiomask import getpass
-from werkzeug.security import check_password_hash, generate_password_hash
+
+try:
+    from stdiomask import getpass
+    from werkzeug.security import check_password_hash, generate_password_hash
+except ModuleNotFoundError as error_module:
+    write_log(error_module, 'CRASH')
+    print(RED, 'Error: \n' + str(error_module), DEFAULT_COLOR)
+    print('\n')
+    template_some_message(
+        YELLOW, "Please, install module/modules with PIP and restart the program"
+    )
+    quit()
 
 from Crypto.Cipher import AES
 import Crypto.Random
@@ -13,7 +23,7 @@ import Crypto.Random
 from main import *
 
 
-__version__ = '2.0.3'
+__version__ = '2.0.4'
 
 
 class AESCipher(object):

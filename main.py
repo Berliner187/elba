@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.3.1.0'
+__version__ = 'v0.3.1.1'
 
 
 def show_name_program():
@@ -54,6 +54,7 @@ def template_some_message(color, message):
 YELLOW, BLUE, PURPLE = "\033[33m", "\033[36m", "\033[35m"
 GREEN, RED, DEFAULT_COLOR = "\033[32m", "\033[31m", "\033[0m"
 DARK_BLUE = BLUE + "\033[6m"
+
 
 # Константы
 FOLDER_ELBA = 'elba/'
@@ -360,24 +361,23 @@ def launcher():
 if __name__ == '__main__':
     system_action('clear')
     try:
+        try:
+            from werkzeug.security import generate_password_hash, check_password_hash
+            from stdiomask import getpass
+        except ModuleNotFoundError as error_module:
+            write_log(error_module, 'CRASH')
+            print(RED, 'Error: \n' + str(error_module), DEFAULT_COLOR)
+            print('\n')
+            template_some_message(
+                YELLOW, "Please, install module/modules with PIP and restart the program"
+            )
+            quit()
         from update_obs import update, install_old_saved_version
     except ModuleNotFoundError as update_obs_error:
         write_log(update_obs_error, 'FAILED')
         print(RED, ' - Module "update" does not exist - ', DEFAULT_COLOR)
         sleep(1)
         download_from_repository()
-
-    try:
-        from werkzeug.security import generate_password_hash, check_password_hash
-        from stdiomask import getpass
-    except ModuleNotFoundError as error_module:
-        write_log(error_module, 'CRASH')
-        print(RED, 'Error: \n' + str(error_module), DEFAULT_COLOR)
-        print('\n')
-        template_some_message(
-            YELLOW, "Please, install module/modules with PIP and restart the program"
-        )
-        quit()
 
     try:
         # Локальные модули
