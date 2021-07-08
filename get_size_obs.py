@@ -5,7 +5,7 @@ import sys
 from memory_profiler import memory_usage
 
 
-__version__ = '1.3.3'
+__version__ = '1.3.4'
 
 
 def get_versions():
@@ -24,7 +24,7 @@ def get_versions():
     print(GREEN, '\n  - Versions installed modules - \n', DEFAULT_COLOR)
 
     def template_version_module(module, version):
-        print(version, ' --- ', module)
+        print(version, '  ---  ', module)
 
     template_version_module('program', __version__)
     template_version_module('change_password_obs', change_password_ver)
