@@ -4,7 +4,7 @@ from main import __version__ as elba_version
 import os
 from time import sleep
 
-__version__ = '1.4.4'  # Версия модуля
+__version__ = '1.4.5'  # Версия модуля
 
 
 main_file = 'main.py'
@@ -81,8 +81,6 @@ def update():  # Обновление программы
             for item in os.listdir('.'):
                 if item.endswith('.py'):
                     template_for_copy(item)
-            # Копирование данных пользователя
-            os.system('cp -r ' + FOLDER_WITH_DATA + ' ' + OLD_ELBA + elba_version)
 
         if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):
             print(GREEN + '\n   A new version of the program is available ' + DEFAULT_COLOR)
@@ -120,15 +118,17 @@ def update():  # Обновление программы
 
 
 def install_old_saved_version():
+
     def template_install_old(version_old_folder):
         for item in os.listdir(OLD_ELBA + version_old_folder):
             os.system('cp ' + OLD_ELBA + version_old_folder + '/' + item + ' ' + '.')
-        os.system('cp -r ' + FOLDER_WITH_DATA + ' ' + OLD_ELBA + elba_version)
+
     s = 0
     system_action('clear')
     for version in os.listdir(OLD_ELBA):
         s += 1
         print(str(s), '-', YELLOW + version + DEFAULT_COLOR)
+
     print(BLUE + "\n\n  - Change version by number - " + DEFAULT_COLOR)
     change = int(input(YELLOW + "(1-" + str(s) + "): " + DEFAULT_COLOR))
     if change == '-z':
@@ -138,5 +138,6 @@ def install_old_saved_version():
         cnt += 1
         if cnt == change:
             template_install_old(need_version_folder)
+
     print(GREEN + ' - Success roll back! - ' + DEFAULT_COLOR)
     sleep(1)
