@@ -6,7 +6,7 @@ import datetime
 from time import sleep
 
 
-__version__ = '1.2.0'
+__version__ = '1.2.1'
 
 
 def greeting(generic_key):   # Greating Depending On Date Time
@@ -21,7 +21,6 @@ def greeting(generic_key):   # Greating Depending On Date Time
 
     hms = datetime.datetime.today()
     time_now = hms.hour * 3600 + hms.minute * 60 + hms.second  # Время в секундах
-    print(time_now)
     if 14400 <= time_now < 43200:  # Condition morning
         template_greeting('Good morning,')
     elif 43200 <= time_now < 61200:  # Condition day
