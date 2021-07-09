@@ -10,6 +10,8 @@ from time import sleep
 try:
     from stdiomask import getpass
     from werkzeug.security import check_password_hash, generate_password_hash
+    from Crypto.Cipher import AES
+    import Crypto.Random
 except ModuleNotFoundError as error_module:
     write_log(error_module, 'CRASH')
     print(RED, 'Error: \n' + str(error_module), DEFAULT_COLOR)
@@ -19,13 +21,11 @@ except ModuleNotFoundError as error_module:
     )
     quit()
 
-from Crypto.Cipher import AES
-import Crypto.Random
 
 from main import *
 
 
-__version__ = '2.1.1'
+__version__ = '2.1.2'
 
 
 class AESCipher(object):
@@ -172,11 +172,11 @@ def save_data_to_file(data_1, data_2, data_3, generic_key, type_data):
 
 
 class WorkWithUserFiles:
-    def __init__(self, generic_key, enc_or_dec):
+    def __init__(self, generic_key, type_work):
         self.generic_key = generic_key
-        self.type_work = enc_or_dec
+        self.type_work = type_work
 
-    def enc_or_dec_fun(self):
+    def file_encryption_control(self):
         KEY_FILE = FOLDER_WITH_DATA + 'KEY.key'
         IV_FILE = FOLDER_WITH_DATA + 'IV.key'
         FOLDER_FOR_ENCRYPTION_FILES = FOLDER_WITH_DATA + 'FOR_ENCRYPTION'
@@ -236,19 +236,11 @@ class WorkWithUserFiles:
                 key = readBinFile(KEY_FILE)
                 iv = readBinFile(IV_FILE)
 
-            try:
-                oriFile = os.listdir(FOLDER_FOR_ENCRYPTION_FILES)
-            except:
-                raise Exception('Directory \'FOR_ENCRYPTION\' does not exist in the current directory')
-
             print("Beginning Encryption...\n")
-
-            for file in oriFile:
+            for file in os.listdir(FOLDER_FOR_ENCRYPTION_FILES):
                 print("Encrypting", file)
-
                 file_data = readBinFile(FOLDER_FOR_ENCRYPTION_FILES + '/' + file)
                 writeBinFile(FOLDER_WITH_ENC_FILES + '/' + file + ".enc", encrypt_it(file_data, key, iv))
-
                 print("Completed encrypting", file, "\n")
 
             print(GREEN + "Encryption successful\n" + DEFAULT_COLOR)
