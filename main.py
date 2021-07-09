@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.3.1.1'
+__version__ = 'v0.3.2.0'
 
 
 def show_name_program():
@@ -218,6 +218,32 @@ def decryption_block(generic_key):
             elif change_resource_or_actions == '-n':    # Добавление заметок
                 show_decryption_data(generic_key, 'note')
                 notes(generic_key)
+
+            elif change_resource_or_actions == '-f':
+                try:
+                    from enc_obs import WorkWithUserFiles
+
+                    system_action('clear')
+
+                    print(
+                        BLUE, "-- Go to the VOLARE data folder and follow the instructions --\n", DEFAULT_COLOR
+                          )
+
+                    print(BLUE, "1.", YELLOW, " - Encryption files", DEFAULT_COLOR)
+                    print(BLUE, "2.", YELLOW, " - Decryption files", DEFAULT_COLOR)
+
+                    sleep(.4)
+                    os.system('explorer.exe .')
+
+                    change_action = input(YELLOW + "\n - Select by number: " + DEFAULT_COLOR)
+                    if change_action == '1':
+                        WorkWithUserFiles(generic_key, 'enc').enc_or_dec_fun()
+                    elif change_action == '2':
+                        WorkWithUserFiles(generic_key, 'dec').enc_or_dec_fun()
+                    show_decryption_data(generic_key, 'resource')
+                except ModuleNotFoundError:
+                    print(RED, " - Download new version.. -", DEFAULT_COLOR)
+                    update()
 
             elif change_resource_or_actions == '-z':    # Удаление всех данных
                 system_action('clear')

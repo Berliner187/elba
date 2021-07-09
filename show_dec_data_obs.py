@@ -12,7 +12,7 @@ def show_decryption_data(generic_key, category):
     print(BLUE + "     ___________________________________")
     print(BLUE + "    /\/| ", YELLOW, "\/                   \/", BLUE, " |\/\ ")
     print(BLUE + "   /\/\|", YELLOW, " \/  Saved " + category + 's' + separator + "  \/ ", BLUE, "|/\/\ ", DEFAULT_COLOR)
-    print(YELLOW + "           \/                   \/ \n"*2)
+    print(YELLOW + "           \/                   \/ \n")
     print('\n')
 
     s = 0
@@ -38,6 +38,7 @@ def show_decryption_data(generic_key, category):
             BLUE, '\n  - Enter "-c" to change master-password', YELLOW, '|',
             BLUE, '\n  - Enter "-d" to remove resource       ', YELLOW, '|',
             BLUE, '\n  - Enter "-n" to go to notes           ', YELLOW, '|',
+            BLUE, '\n  - Enter "-f" to encrypt your files', RED, 'ALPHA  |',
             BLUE, '\n  - Enter "-u" to update program        ', YELLOW, '|',
             BLUE, '\n  - Enter "-z" to remove ALL data       ', YELLOW, '|',
             backup_message, YELLOW,

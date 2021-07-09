@@ -1,8 +1,10 @@
+# -*- encryption: UTF-8 -*-
 from base64 import urlsafe_b64encode, urlsafe_b64decode
 import base64
 import hashlib
 import random
 import os
+from time import sleep
 
 
 try:
@@ -23,7 +25,7 @@ import Crypto.Random
 from main import *
 
 
-__version__ = '2.0.4'
+__version__ = '2.1.0'
 
 
 class AESCipher(object):
@@ -119,6 +121,16 @@ def dec_aes(__file__, __key__):
             return aes.decrypt(item)
 
 
+def enc_keyiv(key, iv, generic_key):
+    enc_data = AESCipher(generic_key)
+    total = aes.encrypt(enc_data)
+    return total
+
+
+def dec_keyiv(key, iv, generic_key):
+    return total
+
+
 def save_data_to_file(data_1, data_2, data_3, generic_key, type_data):
 
     def path_to_data_to_save_resource(enc_name_type_folder):
@@ -157,3 +169,124 @@ def save_data_to_file(data_1, data_2, data_3, generic_key, type_data):
 
         enc_aes(name_note_file, data_1, generic_key)
         enc_aes(note_file, data_2, generic_key)
+
+
+class WorkWithUserFiles:
+    def __init__(self, generic_key, enc_or_dec):
+        self.generic_key = generic_key
+        self.type_work = enc_or_dec
+
+    def enc_or_dec_fun(self):
+        KEY_FILE = FOLDER_WITH_DATA + 'KEY.key'
+        IV_FILE = FOLDER_WITH_DATA + 'IV.key'
+        FOLDER_FOR_ENCRYPTION_FILES = FOLDER_WITH_DATA + 'FOR_ENCRYPTION'
+        FOLDER_WITH_ENC_FILES = FOLDER_WITH_DATA + 'ENCRYPTED'
+        FOLDER_WITH_DEC_FILES = FOLDER_WITH_DATA + 'DECRYPTED'
+
+        def encrypt_it(bytefile, key, iv):
+            cfb_cipher = AES.new(key, AES.MODE_OFB, iv)
+            return cfb_cipher.encrypt(bytefile)
+
+        def decrypt_it(bytefile, key, iv):
+            cfb_decipher = AES.new(key, AES.MODE_OFB, iv)
+            return cfb_decipher.decrypt(bytefile)
+
+        def readBinFile(dir):
+            with open(dir, "rb") as file:
+                data = file.read()
+            file.close()
+            return data
+
+        def writeBinFile(dir, data):
+            with open(dir, "wb") as file:
+                file.write(data)
+            file.close()
+
+        def safe_os(cmd):
+            try:
+                os.system(cmd)
+            except:
+                pass
+
+        if self.type_work == 'enc':
+
+            def keyGenerate(key, file):
+                with open(file, "wb") as f:
+                    f.write(key)
+                f.close()
+
+                key_data = readBinFile(file)
+                writeBinFile(file, key_data)
+
+            safe_os('mkdir ' + FOLDER_FOR_ENCRYPTION_FILES)
+
+            print("The program allows you to encrypt files")
+            print("Please put the files you want to encrypt in \'FOR_ENCRYPTION\'")
+
+            temp = input("Press \'Enter\' key to continue...")
+
+            if os.path.exists(FOLDER_WITH_ENC_FILES) is False:
+                key = Crypto.Random.new().read(AES.block_size)
+                iv = Crypto.Random.new().read(AES.block_size)
+                safe_os('mkdir ' + FOLDER_WITH_ENC_FILES)
+                print("Generating KEY and IV for the recipient")
+                keyGenerate(key, KEY_FILE)
+                keyGenerate(iv, IV_FILE)
+            else:
+                key = readBinFile(KEY_FILE)
+                iv = readBinFile(IV_FILE)
+
+            print("Retrieving files in FOR_ENCRYPTION\n")
+            try:
+                oriFile = os.listdir(FOLDER_FOR_ENCRYPTION_FILES)
+            except:
+                raise Exception('Directory \'FOR_ENCRYPTION\' does not exist in the current directory')
+
+            print("Beginning Encryption...\n")
+
+            for file in oriFile:
+                print("Encrypting", file)
+
+                filedata = readBinFile(FOLDER_FOR_ENCRYPTION_FILES + '/' + file)
+                writeBinFile(FOLDER_WITH_ENC_FILES + '/' + file + ".enc", encrypt_it(filedata, key, iv))
+
+                print("Completed encrypting", file, "\n")
+
+            print("Encryption successful\n")
+
+            template_remove_folder(FOLDER_FOR_ENCRYPTION_FILES)
+
+            print("Retrieving files in ENCRYPTED\n")
+            try:
+                inFiles = os.listdir(FOLDER_WITH_ENC_FILES)
+            except:
+                raise Exception('Directory \'ENCRYPTED\' does not exist in the current directory')
+
+        if self.type_work == 'dec':
+            if os.path.exists(FOLDER_WITH_DEC_FILES) is False:
+                safe_os('mkdir ' + FOLDER_WITH_DEC_FILES)
+
+            cnt_enc_files = cnt_dec_files = 0
+            for file_enc_exist in os.listdir(FOLDER_WITH_ENC_FILES):
+                cnt_enc_files += 1
+            for file_dec_exist in os.listdir(FOLDER_WITH_DEC_FILES):
+                cnt_dec_files += 1
+            if cnt_enc_files != cnt_dec_files:
+                print("Beginning Decryption...\n")
+                for file in os.listdir(FOLDER_WITH_ENC_FILES):
+                    print("Decrypting", file)
+
+                    key = open(KEY_FILE, 'rb').read()
+                    iv = open(IV_FILE, 'rb').read()
+
+                    filedata = readBinFile(FOLDER_WITH_ENC_FILES + '/' + file)
+                    writeBinFile(FOLDER_WITH_DEC_FILES + '/' + file[:-4], decrypt_it(filedata, key, iv))
+
+                    print("Completed decrypting", file, "\n")
+
+                print("Decryption successful\n")
+                sleep(2)
+                template_remove_folder(FOLDER_WITH_ENC_FILES)
+            else:
+                print(RED + 'All files decrypted' + DEFAULT_COLOR)
+                sleep(1)
