@@ -25,7 +25,7 @@ import Crypto.Random
 from main import *
 
 
-__version__ = '2.1.0'
+__version__ = '2.1.1'
 
 
 class AESCipher(object):
@@ -121,14 +121,14 @@ def dec_aes(__file__, __key__):
             return aes.decrypt(item)
 
 
-def enc_keyiv(key, iv, generic_key):
-    enc_data = AESCipher(generic_key)
-    total = aes.encrypt(enc_data)
-    return total
+def enc_keyiv(keyiv, generic_key):
+    aes = AESCipher(generic_key)
+    return aes.encrypt(keyiv)
 
 
-def dec_keyiv(key, iv, generic_key):
-    return total
+def dec_keyiv(enc_keyiv, generic_key):
+    aes = AESCipher(generic_key)
+    return aes.decrypt(enc_keyiv)
 
 
 def save_data_to_file(data_1, data_2, data_3, generic_key, type_data):
@@ -210,7 +210,7 @@ class WorkWithUserFiles:
 
         if self.type_work == 'enc':
 
-            def keyGenerate(key, file):
+            def save_keyiv(key, file):
                 with open(file, "wb") as f:
                     f.write(key)
                 f.close()
@@ -220,8 +220,8 @@ class WorkWithUserFiles:
 
             safe_os('mkdir ' + FOLDER_FOR_ENCRYPTION_FILES)
 
-            print("The program allows you to encrypt files")
-            print("Please put the files you want to encrypt in \'FOR_ENCRYPTION\'")
+            print(BLUE, "\n The program allows you to encrypt files", DEFAULT_COLOR)
+            print(YELLOW, "\n - Please put the files you want to encrypt in \'FOR_ENCRYPTION\'", DEFAULT_COLOR)
 
             temp = input("Press \'Enter\' key to continue...")
 
@@ -230,13 +230,12 @@ class WorkWithUserFiles:
                 iv = Crypto.Random.new().read(AES.block_size)
                 safe_os('mkdir ' + FOLDER_WITH_ENC_FILES)
                 print("Generating KEY and IV for the recipient")
-                keyGenerate(key, KEY_FILE)
-                keyGenerate(iv, IV_FILE)
+                save_keyiv(key, KEY_FILE)
+                save_keyiv(iv, IV_FILE)
             else:
                 key = readBinFile(KEY_FILE)
                 iv = readBinFile(IV_FILE)
 
-            print("Retrieving files in FOR_ENCRYPTION\n")
             try:
                 oriFile = os.listdir(FOLDER_FOR_ENCRYPTION_FILES)
             except:
@@ -247,46 +246,31 @@ class WorkWithUserFiles:
             for file in oriFile:
                 print("Encrypting", file)
 
-                filedata = readBinFile(FOLDER_FOR_ENCRYPTION_FILES + '/' + file)
-                writeBinFile(FOLDER_WITH_ENC_FILES + '/' + file + ".enc", encrypt_it(filedata, key, iv))
+                file_data = readBinFile(FOLDER_FOR_ENCRYPTION_FILES + '/' + file)
+                writeBinFile(FOLDER_WITH_ENC_FILES + '/' + file + ".enc", encrypt_it(file_data, key, iv))
 
                 print("Completed encrypting", file, "\n")
 
-            print("Encryption successful\n")
-
+            print(GREEN + "Encryption successful\n" + DEFAULT_COLOR)
             template_remove_folder(FOLDER_FOR_ENCRYPTION_FILES)
-
-            print("Retrieving files in ENCRYPTED\n")
-            try:
-                inFiles = os.listdir(FOLDER_WITH_ENC_FILES)
-            except:
-                raise Exception('Directory \'ENCRYPTED\' does not exist in the current directory')
+            sleep(3)
 
         if self.type_work == 'dec':
             if os.path.exists(FOLDER_WITH_DEC_FILES) is False:
                 safe_os('mkdir ' + FOLDER_WITH_DEC_FILES)
 
-            cnt_enc_files = cnt_dec_files = 0
-            for file_enc_exist in os.listdir(FOLDER_WITH_ENC_FILES):
-                cnt_enc_files += 1
-            for file_dec_exist in os.listdir(FOLDER_WITH_DEC_FILES):
-                cnt_dec_files += 1
-            if cnt_enc_files != cnt_dec_files:
-                print("Beginning Decryption...\n")
-                for file in os.listdir(FOLDER_WITH_ENC_FILES):
-                    print("Decrypting", file)
+            print("Beginning Decryption...\n")
+            for file in os.listdir(FOLDER_WITH_ENC_FILES):
+                print("Decrypting", file)
 
-                    key = open(KEY_FILE, 'rb').read()
-                    iv = open(IV_FILE, 'rb').read()
+                key = open(KEY_FILE, 'rb').read()
+                iv = open(IV_FILE, 'rb').read()
 
-                    filedata = readBinFile(FOLDER_WITH_ENC_FILES + '/' + file)
-                    writeBinFile(FOLDER_WITH_DEC_FILES + '/' + file[:-4], decrypt_it(filedata, key, iv))
+                file_data = readBinFile(FOLDER_WITH_ENC_FILES + '/' + file)
+                writeBinFile(FOLDER_WITH_DEC_FILES + '/' + file[:-4], decrypt_it(file_data, key, iv))
 
-                    print("Completed decrypting", file, "\n")
+                print("Completed decrypting", file, "\n")
 
-                print("Decryption successful\n")
-                sleep(2)
-                template_remove_folder(FOLDER_WITH_ENC_FILES)
-            else:
-                print(RED + 'All files decrypted' + DEFAULT_COLOR)
-                sleep(1)
+            print(GREEN + "Decryption successful\n")
+            sleep(3)
+            template_remove_folder(FOLDER_WITH_ENC_FILES)

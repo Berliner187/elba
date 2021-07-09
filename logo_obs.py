@@ -6,7 +6,7 @@ from main import *
 import os
 
 
-__version__ = '1.1.2'
+__version__ = '1.1.3'
 
 
 def clear():
@@ -173,7 +173,7 @@ def animation():
 
 
 def elba():     # Фунция вывода только логотипа
-    print(DARK_BLUE)
+    print(BLUE)
     logo()
     print(DEFAULT_COLOR)
 

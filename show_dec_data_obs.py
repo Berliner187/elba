@@ -1,7 +1,7 @@
 from enc_obs import *
 
 
-__version__ = '1.0.1'
+__version__ = '1.1.0'
 
 
 def show_decryption_data(generic_key, category):
@@ -30,17 +30,17 @@ def show_decryption_data(generic_key, category):
     if category == 'resource':
         backup_message = ''
         if os.path.exists(OLD_ELBA):
-            backup_message = BLUE + '\n  - Enter "-o" to rollback               ' + YELLOW + ' |'
+            backup_message = BLUE + '\n  - Enter \'-o\' to rollback               ' + YELLOW + ' |'
         print(
             YELLOW, '\n__________________________________________',
-            BLUE, '\n  - Enter "-r" to restart, "-x" to exit ', YELLOW, '|',
-            BLUE, '\n  - Enter "-a" to add new resource      ', YELLOW, '|',
-            BLUE, '\n  - Enter "-c" to change master-password', YELLOW, '|',
-            BLUE, '\n  - Enter "-d" to remove resource       ', YELLOW, '|',
-            BLUE, '\n  - Enter "-n" to go to notes           ', YELLOW, '|',
-            BLUE, '\n  - Enter "-f" to encrypt your files', RED, 'ALPHA  |',
-            BLUE, '\n  - Enter "-u" to update program        ', YELLOW, '|',
-            BLUE, '\n  - Enter "-z" to remove ALL data       ', YELLOW, '|',
+            BLUE, '\n  - Enter \'-r\' to restart, "-x" to exit ', YELLOW, '|',
+            BLUE, '\n  - Enter \'-a\' to add new resource      ', YELLOW, '|',
+            BLUE, '\n  - Enter \'-c\' to change master-password', YELLOW, '|',
+            BLUE, '\n  - Enter \'-d\' to remove resource       ', YELLOW, '|',
+            BLUE, '\n  - Enter \'-n\' to go to notes           ', YELLOW, '|',
+            BLUE, '\n  - Enter \'-f\' to encrypt your files', RED, 'ALPHA  |',
+            BLUE, '\n  - Enter \'-u\' to update program        ', YELLOW, '|',
+            BLUE, '\n  - Enter \'-z\' to remove ALL data       ', YELLOW, '|',
             backup_message, YELLOW,
             '\n__________________________________________|\n'
             '\n Select resource by number \n', DEFAULT_COLOR)
