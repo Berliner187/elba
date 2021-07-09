@@ -25,7 +25,7 @@ except ModuleNotFoundError as error_module:
 from main import *
 
 
-__version__ = '2.1.2'
+__version__ = '2.1.1'
 
 
 class AESCipher(object):

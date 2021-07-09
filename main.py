@@ -363,7 +363,7 @@ def launcher():
         genetic_key = ActionsWithPassword('generic').get_password()
         enc_aes(FILE_WITH_GENERIC_KEY, genetic_key, master_password)
 
-        greeting(genetic_key)  # Вывод приветствия
+        greeting(genetic_key)
         os.mkdir(FOLDER_WITH_RESOURCES)
         sleep(.5)
         decryption_block(genetic_key)
