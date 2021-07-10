@@ -5,50 +5,35 @@ from enc_obs import save_data_to_file
 import random
 from time import sleep
 import os
+import re
 
 from werkzeug.security import generate_password_hash
 from stdiomask import getpass
 
 
-__version__ = '1.1.5'
+__version__ = '1.2.0'
 
 
 def create_and_confirm_user_password():
     """ Создание и подтверждение пользовательского пароля """
-    print(BLUE + '\n Minimum password length 8 characters' + DEFAULT_COLOR)
+    print(BLUE + '\n Minimum password length — 8 characters' + DEFAULT_COLOR)
 
-    def input_password():
-        password_from_user = getpass(YELLOW + 'Password: ' + DEFAULT_COLOR)
-        confirm_password_from_user = getpass(YELLOW + 'Confirm:  ' + DEFAULT_COLOR)
-        if confirm_password_from_user == 'x':
-            quit()
-        return password_from_user, confirm_password_from_user
+    def template_red_messages(message):
+        system_action('clear')
+        print(RED + '\n'*2 + ' - ' + message + DEFAULT_COLOR)
 
-    user_password, user_confirm_password = input_password()
-
-    if user_password != user_confirm_password:
-        if (len(user_password) or len(user_confirm_password)) < 8:
-            print(RED + '\n Error of confirm. Try again \n' + DEFAULT_COLOR)
-            # Условия принятия и подтверждения пароля
-            password, confirm_pas = input_password()
-            if password == confirm_pas:
-                if len(password) >= 8:
-                    if len(confirm_pas) >= 8:
-                        return password
-            else:
-                print(RED + '\n Error in confirm \n' + DEFAULT_COLOR)
-                while (password != confirm_pas) or (len(password or confirm_pas) < 8):
-                    password, confirm_pas = input_password()
-                    if password == confirm_pas:
-                        if len(password and confirm_pas) >= 8:
-                            return password
-                    else:
-                        print(RED + '\n Error in confirm \n' + DEFAULT_COLOR)
-
-    else:
-        if len(user_password):
-            if len(user_confirm_password) >= 8:
-                return user_confirm_password
+    while True:
+        password = getpass(YELLOW + " Password: " + DEFAULT_COLOR)
+        confirm_password = getpass(YELLOW + " Confirm:  " + DEFAULT_COLOR)
+        if confirm_password == 'x':  quit()
+        if len(password) < 8:
+            template_red_messages("Make sure your password is at lest 8 letters")
+        elif password != confirm_password:
+            template_red_messages("Passwords don't match")
+        elif re.search('[0-9]', password) is None:
+            template_red_messages("Make sure your password has a number in it")
+        else:
+            return password
 
 
 class ActionsWithPassword:
@@ -94,7 +79,7 @@ class ActionsWithPassword:
                     hash_pas.close()
                 return master_password
 
-            elif (CHECK_FILE_FOR_RESOURCE and CHECK_FILE_WITH_HASH) is True:
+            elif (CHECK_FOLDER_FOR_RESOURCE and CHECK_FILE_WITH_HASH) is True:
                 return master_password
 
         # Получение нового сгенерированного пароля

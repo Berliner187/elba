@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.3.2.2'
+__version__ = 'v0.3.2.3'
 
 
 def show_name_program():
@@ -179,12 +179,9 @@ def decryption_block(generic_key):
         # change_category = input(YELLOW + "(1/2/3/4): " + DEFAULT_COLOR)
         if CHECK_FOLDER_FOR_RESOURCE:
             show_decryption_data(generic_key, 'resource')
-        else:
-            system_action('restart')
 
     if CHECK_FOLDER_FOR_RESOURCE is False:   # При первом запуске
         add_resource_data()
-        system_action('restart')
     else:  # При последущих запусках программа работает тут
         change_resource_or_actions = input('\n Change action: ')   # Выбор действия
         try:
@@ -352,7 +349,6 @@ def launcher():
         with open(FILE_LOG, mode="a", encoding='utf-8') as data:
             logs_writer = DictWriter(data, fieldnames=fields_for_log, delimiter=';')
             logs_writer.writeheader()
-        write_log('First launch', 'OK')
 
     if CHECK_FOLDER_FOR_RESOURCE is False:
         # Если нет ресурсов
@@ -361,13 +357,13 @@ def launcher():
         master_password = ActionsWithPassword('master').get_password()  # Создание мастер-пароля
         # Генерирование generic-key
         genetic_key = ActionsWithPassword('generic').get_password()
-        enc_aes(FILE_WITH_GENERIC_KEY, genetic_key, master_password)
 
         greeting(genetic_key)
         os.mkdir(FOLDER_WITH_RESOURCES)
         sleep(.5)
         decryption_block(genetic_key)
-        write_log('---', 'OK')
+        enc_aes(FILE_WITH_GENERIC_KEY, genetic_key, master_password)
+        write_log('First launch', 'OK')
         system_action('restart')
     else:
         # Если есть ресурсы

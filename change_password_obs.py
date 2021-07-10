@@ -10,7 +10,7 @@ from time import sleep
 import os
 
 
-__version__ = '3.0.1'
+__version__ = '3.0.2'
 
 
 def change_master_password():
@@ -33,17 +33,21 @@ def change_master_password():
         system_action('clear')
         print(BLUE + '\n   Pick a new master-password \n' + DEFAULT_COLOR)
         new_master_password = create_and_confirm_user_password()
+        if new_master_password == confirm_master_password:
+            print(RED + " -- This password has already been used --" + DEFAULT_COLOR)
+            while new_master_password == confirm_master_password:
+                new_master_password = create_and_confirm_user_password()
+                if new_master_password != confirm_master_password:
+                    # Generic-key шифруется новым мастер-паролем
+                    generic_key_from_file = dec_aes(FILE_WITH_GENERIC_KEY, confirm_master_password)
+                    enc_aes(FILE_WITH_GENERIC_KEY, generic_key_from_file, new_master_password)
 
-        # Generic-key шифруется новым мастер-паролем
-        generic_key_from_file = dec_aes(FILE_WITH_GENERIC_KEY, confirm_master_password)
-        enc_aes(FILE_WITH_GENERIC_KEY, generic_key_from_file, new_master_password)
+                    new_hash = generate_password_hash(new_master_password)
+                    with open(FILE_WITH_HASH, 'w') as hash_pas:
+                        hash_pas.write(new_hash)
+                        hash_pas.close()
 
-        new_hash = generate_password_hash(new_master_password)
-        with open(FILE_WITH_HASH, 'w') as hash_pas:
-            hash_pas.write(new_hash)
-            hash_pas.close()
-
-    system_action('clear')
-    print(GREEN + '\n\n    -  Password changed successfully!  - ' + DEFAULT_COLOR)
-    sleep(1)
-    system_action('restart')
+                    system_action('clear')
+                    print(GREEN + '\n\n    -  Password changed successfully!  - ' + DEFAULT_COLOR)
+                    sleep(1)
+                    system_action('restart')
