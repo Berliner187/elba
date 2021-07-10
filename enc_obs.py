@@ -25,7 +25,7 @@ except ModuleNotFoundError as error_module:
 from main import *
 
 
-__version__ = '2.1.1'
+__version__ = '2.1.2'
 
 
 class AESCipher(object):
@@ -183,24 +183,24 @@ class WorkWithUserFiles:
         FOLDER_WITH_ENC_FILES = FOLDER_WITH_DATA + 'ENCRYPTED'
         FOLDER_WITH_DEC_FILES = FOLDER_WITH_DATA + 'DECRYPTED'
 
-        def encrypt_it(bytefile, key, iv):
+        def encrypt_it(byte_file, key, iv):
             cfb_cipher = AES.new(key, AES.MODE_OFB, iv)
-            return cfb_cipher.encrypt(bytefile)
+            return cfb_cipher.encrypt(byte_file)
 
-        def decrypt_it(bytefile, key, iv):
+        def decrypt_it(byte_file, key, iv):
             cfb_decipher = AES.new(key, AES.MODE_OFB, iv)
-            return cfb_decipher.decrypt(bytefile)
+            return cfb_decipher.decrypt(byte_file)
 
-        def readBinFile(dir):
-            with open(dir, "rb") as file:
-                data = file.read()
-            file.close()
+        def read_bin_file(directory):
+            file_to_read = open(directory, "rb")
+            data = file_to_read.read()
+            file_to_read.close()
             return data
 
-        def writeBinFile(dir, data):
-            with open(dir, "wb") as file:
-                file.write(data)
-            file.close()
+        def write_bin_file(directory, data):
+            file_to_write = open(directory, "wb")
+            file_to_write.write(data)
+            file_to_write.close()
 
         def safe_os(cmd):
             try:
@@ -215,8 +215,8 @@ class WorkWithUserFiles:
                     f.write(key)
                 f.close()
 
-                key_data = readBinFile(file)
-                writeBinFile(file, key_data)
+                key_data = read_bin_file(file)
+                write_bin_file(file, key_data)
 
             safe_os('mkdir ' + FOLDER_FOR_ENCRYPTION_FILES)
 
@@ -233,14 +233,14 @@ class WorkWithUserFiles:
                 save_keyiv(key, KEY_FILE)
                 save_keyiv(iv, IV_FILE)
             else:
-                key = readBinFile(KEY_FILE)
-                iv = readBinFile(IV_FILE)
+                key = read_bin_file(KEY_FILE)
+                iv = read_bin_file(IV_FILE)
 
             print("Beginning Encryption...\n")
             for file in os.listdir(FOLDER_FOR_ENCRYPTION_FILES):
                 print("Encrypting", file)
-                file_data = readBinFile(FOLDER_FOR_ENCRYPTION_FILES + '/' + file)
-                writeBinFile(FOLDER_WITH_ENC_FILES + '/' + file + ".enc", encrypt_it(file_data, key, iv))
+                file_data = read_bin_file(FOLDER_FOR_ENCRYPTION_FILES + '/' + file)
+                write_bin_file(FOLDER_WITH_ENC_FILES + '/' + file + ".enc", encrypt_it(file_data, key, iv))
                 print("Completed encrypting", file, "\n")
 
             print(GREEN + "Encryption successful\n" + DEFAULT_COLOR)
@@ -258,8 +258,8 @@ class WorkWithUserFiles:
                 key = open(KEY_FILE, 'rb').read()
                 iv = open(IV_FILE, 'rb').read()
 
-                file_data = readBinFile(FOLDER_WITH_ENC_FILES + '/' + file)
-                writeBinFile(FOLDER_WITH_DEC_FILES + '/' + file[:-4], decrypt_it(file_data, key, iv))
+                file_data = read_bin_file(FOLDER_WITH_ENC_FILES + '/' + file)
+                write_bin_file(FOLDER_WITH_DEC_FILES + '/' + file[:-4], decrypt_it(file_data, key, iv))
 
                 print("Completed decrypting", file, "\n")
 
