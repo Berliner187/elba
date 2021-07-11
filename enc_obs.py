@@ -5,6 +5,7 @@ import hashlib
 import random
 import os
 from time import sleep
+import datetime
 
 
 try:
@@ -25,7 +26,7 @@ except ModuleNotFoundError as error_module:
 from main import *
 
 
-__version__ = '2.1.2'
+__version__ = '3.0.0'
 
 
 class AESCipher(object):
@@ -177,11 +178,16 @@ class WorkWithUserFiles:
         self.type_work = type_work
 
     def file_encryption_control(self):
-        KEY_FILE = FOLDER_WITH_DATA + 'KEY.key'
-        IV_FILE = FOLDER_WITH_DATA + 'IV.key'
-        FOLDER_FOR_ENCRYPTION_FILES = FOLDER_WITH_DATA + 'FOR_ENCRYPTION'
-        FOLDER_WITH_ENC_FILES = FOLDER_WITH_DATA + 'ENCRYPTED'
-        FOLDER_WITH_DEC_FILES = FOLDER_WITH_DATA + 'DECRYPTED'
+        FOLDER_WITH_ENC_DATA = FOLDER_WITH_DATA + 'ENCRYPTION_DATA/'
+        FOLDER_FOR_ENCRYPTION_FILES = FOLDER_WITH_ENC_DATA + 'FOR_ENCRYPTION'
+        # FOLDER_WITH_ENC_FILES = FOLDER_WITH_ENC_DATA + 'ENCRYPTED'
+        FOLDER_WITH_DEC_FILES = FOLDER_WITH_ENC_DATA + 'DECRYPTED'
+
+        hms = datetime.datetime.today()
+        NAME_ENC_FOLDER = str(hms.hour * 3600 + hms.minute * 60 + hms.second + hms.day)
+        FOLDER_WITH_ENC_FILES = FOLDER_WITH_ENC_DATA + NAME_ENC_FOLDER
+        KEY_FILE = 'ONE.key'
+        IV_FILE = 'TWO.key'
 
         def encrypt_it(byte_file, key, iv):
             cfb_cipher = AES.new(key, AES.MODE_OFB, iv)
@@ -202,23 +208,19 @@ class WorkWithUserFiles:
             file_to_write.write(data)
             file_to_write.close()
 
-        def safe_os(cmd):
-            try:
-                os.system(cmd)
-            except:
-                pass
+        if os.path.exists(FOLDER_WITH_ENC_DATA) is False:
+            os.system('mkdir ' + FOLDER_WITH_ENC_DATA)
 
         if self.type_work == 'enc':
-
             def save_keyiv(key, file):
-                with open(file, "wb") as f:
-                    f.write(key)
-                f.close()
+                file_key = open(file, "wb")
+                file_key.write(key)
+                file_key.close()
 
                 key_data = read_bin_file(file)
                 write_bin_file(file, key_data)
 
-            safe_os('mkdir ' + FOLDER_FOR_ENCRYPTION_FILES)
+            system_action('mkdir ' + FOLDER_FOR_ENCRYPTION_FILES)
 
             print(BLUE, "\n The program allows you to encrypt files", DEFAULT_COLOR)
             print(YELLOW, "\n - Please put the files you want to encrypt in \'FOR_ENCRYPTION\'", DEFAULT_COLOR)
@@ -226,22 +228,27 @@ class WorkWithUserFiles:
             temp = input("Press \'Enter\' key to continue...")
 
             if os.path.exists(FOLDER_WITH_ENC_FILES) is False:
-                key = Crypto.Random.new().read(AES.block_size)
-                iv = Crypto.Random.new().read(AES.block_size)
-                safe_os('mkdir ' + FOLDER_WITH_ENC_FILES)
-                print("Generating KEY and IV for the recipient")
-                save_keyiv(key, KEY_FILE)
-                save_keyiv(iv, IV_FILE)
-            else:
-                key = read_bin_file(KEY_FILE)
-                iv = read_bin_file(IV_FILE)
+                system_action('mkdir ' + FOLDER_WITH_ENC_FILES)
+            key = Crypto.Random.new().read(AES.block_size)
+            iv = Crypto.Random.new().read(AES.block_size)
+            print("Generating KEY and IV for the recipient")
+
+            path_to_key_one = FOLDER_WITH_ENC_FILES + '/' + NAME_ENC_FOLDER + KEY_FILE
+            path_to_key_two = FOLDER_WITH_ENC_FILES + '/' + NAME_ENC_FOLDER + IV_FILE
+            # else:
+            #     key = read_bin_file(KEY_FILE)
+            #     iv = read_bin_file(IV_FILE)
+            #     print(key, iv)
 
             print("Beginning Encryption...\n")
             for file in os.listdir(FOLDER_FOR_ENCRYPTION_FILES):
                 print("Encrypting", file)
                 file_data = read_bin_file(FOLDER_FOR_ENCRYPTION_FILES + '/' + file)
-                write_bin_file(FOLDER_WITH_ENC_FILES + '/' + file + ".enc", encrypt_it(file_data, key, iv))
+                write_bin_file(FOLDER_WITH_ENC_FILES + '/' + file + ".elba", encrypt_it(file_data, key, iv))
                 print("Completed encrypting", file, "\n")
+
+            save_keyiv(key, path_to_key_one)
+            save_keyiv(iv, path_to_key_two)
 
             print(GREEN + "Encryption successful\n" + DEFAULT_COLOR)
             template_remove_folder(FOLDER_FOR_ENCRYPTION_FILES)
@@ -249,20 +256,31 @@ class WorkWithUserFiles:
 
         if self.type_work == 'dec':
             if os.path.exists(FOLDER_WITH_DEC_FILES) is False:
-                safe_os('mkdir ' + FOLDER_WITH_DEC_FILES)
+                system_action('mkdir ' + FOLDER_WITH_DEC_FILES)
 
             print("Beginning Decryption...\n")
-            for file in os.listdir(FOLDER_WITH_ENC_FILES):
-                print("Decrypting", file)
+            cnt = 0
+            for folder in os.listdir(FOLDER_WITH_ENC_DATA):
+                if folder == 'DECRYPTED':
+                    pass
+                else:
+                    cnt += 1
+                    print(str(cnt) + '.', folder)
+            change_folder = int(input(YELLOW + '\n - Select folder by number: ' + DEFAULT_COLOR))
+            n_cnt = 0
+            for need_folder in os.listdir(FOLDER_WITH_ENC_DATA):
+                n_cnt += 1
+                if n_cnt == change_folder:
+                    for file in os.listdir(FOLDER_WITH_ENC_DATA + need_folder):
+                        print("Decrypting", file)
 
-                key = open(KEY_FILE, 'rb').read()
-                iv = open(IV_FILE, 'rb').read()
+                        key = open(FOLDER_WITH_ENC_DATA + need_folder + '/' + need_folder + KEY_FILE, 'rb').read()
+                        iv = open(FOLDER_WITH_ENC_DATA + need_folder + '/' + need_folder + IV_FILE, 'rb').read()
 
-                file_data = read_bin_file(FOLDER_WITH_ENC_FILES + '/' + file)
-                write_bin_file(FOLDER_WITH_DEC_FILES + '/' + file[:-4], decrypt_it(file_data, key, iv))
+                        if file.endswith('.elba'):
+                            file_data = read_bin_file(FOLDER_WITH_ENC_DATA + need_folder + '/' + file)
+                            write_bin_file(FOLDER_WITH_DEC_FILES + '/' + file[:-5], decrypt_it(file_data, key, iv))
 
-                print("Completed decrypting", file, "\n")
-
-            print(GREEN + "Decryption successful\n")
-            sleep(3)
-            template_remove_folder(FOLDER_WITH_ENC_FILES)
+                            print(YELLOW, "Completed decrypting", DEFAULT_COLOR, file, "\n")
+                    print(GREEN + "Decryption successful\n", DEFAULT_COLOR)
+                    sleep(3)

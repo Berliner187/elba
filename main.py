@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.3.2.3'
+__version__ = 'v0.4.0.0'
 
 
 def show_name_program():
@@ -31,7 +31,7 @@ def show_name_program():
           __version__)
     if CHECK_FOLDER_FOR_RESOURCE is False:
         first_start_message()
-    elba()  # Вывод логотипа
+    elba()
 
 
 def system_action(action):
@@ -40,6 +40,8 @@ def system_action(action):
         os.execv(sys.executable, [sys.executable] + sys.argv)
     if action == 'clear':
         os.system('cls' if os.name == 'nt' else 'clear')
+    else:
+        os.system(action)
 
 
 def template_remove_folder(some_folder):
@@ -59,12 +61,13 @@ DARK_BLUE = BLUE + "\033[6m"
 # Константы
 FOLDER_ELBA = 'elba/'
 FOLDER_WITH_DATA = 'volare/'     # Mi fa volare
+FOLDER_WITH_PROGRAM_DATA = FOLDER_WITH_DATA + 'program_files/'
 FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + "resources/"
 FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'   # Файл с заметками
 OLD_ELBA = 'old_elba/'  # Старые версии программы
 
-FILE_WITH_HASH_GENERIC_KEY = FOLDER_WITH_DATA + '.hash-generic-key.dat'
-FILE_WITH_GENERIC_KEY = FOLDER_WITH_DATA + '.generic-key.dat'
+FILE_WITH_HASH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.hash-generic-key.dat'
+FILE_WITH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.generic-key.dat'
 
 FILE_RESOURCE = 'resource.dat'
 FILE_LOGIN = 'login.dat'
@@ -73,9 +76,9 @@ FILE_PASSWORD = 'password.dat'
 FILE_NOTE_NAME = 'name_note.dat'
 FILE_NOTE_ITSELF = 'note_itself.dat'
 
-FILE_USER_NAME = FOLDER_WITH_DATA + ".self_name.dat"  # Файл с никнеймом
-FILE_WITH_HASH = FOLDER_WITH_DATA + '.hash_password.dat'  # Файл с хэшем пароля
-FILE_LOG = FOLDER_WITH_DATA + '.file.log'  # Файл с версией программы
+FILE_USER_NAME = FOLDER_WITH_PROGRAM_DATA + ".self_name.dat"  # Файл с никнеймом
+FILE_WITH_HASH = FOLDER_WITH_PROGRAM_DATA + '.hash_password.dat'  # Файл с хэшем пароля
+FILE_LOG = FOLDER_WITH_PROGRAM_DATA + '.file.log'  # Файл с версией программы
 
 USER_DATA_IN_FILES = [FILE_WITH_GENERIC_KEY, FILE_USER_NAME, FILE_WITH_HASH, FILE_LOG]
 
@@ -95,7 +98,7 @@ CHECK_FOLDER_FOR_RESOURCE = os.path.exists(FOLDER_WITH_RESOURCES)
 REPOSITORY = 'git clone https://github.com/Berliner187/elba -b delta'
 
 
-FOLDERS = [FOLDER_WITH_DATA, FOLDER_WITH_NOTES]
+FOLDERS = [FOLDER_WITH_DATA, FOLDER_WITH_NOTES, FOLDER_WITH_PROGRAM_DATA]
 for folder in FOLDERS:
     if os.path.exists(folder) is False:
         os.mkdir(folder)
