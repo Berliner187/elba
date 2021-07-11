@@ -26,7 +26,7 @@ except ModuleNotFoundError as error_module:
 from main import *
 
 
-__version__ = '3.0.0'
+__version__ = '3.0.1'
 
 
 class AESCipher(object):
@@ -181,7 +181,7 @@ class WorkWithUserFiles:
         FOLDER_WITH_ENC_DATA = FOLDER_WITH_DATA + 'ENCRYPTION_DATA/'
         FOLDER_FOR_ENCRYPTION_FILES = FOLDER_WITH_ENC_DATA + 'FOR_ENCRYPTION'
         # FOLDER_WITH_ENC_FILES = FOLDER_WITH_ENC_DATA + 'ENCRYPTED'
-        FOLDER_WITH_DEC_FILES = FOLDER_WITH_ENC_DATA + 'DECRYPTED'
+        PREFIX_FOR_DEC_FILE = '_DEC'
 
         hms = datetime.datetime.today()
         NAME_ENC_FOLDER = str(hms.hour * 3600 + hms.minute * 60 + hms.second + hms.day)
@@ -255,17 +255,10 @@ class WorkWithUserFiles:
             sleep(3)
 
         if self.type_work == 'dec':
-            if os.path.exists(FOLDER_WITH_DEC_FILES) is False:
-                system_action('mkdir ' + FOLDER_WITH_DEC_FILES)
-
-            print("Beginning Decryption...\n")
             cnt = 0
             for folder in os.listdir(FOLDER_WITH_ENC_DATA):
-                if folder == 'DECRYPTED':
-                    pass
-                else:
-                    cnt += 1
-                    print(str(cnt) + '.', folder)
+                cnt += 1
+                print(str(cnt) + '.', folder)
             change_folder = int(input(YELLOW + '\n - Select folder by number: ' + DEFAULT_COLOR))
             n_cnt = 0
             for need_folder in os.listdir(FOLDER_WITH_ENC_DATA):
@@ -274,13 +267,24 @@ class WorkWithUserFiles:
                     for file in os.listdir(FOLDER_WITH_ENC_DATA + need_folder):
                         print("Decrypting", file)
 
+                        new_folder = FOLDER_WITH_ENC_DATA + need_folder + PREFIX_FOR_DEC_FILE
+
+                        if os.path.exists(new_folder) is False:
+                            os.mkdir(new_folder)
+
                         key = open(FOLDER_WITH_ENC_DATA + need_folder + '/' + need_folder + KEY_FILE, 'rb').read()
                         iv = open(FOLDER_WITH_ENC_DATA + need_folder + '/' + need_folder + IV_FILE, 'rb').read()
 
                         if file.endswith('.elba'):
-                            file_data = read_bin_file(FOLDER_WITH_ENC_DATA + need_folder + '/' + file)
-                            write_bin_file(FOLDER_WITH_DEC_FILES + '/' + file[:-5], decrypt_it(file_data, key, iv))
+                            file_data = read_bin_file(
+                                FOLDER_WITH_ENC_DATA + need_folder + '/' + file
+                            )
+                            write_bin_file(
+                                new_folder + '/' + file[:-5],
+                                decrypt_it(file_data, key, iv)
+                            )
 
                             print(YELLOW, "Completed decrypting", DEFAULT_COLOR, file, "\n")
                     print(GREEN + "Decryption successful\n", DEFAULT_COLOR)
+                    template_remove_folder(FOLDER_WITH_ENC_DATA + need_folder)
                     sleep(3)

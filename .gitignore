@@ -1,8 +1,6 @@
-
 *.csv
 *.log
 *.dat
-younit_tester.py
-get_size_all.py
 old_elba/*
 tester.py
+volare/*

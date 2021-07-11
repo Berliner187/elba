@@ -1,7 +1,7 @@
 from enc_obs import *
 
 
-__version__ = '1.1.1'
+__version__ = '1.2.0'
 
 
 def show_decryption_data(generic_key, category):
@@ -30,28 +30,24 @@ def show_decryption_data(generic_key, category):
     if category == 'resource':
         backup_message = ''
         if os.path.exists(OLD_ELBA):
-            backup_message = BLUE + '\n  - Enter \'-o\' to rollback               ' + YELLOW + ' |'
+            backup_message = BLUE + '\n  - Enter \'-o\' to rollback'
         print(
-            YELLOW, '\n__________________________________________',
-            BLUE, '\n  - Enter \'-r\' to restart, "-x" to exit ', YELLOW, '|',
-            BLUE, '\n  - Enter \'-a\' to add new resource      ', YELLOW, '|',
-            BLUE, '\n  - Enter \'-c\' to change master-password', YELLOW, '|',
-            BLUE, '\n  - Enter \'-d\' to remove resource       ', YELLOW, '|',
-            BLUE, '\n  - Enter \'-n\' to go to notes           ', YELLOW, '|',
-            BLUE, '\n  - Enter \'-f\' to encrypt your files', RED, 'ALPHA  |',
-            BLUE, '\n  - Enter \'-u\' to update program        ', YELLOW, '|',
-            BLUE, '\n  - Enter \'-z\' to remove ALL data       ', YELLOW, '|',
+            BLUE, '\n  - Enter \'-r\' to restart, \'-x\' to exit',
+            BLUE, '\n  - Enter \'-a\' to add new resource       ',
+            BLUE, '\n  - Enter \'-c\' to change master-password ',
+            BLUE, '\n  - Enter \'-d\' to remove resource        ',
+            BLUE, '\n  - Enter \'-n\' to go to notes            ',
+            BLUE, '\n  - Enter \'-f\' to encrypt your files     ',
+            BLUE, '\n  - Enter \'-u\' to update program         ',
+            BLUE, '\n  - Enter \'-z\' to remove ALL data        ',
             backup_message, YELLOW,
-            '\n__________________________________________|\n'
-            '\n Select resource by number \n', DEFAULT_COLOR)
+            '\n\n Select resource by number \n', DEFAULT_COLOR)
     if category == 'note':
         print(
-            YELLOW, '\n__________________________________',
             BLUE, '\n  - Press "Enter" to go back    ', YELLOW, '|',
             BLUE, '\n  - Enter "-a" to add new note  ', YELLOW, '|',
             BLUE, '\n  - Enter "-x" to exit          ', YELLOW, '|',
             BLUE, '\n  - Enter "-d" to remove note   ', YELLOW, '|',
-            '\n__________________________________|\n',
             YELLOW, '\n Select note by number \n', DEFAULT_COLOR)
     if s == 0:
         print(YELLOW + '\n    No' + ' saved ' + category + 's \n')
