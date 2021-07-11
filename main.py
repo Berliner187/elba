@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.5.0.4'
+__version__ = 'v0.5.0.5'
 
 
 def show_name_program():
@@ -39,6 +39,8 @@ def system_action(action):
         os.execv(sys.executable, [sys.executable] + sys.argv)
     if action == 'clear':
         os.system('cls' if os.name == 'nt' else 'clear')
+    if action == 'file_manager':
+        os.system('explorer.exe .' if os.name == 'nt' else 'nautilus')
     else:
         os.system(action)
 
@@ -59,7 +61,7 @@ DARK_BLUE = BLUE + "\033[6m"
 
 # Константы
 FOLDER_ELBA = 'elba/'
-FOLDER_WITH_DATA = 'volare/'     # Mi fa volare
+FOLDER_WITH_DATA = 'volare/'  # Mi fa volare
 FOLDER_WITH_PROGRAM_DATA = FOLDER_WITH_DATA + 'program_files/'
 FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + "resources/"
 FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'   # Файл с заметками
@@ -77,15 +79,15 @@ FILE_NOTE_ITSELF = 'note_itself.dat'
 
 FILE_USER_NAME = FOLDER_WITH_PROGRAM_DATA + ".self_name.dat"  # Файл с никнеймом
 FILE_WITH_HASH = FOLDER_WITH_PROGRAM_DATA + '.hash_password.dat'  # Файл с хэшем пароля
-FILE_LOG = FOLDER_WITH_PROGRAM_DATA + '.file.log'  # Файл с версией программы
+FILE_LOG = FOLDER_WITH_PROGRAM_DATA + '.file.log'  # Файл с логами
 
 USER_DATA_IN_FILES = [FILE_WITH_GENERIC_KEY, FILE_USER_NAME, FILE_WITH_HASH, FILE_LOG]
 
 # Модули для работы программы
-stock_modules = ['datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
-                 'del_resource_obs.py', 'notes_obs.py', 'get_size_obs.py',
-                 'change_password_obs.py', 'actions_with_password_obs.py',
-                 'show_dec_data_obs.py']
+stock_modules = [
+    'datetime_obs.py', 'enc_obs.py', 'logo_obs.py', 'del_resource_obs.py',
+    'notes_obs.py', 'get_size_obs.py', 'change_password_obs.py',
+    'actions_with_password_obs.py', 'show_dec_data_obs.py']
 
 # Столбцы файла с логами
 fields_for_log = ['version', 'date', 'cause', 'status']
@@ -95,7 +97,6 @@ CHECK_FILE_WITH_HASH = os.path.exists(FILE_WITH_HASH)
 CHECK_FOLDER_FOR_RESOURCE = os.path.exists(FOLDER_WITH_RESOURCES)
 
 REPOSITORY = 'git clone https://github.com/Berliner187/elba -b delta'
-
 
 FOLDERS = [FOLDER_WITH_DATA, FOLDER_WITH_NOTES, FOLDER_WITH_PROGRAM_DATA]
 for folder in FOLDERS:
@@ -126,11 +127,13 @@ def decryption_block(generic_key):
         try:
             if change_resource_or_actions == '-a':  # Добавление нового ресурса
                 add_resource_data()
+                write_log("Add resource", "OK")
 
             elif change_resource_or_actions == '-u':    # Обновление программы
                 system_action('clear')
                 update()
                 show_decryption_data(generic_key, 'resource')
+                write_log("Update", "OK")
 
             elif change_resource_or_actions == '-x':  # Выход
                 system_action('clear')
@@ -141,7 +144,7 @@ def decryption_block(generic_key):
             elif change_resource_or_actions == '-r':  # Перезапуск
                 system_action('clear')
                 template_some_message(GREEN, ' --- Restart --- \n')
-                sleep(.3)
+                sleep(.2)
                 write_log("Restart", "OK")
                 system_action('restart')
 
@@ -291,7 +294,6 @@ def launcher():
         elba()
         master_password = ActionsWithPassword('master').get_password()  # Создание мастер-пароля
         genetic_key = ActionsWithPassword('generic').get_password()  # Генерирование generic-key
-
         greeting(genetic_key)
         os.mkdir(FOLDER_WITH_RESOURCES)
         decryption_block(genetic_key)
@@ -332,7 +334,7 @@ if __name__ == '__main__':
 
     try:
         # Локальные модули
-        from logo_obs import elba, animation, author, first_start_message
+        from logo_obs import elba, first_start_message
         from datetime_obs import greeting
         from del_resource_obs import delete_resource
         from notes_obs import notes
@@ -352,7 +354,6 @@ if __name__ == '__main__':
     except ImportError:
         template_some_message(RED, " - Error in local import -")
         update()
-
     except ValueError as error:
         print(error)
         write_log(error, 'CRITICAL CRASH')

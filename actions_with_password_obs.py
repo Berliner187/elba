@@ -1,7 +1,7 @@
 from main import *
 
 from enc_obs import save_data_to_file
-from logo_obs import elba
+from logo_obs import *
 
 import random
 from time import sleep
@@ -26,7 +26,8 @@ def create_and_confirm_user_password():
     while True:
         password = getpass(YELLOW + " Password: " + DEFAULT_COLOR)
         confirm_password = getpass(YELLOW + " Confirm:  " + DEFAULT_COLOR)
-        if confirm_password == 'x':  quit()
+        if confirm_password == 'x':
+            quit()
         if len(password) < 8:
             template_red_messages("Make sure your password is at lest 8 letters")
         elif password != confirm_password:

@@ -5,10 +5,11 @@ import sys
 from memory_profiler import memory_usage
 
 
-__version__ = '1.3.4'
+__version__ = '1.3.5'
 
 
 def get_versions():
+    from main import __version__ as elba_v
     from change_password_obs import __version__ as change_password_ver
     from actions_with_password_obs import __version__ as actions_with_password_ver
     from datetime_obs import __version__ as datetime_ver
@@ -26,7 +27,7 @@ def get_versions():
     def template_version_module(module, version):
         print(version, '  ---  ', module)
 
-    template_version_module('program', __version__)
+    template_version_module('get_size_obs', __version__)
     template_version_module('change_password_obs', change_password_ver)
     template_version_module('confirm_password_obs', actions_with_password_ver)
     template_version_module('datetime_obs', datetime_ver)
@@ -37,6 +38,7 @@ def get_versions():
     template_version_module('notes_obs', notes_ver)
     template_version_module('update_obs', update_ver)
     template_version_module('show_dec_data_obs', show_dec_ver)
+    template_version_module('main', elba_v)
 
 
 def size_all():

@@ -15,14 +15,13 @@ def show_decryption_data(generic_key, category):
     print(YELLOW + "           \/                   \/ \n")
     print('\n')
 
-    s = 0
-
     type_folder = ''
     if category == 'resource':
         type_folder = FOLDER_WITH_RESOURCES
     elif category == 'note':
         type_folder = FOLDER_WITH_NOTES
 
+    s = 0
     for category_item in os.listdir(type_folder):
         decryption_data = dec_only_base64(category_item, generic_key)
         s += 1
@@ -50,4 +49,4 @@ def show_decryption_data(generic_key, category):
             BLUE, '\n  - Enter "-d" to remove note   ',
             YELLOW, '\n Select note by number \n', DEFAULT_COLOR)
     if s == 0:
-        print(YELLOW + '\n    No' + ' saved ' + category + 's \n')
+        print(YELLOW + '\n    No saved ' + category + 's \n')

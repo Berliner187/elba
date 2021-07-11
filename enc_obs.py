@@ -266,34 +266,38 @@ class WorkWithUserFiles:
         if self.type_work == 'dec':
             cnt = 0
             for folder in os.listdir(FOLDER_WITH_ENC_DATA):
-                cnt += 1
-                print(str(cnt) + '.', folder)
+                if folder[-4:] != '_DEC':
+                    cnt += 1
+                    print(str(cnt) + '.', folder)
+            if cnt == 0:
+                print(YELLOW, " - No data encryption - ")
             change_folder = int(input(YELLOW + '\n - Select folder by number: ' + DEFAULT_COLOR))
             n_cnt = 0
             for need_folder in os.listdir(FOLDER_WITH_ENC_DATA):
-                n_cnt += 1
-                if n_cnt == change_folder:
-                    for file in os.listdir(FOLDER_WITH_ENC_DATA + need_folder):
-                        print("Decrypting", file)
+                if need_folder[-4:] != '_DEC':
+                    n_cnt += 1
+                    if n_cnt == change_folder:
+                        for file in os.listdir(FOLDER_WITH_ENC_DATA + need_folder):
+                            print("Decrypting", file)
 
-                        new_folder = FOLDER_WITH_ENC_DATA + need_folder + PREFIX_FOR_DEC_FILE
+                            new_folder = FOLDER_WITH_ENC_DATA + need_folder + PREFIX_FOR_DEC_FILE
 
-                        if os.path.exists(new_folder) is False:
-                            os.mkdir(new_folder)
+                            if os.path.exists(new_folder) is False:
+                                os.mkdir(new_folder)
 
-                        key = open(FOLDER_WITH_ENC_DATA + need_folder + '/' + need_folder + KEY_FILE, 'rb').read()
-                        iv = open(FOLDER_WITH_ENC_DATA + need_folder + '/' + need_folder + IV_FILE, 'rb').read()
+                            key = open(FOLDER_WITH_ENC_DATA + need_folder + '/' + need_folder + KEY_FILE, 'rb').read()
+                            iv = open(FOLDER_WITH_ENC_DATA + need_folder + '/' + need_folder + IV_FILE, 'rb').read()
 
-                        if file.endswith('.elba'):
-                            file_data = read_bin_file(
-                                FOLDER_WITH_ENC_DATA + need_folder + '/' + file
-                            )
-                            write_bin_file(
-                                new_folder + '/' + file[:-5],
-                                decrypt_it(file_data, key, iv)
-                            )
+                            if file.endswith('.elba'):
+                                file_data = read_bin_file(
+                                    FOLDER_WITH_ENC_DATA + need_folder + '/' + file
+                                )
+                                write_bin_file(
+                                    new_folder + '/' + file[:-5],
+                                    decrypt_it(file_data, key, iv)
+                                )
 
-                            print(YELLOW, "Completed decrypting", DEFAULT_COLOR, file, "\n")
-                    print(GREEN + "Decryption successful\n", DEFAULT_COLOR)
-                    template_remove_folder(FOLDER_WITH_ENC_DATA + need_folder)
-                    sleep(3)
+                                print(YELLOW, "Completed decrypting", DEFAULT_COLOR, file, "\n")
+                        print(GREEN + "Decryption successful\n", DEFAULT_COLOR)
+                        template_remove_folder(FOLDER_WITH_ENC_DATA + need_folder)
+                        sleep(3)
