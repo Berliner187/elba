@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.5.0.2'
+__version__ = 'v0.5.0.3'
 
 
 def show_name_program():
@@ -142,27 +142,25 @@ def decryption_block(generic_key):
                 system_action('clear')
                 template_some_message(GREEN, ' --- Restart --- \n')
                 sleep(.3)
+                write_log("Restart", "OK")
                 system_action('restart')
 
             elif change_resource_or_actions == '-c':    # Смена мастер-пароля
                 change_master_password()
+                write_log("Change password", "OK")
 
             elif change_resource_or_actions == '-d':    # Удаление ресурса
                 delete_resource('resource')
                 show_decryption_data(generic_key, 'resource')
+                write_log("Delete resource", "OK")
 
             elif change_resource_or_actions == '-n':    # Добавление заметок
                 show_decryption_data(generic_key, 'note')
                 notes(generic_key)
+                write_log("Go to notes", "OK")
 
             elif change_resource_or_actions == '-f':
                 # Переписать под show_dec_data_obs
-                try:
-                    from enc_obs import WorkWithUserFiles
-                except ModuleNotFoundError:
-                    template_some_message(RED, ' --- Restart --- \n')
-                    update()
-
                 system_action('clear')
                 template_some_message(BLUE, "-- Go to the VOLARE data folder and follow the instructions --\n")
                 print(BLUE, "1.", YELLOW, " - Encryption files", DEFAULT_COLOR)
@@ -205,7 +203,7 @@ def decryption_block(generic_key):
                         line[fields_for_log[2]],
                         line[fields_for_log[3]]
                     )
-                    template_some_message(YELLOW, " - Press Enter to exit - ")
+                template_some_message(YELLOW, " - Press Enter to exit - ")
 
             elif change_resource_or_actions == '-dm':  # Удаление кэша
                 template_remove_folder('rm -r __pycache__/')
@@ -288,22 +286,18 @@ def launcher():
             logs_writer = DictWriter(data, fieldnames=fields_for_log, delimiter=';')
             logs_writer.writeheader()
 
-    if CHECK_FOLDER_FOR_RESOURCE is False:
-        # Если нет ресурсов
+    if CHECK_FOLDER_FOR_RESOURCE is False:  # Если нет ресурсов
         show_name_program()
         elba()
         master_password = ActionsWithPassword('master').get_password()  # Создание мастер-пароля
-        # Генерирование generic-key
-        genetic_key = ActionsWithPassword('generic').get_password()
-
+        genetic_key = ActionsWithPassword('generic').get_password()  # Генерирование generic-key
         greeting(genetic_key)
         os.mkdir(FOLDER_WITH_RESOURCES)
         decryption_block(genetic_key)
         enc_aes(FILE_WITH_GENERIC_KEY, genetic_key, master_password)
         write_log('First launch', 'OK')
         system_action('restart')
-    else:
-        # Если есть ресурсы
+    else:  # Если есть ресурсы
         master_password = point_of_entry()
         genetic_key_from_file = dec_aes(FILE_WITH_GENERIC_KEY, master_password)
         system_action('clear')
@@ -344,7 +338,7 @@ if __name__ == '__main__':
         from change_password_obs import change_master_password
         from actions_with_password_obs import ActionsWithPassword, choice_generation_or_save_self_password
         from actions_with_password_obs import point_of_entry
-        from enc_obs import enc_aes, dec_aes
+        from enc_obs import enc_aes, dec_aes, WorkWithUserFiles
         from show_dec_data_obs import show_decryption_data
 
         launcher()  # Запуск лончера
