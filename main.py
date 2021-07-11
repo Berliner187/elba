@@ -27,7 +27,7 @@ def show_name_program():
           "\n || Password Manager and Keeper of Notes ||",
           "\n || Delta For Linux || "
           "\n || by Berliner187  || ", YELLOW,
-          "\n\n ||   Valtso Array  || ", BLUE,
+          "\n\n || Megalodon Rickyan || ", BLUE,
           __version__)
     if CHECK_FOLDER_FOR_RESOURCE is False:
         first_start_message()
