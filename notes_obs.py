@@ -10,11 +10,10 @@ from shutil import copyfile
 import os
 
 
-__version__ = '2.0.2'
+__version__ = '2.0.3'
 
 
 def notes(generic_key):
-
     def add_new():  # Добавление новой заметки
         system_action('clear')
         print(BLUE + '    ---  Add new note  --- \n\n')
