@@ -1,7 +1,7 @@
 from enc_obs import *
 
 
-__version__ = '1.2.0'
+__version__ = '1.2.1'
 
 
 def show_decryption_data(generic_key, category):
@@ -44,10 +44,10 @@ def show_decryption_data(generic_key, category):
             '\n\n Select resource by number \n', DEFAULT_COLOR)
     elif category == 'note':
         print(
-            BLUE, '\n  - Press "Enter" to go back    ', YELLOW, '|',
-            BLUE, '\n  - Enter "-a" to add new note  ', YELLOW, '|',
-            BLUE, '\n  - Enter "-x" to exit          ', YELLOW, '|',
-            BLUE, '\n  - Enter "-d" to remove note   ', YELLOW, '|',
+            BLUE, '\n  - Press "Enter" to go back    ',
+            BLUE, '\n  - Enter "-a" to add new note  ',
+            BLUE, '\n  - Enter "-x" to exit          ',
+            BLUE, '\n  - Enter "-d" to remove note   ',
             YELLOW, '\n Select note by number \n', DEFAULT_COLOR)
     if s == 0:
         print(YELLOW + '\n    No' + ' saved ' + category + 's \n')
