@@ -1,17 +1,18 @@
 from main import *
 
 from enc_obs import save_data_to_file
+from logo_obs import elba
 
 import random
 from time import sleep
 import os
 import re
 
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
 
 
-__version__ = '1.2.0'
+__version__ = '2.0.0'
 
 
 def create_and_confirm_user_password():
@@ -121,3 +122,65 @@ def choice_generation_or_save_self_password(resource, login, master_password):
         print(RED + '  -- Error of change. Please, change again --  ' + DEFAULT_COLOR)
         choice_generation_or_save_self_password(resource, login, master_password)
     system_action('clear')
+
+
+def point_of_entry():   # Точка входа в систему
+    """ Получение мастер-пароля """
+    def template_wrong_message(value_left):
+        print(RED, '\n  ---  Wrong password --- ',
+              BLUE, "\n\n Attempts left:",
+              RED, value_left, DEFAULT_COLOR)
+        sleep(1)
+
+    def get_master_password():
+        show_name_program()
+        elba()
+        user_master_password = getpass(
+            YELLOW + '\n -- Your master-password: ' + DEFAULT_COLOR
+        )
+        if user_master_password == 'x':  # Досрочный выход из программы
+            quit()
+        elif user_master_password == 'r':
+            system_action('restart')
+        elif user_master_password == 'a':    # Показ анимации
+            animation()
+        elif user_master_password == 'n':
+            author()
+        elif user_master_password == 'u':
+            from logo_obs import Ukraine
+            Ukraine()
+        return user_master_password
+
+    master_password = get_master_password()
+
+    # Удаление данных, если файл с хэшем не существует, но при этом есть сохраненные
+    if os.path.exists(FILE_WITH_HASH) is False:
+        if CHECK_FOLDER_FOR_RESOURCE is True:
+            template_remove_folder(FOLDER_WITH_DATA)
+            quit()
+
+    # Проверка хэша пароля
+    hash_pas_from_file = open(FILE_WITH_HASH, 'r')
+    hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
+    cnt_left = 3    # Счет оставшихся попыток
+
+    if (hash_password and CHECK_FOLDER_FOR_RESOURCE) is False:    # Если хеши не совпадают
+        template_wrong_message(cnt_left)
+        while hash_password is False:
+            cnt_left -= 1
+            system_action('clear')
+            master_password = get_master_password()
+            file_hash = open(FILE_WITH_HASH)
+            hash_password = check_password_hash(file_hash.readline(), master_password)
+            if cnt_left == 0:
+                system_action('clear')
+                print(RED + " -- Limit is exceeded -- " + DEFAULT_COLOR)
+                write_log('Someone tried to enter', 'WARNING')
+                sleep(2**10)
+                quit()
+            if hash_password:
+                return master_password
+            else:
+                template_wrong_message(cnt_left)
+    elif (hash_password and CHECK_FOLDER_FOR_RESOURCE) is True:
+        return master_password

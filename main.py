@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.4.0.0'
+__version__ = 'v0.5.0.0'
 
 
 def show_name_program():
@@ -27,11 +27,10 @@ def show_name_program():
           "\n || Password Manager and Keeper of Notes ||",
           "\n || Delta For Linux || "
           "\n || by Berliner187  || ", YELLOW,
-          "\n\n || Huppo Walloren  || ", BLUE,
+          "\n\n ||   Valtso Array  || ", BLUE,
           __version__)
     if CHECK_FOLDER_FOR_RESOURCE is False:
         first_start_message()
-    elba()
 
 
 def system_action(action):
@@ -66,8 +65,8 @@ FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + "resources/"
 FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'   # Файл с заметками
 OLD_ELBA = 'old_elba/'  # Старые версии программы
 
-FILE_WITH_HASH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.hash-generic-key.dat'
-FILE_WITH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.generic-key.dat'
+FILE_WITH_HASH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.hash_generic_key.dat'
+FILE_WITH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.generic_key.dat'
 
 FILE_RESOURCE = 'resource.dat'
 FILE_LOGIN = 'login.dat'
@@ -104,71 +103,8 @@ for folder in FOLDERS:
         os.mkdir(folder)
 
 
-def point_of_entry():   # Точка входа в систему
-    """ Получение мастер-пароля """
-
-    def template_wrong_message(value_left):
-        print(RED, '\n  ---  Wrong password --- ',
-              BLUE, "\n\n Attempts left:",
-              RED, value_left, DEFAULT_COLOR)
-        sleep(1)
-
-    def get_master_password():
-        show_name_program()     # Выводит название и логотип
-        user_master_password = getpass(
-            YELLOW + '\n -- Your master-password: ' + DEFAULT_COLOR
-        )
-        if user_master_password == 'x':  # Досрочный выход из программы
-            quit()
-        elif user_master_password == 'r':
-            system_action('restart')
-        elif user_master_password == 'a':    # Показ анимации
-            animation()
-        elif user_master_password == 'n':
-            author()
-        elif user_master_password == 'u':
-            from logo_obs import Ukraine
-            Ukraine()
-        return user_master_password
-
-    master_password = get_master_password()
-
-    # Удаление данных, если файл с хэшем не существует, но при этом есть сохраненные
-    if os.path.exists(FILE_WITH_HASH) is False:
-        if CHECK_FOLDER_FOR_RESOURCE is True:
-            template_remove_folder(FOLDER_WITH_DATA)
-            quit()
-
-    # Проверка хэша пароля
-    hash_pas_from_file = open(FILE_WITH_HASH, 'r')
-    hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
-    cnt_left = 3    # Счет оставшихся попыток
-
-    if (hash_password and CHECK_FOLDER_FOR_RESOURCE) is False:    # Если хеши не совпадают
-        template_wrong_message(cnt_left)
-        while hash_password is False:
-            cnt_left -= 1
-            system_action('clear')
-            master_password = get_master_password()
-            file_hash = open(FILE_WITH_HASH)
-            hash_password = check_password_hash(file_hash.readline(), master_password)
-            if cnt_left == 0:
-                system_action('clear')
-                print(RED + " -- Limit is exceeded -- " + DEFAULT_COLOR)
-                write_log('Someone tried to enter', 'WARNING')
-                sleep(2**10)
-                quit()
-            if hash_password:
-                return master_password
-            else:
-                template_wrong_message(cnt_left)
-    elif (hash_password and CHECK_FOLDER_FOR_RESOURCE) is True:
-        return master_password
-
-
 def decryption_block(generic_key):
     """ Цикл с выводом сохраненных ресурсов """
-
     def add_resource_data():
         """ Данные для сохранения (ресурс, логин) """
         system_action('clear')
@@ -356,7 +292,7 @@ def launcher():
     if CHECK_FOLDER_FOR_RESOURCE is False:
         # Если нет ресурсов
         show_name_program()
-
+        elba()
         master_password = ActionsWithPassword('master').get_password()  # Создание мастер-пароля
         # Генерирование generic-key
         genetic_key = ActionsWithPassword('generic').get_password()
@@ -410,6 +346,7 @@ if __name__ == '__main__':
         from notes_obs import notes
         from change_password_obs import change_master_password
         from actions_with_password_obs import ActionsWithPassword, choice_generation_or_save_self_password
+        from actions_with_password_obs import point_of_entry
         from enc_obs import enc_aes, dec_aes
         from show_dec_data_obs import show_decryption_data
 
