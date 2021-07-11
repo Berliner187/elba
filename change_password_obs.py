@@ -10,44 +10,40 @@ from time import sleep
 import os
 
 
-__version__ = '3.0.2'
+__version__ = '4.0.0'
 
 
 def change_master_password():
     system_action('clear')
 
-    # Сверяются хеши паролей
-    confirm_master_password = getpass(YELLOW + ' -- Enter your master-password: ' + DEFAULT_COLOR)
-    open_file_with_hash = open(FILE_WITH_HASH).readline()
-    check_master_password = check_password_hash(open_file_with_hash, confirm_master_password)
+    def get_confirm_master_password():
+        while True:
+            _confirm_master_password = getpass(YELLOW + ' -- Enter your master-password: ' + DEFAULT_COLOR)
+            open_file_with_hash = open(FILE_WITH_HASH).readline()
+            check_master_password = check_password_hash(open_file_with_hash, _confirm_master_password)
+            if check_master_password is False:
+                print(RED + '\n --- Wrong master-password --- ' + DEFAULT_COLOR)
+                sleep(1)
+            else:
+                return _confirm_master_password
 
-    if check_master_password is False:
-        print(RED + '\n --- Wrong master-password --- ' + DEFAULT_COLOR)
-        sleep(1)
-        # Костыль
-        quit()
-    else:
-        system_action('clear')
-        print(GREEN + '\n\n  --  Success confirm  -- ' + DEFAULT_COLOR)
-        sleep(.6)
-        system_action('clear')
-        print(BLUE + '\n   Pick a new master-password \n' + DEFAULT_COLOR)
-        new_master_password = create_and_confirm_user_password()
-        if new_master_password == confirm_master_password:
-            print(RED + " -- This password has already been used --" + DEFAULT_COLOR)
-            while new_master_password == confirm_master_password:
-                new_master_password = create_and_confirm_user_password()
-                if new_master_password != confirm_master_password:
-                    # Generic-key шифруется новым мастер-паролем
-                    generic_key_from_file = dec_aes(FILE_WITH_GENERIC_KEY, confirm_master_password)
-                    enc_aes(FILE_WITH_GENERIC_KEY, generic_key_from_file, new_master_password)
+    confirm_master_password = get_confirm_master_password()
+    system_action('clear')
+    print(GREEN + '\n\n  --  Success confirm  -- ' + DEFAULT_COLOR)
+    sleep(.6)
+    system_action('clear')
+    print(BLUE + '\n   Pick a new master-password \n' + DEFAULT_COLOR)
+    new_master_password = create_and_confirm_user_password()
+    # Generic-key шифруется новым мастер-паролем
+    generic_key_from_file = dec_aes(FILE_WITH_GENERIC_KEY, confirm_master_password)
+    enc_aes(FILE_WITH_GENERIC_KEY, generic_key_from_file, new_master_password)
 
-                    new_hash = generate_password_hash(new_master_password)
-                    with open(FILE_WITH_HASH, 'w') as hash_pas:
-                        hash_pas.write(new_hash)
-                        hash_pas.close()
+    new_hash = generate_password_hash(new_master_password)
+    with open(FILE_WITH_HASH, 'w') as hash_pas:
+        hash_pas.write(new_hash)
+        hash_pas.close()
 
-                    system_action('clear')
-                    print(GREEN + '\n\n    -  Password changed successfully!  - ' + DEFAULT_COLOR)
-                    sleep(1)
-                    system_action('restart')
+    system_action('clear')
+    print(GREEN + '\n\n    -  Password changed successfully!  - ' + DEFAULT_COLOR)
+    sleep(1)
+    system_action('restart')

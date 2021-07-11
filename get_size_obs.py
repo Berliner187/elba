@@ -5,7 +5,7 @@ import sys
 from memory_profiler import memory_usage
 
 
-__version__ = '1.3.5'
+__version__ = '1.3.6'
 
 
 def get_versions():
@@ -20,6 +20,7 @@ def get_versions():
     from notes_obs import __version__ as notes_ver
     from update_obs import __version__ as update_ver
     from show_dec_data_obs import __version__ as show_dec_ver
+    from decryption_block_obs import __version__ as dec_block_ver
 
     system_action("clear")
     print(GREEN, '\n  - Versions installed modules - \n', DEFAULT_COLOR)
@@ -38,6 +39,7 @@ def get_versions():
     template_version_module('notes_obs', notes_ver)
     template_version_module('update_obs', update_ver)
     template_version_module('show_dec_data_obs', show_dec_ver)
+    template_version_module('decryption_block_obs', dec_block_ver)
     template_version_module('main', elba_v)
 
 
@@ -114,7 +116,7 @@ def size_all():
     total_size = size_program + size_mod_cache + size_user_data + size_logs
     data_to_print = {
         'The program occupies RAM ': to_another_unit_of_measurement(program_in_ram),
-        'The log files too        ': to_another_unit_of_measurement(size_logs),
+        'The log files took       ': to_another_unit_of_measurement(size_logs),
         'User files took          ': to_another_unit_of_measurement(size_user_data),
         'The notes took           ': to_another_unit_of_measurement(size_notes),
         'The resources took       ': to_another_unit_of_measurement(size_resources),
