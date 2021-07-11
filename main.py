@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.5.0.1'
+__version__ = 'v0.5.0.2'
 
 
 def show_name_program():
@@ -108,7 +108,7 @@ def decryption_block(generic_key):
     def add_resource_data():
         """ Данные для сохранения (ресурс, логин) """
         system_action('clear')
-        print(GREEN, '\n   --- Add new resource ---   ', '\n' * 3, DEFAULT_COLOR)
+        template_some_message(GREEN, '\n   --- Add new resource ---   \n\n\n')
         resource = input(YELLOW + ' Resource: ' + DEFAULT_COLOR)
         login = input(YELLOW + ' Login: ' + DEFAULT_COLOR)
         choice_generation_or_save_self_password(resource, login, generic_key)
@@ -134,13 +134,13 @@ def decryption_block(generic_key):
 
             elif change_resource_or_actions == '-x':  # Выход
                 system_action('clear')
-                print(BLUE, ' --- Program is closet --- \n', DEFAULT_COLOR)
+                template_some_message(BLUE, ' --- Program is closet --- \n')
                 write_log("Exit", "OK")
                 quit()
 
             elif change_resource_or_actions == '-r':  # Перезапуск
                 system_action('clear')
-                print(GREEN, '\n -- Restart -- ', DEFAULT_COLOR)
+                template_some_message(GREEN, ' --- Restart --- \n')
                 sleep(.3)
                 system_action('restart')
 
@@ -156,16 +156,15 @@ def decryption_block(generic_key):
                 notes(generic_key)
 
             elif change_resource_or_actions == '-f':
+                # Переписать под show_dec_data_obs
                 try:
                     from enc_obs import WorkWithUserFiles
                 except ModuleNotFoundError:
-                    print(RED, " - Download new version.. -", DEFAULT_COLOR)
+                    template_some_message(RED, ' --- Restart --- \n')
                     update()
 
                 system_action('clear')
-                print(
-                    BLUE, "-- Go to the VOLARE data folder and follow the instructions --\n", DEFAULT_COLOR
-                )
+                template_some_message(BLUE, "-- Go to the VOLARE data folder and follow the instructions --\n")
                 print(BLUE, "1.", YELLOW, " - Encryption files", DEFAULT_COLOR)
                 print(BLUE, "2.", YELLOW, " - Decryption files", DEFAULT_COLOR)
 
@@ -196,7 +195,7 @@ def decryption_block(generic_key):
 
             elif change_resource_or_actions == '-l':
                 system_action("clear")
-                print(GREEN + "\n Log program from file \n" + DEFAULT_COLOR)
+                template_some_message(GREEN, "\n Log program from file \n")
                 log_data = open(FILE_LOG, 'r')
                 reader_log = DictReader(log_data, delimiter=';')
                 for line in reader_log:
@@ -206,18 +205,18 @@ def decryption_block(generic_key):
                         line[fields_for_log[2]],
                         line[fields_for_log[3]]
                     )
-                print(YELLOW + " - Press Enter to exit - " + DEFAULT_COLOR)
+                    template_some_message(YELLOW, " - Press Enter to exit - ")
 
             elif change_resource_or_actions == '-dm':  # Удаление кэша
                 template_remove_folder('rm -r __pycache__/')
                 system_action('clear')
-                print(GREEN + "\n" * 3, "    Success delete cache" + DEFAULT_COLOR)
+                template_some_message(GREEN, "\n\n  Success delete cache")
                 sleep(1)
                 system_action('restart')
 
             elif change_resource_or_actions == '-o':    # Откат к старой сохраненной версии
                 if os.path.exists(OLD_ELBA) is False:
-                    print(YELLOW + ' - No versions saved - ' + DEFAULT_COLOR)
+                    template_some_message(YELLOW, ' - No versions saved - ')
                 else:
                     install_old_saved_version()
                     system_action('restart')
@@ -326,13 +325,13 @@ if __name__ == '__main__':
             print(RED, 'Error: \n' + str(error_module), DEFAULT_COLOR)
             print('\n')
             template_some_message(
-                YELLOW, "Please, install module/modules with PIP and restart the program"
+                YELLOW, "Please, install module/modules with requirements"
             )
             quit()
         from update_obs import update, install_old_saved_version
     except ModuleNotFoundError as update_obs_error:
         write_log(update_obs_error, 'FAILED')
-        print(RED, ' - Module "update" does not exist - ', DEFAULT_COLOR)
+        template_some_message(RED, ' - Module "update" does not exist - ')
         sleep(1)
         download_from_repository()
 
@@ -362,12 +361,12 @@ if __name__ == '__main__':
     except ValueError as error:
         print(error)
         write_log(error, 'CRITICAL CRASH')
-        print(RED, '\n --- Critical error, program is restarted --- ', DEFAULT_COLOR)
+        template_some_message(RED, ' --- Critical error, program is restarted --- ')
         sleep(1)
         system_action('clear')
         # Попытка обновиться, если возникает ошибка
         if os.path.exists(OLD_ELBA):
-            print(RED + ' -- You can try roll back -- \n' + DEFAULT_COLOR)
+            template_some_message(RED, ' -- You can try roll back -- \n')
             change = input(YELLOW + ' - Roll back? (y/n): ' + DEFAULT_COLOR)
             if change == 'y':
                 install_old_saved_version()
