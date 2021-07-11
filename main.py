@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.6.0.0'
+__version__ = 'v0.6.0.1'
 
 
 def show_name_program():
@@ -88,7 +88,7 @@ stock_modules = [
     'datetime_obs.py', 'enc_obs.py', 'logo_obs.py', 'del_resource_obs.py',
     'notes_obs.py', 'get_size_obs.py', 'change_password_obs.py',
     'actions_with_password_obs.py', 'show_dec_data_obs.py',
-    'decryption_block_obs'
+    'decryption_block_obs.py'
 ]
 
 # Столбцы файла с логами
