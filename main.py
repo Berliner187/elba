@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.6.0.1'
+__version__ = 'v0.6.0.2'
 
 
 def show_name_program():
@@ -195,6 +195,7 @@ if __name__ == '__main__':
         from datetime_obs import greeting
         from show_dec_data_obs import show_decryption_data
         from actions_with_password_obs import ActionsWithPassword
+        from logo_obs import first_start_message, elba
 
         launcher()  # Запуск лончера
     except ModuleNotFoundError as error:
