@@ -26,7 +26,7 @@ except ModuleNotFoundError as error_module:
 from main import *
 
 
-__version__ = '3.0.1'
+__version__ = '3.1.0'
 
 
 class AESCipher(object):
@@ -210,6 +210,15 @@ class WorkWithUserFiles:
 
         if os.path.exists(FOLDER_WITH_ENC_DATA) is False:
             os.system('mkdir ' + FOLDER_WITH_ENC_DATA)
+
+        generic_key = self.generic_key
+        generic_hash_from_file = open(FILE_WITH_HASH_GENERIC_KEY).readline()
+        check_generic_hash = check_password_hash(generic_hash_from_file, generic_key)
+        if check_generic_hash is False:
+            system_action('clear')
+            template_some_message(RED, " - Not confirmed - ")
+            sleep(1)
+            quit()
 
         if self.type_work == 'enc':
             def save_keyiv(key, file):

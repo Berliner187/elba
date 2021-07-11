@@ -102,6 +102,10 @@ class ActionsWithPassword:
         # Получение общего ключа
         elif self.type_pas == 'generic':
             generic = generation_new_password(32, False)
+            hash_to_file = generate_password_hash(generic)
+            hash_gen = open(FILE_WITH_HASH_GENERIC_KEY, 'w')
+            hash_gen.write(hash_to_file)
+            hash_gen.close()
             return generic
 
 

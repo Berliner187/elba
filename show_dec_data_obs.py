@@ -42,7 +42,7 @@ def show_decryption_data(generic_key, category):
             BLUE, '\n  - Enter \'-z\' to remove ALL data        ',
             backup_message, YELLOW,
             '\n\n Select resource by number \n', DEFAULT_COLOR)
-    if category == 'note':
+    elif category == 'note':
         print(
             BLUE, '\n  - Press "Enter" to go back    ', YELLOW, '|',
             BLUE, '\n  - Enter "-a" to add new note  ', YELLOW, '|',

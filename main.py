@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.5.0.3'
+__version__ = 'v0.5.0.4'
 
 
 def show_name_program():
@@ -291,6 +291,7 @@ def launcher():
         elba()
         master_password = ActionsWithPassword('master').get_password()  # Создание мастер-пароля
         genetic_key = ActionsWithPassword('generic').get_password()  # Генерирование generic-key
+
         greeting(genetic_key)
         os.mkdir(FOLDER_WITH_RESOURCES)
         decryption_block(genetic_key)
@@ -344,12 +345,12 @@ if __name__ == '__main__':
         launcher()  # Запуск лончера
     except ModuleNotFoundError as error:
         print(error)
-        print(RED + ' - Error in import modules -' + DEFAULT_COLOR)
+        template_some_message(RED, ' - Error in import modules -')
         write_log(error, 'CRASH MODULES')
         sleep(.5)
         update()
     except ImportError:
-        print(RED + " - Error in local import -")
+        template_some_message(RED, " - Error in local import -")
         update()
 
     except ValueError as error:
