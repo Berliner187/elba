@@ -4,7 +4,7 @@ from main import __version__ as elba_version
 import os
 from time import sleep
 
-__version__ = '1.5.0'  # Версия модуля
+__version__ = '1.5.1'  # Версия модуля
 
 
 main_file = 'main.py'
@@ -23,10 +23,8 @@ def update():  # Обновление программы
         question = input(YELLOW + ' - ' + text + ' (y/n): ' + DEFAULT_COLOR)
         return question
 
-    def template_red_text(text):
-        print(RED, text, ' \n', DEFAULT_COLOR)
-
     def message_about_status_modules():
+        template_some_message(YELLOW, " - Check Modules - ")
         system_action('clear')
         installed_modules = []
         for file in os.listdir('.'):
