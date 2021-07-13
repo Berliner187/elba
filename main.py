@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.6.0.2'
+__version__ = 'v0.6.0.3'
 
 
 def show_name_program():
@@ -167,6 +167,22 @@ def launcher():
         decryption_block(genetic_key_from_file)
 
 
+def check_modules():
+    cnt_modules = 0
+    file_type = 'obs.py'
+    any_file = os.listdir('.')
+    installed_modules = []
+    for file in any_file:
+        if file.endswith(file_type):
+            installed_modules.append(file)
+    for i in range(len(stock_modules)):  # Счет отсутствующих модулей
+        if stock_modules[i] not in installed_modules:
+            cnt_modules += 1
+    if cnt_modules > 0:
+        template_some_message(RED, " - Missing module/modules -")
+        update()
+
+
 if __name__ == '__main__':
     system_action('clear')
     try:
@@ -181,32 +197,25 @@ if __name__ == '__main__':
                 YELLOW, "Please, install module/modules with requirements"
             )
             quit()
-        from update_obs import update, install_old_saved_version
+        from update_obs.CheckUpdates import update, install_old_saved_version
     except ModuleNotFoundError as update_obs_error:
         write_log(update_obs_error, 'FAILED')
         template_some_message(RED, ' - Module "update" does not exist - ')
         sleep(1)
         download_from_repository()
 
-    try:
-        from decryption_block_obs import decryption_block
-        from actions_with_password_obs import point_of_entry
-        from enc_obs import enc_aes, dec_aes
-        from datetime_obs import greeting
-        from show_dec_data_obs import show_decryption_data
-        from actions_with_password_obs import ActionsWithPassword
-        from logo_obs import first_start_message, elba
+    check_modules()
 
+    from decryption_block_obs import decryption_block
+    from actions_with_password_obs import point_of_entry
+    from enc_obs import enc_aes, dec_aes
+    from datetime_obs import greeting
+    from show_dec_data_obs import show_decryption_data
+    from actions_with_password_obs import ActionsWithPassword
+    from logo_obs import first_start_message, elba
+
+    try:
         launcher()  # Запуск лончера
-    except ModuleNotFoundError as error:
-        print(error)
-        template_some_message(RED, ' - Error in import modules -')
-        write_log(error, 'CRASH MODULES')
-        sleep(.5)
-        update()
-    except ImportError:
-        template_some_message(RED, " - Error in local import -")
-        update()
     except ValueError as error:
         print(error)
         write_log(error, 'CRITICAL CRASH')
