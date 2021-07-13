@@ -206,30 +206,32 @@ if __name__ == '__main__':
 
     from update_obs import update, install_old_saved_version
 
-    check_modules()
+    status = check_modules()
+    if status == 0:
+        from decryption_block_obs import decryption_block
+        from actions_with_password_obs import point_of_entry
+        from enc_obs import enc_aes, dec_aes
+        from datetime_obs import greeting
+        from show_dec_data_obs import show_decryption_data
+        from actions_with_password_obs import ActionsWithPassword
+        from logo_obs import first_start_message, elba
 
-    from decryption_block_obs import decryption_block
-    from actions_with_password_obs import point_of_entry
-    from enc_obs import enc_aes, dec_aes
-    from datetime_obs import greeting
-    from show_dec_data_obs import show_decryption_data
-    from actions_with_password_obs import ActionsWithPassword
-    from logo_obs import first_start_message, elba
-
-    try:
-        launcher()  # Запуск лончера
-    except ValueError as error:
-        print(error)
-        write_log(error, 'CRITICAL CRASH')
-        template_some_message(RED, ' --- Critical error, program is restarted --- ')
-        sleep(1)
-        system_action('clear')
-        # Попытка обновиться, если возникает ошибка
-        if os.path.exists(OLD_ELBA):
-            template_some_message(RED, ' -- You can try roll back -- \n')
-            change = input(YELLOW + ' - Roll back? (y/n): ' + DEFAULT_COLOR)
-            if change == 'y':
-                install_old_saved_version()
-        else:
-            update()
-        system_action('restart')
+        try:
+            launcher()  # Запуск лончера
+        except ValueError as error:
+            print(error)
+            write_log(error, 'CRITICAL CRASH')
+            template_some_message(RED, ' --- Critical error, program is restarted --- ')
+            sleep(1)
+            system_action('clear')
+            # Попытка обновиться, если возникает ошибка
+            if os.path.exists(OLD_ELBA):
+                template_some_message(RED, ' -- You can try roll back -- \n')
+                change = input(YELLOW + ' - Roll back? (y/n): ' + DEFAULT_COLOR)
+                if change == 'y':
+                    install_old_saved_version()
+            else:
+                update()
+            system_action('restart')
+    else:
+        update()
