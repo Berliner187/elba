@@ -14,7 +14,7 @@ new_folder_el = 'elba/'
 def update():  # Обновление программы
     download_from_repository()  # Загрузка проекта из репозитория
 
-    cnt_modules = check_modules()
+    status_modules = check_modules()
 
     def template_for_install(program_file):  # Действия для установки
         os.system('mv ' + new_folder_el + program_file + ' . ')
@@ -26,35 +26,29 @@ def update():  # Обновление программы
     def template_red_text(text):
         print(RED, text, ' \n', DEFAULT_COLOR)
 
-    def message_about_status_modules(cnt):
+    def message_about_status_modules(status):
         system_action('clear')
-        if cnt == 1:
-            template_red_text('Missing module')
-            write_log('MissingModule', 'ERROR')
-        elif cnt > 1:
-            template_red_text('Missing modules')
-            write_log('MissingModules', 'ERROR')
-        for item in range(len(stock_modules)):
+        for item_mod in range(len(stock_modules)):
             def template_text_modules(color, message):
-                print('[', color, message, DEFAULT_COLOR, ']', stock_modules[item])
-            if stock_modules[item] not in installed_modules:
+                print('[', color, message, DEFAULT_COLOR, ']', stock_modules[item_mod])
+            if stock_modules[item_mod] not in installed_modules:
                 template_text_modules(RED, 'FAILED')
-                write_log(stock_modules[item], 'FAILED')
+                write_log(stock_modules[item_mod], 'FAILED')
                 sleep(.5)
             else:
                 template_text_modules(GREEN, 'OK')
                 sleep(.5)
 
-    if cnt_modules != 0:
+    if status_modules != 0:
         system_action('clear')
-        message_about_status_modules(cnt_modules)
+        message_about_status_modules(status_modules)
 
         for i in range(len(stock_modules)):
             template_for_install(stock_modules[i])
 
         system_action('clear')
         template_remove_folder(new_folder_el)
-        message_about_status_modules(cnt_modules)
+        message_about_status_modules(status_modules)
         print(GREEN + '\n The missing module has been installed! \n\n' + DEFAULT_COLOR)
         sleep(1)
         system_action('restart')
