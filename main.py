@@ -226,13 +226,14 @@ if __name__ == '__main__':
             template_some_message(RED, ' --- Critical error, program is restarted --- ')
             sleep(1)
             system_action('clear')
-            # Попытка обновиться, если возникает ошибка
+            # Попытка откатиться, если возникает ошибка
             if os.path.exists(OLD_ELBA):
                 template_some_message(RED, ' -- You can try roll back -- \n')
                 change = input(YELLOW + ' - Roll back? (y/n): ' + DEFAULT_COLOR)
                 if change == 'y':
                     install_old_saved_version()
             else:
+                # Попытка обновиться, если возникает ошибка
                 update()
             system_action('restart')
     else:
