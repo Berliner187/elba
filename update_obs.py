@@ -14,18 +14,7 @@ new_folder_el = 'elba/'
 def update():  # Обновление программы
     download_from_repository()  # Загрузка проекта из репозитория
 
-    # Проверка отсутствующих модулей
-    cnt_modules = 0
-    file_type = 'obs.py'
-    any_file = os.listdir('.')
-    installed_modules = []
-    for file in any_file:
-        if file.endswith(file_type):
-            installed_modules.append(file)
-
-    for j in range(len(stock_modules)):  # Счет отсутствующих модулей
-        if stock_modules[j] not in installed_modules:
-            cnt_modules += 1
+    cnt_modules = check_modules()
 
     def template_for_install(program_file):  # Действия для установки
         os.system('mv ' + new_folder_el + program_file + ' . ')
@@ -38,6 +27,7 @@ def update():  # Обновление программы
         print(RED, text, ' \n', DEFAULT_COLOR)
 
     def message_about_status_modules(cnt):
+        system_action('clear')
         if cnt == 1:
             template_red_text('Missing module')
             write_log('MissingModule', 'ERROR')
@@ -57,12 +47,12 @@ def update():  # Обновление программы
 
     if cnt_modules != 0:
         system_action('clear')
-
         message_about_status_modules(cnt_modules)
 
         for i in range(len(stock_modules)):
             template_for_install(stock_modules[i])
 
+        system_action('clear')
         template_remove_folder(new_folder_el)
         message_about_status_modules(cnt_modules)
         print(GREEN + '\n The missing module has been installed! \n\n' + DEFAULT_COLOR)

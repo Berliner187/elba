@@ -180,7 +180,7 @@ def check_modules():
             cnt_modules += 1
     if cnt_modules > 0:
         template_some_message(RED, " - Missing module/modules -")
-        update()
+        return 1
 
 
 if __name__ == '__main__':
