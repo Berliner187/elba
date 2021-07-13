@@ -69,6 +69,8 @@ def update():  # Обновление программы
                 for item in os.listdir('.'):
                     if item.endswith('.py'):
                         template_for_copy(item)
+                # Копирование данных юзера
+                os.system("cp -r " + FOLDER_WITH_DATA + ' ' + OLD_ELBA + elba_version)
 
             if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):
                 print(GREEN + '\n   A new version of the program is available ' + DEFAULT_COLOR)
@@ -125,6 +127,7 @@ def install_old_saved_version():
         cnt += 1
         if cnt == change:
             template_install_old(need_version_folder)
+    os.system("cp -r " + OLD_ELBA + elba_version + ' ' + FOLDER_WITH_DATA)
 
     print(GREEN + ' - Success roll back! - ' + DEFAULT_COLOR)
     sleep(1)
