@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.6.0.4'
+__version__ = 'v0.6.0.5'
 
 
 def show_name_program():
@@ -181,6 +181,8 @@ def check_modules():
     if cnt_modules > 0:
         template_some_message(RED, " - Missing module/modules -")
         return 1
+    else:
+        return 0
 
 
 if __name__ == '__main__':
