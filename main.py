@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.6.0.5'
+__version__ = 'v0.6.0.6'
 
 
 def show_name_program():
@@ -67,9 +67,6 @@ FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + "resources/"
 FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'   # Файл с заметками
 OLD_ELBA = 'old_elba/'  # Старые версии программы
 
-FILE_WITH_HASH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.hash_generic_key.dat'
-FILE_WITH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.generic_key.dat'
-
 FILE_RESOURCE = 'resource.dat'
 FILE_LOGIN = 'login.dat'
 FILE_PASSWORD = 'password.dat'
@@ -77,6 +74,8 @@ FILE_PASSWORD = 'password.dat'
 FILE_NOTE_NAME = 'name_note.dat'
 FILE_NOTE_ITSELF = 'note_itself.dat'
 
+FILE_WITH_HASH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.hash_generic_key.dat'
+FILE_WITH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.generic_key.dat'
 FILE_USER_NAME = FOLDER_WITH_PROGRAM_DATA + ".self_name.dat"  # Файл с никнеймом
 FILE_WITH_HASH = FOLDER_WITH_PROGRAM_DATA + '.hash_password.dat'  # Файл с хэшем пароля
 FILE_LOG = FOLDER_WITH_PROGRAM_DATA + '.file.log'  # Файл с логами
@@ -115,7 +114,7 @@ def download_from_repository():
         system_action('restart')
 
 
-def write_log(cause, status):
+def write_log(cause, status_itself):
     """ Логирование """
     def get_date():      # Получение и форматирование текущего времени
         hms = datetime.datetime.today()  # Дата и время
@@ -134,7 +133,7 @@ def write_log(cause, status):
             fields_for_log[0]: __version__,     # Запись версии
             fields_for_log[1]: get_date(),      # Запись даты и времени
             fields_for_log[2]: cause,           # Запись причины
-            fields_for_log[3]: status           # Запись статуса
+            fields_for_log[3]: status_itself    # Запись статуса
         })
 
 
