@@ -26,7 +26,7 @@ except ModuleNotFoundError as error_module:
 from main import *
 
 
-__version__ = '3.1.0'
+__version__ = '3.1.1'
 
 
 class AESCipher(object):
@@ -184,7 +184,8 @@ class WorkWithUserFiles:
         PREFIX_FOR_DEC_FILE = '_DEC'
 
         hms = datetime.datetime.today()
-        NAME_ENC_FOLDER = str(hms.hour * 3600 + hms.minute * 60 + hms.second + hms.day)
+        NAME_ENC_FOLDER = str(hms.day) + str(hms.month) + str(hms.year) + '_' + \
+                          str(hms.hour * 3600 + hms.minute * 60 + hms.second)
         FOLDER_WITH_ENC_FILES = FOLDER_WITH_ENC_DATA + NAME_ENC_FOLDER
         KEY_FILE = 'ONE.key'
         IV_FILE = 'TWO.key'
