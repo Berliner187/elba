@@ -40,7 +40,7 @@ def system_action(action):
     if action == 'clear':
         os.system('cls' if os.name == 'nt' else 'clear')
     if action == 'file_manager':
-        os.system('explorer.exe .' if os.name == 'nt' else 'nautilus')
+        os.system('explorer.exe .' if os.name == 'nt' else 'nautilus .')
     else:
         os.system(action)
 
