@@ -218,7 +218,7 @@ if __name__ == '__main__':
 
         try:
             launcher()  # Запуск лончера
-        except ValueError as error:
+        except ValueError or TypeError as error:
             print(error)
             write_log(error, 'CRITICAL CRASH')
             template_some_message(RED, ' --- Critical error, program is restarted --- ')
