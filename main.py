@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.6.0.3'
+__version__ = 'v0.6.0.3 NOT STABLE'
 
 
 def show_name_program():
@@ -197,12 +197,14 @@ if __name__ == '__main__':
                 YELLOW, "Please, install module/modules with requirements"
             )
             quit()
-        from update_obs.CheckUpdates import update, install_old_saved_version
+        from update_obs import update, install_old_saved_version
     except ModuleNotFoundError as update_obs_error:
         write_log(update_obs_error, 'FAILED')
         template_some_message(RED, ' - Module "update" does not exist - ')
         sleep(1)
         download_from_repository()
+
+    from update_obs import update, install_old_saved_version
 
     check_modules()
 
