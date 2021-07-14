@@ -2,7 +2,7 @@
 # Локальные модули
 from logo_obs import elba, first_start_message
 from datetime_obs import greeting
-from del_resource_obs import delete_resource
+from del_object_obs import delete_resource
 from notes_obs import notes
 from change_password_obs import change_master_password
 from actions_with_password_obs import choice_generation_or_save_self_password
@@ -12,7 +12,7 @@ from update_obs import update, install_old_saved_version
 from main import *
 
 
-__version__ = '1.0.3'
+__version__ = '2.0.0'
 
 
 def decryption_block(generic_key):

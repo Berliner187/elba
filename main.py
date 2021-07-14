@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.6.0.7'
+__version__ = 'v0.7.0.0'
 
 
 def show_name_program():
@@ -89,7 +89,7 @@ REPOSITORY = 'git clone https://github.com/Berliner187/elba -b delta'
 
 # <<<--------------  Модули для работы программы  -------------->>>
 stock_modules = [
-    'datetime_obs.py', 'enc_obs.py', 'logo_obs.py', 'del_resource_obs.py',
+    'datetime_obs.py', 'enc_obs.py', 'logo_obs.py', 'del_object_obs.py',
     'notes_obs.py', 'get_size_obs.py', 'change_password_obs.py',
     'actions_with_password_obs.py', 'show_dec_data_obs.py',
     'decryption_block_obs.py'

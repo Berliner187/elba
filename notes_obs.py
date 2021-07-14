@@ -2,7 +2,7 @@ from main import *
 
 from enc_obs import *
 from show_dec_data_obs import *
-from del_resource_obs import delete_resource
+from del_object_obs import delete_resource
 
 from csv import DictReader, DictWriter
 from time import sleep
@@ -10,7 +10,7 @@ from shutil import copyfile
 import os
 
 
-__version__ = '2.0.3'
+__version__ = '3.0.0'
 
 
 def notes(generic_key):

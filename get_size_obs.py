@@ -5,7 +5,7 @@ import sys
 from memory_profiler import memory_usage
 
 
-__version__ = '1.3.6'
+__version__ = '2.0.0'
 
 
 def get_versions():
@@ -13,7 +13,7 @@ def get_versions():
     from change_password_obs import __version__ as change_password_ver
     from actions_with_password_obs import __version__ as actions_with_password_ver
     from datetime_obs import __version__ as datetime_ver
-    from del_resource_obs import __version__ as del_resource_ver
+    from del_object_obs import __version__ as del_resource_ver
     from enc_obs import __version__ as enc_ver
     from get_size_obs import __version__ as get_size_ver
     from logo_obs import __version__ as logo_ver
@@ -32,7 +32,7 @@ def get_versions():
     template_version_module('change_password_obs', change_password_ver)
     template_version_module('confirm_password_obs', actions_with_password_ver)
     template_version_module('datetime_obs', datetime_ver)
-    template_version_module('del_resource_obs', del_resource_ver)
+    template_version_module('del_object_obs', del_resource_ver)
     template_version_module('enc_obs', enc_ver)
     template_version_module('get_size_obs', get_size_ver)
     template_version_module('logo_obs', logo_ver)
