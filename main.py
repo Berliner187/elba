@@ -27,7 +27,7 @@ def show_name_program():
           "\n || Password Manager and Keeper of Notes ||",
           "\n || Delta For Linux || "
           "\n || by Berliner187  || ", YELLOW,
-          "\n\n || Megalodon Rickyan || ", BLUE, __version__)
+          "\n\n ||  Henette Zuer   || ", BLUE, __version__)
     if CHECK_FOLDER_FOR_RESOURCE is False:
         first_start_message()
 
@@ -66,7 +66,7 @@ FOLDER_WITH_PROGRAM_DATA = FOLDER_WITH_DATA + 'program_files/'
 FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + "resources/"
 FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'
 OLD_ELBA = 'old_elba/'
-#
+# <<<-------- Имена файлов и папок для шифрования --------->>>
 FOLDER_WITH_ENC_DATA = FOLDER_WITH_DATA + 'ENCRYPTION_DATA/'
 FOLDER_FOR_ENCRYPTION_FILES = FOLDER_WITH_ENC_DATA + 'FOR_ENCRYPTION'
 PREFIX_FOR_DEC_FILE = '_DEC'
@@ -78,22 +78,22 @@ NAME_ENC_FOLDER = get_date + get_time
 FOLDER_WITH_ENC_FILES = FOLDER_WITH_ENC_DATA + NAME_ENC_FOLDER
 KEY_FILE = 'ONE.key'
 IV_FILE = 'TWO.key'
-# Имена файлов ресурсов и заметок
+# <<<--- Имена файлов для ресурсов и заметок --->>>
 FILE_RESOURCE = 'resource.dat'
 FILE_LOGIN = 'login.dat'
 FILE_PASSWORD = 'password.dat'
 FILE_NOTE_NAME = 'name_note.dat'
 FILE_NOTE_ITSELF = 'note_itself.dat'
-# Файлы программы
+# <<<----------------------- Имена файлов программы ------------------------>>>
 FILE_WITH_HASH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.hash_generic_key.dat'
 FILE_WITH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.generic_key.dat'
 FILE_USER_NAME = FOLDER_WITH_PROGRAM_DATA + ".self_name.dat"
 FILE_WITH_HASH = FOLDER_WITH_PROGRAM_DATA + '.hash_password.dat'
 FILE_LOG = FOLDER_WITH_PROGRAM_DATA + '.file.log'
-# Проверка файлов на наличие
+# <<<------------- Проверка файлов на наличие --------------->>>
 CHECK_FILE_WITH_HASH = os.path.exists(FILE_WITH_HASH)
 CHECK_FOLDER_FOR_RESOURCE = os.path.exists(FOLDER_WITH_RESOURCES)
-# Столбцы файла с логами
+# <<<----------- Столбцы файла с логами ------------->>>
 FIELDS_LOG_FILE = ['version', 'date', 'cause', 'status']
 
 # <<<--------------  Репозиторий для обновлений  -------------->>>
