@@ -4,7 +4,7 @@ from main import __version__ as elba_version
 import os
 from time import sleep
 
-__version__ = '1.5.6'  # Версия модуля
+__version__ = '1.5.7'  # Версия модуля
 
 
 main_file = 'main.py'
@@ -123,7 +123,8 @@ def install_old_saved_version():
         cnt += 1
         if cnt == change:
             for item in os.listdir(OLD_ELBA + need_version_folder):
-                os.system('cp ' + OLD_ELBA + need_version_folder + '/' + item + ' .')
+                if item.endswith('.py'):
+                    os.system('cp ' + OLD_ELBA + need_version_folder + '/' + item + ' .')
             template_remove_folder(FOLDER_WITH_DATA)
             os.system("cp -r " + OLD_ELBA + need_version_folder + '/' + FOLDER_WITH_DATA + '/' + ' .')
     system_action('clear')
