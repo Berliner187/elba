@@ -4,7 +4,7 @@ from main import __version__ as elba_version
 import os
 from time import sleep
 
-__version__ = '1.5.5'  # Версия модуля
+__version__ = '1.5.6'  # Версия модуля
 
 
 main_file = 'main.py'
@@ -70,7 +70,7 @@ def update():  # Обновление программы
                     if item.endswith('.py'):
                         template_for_copy(item)
                 # Копирование данных юзера
-                os.system("cp -a " + FOLDER_WITH_DATA + ' ' + OLD_ELBA + elba_version + '/')
+                os.system("cp -r " + FOLDER_WITH_DATA + ' ' + OLD_ELBA + elba_version + '/')
 
             if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):
                 print(GREEN + '\n   A new version of the program is available ' + DEFAULT_COLOR)
@@ -123,9 +123,9 @@ def install_old_saved_version():
         cnt += 1
         if cnt == change:
             for item in os.listdir(OLD_ELBA + need_version_folder):
-                os.system('cp ' + OLD_ELBA + need_version_folder + '/' + item + ' ' + '.')
+                os.system('cp ' + OLD_ELBA + need_version_folder + '/' + item + ' .')
             template_remove_folder(FOLDER_WITH_DATA)
-            os.system("cp -r " + OLD_ELBA + need_version_folder + '/' + FOLDER_WITH_DATA + '/' + ' ' + '.')
+            os.system("cp -r " + OLD_ELBA + need_version_folder + '/' + FOLDER_WITH_DATA + '/' + ' .')
     system_action('clear')
     template_some_message(GREEN, '  --- Success roll back! --- ')
     sleep(1)
