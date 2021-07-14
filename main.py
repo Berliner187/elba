@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.7.0.3'
+__version__ = 'v0.7.0.4'
 
 
 def show_name_program():
@@ -72,12 +72,6 @@ OLD_ELBA = 'old_elba/'
 FOLDER_WITH_ENC_DATA = FOLDER_WITH_DATA + 'ENCRYPTION_DATA/'
 FOLDER_FOR_ENCRYPTION_FILES = FOLDER_WITH_ENC_DATA + 'FOR_ENCRYPTION'
 PREFIX_FOR_DEC_FILE = '_DEC'
-# Получение времени
-hms = datetime.datetime.today()
-get_date = str(hms.day) + str(hms.month) + str(hms.year) + '_'
-get_time = str(hms.hour * 3600 + hms.minute * 60 + hms.second)
-NAME_ENC_FOLDER = get_date + get_time
-FOLDER_WITH_ENC_FILES = FOLDER_WITH_ENC_DATA + NAME_ENC_FOLDER
 KEY_FILE = 'ONE.key'
 IV_FILE = 'TWO.key'
 # <<<--- Имена файлов для ресурсов и заметок --->>>
@@ -127,6 +121,7 @@ def download_from_repository():
 def write_log(cause, status_itself):
     """ Логирование """
     def get_time_now():      # Получение и форматирование текущего времени
+        hms = datetime.datetime.today()
         time_format = str(hms.hour) + ':' + str(hms.minute) + ':' + str(hms.second)
         date_format = str(hms.day) + '.' + str(hms.month) + '.' + str(hms.year)
         total = str(time_format) + '-' + str(date_format)

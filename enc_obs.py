@@ -32,7 +32,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '3.1.4'
+__version__ = '3.1.5'
 
 
 class AESCipher(object):
@@ -187,6 +187,12 @@ class WorkWithUserFiles:
         self.type_work = type_work
 
     def file_encryption_control(self):
+        # Получение времени
+        hms = datetime.datetime.today()
+        get_date = str(hms.day) + str(hms.month) + str(hms.year) + '_'
+        get_time = str(hms.hour * 3600 + hms.minute * 60 + hms.second)
+        NAME_ENC_FOLDER = get_date + get_time
+        FOLDER_WITH_ENC_FILES = FOLDER_WITH_ENC_DATA + NAME_ENC_FOLDER
 
         def encrypt_it(byte_file, key, iv):
             cfb_cipher = AES.new(key, AES.MODE_OFB, iv)
