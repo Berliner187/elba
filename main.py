@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.6.0.6'
+__version__ = 'v0.6.0.7'
 
 
 def show_name_program():
@@ -27,8 +27,7 @@ def show_name_program():
           "\n || Password Manager and Keeper of Notes ||",
           "\n || Delta For Linux || "
           "\n || by Berliner187  || ", YELLOW,
-          "\n\n || Megalodon Rickyan || ", BLUE,
-          __version__)
+          "\n\n || Megalodon Rickyan || ", BLUE, __version__)
     if CHECK_FOLDER_FOR_RESOURCE is False:
         first_start_message()
 
@@ -46,58 +45,55 @@ def system_action(action):
 
 
 def template_remove_folder(some_folder):
+    """ Шаблон удаления папки """
     os.system('rmdir ' + some_folder if os.name == 'nt' else 'rm -r ' + some_folder + ' -f')
 
 
 def template_some_message(color, message):
+    """ Шаблон сообщения в ходе работы программы """
     print(color, '\n\n', message, DEFAULT_COLOR)
 
 
 # Цвета в терминале
 YELLOW, BLUE, PURPLE = "\033[33m", "\033[36m", "\033[35m"
 GREEN, RED, DEFAULT_COLOR = "\033[32m", "\033[31m", "\033[0m"
-DARK_BLUE = BLUE + "\033[6m"
 
-
-# Константы
+# <<<-------------------- Константы ------------------------->>>
+# Папки
 FOLDER_ELBA = 'elba/'
 FOLDER_WITH_DATA = 'volare/'  # Mi fa volare
 FOLDER_WITH_PROGRAM_DATA = FOLDER_WITH_DATA + 'program_files/'
 FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + "resources/"
-FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'   # Файл с заметками
+FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'
 OLD_ELBA = 'old_elba/'  # Старые версии программы
-
+# Имена файлов ресурсов и заметок
 FILE_RESOURCE = 'resource.dat'
 FILE_LOGIN = 'login.dat'
 FILE_PASSWORD = 'password.dat'
-
 FILE_NOTE_NAME = 'name_note.dat'
 FILE_NOTE_ITSELF = 'note_itself.dat'
-
+# Файлы программы
 FILE_WITH_HASH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.hash_generic_key.dat'
 FILE_WITH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.generic_key.dat'
-FILE_USER_NAME = FOLDER_WITH_PROGRAM_DATA + ".self_name.dat"  # Файл с никнеймом
-FILE_WITH_HASH = FOLDER_WITH_PROGRAM_DATA + '.hash_password.dat'  # Файл с хэшем пароля
-FILE_LOG = FOLDER_WITH_PROGRAM_DATA + '.file.log'  # Файл с логами
+FILE_USER_NAME = FOLDER_WITH_PROGRAM_DATA + ".self_name.dat"
+FILE_WITH_HASH = FOLDER_WITH_PROGRAM_DATA + '.hash_password.dat'
+FILE_LOG = FOLDER_WITH_PROGRAM_DATA + '.file.log'
+# Проверка файлов на наличие
+CHECK_FILE_WITH_HASH = os.path.exists(FILE_WITH_HASH)
+CHECK_FOLDER_FOR_RESOURCE = os.path.exists(FOLDER_WITH_RESOURCES)
+# Столбцы файла с логами
+FIELDS_LOG_FILE = ['version', 'date', 'cause', 'status']
 
-USER_DATA_IN_FILES = [FILE_WITH_GENERIC_KEY, FILE_USER_NAME, FILE_WITH_HASH, FILE_LOG]
+# <<<--------------  Репозиторий для обновлений  -------------->>>
+REPOSITORY = 'git clone https://github.com/Berliner187/elba -b delta'
 
-# Модули для работы программы
+# <<<--------------  Модули для работы программы  -------------->>>
 stock_modules = [
     'datetime_obs.py', 'enc_obs.py', 'logo_obs.py', 'del_resource_obs.py',
     'notes_obs.py', 'get_size_obs.py', 'change_password_obs.py',
     'actions_with_password_obs.py', 'show_dec_data_obs.py',
     'decryption_block_obs.py'
 ]
-
-# Столбцы файла с логами
-fields_for_log = ['version', 'date', 'cause', 'status']
-
-# Проверка файлов на наличие
-CHECK_FILE_WITH_HASH = os.path.exists(FILE_WITH_HASH)
-CHECK_FOLDER_FOR_RESOURCE = os.path.exists(FOLDER_WITH_RESOURCES)
-
-REPOSITORY = 'git clone https://github.com/Berliner187/elba -b delta'
 
 FOLDERS = [FOLDER_WITH_DATA, FOLDER_WITH_NOTES, FOLDER_WITH_PROGRAM_DATA]
 for folder in FOLDERS:
@@ -125,15 +121,12 @@ def write_log(cause, status_itself):
         return ''.join(total)
 
     log_data = open(FILE_LOG, mode="a", encoding='utf-8')
-    log_writer = DictWriter(log_data, fieldnames=fields_for_log, delimiter=';')
-    if os.path.exists(FILE_LOG) is False:
-        log_writer.writeheader()
-
+    log_writer = DictWriter(log_data, fieldnames=FIELDS_LOG_FILE, delimiter=';')
     log_writer.writerow({
-        fields_for_log[0]: __version__,     # Запись версии
-        fields_for_log[1]: get_date(),      # Запись даты и времени
-        fields_for_log[2]: cause,           # Запись причины
-        fields_for_log[3]: status_itself    # Запись статуса
+        FIELDS_LOG_FILE[0]: __version__,     # Запись версии
+        FIELDS_LOG_FILE[1]: get_date(),      # Запись даты и времени
+        FIELDS_LOG_FILE[2]: cause,           # Запись причины
+        FIELDS_LOG_FILE[3]: status_itself    # Запись статуса
     })
 
 
@@ -141,10 +134,10 @@ def launcher():
     """ The main function responsible for the operation of the program """
     if os.path.exists(FILE_LOG) is False:
         with open(FILE_LOG, mode="a", encoding='utf-8') as data:
-            logs_writer = DictWriter(data, fieldnames=fields_for_log, delimiter=';')
+            logs_writer = DictWriter(data, fieldnames=FIELDS_LOG_FILE, delimiter=';')
             logs_writer.writeheader()
 
-    if CHECK_FOLDER_FOR_RESOURCE is False:  # Если нет ресурсов
+    if CHECK_FOLDER_FOR_RESOURCE is False:  # При первом запуске
         show_name_program()
         elba()
         master_password = ActionsWithPassword('master').get_password()  # Создание мастер-пароля
@@ -155,7 +148,7 @@ def launcher():
         enc_aes(FILE_WITH_GENERIC_KEY, genetic_key, master_password)
         write_log('First launch', 'OK')
         system_action('restart')
-    else:  # Если есть ресурсы
+    else:  # При последующем
         master_password = point_of_entry()
         genetic_key_from_file = dec_aes(FILE_WITH_GENERIC_KEY, master_password)
         system_action('clear')
@@ -167,17 +160,18 @@ def launcher():
 
 
 def check_modules():
-    cnt_modules = 0
+    """ Проверка модулей программы """
+    cnt_missing_modules = 0
     file_type = 'obs.py'
     any_file = os.listdir('.')
     installed_modules = []
     for file in any_file:
         if file.endswith(file_type):
             installed_modules.append(file)
-    for i in range(len(stock_modules)):  # Счет отсутствующих модулей
+    for i in range(len(stock_modules)):
         if stock_modules[i] not in installed_modules:
-            cnt_modules += 1
-    if cnt_modules > 0:
+            cnt_missing_modules += 1
+    if cnt_missing_modules > 0:
         template_some_message(RED, " - Missing module/modules -")
         return 1
     else:
@@ -187,6 +181,7 @@ def check_modules():
 if __name__ == '__main__':
     system_action('clear')
     try:
+        from update_obs import update, install_old_saved_version
         try:
             from werkzeug.security import generate_password_hash, check_password_hash
             from stdiomask import getpass
@@ -198,14 +193,11 @@ if __name__ == '__main__':
                 YELLOW, "Please, install module/modules with requirements"
             )
             quit()
-        from update_obs import update, install_old_saved_version
     except ModuleNotFoundError as update_obs_error:
         write_log(update_obs_error, 'FAILED')
         template_some_message(RED, ' - Module "update" does not exist - ')
         sleep(1)
         download_from_repository()
-
-    from update_obs import update, install_old_saved_version
 
     status = check_modules()
     if status == 0:

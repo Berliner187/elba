@@ -7,6 +7,8 @@ import os
 from time import sleep
 import datetime
 
+from main import *
+
 
 try:
     from stdiomask import getpass
@@ -23,10 +25,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-from main import *
-
-
-__version__ = '3.1.1'
+__version__ = '3.1.2'
 
 
 class AESCipher(object):
@@ -122,17 +121,17 @@ def dec_aes(__file__, __key__):
             return aes.decrypt(item)
 
 
-def enc_keyiv(keyiv, generic_key):
-    aes = AESCipher(generic_key)
+def enc_keyiv(keyiv, xzibit):
+    aes = AESCipher(xzibit)
     return aes.encrypt(keyiv)
 
 
-def dec_keyiv(enc_keyiv, generic_key):
-    aes = AESCipher(generic_key)
+def dec_keyiv(enc_keyiv, xzibit):
+    aes = AESCipher(xzibit)
     return aes.decrypt(enc_keyiv)
 
 
-def save_data_to_file(data_1, data_2, data_3, generic_key, type_data):
+def save_data_to_file(data_1, data_2, data_3, xzibit, type_data):
 
     def path_to_data_to_save_resource(enc_name_type_folder):
         return FOLDER_WITH_RESOURCES + enc_name_type_folder
@@ -141,7 +140,7 @@ def save_data_to_file(data_1, data_2, data_3, generic_key, type_data):
         return FOLDER_WITH_NOTES + enc_name_type_folder
 
     if type_data == 'resource':
-        enc_name_resource_folder = enc_only_base64(data_1, generic_key) + '/'
+        enc_name_resource_folder = enc_only_base64(data_1, xzibit) + '/'
         if os.path.exists(path_to_data_to_save_resource(enc_name_resource_folder)) is False:
             os.mkdir(path_to_data_to_save_resource(enc_name_resource_folder))
 
@@ -153,12 +152,12 @@ def save_data_to_file(data_1, data_2, data_3, generic_key, type_data):
         login_file = login_folder + FILE_LOGIN
         password_file = password_folder + FILE_PASSWORD
 
-        enc_aes(resource_file, data_1, generic_key)
-        enc_aes(login_file, data_2, generic_key)
-        enc_aes(password_file, data_3, generic_key)
+        enc_aes(resource_file, data_1, xzibit)
+        enc_aes(login_file, data_2, xzibit)
+        enc_aes(password_file, data_3, xzibit)
 
     if type_data == 'note':
-        enc_name_note_folder = enc_only_base64(data_1, generic_key) + '/'
+        enc_name_note_folder = enc_only_base64(data_1, xzibit) + '/'
         if os.path.exists(path_to_data_to_save_note(enc_name_note_folder)) is False:
             os.mkdir(path_to_data_to_save_note(enc_name_note_folder))
 
@@ -168,13 +167,13 @@ def save_data_to_file(data_1, data_2, data_3, generic_key, type_data):
         name_note_file = name_note + FILE_NOTE_NAME
         note_file = self_note + FILE_NOTE_ITSELF
 
-        enc_aes(name_note_file, data_1, generic_key)
-        enc_aes(note_file, data_2, generic_key)
+        enc_aes(name_note_file, data_1, xzibit)
+        enc_aes(note_file, data_2, xzibit)
 
 
 class WorkWithUserFiles:
-    def __init__(self, generic_key, type_work):
-        self.generic_key = generic_key
+    def __init__(self, xzibit, type_work):
+        self.xzibit = xzibit
         self.type_work = type_work
 
     def file_encryption_control(self):
@@ -212,9 +211,9 @@ class WorkWithUserFiles:
         if os.path.exists(FOLDER_WITH_ENC_DATA) is False:
             os.system('mkdir ' + FOLDER_WITH_ENC_DATA)
 
-        generic_key = self.generic_key
+        xzibit = self.xzibit
         generic_hash_from_file = open(FILE_WITH_HASH_GENERIC_KEY).readline()
-        check_generic_hash = check_password_hash(generic_hash_from_file, generic_key)
+        check_generic_hash = check_password_hash(generic_hash_from_file, xzibit)
         if check_generic_hash is False:
             system_action('clear')
             template_some_message(RED, " - Not confirmed - ")

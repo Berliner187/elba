@@ -1,25 +1,18 @@
 # -*- coding: UTF-8 -*-
-try:
-    # Локальные модули
-    from logo_obs import elba, first_start_message
-    from datetime_obs import greeting
-    from del_resource_obs import delete_resource
-    from notes_obs import notes
-    from change_password_obs import change_master_password
-    from actions_with_password_obs import choice_generation_or_save_self_password
-    from enc_obs import enc_aes, dec_aes, WorkWithUserFiles
-    from show_dec_data_obs import show_decryption_data
-    from update_obs import update, install_old_saved_version
-    from main import *
-except ModuleNotFoundError as error:
-    print(error)
-    template_some_message(RED, ' - Error in import modules -')
-    write_log(error, 'CRASH MODULES')
-    sleep(.5)
-    update()
+# Локальные модули
+from logo_obs import elba, first_start_message
+from datetime_obs import greeting
+from del_resource_obs import delete_resource
+from notes_obs import notes
+from change_password_obs import change_master_password
+from actions_with_password_obs import choice_generation_or_save_self_password
+from enc_obs import enc_aes, dec_aes, WorkWithUserFiles
+from show_dec_data_obs import show_decryption_data
+from update_obs import update, install_old_saved_version
+from main import *
 
 
-__version__ = '1.0.2'
+__version__ = '1.0.3'
 
 
 def decryption_block(generic_key):
@@ -80,13 +73,12 @@ def decryption_block(generic_key):
                 notes(generic_key)
                 write_log("Go to notes", "OK")
 
-            elif change_resource_or_actions == '-f':
+            elif change_resource_or_actions == '-f':    # Шифрование файлов
                 # Переписать под show_dec_data_obs
                 system_action('clear')
                 template_some_message(BLUE, "-- Go to the VOLARE data folder and follow the instructions --\n")
                 print(BLUE, "1.", YELLOW, " - Encryption files", DEFAULT_COLOR)
                 print(BLUE, "2.", YELLOW, " - Decryption files", DEFAULT_COLOR)
-
                 change_action = input(YELLOW + "\n - Select by number: " + DEFAULT_COLOR)
                 if change_action == '1':
                     system_action('clear')
@@ -119,10 +111,10 @@ def decryption_block(generic_key):
                 reader_log = DictReader(log_data, delimiter=';')
                 for line in reader_log:
                     print(
-                        line[fields_for_log[0]],
-                        line[fields_for_log[1]],
-                        line[fields_for_log[2]],
-                        line[fields_for_log[3]]
+                        line[FIELDS_LOG_FILE[0]],
+                        line[FIELDS_LOG_FILE[1]],
+                        line[FIELDS_LOG_FILE[2]],
+                        line[FIELDS_LOG_FILE[3]]
                     )
                 template_some_message(YELLOW, " - Press Enter to exit - ")
 
@@ -164,5 +156,5 @@ def decryption_block(generic_key):
                             'Password --->', password_from_file)
 
         except ValueError:
-            show_decryption_data(generic_key, 'resource')   # Показ содежимого
+            show_decryption_data(generic_key, 'resource')   # Показ ресурсов
         decryption_block(generic_key)  # Рекусрия под-главной функции
