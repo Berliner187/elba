@@ -4,7 +4,7 @@ from main import __version__ as elba_version
 import os
 from time import sleep
 
-__version__ = '1.5.4'  # Версия модуля
+__version__ = '1.5.5'  # Версия модуля
 
 
 main_file = 'main.py'
@@ -126,6 +126,6 @@ def install_old_saved_version():
                 os.system('cp ' + OLD_ELBA + need_version_folder + '/' + item + ' ' + '.')
             template_remove_folder(FOLDER_WITH_DATA)
             os.system("cp -r " + OLD_ELBA + need_version_folder + '/' + FOLDER_WITH_DATA + '/' + ' ' + '.')
-
-    print(GREEN + ' - Success roll back! - ' + DEFAULT_COLOR)
+    system_action('clear')
+    template_some_message(GREEN, '  --- Success roll back! --- ')
     sleep(1)
