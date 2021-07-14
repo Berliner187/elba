@@ -19,15 +19,17 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.7.0.2'
+__version__ = 'v0.7.0.3'
 
 
 def show_name_program():
     print(BLUE,
-          "\n || Password Manager and Keeper of Notes ||",
-          "\n || Delta For Linux || "
-          "\n || by Berliner187  || ", YELLOW,
-          "\n\n ||  Henette Zuer   || ", BLUE, __version__)
+          "\n || Password Manager || "
+          "\n || Keeper of Notes  || "
+          "\n || Encryption Files || ", YELLOW,
+          "\n || Delta For Linux  || "
+          "\n || by Berliner187   || ", YELLOW,
+          "\n ||   Henette Zuer   || ", BLUE, __version__)
     if CHECK_FOLDER_FOR_RESOURCE is False:
         first_start_message()
 

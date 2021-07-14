@@ -4,11 +4,10 @@ from main import __version__ as elba_version
 import os
 from time import sleep
 
-__version__ = '1.5.7'  # Версия модуля
+__version__ = '1.5.8'  # Версия модуля
 
 
 main_file = 'main.py'
-new_folder_el = 'elba/'
 
 
 def update():  # Обновление программы
@@ -17,7 +16,7 @@ def update():  # Обновление программы
     status_modules = check_modules()
 
     def template_for_install(program_file):  # Действия для установки
-        os.system('mv ' + new_folder_el + program_file + ' . ')
+        os.system('mv ' + FOLDER_ELBA + program_file + ' . ')
 
     def template_question(text):
         question = input(YELLOW + ' - ' + text + ' (y/n): ' + DEFAULT_COLOR)
@@ -49,13 +48,13 @@ def update():  # Обновление программы
             template_for_install(stock_modules[i])
 
         system_action('clear')
-        template_remove_folder(new_folder_el)
+        template_remove_folder(FOLDER_ELBA)
         message_about_status_modules()
         print(GREEN + '\n The missing module has been installed! \n\n' + DEFAULT_COLOR)
         sleep(1)
         system_action('restart')
     else:
-        if os.path.exists(new_folder_el):
+        if os.path.exists(FOLDER_ELBA):
 
             def template_for_copy(item_program):
                 os.system('cp ' + item_program + ' ' + OLD_ELBA + elba_version)
@@ -72,7 +71,7 @@ def update():  # Обновление программы
                 # Копирование данных юзера
                 os.system("cp -r " + FOLDER_WITH_DATA + ' ' + OLD_ELBA + elba_version + '/')
 
-            if os.path.getsize(main_file) != os.path.getsize(new_folder_el + main_file):
+            if os.path.getsize(main_file) != os.path.getsize(FOLDER_ELBA + main_file):
                 print(GREEN + '\n   A new version of the program is available ' + DEFAULT_COLOR)
                 install_or_no = template_question(' - Install new version program?')
 
@@ -86,7 +85,7 @@ def update():  # Обновление программы
                     sleep(.7)
                     write_log('Upgrade', 'OK')
 
-                template_remove_folder(new_folder_el)
+                template_remove_folder(FOLDER_ELBA)
                 system_action('restart')
             else:
                 system_action('clear')
@@ -94,11 +93,11 @@ def update():  # Обновление программы
 
                 template_for_install('update_obs.py')
                 for module in stock_modules:
-                    if os.path.getsize(new_folder_el + module) != os.path.getsize(module):
+                    if os.path.getsize(FOLDER_ELBA + module) != os.path.getsize(module):
                         template_for_install(module)
                         write_log('Upgrade ' + module, 'OK')
 
-                template_remove_folder(new_folder_el)
+                template_remove_folder(FOLDER_ELBA)
                 sleep(.7)
         else:
             print(YELLOW + ' - New folder not found... ' + DEFAULT_COLOR)

@@ -1,6 +1,6 @@
 from main import *
 
-from enc_obs import save_data_to_file
+from enc_obs import *
 from logo_obs import *
 
 import random
@@ -12,7 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
 
 
-__version__ = '2.0.0'
+__version__ = '2.0.1'
 
 
 def create_and_confirm_user_password():
@@ -139,36 +139,38 @@ def point_of_entry():   # Точка входа в систему
     def get_master_password():
         show_name_program()
         elba()
-        user_master_password = getpass(
+        input_master_password = getpass(
             YELLOW + '\n -- Your master-password: ' + DEFAULT_COLOR
         )
-        if user_master_password == 'x':  # Досрочный выход из программы
+        if input_master_password == 'x':  # Досрочный выход из программы
             quit()
-        elif user_master_password == 'r':
+        elif input_master_password == 'r':
             system_action('restart')
-        elif user_master_password == 'a':    # Показ анимации
+        elif input_master_password == 'a':    # Показ анимации
             animation()
-        elif user_master_password == 'n':
+        elif input_master_password == 'n':   # Показ ника автора
             author()
-        elif user_master_password == 'u':
+        elif input_master_password == 'u':   # Слава Україні
             from logo_obs import Ukraine
             Ukraine()
-        return user_master_password
+        return input_master_password
 
     master_password = get_master_password()
 
-    # Удаление данных, если файл с хэшем не существует, но при этом есть сохраненные
-    if os.path.exists(FILE_WITH_HASH) is False:
+    if (os.path.exists(FILE_WITH_HASH) or os.path.exists(FILE_WITH_HASH_GENERIC_KEY)) is False:
         if CHECK_FOLDER_FOR_RESOURCE is True:
             template_remove_folder(FOLDER_WITH_DATA)
             quit()
 
     # Проверка хэша пароля
-    hash_pas_from_file = open(FILE_WITH_HASH, 'r')
+    hash_pas_from_file = open(FILE_WITH_HASH)
+    xzibit_from_file = open(FILE_WITH_HASH_GENERIC_KEY)
     hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
-    cnt_left = 3    # Счет оставшихся попыток
+    xzibit = dec_aes(FILE_WITH_GENERIC_KEY, master_password)
+    check_with_exibit = check_password_hash(xzibit_from_file.readline(), xzibit)
 
-    if (hash_password and CHECK_FOLDER_FOR_RESOURCE) is False:    # Если хеши не совпадают
+    cnt_left = 3
+    if (hash_password and CHECK_FOLDER_FOR_RESOURCE) is False:
         template_wrong_message(cnt_left)
         while hash_password is False:
             cnt_left -= 1
@@ -186,5 +188,10 @@ def point_of_entry():   # Точка входа в систему
                 return master_password
             else:
                 template_wrong_message(cnt_left)
-    elif (hash_password and CHECK_FOLDER_FOR_RESOURCE) is True:
-        return master_password
+    elif hash_password and CHECK_FOLDER_FOR_RESOURCE:
+        if check_with_exibit is False:
+            template_remove_folder(FOLDER_WITH_DATA)
+        else:
+            return master_password
+    else:
+        quit()

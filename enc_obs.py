@@ -210,87 +210,87 @@ class WorkWithUserFiles:
         if os.path.exists(FOLDER_WITH_ENC_DATA) is False:
             os.system('mkdir ' + FOLDER_WITH_ENC_DATA)
 
-        xzibit = self.xzibit
-        generic_hash_from_file = open(FILE_WITH_HASH_GENERIC_KEY).readline()
-        check_generic_hash = check_password_hash(generic_hash_from_file, xzibit)
+        xzibit_hash_from_file = open(FILE_WITH_HASH_GENERIC_KEY).readline()
+        check_generic_hash = check_password_hash(xzibit_hash_from_file, self.xzibit)
         if check_generic_hash is False:
             template_remove_folder()
             quit()
+        else:
 
-        if self.type_work == 'enc':
-            def save_keyiv(key, file):
-                file_key = open(file, "wb")
-                file_key.write(key)
-                file_key.close()
+            if self.type_work == 'enc':
+                def save_keyiv(key, file):
+                    file_key = open(file, "wb")
+                    file_key.write(key)
+                    file_key.close()
 
-                key_data = read_bin_file(file)
-                write_bin_file(file, key_data)
+                    key_data = read_bin_file(file)
+                    write_bin_file(file, key_data)
 
-            system_action('mkdir ' + FOLDER_FOR_ENCRYPTION_FILES)
+                system_action('mkdir ' + FOLDER_FOR_ENCRYPTION_FILES)
 
-            print(BLUE, "\n The program allows you to encrypt files", DEFAULT_COLOR)
-            print(YELLOW, "\n - Please put the files you want to encrypt in \'FOR_ENCRYPTION\'", DEFAULT_COLOR)
+                print(BLUE, "\n The program allows you to encrypt files", DEFAULT_COLOR)
+                print(YELLOW, "\n - Please put the files you want to encrypt in \'FOR_ENCRYPTION\'", DEFAULT_COLOR)
 
-            temp = input("Press \'Enter\' key to continue...")
+                temp = input("Press \'Enter\' key to continue...")
 
-            if os.path.exists(FOLDER_WITH_ENC_FILES) is False:
-                system_action('mkdir ' + FOLDER_WITH_ENC_FILES)
-            key = Crypto.Random.new().read(AES.block_size)
-            iv = Crypto.Random.new().read(AES.block_size)
-            print("Generating KEY and IV for the recipient")
+                if os.path.exists(FOLDER_WITH_ENC_FILES) is False:
+                    system_action('mkdir ' + FOLDER_WITH_ENC_FILES)
+                key = Crypto.Random.new().read(AES.block_size)
+                iv = Crypto.Random.new().read(AES.block_size)
+                print("Generating KEY and IV for the recipient")
 
-            path_to_key_one = FOLDER_WITH_ENC_FILES + '/' + NAME_ENC_FOLDER + KEY_FILE
-            path_to_key_two = FOLDER_WITH_ENC_FILES + '/' + NAME_ENC_FOLDER + IV_FILE
-            # else:
-            #     key = read_bin_file(KEY_FILE)
-            #     iv = read_bin_file(IV_FILE)
-            #     print(key, iv)
+                path_to_key_one = FOLDER_WITH_ENC_FILES + '/' + NAME_ENC_FOLDER + KEY_FILE
+                path_to_key_two = FOLDER_WITH_ENC_FILES + '/' + NAME_ENC_FOLDER + IV_FILE
+                # else:
+                #     key = read_bin_file(KEY_FILE)
+                #     iv = read_bin_file(IV_FILE)
+                #     print(key, iv)
 
-            template_some_message(YELLOW, "Beginning Encryption...\n")
-            for file in os.listdir(FOLDER_FOR_ENCRYPTION_FILES):
-                file_data = read_bin_file(FOLDER_FOR_ENCRYPTION_FILES + '/' + file)
-                write_bin_file(FOLDER_WITH_ENC_FILES + '/' + file + ".elba", encrypt_it(file_data, key, iv))
-                print(YELLOW, "\n Completed encrypting", DEFAULT_COLOR, file, "\n")
+                template_some_message(YELLOW, "Beginning Encryption...\n")
+                for file in os.listdir(FOLDER_FOR_ENCRYPTION_FILES):
+                    file_data = read_bin_file(FOLDER_FOR_ENCRYPTION_FILES + '/' + file)
+                    write_bin_file(FOLDER_WITH_ENC_FILES + '/' + file + ".elba", encrypt_it(file_data, key, iv))
+                    print(YELLOW, "\n Completed encrypting", DEFAULT_COLOR, file, "\n")
 
-            save_keyiv(key, path_to_key_one)
-            save_keyiv(iv, path_to_key_two)
-            template_some_message(GREEN, "Encryption successful \n")
-            template_remove_folder(FOLDER_FOR_ENCRYPTION_FILES)
-            sleep(2)
+                save_keyiv(key, path_to_key_one)
+                save_keyiv(iv, path_to_key_two)
+                template_some_message(GREEN, "Encryption successful \n")
+                template_remove_folder(FOLDER_FOR_ENCRYPTION_FILES)
+                sleep(2)
 
-        if self.type_work == 'dec':
-            cnt = 0
-            for folder in os.listdir(FOLDER_WITH_ENC_DATA):
-                if folder[-4:] != '_DEC':
-                    cnt += 1
-                    print(str(cnt) + '.', folder)
-            if cnt == 0:
-                print(YELLOW, " - No data encryption - ")
-            change_folder = int(input(YELLOW + '\n - Select folder by number: ' + DEFAULT_COLOR))
-            n_cnt = 0
-            for need_folder in os.listdir(FOLDER_WITH_ENC_DATA):
-                if need_folder[-4:] != '_DEC':
-                    n_cnt += 1
-                    if n_cnt == change_folder:
-                        for file in os.listdir(FOLDER_WITH_ENC_DATA + need_folder):
-                            new_folder = FOLDER_WITH_ENC_DATA + need_folder + PREFIX_FOR_DEC_FILE
+            if self.type_work == 'dec':
+                cnt = 0
+                for folder in os.listdir(FOLDER_WITH_ENC_DATA):
+                    if folder[-4:] != '_DEC':
+                        cnt += 1
+                        print(str(cnt) + '.', folder)
+                if cnt == 0:
+                    print(YELLOW, " - No data encryption - ")
+                change_folder = int(input(YELLOW + '\n - Select folder by number: ' + DEFAULT_COLOR))
+                n_cnt = 0
+                for need_folder in os.listdir(FOLDER_WITH_ENC_DATA):
+                    if need_folder[-4:] != '_DEC':
+                        n_cnt += 1
+                        if n_cnt == change_folder:
+                            for file in os.listdir(FOLDER_WITH_ENC_DATA + need_folder):
+                                new_folder = FOLDER_WITH_ENC_DATA + need_folder + PREFIX_FOR_DEC_FILE
 
-                            if os.path.exists(new_folder) is False:
-                                os.mkdir(new_folder)
+                                if os.path.exists(new_folder) is False:
+                                    os.mkdir(new_folder)
 
-                            key = open(FOLDER_WITH_ENC_DATA + need_folder + '/' + need_folder + KEY_FILE, 'rb').read()
-                            iv = open(FOLDER_WITH_ENC_DATA + need_folder + '/' + need_folder + IV_FILE, 'rb').read()
+                                key = open(FOLDER_WITH_ENC_DATA + need_folder + '/' + need_folder + KEY_FILE, 'rb').read()
+                                iv = open(FOLDER_WITH_ENC_DATA + need_folder + '/' + need_folder + IV_FILE, 'rb').read()
 
-                            if file.endswith('.elba'):
-                                file_data = read_bin_file(
-                                    FOLDER_WITH_ENC_DATA + need_folder + '/' + file
-                                )
-                                write_bin_file(
-                                    new_folder + '/' + file[:-5],
-                                    decrypt_it(file_data, key, iv)
-                                )
+                                if file.endswith('.elba'):
+                                    file_data = read_bin_file(
+                                        FOLDER_WITH_ENC_DATA + need_folder + '/' + file
+                                    )
+                                    write_bin_file(
+                                        new_folder + '/' + file[:-5],
+                                        decrypt_it(file_data, key, iv)
+                                    )
 
-                                print(YELLOW, "\n Completed decrypting \n", DEFAULT_COLOR, file)
-                        template_some_message(GREEN, "Decryption successful \n")
-                        template_remove_folder(FOLDER_WITH_ENC_DATA + need_folder)
-                        sleep(2)
+                                    print(YELLOW, "\n Completed decrypting \n", DEFAULT_COLOR, file)
+                            template_some_message(GREEN, "Decryption successful \n")
+                            template_remove_folder(FOLDER_WITH_ENC_DATA + need_folder)
+                            sleep(2)
