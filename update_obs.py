@@ -125,7 +125,7 @@ def install_old_saved_version():
             for item in os.listdir(OLD_ELBA + need_version_folder):
                 os.system('cp ' + OLD_ELBA + need_version_folder + '/' + item + ' ' + '.')
             template_remove_folder(FOLDER_WITH_DATA)
-            os.system("cp -a " + OLD_ELBA + need_version_folder + '/' + FOLDER_WITH_DATA + '/' + ' ' + '.')
+            os.system("cp -r " + OLD_ELBA + need_version_folder + '/' + FOLDER_WITH_DATA + '/' + ' ' + '.')
 
     print(GREEN + ' - Success roll back! - ' + DEFAULT_COLOR)
     sleep(1)
