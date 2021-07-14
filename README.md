@@ -2,6 +2,15 @@
 
 With this program you can securely store passwords to resources, store encrypted notes, and encrypt any type of files.
 
+Update to v0.7.x:
+- Rename module delete resource and notes
+
+Update to v0.6.x:
+- Unnecessary dependencies removed, redundancies removed, refactoring of functions
+- Corrected the defects
+- Changed encryption key names, now they are unique
+- Added comments to the code
+
 Update to v0.5.0.0:
 - Optimized code, part of the functions are moved into modules
 - The approach to file encryption has been changed: new keys are generated each time
