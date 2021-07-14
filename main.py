@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.7.0.0'
+__version__ = 'v0.7.0.1'
 
 
 def show_name_program():
@@ -65,7 +65,19 @@ FOLDER_WITH_DATA = 'volare/'  # Mi fa volare
 FOLDER_WITH_PROGRAM_DATA = FOLDER_WITH_DATA + 'program_files/'
 FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + "resources/"
 FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'
-OLD_ELBA = 'old_elba/'  # Старые версии программы
+OLD_ELBA = 'old_elba/'
+#
+FOLDER_WITH_ENC_DATA = FOLDER_WITH_DATA + 'ENCRYPTION_DATA/'
+FOLDER_FOR_ENCRYPTION_FILES = FOLDER_WITH_ENC_DATA + 'FOR_ENCRYPTION'
+PREFIX_FOR_DEC_FILE = '_DEC'
+# Получение времени
+hms = datetime.datetime.today()
+get_date = str(hms.day) + str(hms.month) + str(hms.year) + '_'
+get_time = str(hms.hour * 3600 + hms.minute * 60 + hms.second)
+NAME_ENC_FOLDER = get_date + get_time
+FOLDER_WITH_ENC_FILES = FOLDER_WITH_ENC_DATA + NAME_ENC_FOLDER
+KEY_FILE = 'ONE.key'
+IV_FILE = 'TWO.key'
 # Имена файлов ресурсов и заметок
 FILE_RESOURCE = 'resource.dat'
 FILE_LOGIN = 'login.dat'
@@ -114,9 +126,8 @@ def write_log(cause, status_itself):
     """ Логирование """
     def get_date():      # Получение и форматирование текущего времени
         hms = datetime.datetime.today()  # Дата и время
-        day, month, year = hms.day, hms.month, hms.year     # Число, месяц, год
         time_format = str(hms.hour) + ':' + str(hms.minute) + ':' + str(hms.second)
-        date_format = str(day) + '.' + str(month) + '.' + str(year)
+        date_format = str(hms.day) + '.' + str(hms.month) + '.' + str(hms.year)
         total = str(time_format) + '-' + str(date_format)
         return ''.join(total)
 

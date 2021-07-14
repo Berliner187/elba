@@ -80,7 +80,6 @@ class ActionsWithPassword:
                     hash_pas.write(hash_to_file)
                     hash_pas.close()
                 return master_password
-
             elif (CHECK_FOLDER_FOR_RESOURCE and CHECK_FILE_WITH_HASH) is True:
                 return master_password
 

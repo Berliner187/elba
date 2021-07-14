@@ -25,7 +25,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '3.1.2'
+__version__ = '3.1.3'
 
 
 class AESCipher(object):
@@ -177,17 +177,6 @@ class WorkWithUserFiles:
         self.type_work = type_work
 
     def file_encryption_control(self):
-        FOLDER_WITH_ENC_DATA = FOLDER_WITH_DATA + 'ENCRYPTION_DATA/'
-        FOLDER_FOR_ENCRYPTION_FILES = FOLDER_WITH_ENC_DATA + 'FOR_ENCRYPTION'
-        # FOLDER_WITH_ENC_FILES = FOLDER_WITH_ENC_DATA + 'ENCRYPTED'
-        PREFIX_FOR_DEC_FILE = '_DEC'
-
-        hms = datetime.datetime.today()
-        NAME_ENC_FOLDER = str(hms.day) + str(hms.month) + str(hms.year) + '_' + \
-                          str(hms.hour * 3600 + hms.minute * 60 + hms.second)
-        FOLDER_WITH_ENC_FILES = FOLDER_WITH_ENC_DATA + NAME_ENC_FOLDER
-        KEY_FILE = 'ONE.key'
-        IV_FILE = 'TWO.key'
 
         def encrypt_it(byte_file, key, iv):
             cfb_cipher = AES.new(key, AES.MODE_OFB, iv)
@@ -215,9 +204,7 @@ class WorkWithUserFiles:
         generic_hash_from_file = open(FILE_WITH_HASH_GENERIC_KEY).readline()
         check_generic_hash = check_password_hash(generic_hash_from_file, xzibit)
         if check_generic_hash is False:
-            system_action('clear')
-            template_some_message(RED, " - Not confirmed - ")
-            sleep(1)
+            template_remove_folder()
             quit()
 
         if self.type_work == 'enc':
