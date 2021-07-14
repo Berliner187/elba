@@ -108,10 +108,6 @@ def update():  # Обновление программы
 
 
 def install_old_saved_version():
-    def template_install_old(version_old_folder):
-        for item in os.listdir(OLD_ELBA + version_old_folder):
-            os.system('cp ' + OLD_ELBA + version_old_folder + '/' + item + ' ' + '.')
-
     s = 0
     system_action('clear')
     for version in os.listdir(OLD_ELBA):
@@ -126,7 +122,8 @@ def install_old_saved_version():
     for need_version_folder in os.listdir(OLD_ELBA):
         cnt += 1
         if cnt == change:
-            template_install_old(need_version_folder)
+            for item in os.listdir(OLD_ELBA + need_version_folder):
+                os.system('cp ' + OLD_ELBA + need_version_folder + '/' + item + ' ' + '.')
             template_remove_folder(FOLDER_WITH_DATA)
             os.system("cp -a " + OLD_ELBA + need_version_folder + '/' + FOLDER_WITH_DATA + ' ' + '.')
 
