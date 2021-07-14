@@ -32,7 +32,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '3.1.3'
+__version__ = '3.1.4'
 
 
 class AESCipher(object):
@@ -96,13 +96,13 @@ def dec_only_base64(encryption, key):
     return "".join(dec)
 
 
-def enc_two_levels(anything, master_password):   # Encryption by two levels
+def enc_two_levels(anything, master_password):
     crypto_start = enc_base64(anything, master_password)
     crypto = enc_binary(crypto_start)
     return crypto
 
 
-def dec_two_levels(anything, master_password):   # Decryption by two levels
+def dec_two_levels(anything, master_password):
     decryption_start = dec_binary(anything)
     decryption = dec_base64(decryption_start, master_password)
     return decryption
@@ -181,6 +181,7 @@ def save_data_to_file(data_1, data_2, data_3, xzibit, type_data):
 
 
 class WorkWithUserFiles:
+
     def __init__(self, xzibit, type_work):
         self.xzibit = xzibit
         self.type_work = type_work
@@ -245,19 +246,17 @@ class WorkWithUserFiles:
             #     iv = read_bin_file(IV_FILE)
             #     print(key, iv)
 
-            print("Beginning Encryption...\n")
+            template_some_message(YELLOW, "Beginning Encryption...\n")
             for file in os.listdir(FOLDER_FOR_ENCRYPTION_FILES):
-                print("Encrypting", file)
                 file_data = read_bin_file(FOLDER_FOR_ENCRYPTION_FILES + '/' + file)
                 write_bin_file(FOLDER_WITH_ENC_FILES + '/' + file + ".elba", encrypt_it(file_data, key, iv))
-                print("Completed encrypting", file, "\n")
+                print(YELLOW, "\n Completed encrypting", DEFAULT_COLOR, file, "\n")
 
             save_keyiv(key, path_to_key_one)
             save_keyiv(iv, path_to_key_two)
-
-            print(GREEN + "Encryption successful\n" + DEFAULT_COLOR)
+            template_some_message(GREEN, "Encryption successful \n")
             template_remove_folder(FOLDER_FOR_ENCRYPTION_FILES)
-            sleep(3)
+            sleep(2)
 
         if self.type_work == 'dec':
             cnt = 0
@@ -274,8 +273,6 @@ class WorkWithUserFiles:
                     n_cnt += 1
                     if n_cnt == change_folder:
                         for file in os.listdir(FOLDER_WITH_ENC_DATA + need_folder):
-                            print("Decrypting", file)
-
                             new_folder = FOLDER_WITH_ENC_DATA + need_folder + PREFIX_FOR_DEC_FILE
 
                             if os.path.exists(new_folder) is False:
@@ -293,7 +290,7 @@ class WorkWithUserFiles:
                                     decrypt_it(file_data, key, iv)
                                 )
 
-                                print(YELLOW, "Completed decrypting", DEFAULT_COLOR, file, "\n")
-                        print(GREEN + "Decryption successful\n", DEFAULT_COLOR)
+                                print(YELLOW, "\n Completed decrypting \n", DEFAULT_COLOR, file)
+                        template_some_message(GREEN, "Decryption successful \n")
                         template_remove_folder(FOLDER_WITH_ENC_DATA + need_folder)
-                        sleep(3)
+                        sleep(2)
