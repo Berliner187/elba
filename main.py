@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.7.0.1'
+__version__ = 'v0.7.0.2'
 
 
 def show_name_program():
@@ -124,8 +124,7 @@ def download_from_repository():
 
 def write_log(cause, status_itself):
     """ Логирование """
-    def get_date():      # Получение и форматирование текущего времени
-        hms = datetime.datetime.today()  # Дата и время
+    def get_time_now():      # Получение и форматирование текущего времени
         time_format = str(hms.hour) + ':' + str(hms.minute) + ':' + str(hms.second)
         date_format = str(hms.day) + '.' + str(hms.month) + '.' + str(hms.year)
         total = str(time_format) + '-' + str(date_format)
@@ -133,9 +132,11 @@ def write_log(cause, status_itself):
 
     log_data = open(FILE_LOG, mode="a", encoding='utf-8')
     log_writer = DictWriter(log_data, fieldnames=FIELDS_LOG_FILE, delimiter=';')
+    if os.path.exists(FILE_LOG) is False:
+        logs_writer.writeheader()
     log_writer.writerow({
         FIELDS_LOG_FILE[0]: __version__,     # Запись версии
-        FIELDS_LOG_FILE[1]: get_date(),      # Запись даты и времени
+        FIELDS_LOG_FILE[1]: get_time_now(),      # Запись даты и времени
         FIELDS_LOG_FILE[2]: cause,           # Запись причины
         FIELDS_LOG_FILE[3]: status_itself    # Запись статуса
     })
