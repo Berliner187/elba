@@ -1,4 +1,11 @@
-# -*- encryption: UTF-8 -*-
+# -*- coding: UTF-8 -*-
+
+"""
+    Модуль шифрования.
+    Обеспечивает безопасность и сохранность всех данных пользователя.
+    Доступные методы: AES (с длиной ключа 256 бит) и base64
+"""
+
 from base64 import urlsafe_b64encode, urlsafe_b64decode
 import base64
 import hashlib
@@ -102,6 +109,7 @@ def dec_two_levels(anything, master_password):   # Decryption by two levels
 
 
 def enc_aes(__file__, encryption, __key__):
+    """ Шифрование и сохранение в файл """
     with open(__file__, 'wb') as enc_data:
         aes = AESCipher(__key__)
         payload = aes.encrypt(encryption)
@@ -114,6 +122,7 @@ def enc_aes(__file__, encryption, __key__):
 
 
 def dec_aes(__file__, __key__):
+    """ Дешифрование и сохранение в файл """
     with open(__file__, 'rb') as read_file:
         payload = read_file.readlines()
         for item in payload:
