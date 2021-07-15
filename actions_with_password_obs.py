@@ -12,7 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
 
 
-__version__ = '2.0.1'
+__version__ = '2.1.0'
 
 
 def create_and_confirm_user_password():
@@ -51,27 +51,20 @@ class ActionsWithPassword:
             symbols_for_password = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
             additional_symbols = '!@#$%^&*()_-+[]{}№;:?'
             if add_random_symbols:
-                symbols_for_password = symbols_for_password + additional_symbols
-            if length_password > 8:
-                new_password = ''
-                for i in range(length_password):
-                    new_password += random.choice(symbols_for_password)
-                return new_password
-            else:
-                print(RED + '\n Error of confirm. Try again \n' + DEFAULT_COLOR)
-                generation_new_password(length_password, add_random_symbols)
-
-        # Получение собственного пароля для ресурсов
-        if self.type_pas == 'self':
-            print(BLUE, ' - Pick a self password: ', DEFAULT_COLOR)
-            password = create_and_confirm_user_password()
-            print(BLUE + ' - Your password success saved' + DEFAULT_COLOR)
-            sleep(1)
-            return password
+                symbols_for_password += additional_symbols
+            while True:
+                if length_password > 8:
+                    new_password = ''
+                    for i in range(length_password):
+                        new_password += random.choice(symbols_for_password)
+                    return new_password
+                else:
+                    template_some_message(RED, ' The length must be at least 8 characters \n')
+                    length_password = int(input(YELLOW + ' - Length: ' + DEFAULT_COLOR))
 
         # Создание мастер-пароля, создание хеша и сохранение в файл
-        elif self.type_pas == 'master':
-            print(BLUE + ' - Pick a master-password - \n')
+        if self.type_pas == 'master':
+            template_some_message(BLUE, ' - Pick a master-password - \n')
             master_password = create_and_confirm_user_password()
             # Хэш сохраняется в файл
             if (CHECK_FILE_WITH_HASH and CHECK_FILE_WITH_HASH) is False:
@@ -80,19 +73,29 @@ class ActionsWithPassword:
                     hash_pas.write(hash_to_file)
                     hash_pas.close()
                 return master_password
-            elif (CHECK_FOLDER_FOR_RESOURCE and CHECK_FILE_WITH_HASH) is True:
-                return master_password
+            elif CHECK_FOLDER_FOR_RESOURCE:
+                if CHECK_FILE_WITH_HASH:
+                    if CHECK_FILE_WITH_GENERIC:
+                        return master_password
+
+        # Сохранение пользовательского пароля для ресурсов
+        elif self.type_pas == 'self':
+            template_some_message(BLUE, ' - Pick a self password - \n')
+            password = create_and_confirm_user_password()
+            template_some_message(BLUE, ' -- Your password success saved! --')
+            sleep(1)
+            return password
 
         # Получение нового сгенерированного пароля
         elif self.type_pas == 'gen_new':
             length_new_pas = int(input(YELLOW + ' - Length: ' + DEFAULT_COLOR))
+            status_adding_characters = False
             request_for_adding_characters = input(
                 BLUE + ' - Add additional symbols? (Default: no) (y/n): ' + DEFAULT_COLOR
             )
             if request_for_adding_characters == 'y':
-                password = generation_new_password(length_new_pas, True)
-            else:
-                password = generation_new_password(length_new_pas, False)
+                status_adding_characters = True
+            password = generation_new_password(length_new_pas, status_adding_characters)
             print(
                 YELLOW, ' - Your new password -', GREEN, password,
                 YELLOW, '- success saved', DEFAULT_COLOR
@@ -123,7 +126,9 @@ def choice_generation_or_save_self_password(resource, login, master_password):
         password = ActionsWithPassword('self').get_password()
         save_data_to_file(resource, login, password, master_password, 'resource')
     else:   # Если ошибка выбора
-        print(RED + '  -- Error of change. Please, change again --  ' + DEFAULT_COLOR)
+        print(RED + '\n  -- Error of change. Please, change again --  ' + DEFAULT_COLOR)
+        sleep(1)
+        system_action('clear')
         choice_generation_or_save_self_password(resource, login, master_password)
     system_action('clear')
 
@@ -180,7 +185,7 @@ def point_of_entry():   # Точка входа в систему
             hash_password = check_password_hash(file_hash.readline(), master_password)
             if cnt_left == 0:
                 system_action('clear')
-                print(RED + " -- Limit is exceeded -- " + DEFAULT_COLOR)
+                template_some_message(RED, "  ---  Limit is exceeded  --- ")
                 write_log('Someone tried to enter', 'WARNING')
                 sleep(2**10)
                 quit()

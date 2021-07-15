@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.7.0.4'
+__version__ = 'v0.7.1.0'
 
 
 def show_name_program():
@@ -87,6 +87,7 @@ FILE_USER_NAME = FOLDER_WITH_PROGRAM_DATA + ".self_name.dat"
 FILE_WITH_HASH = FOLDER_WITH_PROGRAM_DATA + '.hash_password.dat'
 FILE_LOG = FOLDER_WITH_PROGRAM_DATA + '.file.log'
 # <<<------------- Проверка файлов на наличие --------------->>>
+CHECK_FILE_WITH_GENERIC = os.path.exists(FILE_WITH_HASH_GENERIC_KEY)
 CHECK_FILE_WITH_HASH = os.path.exists(FILE_WITH_HASH)
 CHECK_FOLDER_FOR_RESOURCE = os.path.exists(FOLDER_WITH_RESOURCES)
 # <<<----------- Столбцы файла с логами ------------->>>

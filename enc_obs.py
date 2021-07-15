@@ -3,7 +3,8 @@
 """
     Модуль шифрования.
     Обеспечивает безопасность и сохранность всех данных пользователя.
-    Доступные методы: AES (с длиной ключа 256 бит) и base64
+    Доступные методы: AES (с длиной ключа 256 бит) и base64,
+    а также двоичный метод
 """
 
 from base64 import urlsafe_b64encode, urlsafe_b64decode
@@ -32,7 +33,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '3.1.5'
+__version__ = '3.1.6'
 
 
 class AESCipher(object):
@@ -191,8 +192,8 @@ class WorkWithUserFiles:
         hms = datetime.datetime.today()
         get_date = str(hms.day) + str(hms.month) + str(hms.year) + '_'
         get_time = str(hms.hour * 3600 + hms.minute * 60 + hms.second)
-        NAME_ENC_FOLDER = get_date + get_time
-        FOLDER_WITH_ENC_FILES = FOLDER_WITH_ENC_DATA + NAME_ENC_FOLDER
+        name_enc_folder = get_date + get_time
+        folder_with_enc_files = FOLDER_WITH_ENC_DATA + name_enc_folder
 
         def encrypt_it(byte_file, key, iv):
             cfb_cipher = AES.new(key, AES.MODE_OFB, iv)
@@ -239,14 +240,14 @@ class WorkWithUserFiles:
 
                 temp = input("Press \'Enter\' key to continue...")
 
-                if os.path.exists(FOLDER_WITH_ENC_FILES) is False:
-                    system_action('mkdir ' + FOLDER_WITH_ENC_FILES)
+                if os.path.exists(folder_with_enc_files) is False:
+                    system_action('mkdir ' + folder_with_enc_files)
                 key = Crypto.Random.new().read(AES.block_size)
                 iv = Crypto.Random.new().read(AES.block_size)
                 print("Generating KEY and IV for the recipient")
 
-                path_to_key_one = FOLDER_WITH_ENC_FILES + '/' + NAME_ENC_FOLDER + KEY_FILE
-                path_to_key_two = FOLDER_WITH_ENC_FILES + '/' + NAME_ENC_FOLDER + IV_FILE
+                path_to_key_one = folder_with_enc_files + '/' + name_enc_folder + KEY_FILE
+                path_to_key_two = folder_with_enc_files + '/' + name_enc_folder + IV_FILE
                 # else:
                 #     key = read_bin_file(KEY_FILE)
                 #     iv = read_bin_file(IV_FILE)
@@ -255,7 +256,7 @@ class WorkWithUserFiles:
                 template_some_message(YELLOW, "Beginning Encryption...\n")
                 for file in os.listdir(FOLDER_FOR_ENCRYPTION_FILES):
                     file_data = read_bin_file(FOLDER_FOR_ENCRYPTION_FILES + '/' + file)
-                    write_bin_file(FOLDER_WITH_ENC_FILES + '/' + file + ".elba", encrypt_it(file_data, key, iv))
+                    write_bin_file(folder_with_enc_files + '/' + file + ".elba", encrypt_it(file_data, key, iv))
                     print(YELLOW, "\n Completed encrypting", DEFAULT_COLOR, file, "\n")
 
                 save_keyiv(key, path_to_key_one)
