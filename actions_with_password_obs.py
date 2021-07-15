@@ -163,7 +163,7 @@ def point_of_entry():   # Точка входа в систему
 
     master_password = get_master_password()
 
-    if (os.path.exists(FILE_WITH_HASH) or os.path.exists(FILE_WITH_HASH_GENERIC_KEY)) is False:
+    if (CHECK_FILE_WITH_HASH or CHECK_FILE_WITH_GENERIC) is False:
         if CHECK_FOLDER_FOR_RESOURCE is True:
             template_remove_folder(FOLDER_WITH_DATA)
             quit()
