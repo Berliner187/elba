@@ -1,7 +1,7 @@
 from enc_obs import *
 
 
-__version__ = '1.2.1'
+__version__ = '1.2.2'
 
 
 def show_decryption_data(generic_key, category):
@@ -45,7 +45,6 @@ def show_decryption_data(generic_key, category):
         print(
             BLUE, '\n  - Press "Enter" to go back    ',
             BLUE, '\n  - Enter "-a" to add new note  ',
-            BLUE, '\n  - Enter "-x" to exit          ',
             BLUE, '\n  - Enter "-d" to remove note   ',
             YELLOW, '\n Select note by number \n', DEFAULT_COLOR)
     if s == 0:

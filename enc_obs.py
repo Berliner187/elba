@@ -33,7 +33,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '3.1.6'
+__version__ = '3.1.7'
 
 
 class AESCipher(object):
@@ -223,7 +223,6 @@ class WorkWithUserFiles:
             template_remove_folder()
             quit()
         else:
-
             if self.type_work == 'enc':
                 def save_keyiv(key, file):
                     file_key = open(file, "wb")
@@ -248,10 +247,6 @@ class WorkWithUserFiles:
 
                 path_to_key_one = folder_with_enc_files + '/' + name_enc_folder + KEY_FILE
                 path_to_key_two = folder_with_enc_files + '/' + name_enc_folder + IV_FILE
-                # else:
-                #     key = read_bin_file(KEY_FILE)
-                #     iv = read_bin_file(IV_FILE)
-                #     print(key, iv)
 
                 template_some_message(YELLOW, "Beginning Encryption...\n")
                 for file in os.listdir(FOLDER_FOR_ENCRYPTION_FILES):
@@ -265,7 +260,7 @@ class WorkWithUserFiles:
                 template_remove_folder(FOLDER_FOR_ENCRYPTION_FILES)
                 sleep(2)
 
-            if self.type_work == 'dec':
+            elif self.type_work == 'dec':
                 cnt = 0
                 for folder in os.listdir(FOLDER_WITH_ENC_DATA):
                     if folder[-4:] != '_DEC':
