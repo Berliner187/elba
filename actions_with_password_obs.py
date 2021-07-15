@@ -12,7 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
 
 
-__version__ = '2.2.0'
+__version__ = '2.2.1'
 
 
 def create_and_confirm_user_password():
@@ -98,8 +98,8 @@ class ActionsWithPassword:
                 status_adding_characters = True
             password = generation_new_password(length_new_pas, status_adding_characters)
             print(
-                YELLOW, ' - Your new password -', GREEN, password,
-                YELLOW, '- success saved', DEFAULT_COLOR
+                BLUE, ' - Your new password -', GREEN, password,
+                BLUE, '- success saved', DEFAULT_COLOR
             )
             sleep(2)
             return password
