@@ -12,7 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
 
 
-__version__ = '2.2.2'
+__version__ = '2.2.3'
 
 
 def create_and_confirm_user_password():
@@ -197,6 +197,7 @@ def point_of_entry():   # Точка входа в систему
     elif hash_password and CHECK_FOLDER_FOR_RESOURCE:
         if check_with_exibit is False:
             template_remove_folder(FOLDER_WITH_DATA)
+            quit()
         else:
             return master_password
     else:
