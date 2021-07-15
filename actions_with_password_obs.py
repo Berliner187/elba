@@ -12,7 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
 
 
-__version__ = '2.1.0'
+__version__ = '2.1.1'
 
 
 def create_and_confirm_user_password():
@@ -53,7 +53,7 @@ class ActionsWithPassword:
             if add_random_symbols:
                 symbols_for_password += additional_symbols
             while True:
-                if length_password > 8:
+                if length_password >= 8:
                     new_password = ''
                     for i in range(length_password):
                         new_password += random.choice(symbols_for_password)
