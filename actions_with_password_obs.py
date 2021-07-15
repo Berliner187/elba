@@ -12,7 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
 
 
-__version__ = '2.2.1'
+__version__ = '2.2.2'
 
 
 def create_and_confirm_user_password():
@@ -68,7 +68,7 @@ class ActionsWithPassword:
             master_password = create_and_confirm_user_password()
             # Хэш сохраняется в файл
             if CHECK_FILE_WITH_HASH is False:
-                if not(os.listdir(CHECK_FOLDER_FOR_RESOURCE)):
+                if CHECK_FOLDER_FOR_RESOURCE is False:
                     hash_to_file = generate_password_hash(master_password)
                     with open(FILE_WITH_HASH, 'w') as hash_pas:
                         hash_pas.write(hash_to_file)

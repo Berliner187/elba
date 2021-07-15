@@ -30,7 +30,7 @@ def get_versions():
 
     template_version_module('get_size_obs', __version__)
     template_version_module('change_password_obs', change_password_ver)
-    template_version_module('confirm_password_obs', actions_with_password_ver)
+    template_version_module('actions_with_password_obs', actions_with_password_ver)
     template_version_module('datetime_obs', datetime_ver)
     template_version_module('del_object_obs', del_resource_ver)
     template_version_module('enc_obs', enc_ver)
