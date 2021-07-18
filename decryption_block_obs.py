@@ -76,7 +76,8 @@ def decryption_block(generic_key):
             elif change_resource_or_actions == '-f':    # Шифрование файлов
                 # Переписать под show_dec_data_obs
                 system_action('clear')
-                template_some_message(BLUE, "-- Go to the VOLARE data folder and follow the instructions --\n")
+                template_some_message(BLUE,
+                                      "-- Go to the VOLARE/ENCRYPTION_DATA data folder and follow the instructions --")
                 print(BLUE, "1.", YELLOW, " - Encryption files", DEFAULT_COLOR)
                 print(BLUE, "2.", YELLOW, " - Decryption files", DEFAULT_COLOR)
                 change_action = input(YELLOW + "\n - Select by number: " + DEFAULT_COLOR)

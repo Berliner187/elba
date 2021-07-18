@@ -33,7 +33,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '4.0.0'
+__version__ = '4.0.1'
 
 
 class AESCipher(object):
@@ -300,6 +300,7 @@ class WorkWithUserFiles:
                     if need_folder[:4] != PREFIX_FOR_DEC_FILE:
                         n_cnt += 1
                         if n_cnt == change_folder:
+                            template_some_message(YELLOW, "Beginning Decryption...\n")
                             os.chdir(FOLDER_WITH_ENC_DATA)
                             path_to_sign = need_folder + '/' + SIGNED
                             if os.path.exists(path_to_sign):
