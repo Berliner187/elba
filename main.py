@@ -152,13 +152,13 @@ def launcher():
         show_name_program()
         elba()
         master_password = ActionsWithPassword('master').get_password()  # Создание мастер-пароля
-        genetic_key = ActionsWithPassword('generic').get_password()  # Генерирование generic-key
-        greeting(genetic_key)
+        generic_key = ActionsWithPassword('generic').get_password()  # Генерирование generic-key
+        greeting(generic_key)
+        enc_aes(FILE_WITH_GENERIC_KEY, generic_key, master_password)
         os.mkdir(FOLDER_WITH_RESOURCES)
-        decryption_block(genetic_key)
-        enc_aes(FILE_WITH_GENERIC_KEY, genetic_key, master_password)
+        show_decryption_data(generic_key, 'resource')   # Показ ресурсов
         write_log('First launch', 'OK')
-        system_action('restart')
+        decryption_block(generic_key)
     else:  # При последующем
         master_password = point_of_entry()
         genetic_key_from_file = dec_aes(FILE_WITH_GENERIC_KEY, master_password)
