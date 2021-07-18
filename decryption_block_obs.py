@@ -26,6 +26,7 @@ def decryption_block(generic_key):
             login = input(YELLOW + ' Login: ' + DEFAULT_COLOR)
             choice_generation_or_save_self_password(resource, login, generic_key)
             write_log("Add resource", "OK")
+            show_decryption_data(generic_key, 'resource')
 
         elif change_resource_or_actions == '-u':    # Обновление программы
             system_action('clear')
