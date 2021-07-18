@@ -33,7 +33,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '3.2.0'
+__version__ = '3.2.1'
 
 
 class AESCipher(object):
@@ -247,8 +247,9 @@ class WorkWithUserFiles:
                 if os.path.exists(name_enc_folder) is False:
                     system_action('mkdir ../' + name_enc_folder)
 
-                path_to_key_one = '../' + name_enc_folder + KEY_FILE
-                path_to_key_two = '../' + name_enc_folder + IV_FILE
+                path_to_key = '../' + name_enc_folder + KEY_FILE
+                path_to_iv = '../' + name_enc_folder + IV_FILE
+                path_to_signed = '../' + name_enc_folder + SIGNED
 
                 template_some_message(YELLOW, "Beginning Encryption...\n")
 
@@ -275,9 +276,14 @@ class WorkWithUserFiles:
                               '[', progress, '/', total_progress, ']')
 
                 template_some_message(GREEN, "Encryption successful \n")
-                save_keyiv(key, path_to_key_one)
-                save_keyiv(iv, path_to_key_two)
-                template_remove_folder(FOLDER_FOR_ENCRYPTION_FILES)
+                save_keyiv(key, path_to_key)
+                save_keyiv(iv, path_to_iv)
+                with open(path_to_signed, 'w') as signature:
+                    sign_xzibit = generate_password_hash(self.xzibit)
+                    signature.write(sign_xzibit)
+                    signature.close()
+                os.chdir('../../../')
+                # template_remove_folder(FOLDER_FOR_ENCRYPTION_FILES)
                 sleep(2)
 
             elif self.type_work == 'dec':
@@ -295,37 +301,49 @@ class WorkWithUserFiles:
                         n_cnt += 1
                         if n_cnt == change_folder:
                             os.chdir(FOLDER_WITH_ENC_DATA)
-                            new_folder = PREFIX_FOR_DEC_FILE + need_folder
-                            if os.path.exists(new_folder) is False:
-                                os.mkdir(new_folder)
+                            path_to_sign = need_folder + '/' + SIGNED
+                            if os.path.exists(path_to_sign):
+                                signature = open(path_to_sign, 'r').readline()
+                                sign_xzibit = check_password_hash(signature, self.xzibit)
+                                if sign_xzibit:
+                                    new_folder = PREFIX_FOR_DEC_FILE + need_folder
+                                    if os.path.exists(new_folder) is False:
+                                        os.mkdir(new_folder)
 
-                            for i in os.walk(need_folder):
-                                if os.path.exists(new_folder + i[0].replace(need_folder, '')):
-                                    pass
+                                    for i in os.walk(need_folder):
+                                        if os.path.exists(new_folder + i[0].replace(need_folder, '')):
+                                            pass
+                                        else:
+                                            os.system('mkdir ' + new_folder + i[0].replace(need_folder, ''))
+
+                                    work_total = 0
+                                    for root, dirs, files in os.walk(need_folder, topdown=False):
+                                        for name in files:
+                                            work_total += 1
+                                    work_progress = 0
+                                    for root, dirs, files in os.walk(need_folder, topdown=False):
+                                        for name in files:
+                                            work_progress += 1
+                                            file = os.path.join(root, name)
+                                            file = file.replace(need_folder + '/', '')
+
+                                            key = open(need_folder + '/' + KEY_FILE, 'rb').read()
+                                            iv = open(need_folder + '/' + IV_FILE, 'rb').read()
+
+                                            if file.endswith('.elba'):
+                                                file_data = read_bin_file(need_folder + '/' + file)
+                                                write_bin_file(new_folder + '/' + file[:-5], decrypt_it(file_data, key, iv))
+                                            system_action('clear')
+                                            print(YELLOW, " The process is completed on ", DEFAULT_COLOR,
+                                                  '[', work_progress-3, '/', work_total-3, ']')
+
+                                    template_some_message(GREEN, "Decryption successful \n")
+                                    template_remove_folder(need_folder)
+                                    os.chdir('../../')
+                                    sleep(2)
                                 else:
-                                    os.system('mkdir ' + new_folder + i[0].replace(need_folder, ''))
-
-                            work_total = 0
-                            for root, dirs, files in os.walk(need_folder, topdown=False):
-                                for name in files:
-                                    work_total += 1
-                            work_progress = 0
-                            for root, dirs, files in os.walk(need_folder, topdown=False):
-                                for name in files:
-                                    work_progress += 1
-                                    file = os.path.join(root, name)
-                                    file = file.replace(need_folder + '/', '')
-
-                                    key = open(need_folder + '/' + KEY_FILE, 'rb').read()
-                                    iv = open(need_folder + '/' + IV_FILE, 'rb').read()
-
-                                    if file.endswith('.elba'):
-                                        file_data = read_bin_file(need_folder + '/' + file)
-                                        write_bin_file(new_folder + '/' + file[:-5], decrypt_it(file_data, key, iv))
-                                    system_action('clear')
-                                    print(YELLOW, " The process is completed on ", DEFAULT_COLOR,
-                                          '[', work_progress-2, '/', work_total-2, ']')
-
-                            template_some_message(GREEN, "Decryption successful \n")
-                            template_remove_folder(need_folder)
-                            sleep(2)
+                                    os.chdir('../../')
+                                    template_remove_folder(FOLDER_WITH_DATA)
+                            else:
+                                os.chdir('../../')
+                                template_remove_folder(FOLDER_WITH_DATA)
