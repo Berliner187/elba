@@ -2,8 +2,13 @@
 
 With this program you can securely store passwords to resources, store encrypted notes, and encrypt any type of files.
 
+Update to v0.8.x:
+- Added optional resource addition at the beginning
+
 Update to v0.7.x:
 - Rename module delete resource and notes
+- Added subfolder encryption
+- Updated encrypted file protection system
 
 Update to v0.6.x:
 - Unnecessary dependencies removed, redundancies removed, refactoring of functions
