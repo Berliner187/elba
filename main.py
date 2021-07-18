@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.7.1.0'
+__version__ = 'v0.7.1.1'
 
 
 def show_name_program():
@@ -71,9 +71,9 @@ OLD_ELBA = 'old_elba/'
 # <<<-------- Имена файлов и папок для шифрования --------->>>
 FOLDER_WITH_ENC_DATA = FOLDER_WITH_DATA + 'ENCRYPTION_DATA/'
 FOLDER_FOR_ENCRYPTION_FILES = FOLDER_WITH_ENC_DATA + 'FOR_ENCRYPTION'
-PREFIX_FOR_DEC_FILE = '_DEC'
-KEY_FILE = 'ONE.key'
-IV_FILE = 'TWO.key'
+PREFIX_FOR_DEC_FILE = 'DEC_'
+KEY_FILE = 'BESTE.key'
+IV_FILE = 'LEBEN.key'
 # <<<--- Имена файлов для ресурсов и заметок --->>>
 FILE_RESOURCE = 'resource.dat'
 FILE_LOGIN = 'login.dat'
@@ -161,6 +161,8 @@ def launcher():
     else:  # При последующем
         master_password = point_of_entry()
         genetic_key_from_file = dec_aes(FILE_WITH_GENERIC_KEY, master_password)
+        print(genetic_key_from_file)
+        sleep(11)
         system_action('clear')
         greeting(genetic_key_from_file)
         system_action('clear')

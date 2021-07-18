@@ -33,7 +33,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '3.1.7'
+__version__ = '3.2.0'
 
 
 class AESCipher(object):
@@ -191,9 +191,8 @@ class WorkWithUserFiles:
         # Получение времени
         hms = datetime.datetime.today()
         get_date = str(hms.day) + str(hms.month) + str(hms.year) + '_'
-        get_time = str(hms.hour * 3600 + hms.minute * 60 + hms.second)
-        name_enc_folder = get_date + get_time
-        folder_with_enc_files = FOLDER_WITH_ENC_DATA + name_enc_folder
+        get_time = str(hms.hour) + '-' + str(hms.minute) + '-' + str(hms.second)
+        name_enc_folder = get_date + get_time + '/'
 
         def encrypt_it(byte_file, key, iv):
             cfb_cipher = AES.new(key, AES.MODE_OFB, iv)
@@ -225,7 +224,7 @@ class WorkWithUserFiles:
         else:
             if self.type_work == 'enc':
                 def save_keyiv(key, file):
-                    file_key = open(file, "wb")
+                    file_key = open(file, mode="wb")
                     file_key.write(key)
                     file_key.close()
 
@@ -239,31 +238,52 @@ class WorkWithUserFiles:
 
                 temp = input("Press \'Enter\' key to continue...")
 
-                if os.path.exists(folder_with_enc_files) is False:
-                    system_action('mkdir ' + folder_with_enc_files)
                 key = Crypto.Random.new().read(AES.block_size)
                 iv = Crypto.Random.new().read(AES.block_size)
                 print("Generating KEY and IV for the recipient")
 
-                path_to_key_one = folder_with_enc_files + '/' + name_enc_folder + KEY_FILE
-                path_to_key_two = folder_with_enc_files + '/' + name_enc_folder + IV_FILE
+                os.chdir(FOLDER_FOR_ENCRYPTION_FILES)
+
+                if os.path.exists(name_enc_folder) is False:
+                    system_action('mkdir ../' + name_enc_folder)
+
+                path_to_key_one = '../' + name_enc_folder + KEY_FILE
+                path_to_key_two = '../' + name_enc_folder + IV_FILE
 
                 template_some_message(YELLOW, "Beginning Encryption...\n")
-                for file in os.listdir(FOLDER_FOR_ENCRYPTION_FILES):
-                    file_data = read_bin_file(FOLDER_FOR_ENCRYPTION_FILES + '/' + file)
-                    write_bin_file(folder_with_enc_files + '/' + file + ".elba", encrypt_it(file_data, key, iv))
-                    print(YELLOW, "\n Completed encrypting", DEFAULT_COLOR, file, "\n")
 
+                for i in os.walk('.'):
+                    if os.path.exists('../' + name_enc_folder + i[0][2:]):
+                        pass
+                    else:
+                        os.system('mkdir ../' + name_enc_folder + i[0][2:])
+
+                total_progress = 0
+                for root, dirs, files in os.walk('.', topdown=False):
+                    for name in files:
+                        total_progress += 1
+                progress = 0
+                for root, dirs, files in os.walk('.', topdown=False):
+                    for name in files:
+                        progress += 1
+                        file = os.path.join(root, name)
+                        file = file[2:]
+                        file_data = read_bin_file(file)
+                        write_bin_file('../' + name_enc_folder + file + ".elba", encrypt_it(file_data, key, iv))
+                        system_action('clear')
+                        print(YELLOW, " The process is completed on ", DEFAULT_COLOR,
+                              '[', progress, '/', total_progress, ']')
+
+                template_some_message(GREEN, "Encryption successful \n")
                 save_keyiv(key, path_to_key_one)
                 save_keyiv(iv, path_to_key_two)
-                template_some_message(GREEN, "Encryption successful \n")
                 template_remove_folder(FOLDER_FOR_ENCRYPTION_FILES)
                 sleep(2)
 
             elif self.type_work == 'dec':
                 cnt = 0
                 for folder in os.listdir(FOLDER_WITH_ENC_DATA):
-                    if folder[-4:] != '_DEC':
+                    if folder[-4:] != PREFIX_FOR_DEC_FILE:
                         cnt += 1
                         print(str(cnt) + '.', folder)
                 if cnt == 0:
@@ -271,28 +291,41 @@ class WorkWithUserFiles:
                 change_folder = int(input(YELLOW + '\n - Select folder by number: ' + DEFAULT_COLOR))
                 n_cnt = 0
                 for need_folder in os.listdir(FOLDER_WITH_ENC_DATA):
-                    if need_folder[-4:] != '_DEC':
+                    if need_folder[4:] != PREFIX_FOR_DEC_FILE:
                         n_cnt += 1
                         if n_cnt == change_folder:
-                            for file in os.listdir(FOLDER_WITH_ENC_DATA + need_folder):
-                                new_folder = FOLDER_WITH_ENC_DATA + need_folder + PREFIX_FOR_DEC_FILE
+                            os.chdir(FOLDER_WITH_ENC_DATA)
+                            new_folder = PREFIX_FOR_DEC_FILE + need_folder
+                            if os.path.exists(new_folder) is False:
+                                os.mkdir(new_folder)
 
-                                if os.path.exists(new_folder) is False:
-                                    os.mkdir(new_folder)
+                            for i in os.walk(need_folder):
+                                if os.path.exists(new_folder + i[0].replace(need_folder, '')):
+                                    pass
+                                else:
+                                    os.system('mkdir ' + new_folder + i[0].replace(need_folder, ''))
 
-                                key = open(FOLDER_WITH_ENC_DATA + need_folder + '/' + need_folder + KEY_FILE, 'rb').read()
-                                iv = open(FOLDER_WITH_ENC_DATA + need_folder + '/' + need_folder + IV_FILE, 'rb').read()
+                            work_total = 0
+                            for root, dirs, files in os.walk(need_folder, topdown=False):
+                                for name in files:
+                                    work_total += 1
+                            work_progress = 0
+                            for root, dirs, files in os.walk(need_folder, topdown=False):
+                                for name in files:
+                                    work_progress += 1
+                                    file = os.path.join(root, name)
+                                    file = file.replace(need_folder + '/', '')
 
-                                if file.endswith('.elba'):
-                                    file_data = read_bin_file(
-                                        FOLDER_WITH_ENC_DATA + need_folder + '/' + file
-                                    )
-                                    write_bin_file(
-                                        new_folder + '/' + file[:-5],
-                                        decrypt_it(file_data, key, iv)
-                                    )
+                                    key = open(need_folder + '/' + KEY_FILE, 'rb').read()
+                                    iv = open(need_folder + '/' + IV_FILE, 'rb').read()
 
-                                    print(YELLOW, "\n Completed decrypting \n", DEFAULT_COLOR, file)
+                                    if file.endswith('.elba'):
+                                        file_data = read_bin_file(need_folder + '/' + file)
+                                        write_bin_file(new_folder + '/' + file[:-5], decrypt_it(file_data, key, iv))
+                                    system_action('clear')
+                                    print(YELLOW, " The process is completed on ", DEFAULT_COLOR,
+                                          '[', work_progress-2, '/', work_total-2, ']')
+
                             template_some_message(GREEN, "Decryption successful \n")
-                            template_remove_folder(FOLDER_WITH_ENC_DATA + need_folder)
+                            template_remove_folder(need_folder)
                             sleep(2)

@@ -33,10 +33,12 @@ def show_decryption_data(generic_key, category):
         print(
             BLUE, '\n  - Enter \'-r\' to restart, \'-x\' to exit',
             BLUE, '\n  - Enter \'-a\' to add new resource       ',
-            BLUE, '\n  - Enter \'-c\' to change master-password ',
             BLUE, '\n  - Enter \'-d\' to remove resource        ',
+            BLUE, '\n  - Enter \'-c\' to change master-password ',
+            YELLOW, '-------------------------------------------',
             BLUE, '\n  - Enter \'-n\' to go to notes            ',
             BLUE, '\n  - Enter \'-f\' to encrypt your files     ',
+            YELLOW, '-------------------------------------------',
             BLUE, '\n  - Enter \'-u\' to update program         ',
             BLUE, '\n  - Enter \'-z\' to remove ALL data        ',
             backup_message, YELLOW,

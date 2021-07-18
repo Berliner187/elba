@@ -12,7 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
 
 
-__version__ = '2.2.4'
+__version__ = '2.2.5'
 
 
 def create_and_confirm_user_password():
@@ -169,11 +169,7 @@ def point_of_entry():   # Точка входа в систему
 
     # Проверка хэша пароля
     hash_pas_from_file = open(FILE_WITH_HASH)
-    xzibit_from_file = open(FILE_WITH_HASH_GENERIC_KEY)
     hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
-    xzibit = dec_aes(FILE_WITH_GENERIC_KEY, master_password)
-    check_with_exibit = check_password_hash(xzibit_from_file.readline(), xzibit)
-
     cnt_left = 3
     if (hash_password and CHECK_FOLDER_FOR_RESOURCE) is False:
         template_wrong_message(cnt_left)
@@ -194,6 +190,9 @@ def point_of_entry():   # Точка входа в систему
             else:
                 template_wrong_message(cnt_left)
     elif hash_password and CHECK_FOLDER_FOR_RESOURCE:
+        xzibit_from_file = open(FILE_WITH_HASH_GENERIC_KEY)
+        xzibit = dec_aes(FILE_WITH_GENERIC_KEY, master_password)
+        check_with_exibit = check_password_hash(xzibit_from_file.readline(), xzibit)
         if check_with_exibit is False:
             template_remove_folder(FOLDER_WITH_DATA)
             quit()
