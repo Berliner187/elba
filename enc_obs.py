@@ -33,7 +33,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '4.0.1'
+__version__ = '4.0.2'
 
 
 class AESCipher(object):
@@ -194,6 +194,9 @@ class WorkWithUserFiles:
         get_time = str(hms.hour) + '-' + str(hms.minute) + '-' + str(hms.second)
         name_enc_folder = get_date + get_time + '/'
 
+        def print_progress(now, total):
+            print(YELLOW, " The process is completed on ", DEFAULT_COLOR, '[', now, '/', total, ']')
+
         def encrypt_it(byte_file, key, iv):
             cfb_cipher = AES.new(key, AES.MODE_OFB, iv)
             return cfb_cipher.encrypt(byte_file)
@@ -272,8 +275,7 @@ class WorkWithUserFiles:
                         file_data = read_bin_file(file)
                         write_bin_file('../' + name_enc_folder + file + ".elba", encrypt_it(file_data, key, iv))
                         system_action('clear')
-                        print(YELLOW, " The process is completed on ", DEFAULT_COLOR,
-                              '[', progress, '/', total_progress, ']')
+                        print_progress(progress, total_progress)
 
                 template_some_message(GREEN, "Encryption successful \n")
                 save_keyiv(key, path_to_key)
@@ -335,8 +337,7 @@ class WorkWithUserFiles:
                                                 file_data = read_bin_file(need_folder + '/' + file)
                                                 write_bin_file(new_folder + '/' + file[:-5], decrypt_it(file_data, key, iv))
                                             system_action('clear')
-                                            print(YELLOW, " The process is completed on ", DEFAULT_COLOR,
-                                                  '[', work_progress-3, '/', work_total-3, ']')
+                                            print_progress(work_progress-3, work_total-3)
 
                                     template_some_message(GREEN, "Decryption successful \n")
                                     template_remove_folder(need_folder)

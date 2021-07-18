@@ -12,7 +12,7 @@ from update_obs import update, install_old_saved_version
 from main import *
 
 
-__version__ = '2.0.1'
+__version__ = '2.1.0'
 
 
 def decryption_block(generic_key):
@@ -75,6 +75,7 @@ def decryption_block(generic_key):
             elif change_action == '2':
                 system_action('clear')
                 WorkWithUserFiles(generic_key, 'dec').file_encryption_control()
+            write_log("Encryption data", "OK")
             show_decryption_data(generic_key, 'resource')
 
         elif change_resource_or_actions == '-z':    # Удаление всех данных
@@ -90,6 +91,7 @@ def decryption_block(generic_key):
             from get_size_obs import size_all, get_versions
             get_versions()
             size_all()
+            write_log("Get size and versions", "OK")
             decryption_block(generic_key)
 
         elif change_resource_or_actions == '-l':
@@ -104,12 +106,17 @@ def decryption_block(generic_key):
                     line[FIELDS_LOG_FILE[2]],
                     line[FIELDS_LOG_FILE[3]]
                 )
+            try:
+                write_log("Get size and versions", "OK")
+            except KeyError:
+                write_log("Get size and versions: KEY ERROR", "FAILED")
             template_some_message(YELLOW, " - Press Enter to exit - ")
 
         elif change_resource_or_actions == '-dm':  # Удаление кэша
             template_remove_folder('rm -r __pycache__/')
             system_action('clear')
             template_some_message(GREEN, " Success delete cache")
+            write_log("Delete cache", "OK")
             sleep(1)
             system_action('restart')
 
@@ -117,7 +124,9 @@ def decryption_block(generic_key):
             if os.path.exists(OLD_ELBA) is False:
                 template_some_message(YELLOW, ' - No versions saved - ')
             else:
+                write_log("Try roll back", "OK")
                 install_old_saved_version()
+                write_log("Success roll back", "OK")
                 system_action('restart')
 
         elif change_resource_or_actions == '':
@@ -146,6 +155,7 @@ def decryption_block(generic_key):
                     template_print_decryption_data(
                         'Password --->', password_from_file)
 
-    except ValueError:
+    except ValueError as error:
+        write_log(error, "pass")
         show_decryption_data(generic_key, 'resource')   # Показ ресурсов
     decryption_block(generic_key)  # Рекусрия под-главной функции
