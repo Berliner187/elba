@@ -12,7 +12,7 @@ from update_obs import update, install_old_saved_version
 from main import *
 
 
-__version__ = '2.1.0'
+__version__ = '2.1.1'
 
 
 def decryption_block(generic_key):
@@ -108,9 +108,9 @@ def decryption_block(generic_key):
                     line[FIELDS_LOG_FILE[3]]
                 )
             try:
-                write_log("Get size and versions", "OK")
+                write_log("Check logs", "OK")
             except KeyError:
-                write_log("Get size and versions: KEY ERROR", "FAILED")
+                write_log("Check logs: KEY ERROR", "FAILED")
             template_some_message(YELLOW, " - Press Enter to exit - ")
 
         elif change_resource_or_actions == '-dm':  # Удаление кэша
