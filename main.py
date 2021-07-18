@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.7.1.3'
+__version__ = 'v0.8.0.0'
 
 
 def show_name_program():
@@ -29,7 +29,7 @@ def show_name_program():
           "\n || Encryption Files || ", YELLOW,
           "\n || Delta For Linux  || "
           "\n || by Berliner187   || ", YELLOW,
-          "\n ||   Henette Zuer   || ", BLUE, __version__)
+          "\n ||   Veli Afaline   || ", BLUE, __version__)
     if CHECK_FOLDER_FOR_RESOURCE is False:
         first_start_message()
 
@@ -164,7 +164,6 @@ def launcher():
         genetic_key_from_file = dec_aes(FILE_WITH_GENERIC_KEY, master_password)
         system_action('clear')
         greeting(genetic_key_from_file)
-        system_action('clear')
         write_log('Subsequent launch', 'OK')
         show_decryption_data(genetic_key_from_file, 'resource')
         decryption_block(genetic_key_from_file)
@@ -228,14 +227,14 @@ if __name__ == '__main__':
             template_some_message(RED, ' --- Critical error, program is restarted --- ')
             sleep(1)
             system_action('clear')
-            # Попытка откатиться, если возникает ошибка
+            # Попытка откатиться
             if os.path.exists(OLD_ELBA):
                 template_some_message(RED, ' -- You can try roll back -- \n')
                 change = input(YELLOW + ' - Roll back? (y/n): ' + DEFAULT_COLOR)
                 if change == 'y':
                     install_old_saved_version()
             else:
-                # Попытка обновиться, если возникает ошибка
+                # Попытка обновиться
                 update()
             system_action('restart')
     else:
