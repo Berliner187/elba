@@ -33,7 +33,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '3.2.1'
+__version__ = '3.2.2'
 
 
 class AESCipher(object):
@@ -283,13 +283,13 @@ class WorkWithUserFiles:
                     signature.write(sign_xzibit)
                     signature.close()
                 os.chdir('../../../')
-                # template_remove_folder(FOLDER_FOR_ENCRYPTION_FILES)
-                sleep(2)
+                template_remove_folder(FOLDER_FOR_ENCRYPTION_FILES)
+                sleep(1)
 
             elif self.type_work == 'dec':
                 cnt = 0
                 for folder in os.listdir(FOLDER_WITH_ENC_DATA):
-                    if folder[-4:] != PREFIX_FOR_DEC_FILE:
+                    if folder[:4] != PREFIX_FOR_DEC_FILE:
                         cnt += 1
                         print(str(cnt) + '.', folder)
                 if cnt == 0:
@@ -297,7 +297,7 @@ class WorkWithUserFiles:
                 change_folder = int(input(YELLOW + '\n - Select folder by number: ' + DEFAULT_COLOR))
                 n_cnt = 0
                 for need_folder in os.listdir(FOLDER_WITH_ENC_DATA):
-                    if need_folder[4:] != PREFIX_FOR_DEC_FILE:
+                    if need_folder[:4] != PREFIX_FOR_DEC_FILE:
                         n_cnt += 1
                         if n_cnt == change_folder:
                             os.chdir(FOLDER_WITH_ENC_DATA)
@@ -340,7 +340,7 @@ class WorkWithUserFiles:
                                     template_some_message(GREEN, "Decryption successful \n")
                                     template_remove_folder(need_folder)
                                     os.chdir('../../')
-                                    sleep(2)
+                                    sleep(1)
                                 else:
                                     os.chdir('../../')
                                     template_remove_folder(FOLDER_WITH_DATA)
