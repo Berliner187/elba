@@ -33,7 +33,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '3.2.3'
+__version__ = '4.0.0'
 
 
 class AESCipher(object):
