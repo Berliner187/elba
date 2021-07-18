@@ -12,7 +12,7 @@ from update_obs import update, install_old_saved_version
 from main import *
 
 
-__version__ = '2.0.0'
+__version__ = '2.0.1'
 
 
 def decryption_block(generic_key):
@@ -119,6 +119,9 @@ def decryption_block(generic_key):
             else:
                 install_old_saved_version()
                 system_action('restart')
+
+        elif change_resource_or_actions == '':
+            show_decryption_data(generic_key, 'resource')
 
         else:
             s = 0
