@@ -5,7 +5,7 @@ import sys
 from memory_profiler import memory_usage
 
 
-__version__ = '2.0.1'
+__version__ = '2.0.2'
 
 
 def get_versions():
@@ -116,7 +116,7 @@ def size_all():
     total_size = size_program + size_mod_cache + size_user_data + size_logs
     data_to_print = {
         'The program occupies RAM ': to_another_unit_of_measurement(program_in_ram),
-        'The log files took       ': to_another_unit_of_measurement(size_logs),
+        '\nThe log files took       ': to_another_unit_of_measurement(size_logs),
         'User files took          ': to_another_unit_of_measurement(size_user_data),
         'The notes took           ': to_another_unit_of_measurement(size_notes),
         'The resources took       ': to_another_unit_of_measurement(size_resources),
