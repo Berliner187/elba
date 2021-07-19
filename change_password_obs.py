@@ -10,7 +10,7 @@ from time import sleep
 import os
 
 
-__version__ = '4.0.3'
+__version__ = '4.0.4'
 
 
 def change_master_password():
@@ -25,7 +25,7 @@ def change_master_password():
             if check_master_password:
                 return _confirm_master_password
             else:
-                print(RED + '\n --- Wrong master-password --- ' + DEFAULT_COLOR)
+                template_some_message(RED, ' --- Wrong master-password --- ')
                 sleep(1)
 
     confirm_master_password = get_confirm_master_password()
