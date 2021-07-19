@@ -34,7 +34,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '6.1.3'
+__version__ = '6.1.4'
 
 
 class AESCipher(object):
@@ -182,7 +182,7 @@ class WorkWithUserFiles:
             progress_status = ((now * 100) // total)
             to_print = ''
             if type_work == 'files':
-                to_print = ' The process is completed on'
+                to_print = ' File encryption completed on'
             elif type_work == 'folders':
                 to_print = ' Folder creation status'
             print(YELLOW, to_print, DEFAULT_COLOR, progress_status, '%')
