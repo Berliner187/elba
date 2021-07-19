@@ -34,7 +34,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '5.0.1'
+__version__ = '6.0.0'
 
 
 class AESCipher(object):
@@ -199,6 +199,7 @@ class WorkWithUserFiles:
         hms = datetime.datetime.today()
         get_date = str(hms.day) + str(hms.month) + str(hms.year) + '_'
         get_time = str(hms.hour) + '-' + str(hms.minute) + '-' + str(hms.second)
+        timed = hms.hour * hms.minute * hms.second * random.randrange(32, 1024)
         name_enc_folder = get_date + get_time + '/'
 
         def print_progress(now, total):
@@ -263,6 +264,7 @@ class WorkWithUserFiles:
                 path_to_key = '../' + name_enc_folder + KEY_FILE
                 path_to_iv = '../' + name_enc_folder + IV_FILE
                 path_to_signed = '../' + name_enc_folder + SIGNED
+                path_to_timed = '../' + name_enc_folder + FILE_CONTROL_SUM
 
                 template_some_message(YELLOW, "Beginning Encryption...\n")
 
@@ -290,8 +292,10 @@ class WorkWithUserFiles:
                 template_some_message(GREEN, "Encryption successful \n")
                 save_keyiv(key, path_to_key)
                 save_keyiv(iv, path_to_iv)
+                control_sum = str(timed) + self.xzibit + str(timed)
+                enc_aes(path_to_timed, control_sum, self.xzibit)
                 with open(path_to_signed, 'w') as signature:
-                    sign_xzibit = generate_password_hash(self.xzibit)
+                    sign_xzibit = generate_password_hash(control_sum)
                     signature.write(sign_xzibit)
                     signature.close()
                 os.chdir('../../../')
@@ -315,9 +319,11 @@ class WorkWithUserFiles:
                             template_some_message(YELLOW, "Beginning Decryption...\n")
                             os.chdir(FOLDER_WITH_ENC_DATA)
                             path_to_sign = need_folder + '/' + SIGNED
+                            path_to_timed = need_folder + '/' + FILE_CONTROL_SUM
                             if os.path.exists(path_to_sign):
+                                control_sum = dec_aes(path_to_timed, self.xzibit)
                                 signature = open(path_to_sign, 'r').readline()
-                                sign_xzibit = check_password_hash(signature, self.xzibit)
+                                sign_xzibit = check_password_hash(signature, control_sum)
                                 if sign_xzibit:
                                     new_folder = PREFIX_FOR_DEC_FILE + need_folder
                                     if os.path.exists(new_folder) is False:
@@ -350,17 +356,19 @@ class WorkWithUserFiles:
                                                 file_data = read_bin_file(need_folder + '/' + file)
                                                 write_bin_file(new_folder + '/' + file[:-5], decrypt_it(file_data, key, iv))
                                             system_action('clear')
-                                            print_progress(work_progress-3, work_total-3)
+                                            print_progress(work_progress-4, work_total-4)
 
                                     template_some_message(GREEN, "Decryption successful \n")
                                     template_remove_folder(need_folder)
                                     os.chdir('../../')
                                     sleep(1)
                                 else:
-                                    os.chdir('../../')
-                                    template_remove_folder(FOLDER_WITH_DATA)
-                                    quit()
+                                    print('блять')
+                                    # os.chdir('../../')
+                                    # template_remove_folder(FOLDER_WITH_DATA)
+                                    # quit()
                             else:
-                                os.chdir('../../')
-                                template_remove_folder(FOLDER_WITH_DATA)
-                                quit()
+                                print('блять')
+                                # os.chdir('../../')
+                                # template_remove_folder(FOLDER_WITH_DATA)
+                                # quit()
