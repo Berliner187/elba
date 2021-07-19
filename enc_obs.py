@@ -181,9 +181,9 @@ class WorkWithUserFiles:
             progress_status = ((now * 100) // total)
             to_print = ''
             if type_work == 'files':
-                to_print = ' Work completed on'
+                to_print = '\n Work completed on'
             elif type_work == 'folders':
-                to_print = ' Folder creation status'
+                to_print = '\n Folder creation status'
             print(YELLOW, to_print, DEFAULT_COLOR, progress_status, '%')
 
         def encrypt_it(byte_file, key, iv):
