@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.8.3.2'
+__version__ = 'v0.8.3.3'
 
 
 def show_name_program():
@@ -220,18 +220,22 @@ if __name__ == '__main__':
         try:
             launcher()  # Запуск лончера
         except ValueError or TypeError as error:
-            print(error)
             write_log(error, 'CRITICAL CRASH')
             template_some_message(RED, ' --- Critical error, program is restarted --- ')
             sleep(1)
             system_action('clear')
+            print(error)
             if os.path.exists(OLD_ELBA):  # Попытка откатиться
                 template_some_message(RED, ' -- You can try roll back -- \n')
                 change = input(YELLOW + ' - Roll back? (y/n): ' + DEFAULT_COLOR)
                 if change == 'y':
                     install_old_saved_version()
             else:  # Попытка обновиться
-                update()
+                get_confirm = input(YELLOW + " - Update? (y/n): " + DEFAULT_COLOR)
+                if get_confirm == 'y':
+                    update()
+                else:
+                    quit()
             system_action('restart')
     else:
         update()
