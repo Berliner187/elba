@@ -34,7 +34,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '6.1.2'
+__version__ = '6.1.3'
 
 
 class AESCipher(object):
@@ -178,9 +178,14 @@ class WorkWithUserFiles:
         timed = hms.hour * hms.minute * hms.second * random.randrange(64, 1024)
         name_enc_folder = get_date + get_time + '/'
 
-        def print_progress(now, total):
+        def print_progress(type_work, now, total):
             progress_status = ((now * 100) // total)
-            print(YELLOW, " The process is completed on ", DEFAULT_COLOR, progress_status, '%')
+            to_print = ''
+            if type_work == 'files':
+                to_print = ' The process is completed on'
+            elif type_work == 'folders':
+                to_print = ' Folder creation status'
+            print(YELLOW, to_print, DEFAULT_COLOR, progress_status, '%')
 
         def encrypt_it(byte_file, key, iv):
             cfb_cipher = AES.new(key, AES.MODE_OFB, iv)
@@ -245,17 +250,25 @@ class WorkWithUserFiles:
 
                 template_some_message(YELLOW, "Beginning Encryption...\n")
 
+                total_progress = progress = 0
                 for i in os.walk('.'):
-                    if os.path.exists('../' + name_enc_folder + i[0][2:]):
+                    total_progress += 1
+                for i in os.walk('.'):
+                    try:
+                        if os.path.exists('../' + name_enc_folder + i[0][2:]):
+                            pass
+                        else:
+                            progress += 1
+                            os.system('mkdir ../' + name_enc_folder + i[0][2:])
+                            system_action('clear')
+                            print_progress('folders', progress, total_progress)
+                    except FileNotFoundError:
                         pass
-                    else:
-                        os.system('mkdir ../' + name_enc_folder + i[0][2:])
 
-                total_progress = 0
+                total_progress = progress = 0
                 for root, dirs, files in os.walk('.', topdown=False):
                     for name in files:
                         total_progress += 1
-                progress = 0
                 for root, dirs, files in os.walk('.', topdown=False):
                     for name in files:
                         progress += 1
@@ -264,7 +277,7 @@ class WorkWithUserFiles:
                         file_data = read_bin_file(file)
                         write_bin_file('../' + name_enc_folder + file + ".elba", encrypt_it(file_data, key, iv))
                         system_action('clear')
-                        print_progress(progress, total_progress)
+                        print_progress('files', progress, total_progress)
 
                 template_some_message(GREEN, "Encryption successful \n")
                 save_keyiv(key, path_to_key)
@@ -333,7 +346,7 @@ class WorkWithUserFiles:
                                                 file_data = read_bin_file(need_folder + '/' + file)
                                                 write_bin_file(new_folder + '/' + file[:-5], decrypt_it(file_data, key, iv))
                                             system_action('clear')
-                                            print_progress(work_progress-4, work_total-4)
+                                            print_progress('files', work_progress-4, work_total-4)
 
                                     template_some_message(GREEN, "Decryption successful \n")
                                     template_remove_folder(need_folder)
