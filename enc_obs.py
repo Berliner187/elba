@@ -34,7 +34,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '5.0.0'
+__version__ = '5.0.1'
 
 
 class AESCipher(object):
@@ -229,7 +229,9 @@ class WorkWithUserFiles:
         xzibit_hash_from_file = open(FILE_WITH_HASH_GENERIC_KEY).readline()
         check_generic_hash = check_password_hash(xzibit_hash_from_file, self.xzibit)
         if check_generic_hash is False:
-            template_remove_folder()
+            template_some_message(RED, "** DA DUMM BASS **")
+            sleep(1)
+            template_remove_folder(FOLDER_WITH_DATA)
             quit()
         else:
             if self.type_work == 'enc':

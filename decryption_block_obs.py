@@ -71,7 +71,7 @@ def decryption_block(generic_key):
             change_action = input(YELLOW + "\n - Select by number: " + DEFAULT_COLOR)
             if change_action == '1':
                 system_action('clear')
-                system_action('file_manager')
+                # system_action('file_manager')
                 WorkWithUserFiles(generic_key, 'enc').file_encryption_control()
             elif change_action == '2':
                 system_action('clear')

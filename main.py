@@ -84,7 +84,7 @@ FILE_NOTE_ITSELF = 'note_itself.dat'
 # <<<----------------------- Имена файлов программы ------------------------>>>
 FILE_WITH_HASH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.hash_generic_key.dat'
 FILE_WITH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.generic_key.dat'
-FILE_USER_NAME = FOLDER_WITH_PROGRAM_DATA + ".self_name.dat"
+FILE_USER_NAME = FOLDER_WITH_PROGRAM_DATA + '.self_name.dat'
 FILE_WITH_HASH = FOLDER_WITH_PROGRAM_DATA + '.hash_password.dat'
 FILE_LOG = FOLDER_WITH_PROGRAM_DATA + '.file.log'
 # <<<------------- Проверка файлов на наличие --------------->>>
