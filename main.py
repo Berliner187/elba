@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.8.1.0'
+__version__ = 'v0.8.1.1'
 
 
 def show_name_program():
@@ -29,13 +29,13 @@ def show_name_program():
           "\n || Encryption Files || ", YELLOW,
           "\n || Delta For Linux  || "
           "\n || by Berliner187   || ", YELLOW,
-          "\n ||   Veli Afaline   || ", BLUE, __version__)
+          "\n || Veli Afaline     || ", BLUE, __version__)
     if CHECK_FOLDER_FOR_RESOURCE is False:
         first_start_message()
 
 
 def system_action(action):
-    """ Restart Program or Clear terminal """
+    """ Системные действия """
     if action == 'restart':
         os.execv(sys.executable, [sys.executable] + sys.argv)
     if action == 'clear':
@@ -56,26 +56,25 @@ def template_some_message(color, message):
     print(color, '\n\n', message, DEFAULT_COLOR)
 
 
+# <<<-------------------- Константы ------------------------->>>
 # Цвета в терминале
 YELLOW, BLUE, PURPLE = "\033[33m", "\033[36m", "\033[35m"
 GREEN, RED, DEFAULT_COLOR = "\033[32m", "\033[31m", "\033[0m"
-
-# <<<-------------------- Константы ------------------------->>>
 # Папки
 FOLDER_ELBA = 'elba/'
 FOLDER_WITH_DATA = 'volare/'  # Mi fa volare
 FOLDER_WITH_PROGRAM_DATA = FOLDER_WITH_DATA + 'program_files/'
-FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + "resources/"
+FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + 'resources/'
 FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'
 OLD_ELBA = 'old_elba/'
-# <<<-------- Имена файлов и папок для шифрования --------->>>
+# <<<----------- Имена файлов и папок для шифрования ------------>>>
 FOLDER_WITH_ENC_DATA = FOLDER_WITH_DATA + 'ENCRYPTION_DATA/'
 FOLDER_FOR_ENCRYPTION_FILES = FOLDER_WITH_ENC_DATA + 'FOR_ENCRYPTION'
 PREFIX_FOR_DEC_FILE = 'DEC_'
 KEY_FILE = 'BESTE.key'
 IV_FILE = 'LEBEN.key'
 SIGNED = 'SIGN.dat'
-# <<<--- Имена файлов для ресурсов и заметок --->>>
+# <<<------------ Имена файлов для ресурсов и заметок ------------>>>
 FILE_RESOURCE = 'resource.dat'
 FILE_LOGIN = 'login.dat'
 FILE_PASSWORD = 'password.dat'
@@ -173,9 +172,8 @@ def check_modules():
     """ Проверка модулей программы """
     cnt_missing_modules = 0
     file_type = 'obs.py'
-    any_file = os.listdir('.')
     installed_modules = []
-    for file in any_file:
+    for file in os.listdir('.'):
         if file.endswith(file_type):
             installed_modules.append(file)
     for i in range(len(stock_modules)):
@@ -183,6 +181,7 @@ def check_modules():
             cnt_missing_modules += 1
     if cnt_missing_modules > 0:
         template_some_message(RED, " - Missing module/modules -")
+        write_log('Missing module/modules', 'FAIL')
         return 1
     else:
         return 0
