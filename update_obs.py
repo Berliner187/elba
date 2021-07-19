@@ -4,18 +4,19 @@ from main import __version__ as elba_version
 import os
 from time import sleep
 
-__version__ = '1.5.8'  # Версия модуля
+__version__ = '1.5.9'
 
 
 main_file = 'main.py'
 
 
-def update():  # Обновление программы
-    download_from_repository()  # Загрузка проекта из репозитория
+def update():
+    """ Обновление программы """
+    download_from_repository()  # Загрузка Эльбы из репозитория
 
     status_modules = check_modules()
 
-    def template_for_install(program_file):  # Действия для установки
+    def template_for_install(program_file):
         os.system('mv ' + FOLDER_ELBA + program_file + ' . ')
 
     def template_question(text):
@@ -23,6 +24,7 @@ def update():  # Обновление программы
         return question
 
     def message_about_status_modules():
+        """ Вывод показателей о состоянии модулей """
         template_some_message(YELLOW, " - Check Modules - ")
         system_action('clear')
         installed_modules = []
@@ -70,7 +72,7 @@ def update():  # Обновление программы
                         template_for_copy(item)
                 # Копирование данных юзера
                 os.system("cp -r " + FOLDER_WITH_DATA + ' ' + OLD_ELBA + elba_version + '/')
-
+            # Условие установки новой версии программы
             if os.path.getsize(main_file) != os.path.getsize(FOLDER_ELBA + main_file):
                 print(GREEN + '\n   A new version of the program is available ' + DEFAULT_COLOR)
                 install_or_no = template_question(' - Install new version program?')
@@ -91,6 +93,7 @@ def update():  # Обновление программы
                 system_action('clear')
                 template_some_message(YELLOW, ' -- You are using the latest version of the program -- ')
 
+                # Установка обновленных модулей
                 template_for_install('update_obs.py')
                 for module in stock_modules:
                     if os.path.getsize(FOLDER_ELBA + module) != os.path.getsize(module):
@@ -101,19 +104,20 @@ def update():  # Обновление программы
                 sleep(.7)
         else:
             print(YELLOW + ' - New folder not found... ' + DEFAULT_COLOR)
-            write_log('New folder not exist', 'ERROR: Not Found Folder')
+            write_log('New folder not exist', 'PASS')
             sleep(1)
             download_from_repository()
 
 
 def install_old_saved_version():
+    """ Откат к сохраненым версиям """
     s = 0
     system_action('clear')
     for version in os.listdir(OLD_ELBA):
         s += 1
         print(str(s), '-', YELLOW + version + DEFAULT_COLOR)
 
-    print(BLUE + "\n\n  - Change version by number - " + DEFAULT_COLOR)
+    template_some_message(BLUE, "  - Change version by number - ")
     change = int(input(YELLOW + "(1-" + str(s) + "): " + DEFAULT_COLOR))
     if change == '-z':
         template_remove_folder(OLD_ELBA)
