@@ -8,6 +8,7 @@
 """
 
 from base64 import urlsafe_b64encode, urlsafe_b64decode
+from base64 import b64encode, b64decode
 import base64
 import hashlib
 import random
@@ -33,7 +34,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '4.0.2'
+__version__ = '5.0.0'
 
 
 class AESCipher(object):
@@ -132,13 +133,19 @@ def dec_aes(__file__, __key__):
 
 
 def enc_keyiv(keyiv, xzibit):
+    keyiv = b64encode(keyiv)
+    keyiv = str(keyiv)
+    keyiv = keyiv[2:-1]
     aes = AESCipher(xzibit)
     return aes.encrypt(keyiv)
 
 
 def dec_keyiv(enc_keyiv, xzibit):
     aes = AESCipher(xzibit)
-    return aes.decrypt(enc_keyiv)
+    dec_key = aes.decrypt(enc_keyiv)
+    keyiv = str.encode(dec_key)
+    keyiv = b64decode(keyiv)
+    return keyiv
 
 
 def save_data_to_file(data_1, data_2, data_3, xzibit, type_data):
@@ -228,7 +235,8 @@ class WorkWithUserFiles:
             if self.type_work == 'enc':
                 def save_keyiv(key, file):
                     file_key = open(file, mode="wb")
-                    file_key.write(key)
+                    keyiv = enc_keyiv(key, self.xzibit)
+                    file_key.write(keyiv)
                     file_key.close()
 
                     key_data = read_bin_file(file)
@@ -330,8 +338,11 @@ class WorkWithUserFiles:
                                             file = os.path.join(root, name)
                                             file = file.replace(need_folder + '/', '')
 
-                                            key = open(need_folder + '/' + KEY_FILE, 'rb').read()
-                                            iv = open(need_folder + '/' + IV_FILE, 'rb').read()
+                                            enc_key = open(need_folder + '/' + KEY_FILE, 'rb').read()
+                                            enc_iv = open(need_folder + '/' + IV_FILE, 'rb').read()
+
+                                            key = dec_keyiv(enc_key, self.xzibit)
+                                            iv = dec_keyiv(enc_iv, self.xzibit)
 
                                             if file.endswith('.elba'):
                                                 file_data = read_bin_file(need_folder + '/' + file)

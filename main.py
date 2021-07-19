@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.8.0.1'
+__version__ = 'v0.8.1.0'
 
 
 def show_name_program():
@@ -161,12 +161,12 @@ def launcher():
         decryption_block(generic_key)
     else:  # При последующем
         master_password = point_of_entry()
-        genetic_key_from_file = dec_aes(FILE_WITH_GENERIC_KEY, master_password)
+        generic_key_from_file = dec_aes(FILE_WITH_GENERIC_KEY, master_password)
         system_action('clear')
-        greeting(genetic_key_from_file)
+        greeting(generic_key_from_file)
         write_log('Subsequent launch', 'OK')
-        show_decryption_data(genetic_key_from_file, 'resource')
-        decryption_block(genetic_key_from_file)
+        show_decryption_data(generic_key_from_file, 'resource')
+        decryption_block(generic_key_from_file)
 
 
 def check_modules():
