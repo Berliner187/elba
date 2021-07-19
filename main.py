@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.8.1.1'
+__version__ = 'v0.8.1.2'
 
 
 def show_name_program():
@@ -128,6 +128,11 @@ def write_log(cause, status_itself):
         total = str(time_format) + '-' + str(date_format)
         return ''.join(total)
 
+    if os.path.exists(FILE_LOG) is False:
+        with open(FILE_LOG, mode="a", encoding='utf-8') as data:
+            logs_writer = DictWriter(data, fieldnames=FIELDS_LOG_FILE, delimiter=';')
+            logs_writer.writeheader()
+
     log_data = open(FILE_LOG, mode="a", encoding='utf-8')
     log_writer = DictWriter(log_data, fieldnames=FIELDS_LOG_FILE, delimiter=';')
     if os.path.exists(FILE_LOG) is False:
@@ -142,11 +147,6 @@ def write_log(cause, status_itself):
 
 def launcher():
     """ The main function responsible for the operation of the program """
-    if os.path.exists(FILE_LOG) is False:
-        with open(FILE_LOG, mode="a", encoding='utf-8') as data:
-            logs_writer = DictWriter(data, fieldnames=FIELDS_LOG_FILE, delimiter=';')
-            logs_writer.writeheader()
-
     if CHECK_FOLDER_FOR_RESOURCE is False:  # При первом запуске
         show_name_program()
         elba()
