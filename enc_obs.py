@@ -34,7 +34,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '6.0.0'
+__version__ = '6.0.1'
 
 
 class AESCipher(object):
@@ -64,18 +64,6 @@ class AESCipher(object):
         return s[:-ord(s[len(s) - 1:])]
 
 
-def enc_binary(text, encoding='utf-8', errors='surrogatepass'):
-    """ Translation to binary view """
-    bits = bin(int.from_bytes(text.encode(encoding, errors), 'big'))[2:]
-    return bits.zfill(8 * ((len(bits) + 7) // 8))
-
-
-def dec_binary(bits, encoding='utf-8', errors='surrogatepass'):
-    """ Translation from binary """
-    n = int(bits, 2)
-    return n.to_bytes((n.bit_length() + 7) // 8, 'big').decode(encoding, errors) or '\0'
-
-
 def enc_only_base64(message, key):
     """ Base64-based encryption """
     key, message = str(key), str(message)
@@ -96,18 +84,6 @@ def dec_only_base64(encryption, key):
         key_c = key[i % len(key)]
         dec.append(chr((256 + ord(message[i]) - ord(key_c)) % 256))
     return "".join(dec)
-
-
-def enc_two_levels(anything, master_password):
-    crypto_start = enc_base64(anything, master_password)
-    crypto = enc_binary(crypto_start)
-    return crypto
-
-
-def dec_two_levels(anything, master_password):
-    decryption_start = dec_binary(anything)
-    decryption = dec_base64(decryption_start, master_password)
-    return decryption
 
 
 def enc_aes(__file__, encryption, __key__):
@@ -363,12 +339,10 @@ class WorkWithUserFiles:
                                     os.chdir('../../')
                                     sleep(1)
                                 else:
-                                    print('блять')
-                                    # os.chdir('../../')
-                                    # template_remove_folder(FOLDER_WITH_DATA)
-                                    # quit()
+                                    os.chdir('../../')
+                                    template_remove_folder(FOLDER_WITH_DATA)
+                                    quit()
                             else:
-                                print('блять')
-                                # os.chdir('../../')
-                                # template_remove_folder(FOLDER_WITH_DATA)
-                                # quit()
+                                os.chdir('../../')
+                                template_remove_folder(FOLDER_WITH_DATA)
+                                quit()
