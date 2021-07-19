@@ -12,7 +12,7 @@ from update_obs import update, install_old_saved_version
 from main import *
 
 
-__version__ = '2.1.3'
+__version__ = '2.1.4'
 
 
 def decryption_block(generic_key):
@@ -156,7 +156,6 @@ def decryption_block(generic_key):
                     template_print_decryption_data(
                         'Password --->', password_from_file)
 
-    except ValueError as error:
-        write_log(error, "pass")
+    except ValueError:
         show_decryption_data(generic_key, 'resource')   # Показ ресурсов
     decryption_block(generic_key)  # Рекусрия под-главной функции
