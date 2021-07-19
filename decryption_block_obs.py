@@ -12,7 +12,7 @@ from update_obs import update, install_old_saved_version
 from main import *
 
 
-__version__ = '2.1.2'
+__version__ = '2.1.3'
 
 
 def decryption_block(generic_key):
@@ -101,7 +101,6 @@ def decryption_block(generic_key):
             log_data = open(FILE_LOG, 'r')
             reader_log = DictReader(log_data, delimiter=';')
             try:
-                write_log("Check logs", "OK")
                 for line in reader_log:
                     print(
                         line[FIELDS_LOG_FILE[0]],
@@ -109,6 +108,7 @@ def decryption_block(generic_key):
                         line[FIELDS_LOG_FILE[2]],
                         line[FIELDS_LOG_FILE[3]]
                     )
+                write_log("Check logs", "OK")
             except KeyError:
                 write_log("Check logs: KEY ERROR", "FAILED")
             template_some_message(YELLOW, " - Press Enter to exit - ")
