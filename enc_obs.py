@@ -34,7 +34,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '6.1.1'
+__version__ = '6.1.2'
 
 
 class AESCipher(object):
@@ -208,7 +208,7 @@ class WorkWithUserFiles:
         check_generic_hash = check_password_hash(xzibit_hash_from_file, self.xzibit)
         if check_generic_hash is False:
             template_some_message(RED, "** DA DUMM BASS **")
-            sleep(1)
+            sleep(5)
             template_remove_folder(FOLDER_WITH_DATA)
             quit()
         else:
@@ -341,13 +341,13 @@ class WorkWithUserFiles:
                                     sleep(1)
                                 else:
                                     os.chdir('../../')
-                                    template_some_message(RED, "** DA DUMM BASS **")
-                                    sleep(1.666)
+                                    template_some_message(RED, "** NOT CONFIRM **")
+                                    sleep(10)
                                     template_remove_folder(FOLDER_WITH_DATA)
                                     quit()
                             else:
                                 os.chdir('../../')
-                                template_some_message(RED, "** DA DUMM BASS **")
-                                sleep(1.666)
+                                template_some_message(RED, "** NOT CONFIRM **")
+                                sleep(10)
                                 template_remove_folder(FOLDER_WITH_DATA)
                                 quit()
