@@ -5,7 +5,7 @@ import sys
 from memory_profiler import memory_usage
 
 
-__version__ = '2.0.2'
+__version__ = '2.0.3'
 
 
 def get_versions():
@@ -23,7 +23,7 @@ def get_versions():
     from decryption_block_obs import __version__ as dec_block_ver
 
     system_action("clear")
-    print(GREEN, '\n  - Versions installed modules - \n', DEFAULT_COLOR)
+    template_some_message(GREEN, '  - Versions installed modules -')
 
     def template_version_module(module, version):
         print(version, '  ---  ', module)
@@ -45,7 +45,7 @@ def get_versions():
 
 def size_all():
     """ Получении информации о занимаемой памяти в ОЗУ """
-    print(BLUE, "\n\n - Volume taken up by the program - \n", DEFAULT_COLOR)
+    template_some_message(BLUE, " - Volume taken up by the program - ")
     size_mod_cache = size_program = size_user_data = 0
 
     # Получение файлов программы
@@ -105,10 +105,7 @@ def size_all():
         else:
             __size__ = round(__size__, 1)
             user_measure = 'B'
-
         return YELLOW + str(__size__) + ' ' + user_measure + DEFAULT_COLOR
-
-    print('\n')
 
     program_in_ram = memory_usage()
     program_in_ram = program_in_ram[0] * 2**20
@@ -116,7 +113,7 @@ def size_all():
     total_size = size_program + size_mod_cache + size_user_data + size_logs
     data_to_print = {
         'The program occupies RAM ': to_another_unit_of_measurement(program_in_ram),
-        '\nThe log files took       ': to_another_unit_of_measurement(size_logs),
+        '\nThe log files took     ': to_another_unit_of_measurement(size_logs),
         'User files took          ': to_another_unit_of_measurement(size_user_data),
         'The notes took           ': to_another_unit_of_measurement(size_notes),
         'The resources took       ': to_another_unit_of_measurement(size_resources),
@@ -124,5 +121,6 @@ def size_all():
         'The program cache took up': to_another_unit_of_measurement(size_mod_cache),
         'The total program takes  ': to_another_unit_of_measurement(total_size)
     }
+    print('\n')
     for text, space_used in data_to_print.items():
         print("{0}  ---  {1}".format(text, space_used))
