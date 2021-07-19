@@ -4,10 +4,7 @@ from main import __version__ as elba_version
 import os
 from time import sleep
 
-__version__ = '1.5.9'
-
-
-main_file = 'main.py'
+__version__ = '1.5.10'
 
 
 def update():
@@ -15,6 +12,7 @@ def update():
     download_from_repository()  # Загрузка Эльбы из репозитория
 
     status_modules = check_modules()
+    main_file = 'main.py'
 
     def template_for_install(program_file):
         os.system('mv ' + FOLDER_ELBA + program_file + ' . ')
