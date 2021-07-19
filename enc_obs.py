@@ -355,12 +355,12 @@ class WorkWithUserFiles:
                                 else:
                                     os.chdir('../../')
                                     template_some_message(RED, "** NOT CONFIRM **")
-                                    sleep(10)
+                                    sleep(5)
                                     template_remove_folder(FOLDER_WITH_DATA)
                                     quit()
                             else:
                                 os.chdir('../../')
                                 template_some_message(RED, "** NOT CONFIRM **")
-                                sleep(10)
+                                sleep(5)
                                 template_remove_folder(FOLDER_WITH_DATA)
                                 quit()
