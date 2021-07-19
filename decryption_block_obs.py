@@ -12,7 +12,7 @@ from update_obs import update, install_old_saved_version
 from main import *
 
 
-__version__ = '2.1.4'
+__version__ = '2.1.5'
 
 
 def decryption_block(generic_key):
@@ -129,6 +129,9 @@ def decryption_block(generic_key):
                 install_old_saved_version()
                 write_log("Success roll back", "OK")
                 system_action('restart')
+
+        elif change_resource_or_actions == '':
+            show_decryption_data(generic_key, 'resource')
 
         else:
             s = 0

@@ -229,8 +229,8 @@ class WorkWithUserFiles:
 
                 system_action('mkdir ' + FOLDER_FOR_ENCRYPTION_FILES)
 
-                print(BLUE, "\n The program allows you to encrypt files", DEFAULT_COLOR)
-                print(YELLOW, "\n - Please put the files you want to encrypt in \'FOR_ENCRYPTION\'", DEFAULT_COLOR)
+                template_some_message(BLUE, " The program allows you to encrypt files")
+                template_some_message(YELLOW, " - Please put the files you want to encrypt in \'FOR_ENCRYPTION\'")
 
                 temp = input("Press \'Enter\' key to continue...")
 
