@@ -7,11 +7,11 @@ from time import sleep
 from main import *
 
 
-__version__ = '2.0.1'  # Версия модуля
+__version__ = '2.0.2'
 
 
 def delete_resource(category):
-	print(BLUE + '\n -- Change by number -- \n' + DEFAULT_COLOR)
+	template_some_message(BLUE, ' -- Change by number -- ')
 
 	folder_category = ''
 	if category == 'resource':

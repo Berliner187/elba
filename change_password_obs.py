@@ -10,7 +10,7 @@ from time import sleep
 import os
 
 
-__version__ = '4.0.1'
+__version__ = '4.0.2'
 
 
 def change_master_password():
@@ -30,10 +30,10 @@ def change_master_password():
 
     confirm_master_password = get_confirm_master_password()
     system_action('clear')
-    print(GREEN + '\n\n  --  Success confirm  -- ' + DEFAULT_COLOR)
+    template_some_message(GREEN, '  --  Success confirm  --')
     sleep(.6)
     system_action('clear')
-    print(BLUE + '\n   Pick a new master-password \n' + DEFAULT_COLOR)
+    template_some_message(BLUE, ' - Pick a new master-password -')
     new_master_password = create_and_confirm_user_password()
     # Generic-key шифруется новым мастер-паролем
     generic_key_from_file = dec_aes(FILE_WITH_GENERIC_KEY, confirm_master_password)
@@ -45,6 +45,6 @@ def change_master_password():
         hash_pas.close()
 
     system_action('clear')
-    print(GREEN + '\n\n    -  Password changed successfully!  - ' + DEFAULT_COLOR)
+    template_some_message(GREEN, '  -  Password changed successfully!  - ')
     sleep(1)
     system_action('restart')

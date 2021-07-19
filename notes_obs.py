@@ -10,17 +10,17 @@ from shutil import copyfile
 import os
 
 
-__version__ = '3.0.0'
+__version__ = '3.0.1'
 
 
 def notes(generic_key):
     def add_new():  # Добавление новой заметки
         system_action('clear')
-        print(BLUE + '    ---  Add new note  --- \n\n')
+        template_some_message(BLUE, '  ---  Add new note  ---')
         name_note = input(YELLOW + ' - Name note: ' + DEFAULT_COLOR)
         note_itself = input(YELLOW + ' - Note: ' + DEFAULT_COLOR)
         save_data_to_file(name_note, note_itself, None, generic_key, 'note')
-        print(GREEN, '   -- Success saved! --')
+        template_some_message(GREEN, '   -- Success saved! --')
         sleep(.3)
         system_action('clear')
         show_decryption_data(generic_key, 'note')
