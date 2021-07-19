@@ -6,7 +6,7 @@ from main import *
 import os
 
 
-__version__ = '1.1.3'
+__version__ = '1.1.4'
 
 
 def clear():
@@ -207,8 +207,5 @@ def first_start_message():
           RED,
           "\n          Программа не поддерживает русский язык         ",
           YELLOW,
-          '\n --              Pick a master-password               -- '
-          '\n --    Только не используйте свой банковский пароль,  -- '
-          '\n          я не сильно вкладывался в безопасность         '
-          '\n                     этой программы                      ',
+          '\n --              Pick a master-password               -- ',
           DEFAULT_COLOR)

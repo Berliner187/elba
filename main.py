@@ -2,7 +2,7 @@
 
 """
     Password Manager For Linux (SFL)
-    Elba - Password manager and keeper notes
+    Elba - Password manager, keeper notes and encryption files and folders
     Resources and notes related to them are encrypted with a single password
     Copyright (C) 2021  by Berliner187
 
