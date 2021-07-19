@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.8.3.0'
+__version__ = 'v0.8.3.2'
 
 
 def show_name_program():
@@ -136,8 +136,6 @@ def write_log(cause, status_itself):
 
     log_data = open(FILE_LOG, mode="a", encoding='utf-8')
     log_writer = DictWriter(log_data, fieldnames=FIELDS_LOG_FILE, delimiter=';')
-    if os.path.exists(FILE_LOG) is False:
-        logs_writer.writeheader()
     log_writer.writerow({
         FIELDS_LOG_FILE[0]: __version__,     # Запись версии
         FIELDS_LOG_FILE[1]: get_time_now(),  # Запись даты и времени

@@ -34,7 +34,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '6.0.1'
+__version__ = '6.1.0'
 
 
 class AESCipher(object):
@@ -175,11 +175,12 @@ class WorkWithUserFiles:
         hms = datetime.datetime.today()
         get_date = str(hms.day) + str(hms.month) + str(hms.year) + '_'
         get_time = str(hms.hour) + '-' + str(hms.minute) + '-' + str(hms.second)
-        timed = hms.hour * hms.minute * hms.second * random.randrange(32, 1024)
+        timed = hms.hour * hms.minute * hms.second * random.randrange(64, 1024)
         name_enc_folder = get_date + get_time + '/'
 
         def print_progress(now, total):
-            print(YELLOW, " The process is completed on ", DEFAULT_COLOR, '[', now, '/', total, ']')
+            progress_status = ((now * 100) // total)
+            print(YELLOW, " The process is completed on ", DEFAULT_COLOR, progress_status, '%')
 
         def encrypt_it(byte_file, key, iv):
             cfb_cipher = AES.new(key, AES.MODE_OFB, iv)
