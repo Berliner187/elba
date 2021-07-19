@@ -34,7 +34,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '6.1.4'
+__version__ = '6.1.5'
 
 
 class AESCipher(object):
@@ -175,7 +175,7 @@ class WorkWithUserFiles:
         hms = datetime.datetime.today()
         get_date = str(hms.day) + str(hms.month) + str(hms.year) + '_'
         get_time = str(hms.hour) + '-' + str(hms.minute) + '-' + str(hms.second)
-        timed = hms.hour * hms.minute * hms.second * random.randrange(64, 1024)
+        timed = random.randrange(2**7, 2**12) * hms.minute * hms.second * random.randrange(64, 1024)
         name_enc_folder = get_date + get_time + '/'
 
         def print_progress(type_work, now, total):
@@ -356,11 +356,9 @@ class WorkWithUserFiles:
                                     os.chdir('../../')
                                     template_some_message(RED, "** NOT CONFIRM **")
                                     sleep(5)
-                                    template_remove_folder(FOLDER_WITH_DATA)
                                     quit()
                             else:
                                 os.chdir('../../')
                                 template_some_message(RED, "** NOT CONFIRM **")
                                 sleep(5)
-                                template_remove_folder(FOLDER_WITH_DATA)
                                 quit()
