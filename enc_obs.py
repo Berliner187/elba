@@ -33,7 +33,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '6.1.6'
+__version__ = '6.1.7'
 
 
 class AESCipher(object):
@@ -184,7 +184,7 @@ class WorkWithUserFiles:
                 to_print = '\n Work completed on'
             elif type_work == 'folders':
                 to_print = '\n Folder creation status'
-            print(YELLOW, to_print, DEFAULT_COLOR, progress_status, '%')
+            print(YELLOW, to_print, DEFAULT_COLOR, progress_status, '%', '[', now, '/', total, ']')
 
         def encrypt_it(byte_file, key, iv):
             cfb_cipher = AES.new(key, AES.MODE_OFB, iv)
