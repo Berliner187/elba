@@ -16,7 +16,7 @@ __version__ = '2.1.4'
 
 
 def decryption_block(generic_key):
-    """ Цикл с выводом сохраненных ресурсов """
+    """ Цикл с выводом сохраненных ресурсов и выбор действий """
     change_resource_or_actions = input('\n Change action: ')   # Выбор действия
     try:
         if change_resource_or_actions == '-a':  # Добавление нового ресурса
@@ -36,13 +36,13 @@ def decryption_block(generic_key):
 
         elif change_resource_or_actions == '-x':  # Выход
             system_action('clear')
-            template_some_message(BLUE, ' --- Program is closet --- \n')
+            template_some_message(BLUE, ' --- Close ---')
             write_log("Exit", "OK")
             quit()
 
         elif change_resource_or_actions == '-r':  # Перезапуск
             system_action('clear')
-            template_some_message(GREEN, ' --- Restart --- \n')
+            template_some_message(GREEN, ' --- Restart ---')
             sleep(.2)
             write_log("Restart", "OK")
             system_action('restart')
@@ -109,8 +109,8 @@ def decryption_block(generic_key):
                         line[FIELDS_LOG_FILE[3]]
                     )
                 write_log("Check logs", "OK")
-            except KeyError:
-                write_log("Check logs: KEY ERROR", "FAILED")
+            except KeyError as error:
+                write_log(error, "FAILED")
             template_some_message(YELLOW, " - Press Enter to exit - ")
 
         elif change_resource_or_actions == '-dm':  # Удаление кэша
@@ -129,9 +129,6 @@ def decryption_block(generic_key):
                 install_old_saved_version()
                 write_log("Success roll back", "OK")
                 system_action('restart')
-
-        elif change_resource_or_actions == '':
-            show_decryption_data(generic_key, 'resource')
 
         else:
             s = 0
