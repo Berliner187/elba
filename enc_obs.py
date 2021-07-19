@@ -34,7 +34,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '6.1.0'
+__version__ = '6.1.1'
 
 
 class AESCipher(object):
@@ -341,9 +341,13 @@ class WorkWithUserFiles:
                                     sleep(1)
                                 else:
                                     os.chdir('../../')
+                                    template_some_message(RED, "** DA DUMM BASS **")
+                                    sleep(1.666)
                                     template_remove_folder(FOLDER_WITH_DATA)
                                     quit()
                             else:
                                 os.chdir('../../')
+                                template_some_message(RED, "** DA DUMM BASS **")
+                                sleep(1.666)
                                 template_remove_folder(FOLDER_WITH_DATA)
                                 quit()
