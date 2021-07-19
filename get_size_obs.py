@@ -96,10 +96,10 @@ def size_all():
 
     def to_another_unit_of_measurement(__size__):
         """ Округление и перевод в единицы измерения """
-        if 2**20 < __size__:
+        if 2**20 <= __size__:
             __size__ = round((__size__ / (2**20)), 1)
             user_measure = 'MiB'
-        elif 2**10 < __size__ < 2**20:
+        elif 2**10 <= __size__ < 2**20:
             __size__ = round((__size__ / (2**10)), 1)
             user_measure = 'KiB'
         else:
