@@ -135,7 +135,7 @@ def write_log(cause, status_itself):
         logs_writer.writeheader()
     log_writer.writerow({
         FIELDS_LOG_FILE[0]: __version__,     # Запись версии
-        FIELDS_LOG_FILE[1]: get_time_now(),      # Запись даты и времени
+        FIELDS_LOG_FILE[1]: get_time_now(),  # Запись даты и времени
         FIELDS_LOG_FILE[2]: cause,           # Запись причины
         FIELDS_LOG_FILE[3]: status_itself    # Запись статуса
     })
