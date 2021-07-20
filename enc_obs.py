@@ -274,9 +274,14 @@ class WorkWithUserFiles:
                         file = os.path.join(root, name)
                         file = file[2:]
                         file_data = read_bin_file(file)
-                        write_bin_file('../' + name_enc_folder + file + ".elba", encrypt_it(file_data, key, iv))
-                        system_action('clear')
-                        print_progress('files', progress, total_progress)
+                        try:
+                            write_bin_file('../' + name_enc_folder + file + ".elba", encrypt_it(file_data, key, iv))
+                            system_action('clear')
+                            print_progress('files', progress, total_progress)
+                        except FileNotFoundError:
+                            template_some_message(RED,
+                                                  'Error in encryption file: directory must not contain a SPACE')
+                            quit()
 
                 template_some_message(GREEN, "Encryption successful \n")
                 save_keyiv(key, path_to_key)
