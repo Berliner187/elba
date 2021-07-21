@@ -7,12 +7,13 @@ from notes_obs import notes
 from change_password_obs import change_master_password
 from actions_with_password_obs import choice_generation_or_save_self_password
 from enc_obs import enc_aes, dec_aes, WorkWithUserFiles
+from enc_obs import actions_with_encryption_files
 from show_dec_data_obs import show_decryption_data
 from update_obs import update, install_old_saved_version
 from main import *
 
 
-__version__ = '2.1.5'
+__version__ = '2.2.0'
 
 
 def decryption_block(generic_key):
@@ -63,20 +64,7 @@ def decryption_block(generic_key):
 
         elif change_resource_or_actions == '-f':    # Шифрование файлов
             # Переписать под show_dec_data_obs
-            system_action('clear')
-            template_some_message(BLUE,
-                                  "-- Go to the VOLARE/ENCRYPTION_DATA data folder and follow the instructions --")
-            print(BLUE, "1.", YELLOW, " - Encryption files", DEFAULT_COLOR)
-            print(BLUE, "2.", YELLOW, " - Decryption files", DEFAULT_COLOR)
-            change_action = input(YELLOW + "\n - Select by number: " + DEFAULT_COLOR)
-            if change_action == '1':
-                system_action('clear')
-                # system_action('file_manager')
-                WorkWithUserFiles(generic_key, 'enc').file_encryption_control()
-            elif change_action == '2':
-                system_action('clear')
-                WorkWithUserFiles(generic_key, 'dec').file_encryption_control()
-            write_log("Encryption data", "OK")
+            actions_with_encryption_files(generic_key)
             show_decryption_data(generic_key, 'resource')
 
         elif change_resource_or_actions == '-z':    # Удаление всех данных

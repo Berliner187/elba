@@ -33,7 +33,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '6.1.7'
+__version__ = '6.2.0'
 
 
 class AESCipher(object):
@@ -366,3 +366,20 @@ class WorkWithUserFiles:
                                 template_some_message(RED, "** NOT CONFIRM **")
                                 sleep(5)
                                 quit()
+
+
+def actions_with_encryption_files(xzibit):
+    system_action('clear')
+    template_some_message(BLUE, "-- Go to the VOLARE/ENCRYPTION_DATA data folder and follow the instructions --")
+    print(BLUE, "1.", YELLOW, " - Encryption files", DEFAULT_COLOR)
+    print(BLUE, "2.", YELLOW, " - Decryption files", DEFAULT_COLOR)
+    print(BLUE, "\n Press \'Enter\' to exit from encryption", DEFAULT_COLOR)
+    change_action = input(YELLOW + "\n - Select by number: " + DEFAULT_COLOR)
+    if change_action == '1':
+        system_action('clear')
+        system_action('file_manager')
+        WorkWithUserFiles(xzibit, 'enc').file_encryption_control()
+    elif change_action == '2':
+        system_action('clear')
+        WorkWithUserFiles(xzibit, 'dec').file_encryption_control()
+    write_log("Encryption data", "OK")
