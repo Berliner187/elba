@@ -3,7 +3,7 @@
 """
     Модуль шифрования.
     Обеспечивает безопасность и сохранность всех данных пользователя.
-    Доступные методы: AES (с длиной ключа 256 бит) и base64
+    Доступные методы: AES и Base64
 """
 
 from base64 import urlsafe_b64encode, urlsafe_b64decode
@@ -33,7 +33,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '6.2.0'
+__version__ = '6.3.0'
 
 
 class AESCipher(object):
@@ -170,11 +170,18 @@ class WorkWithUserFiles:
         self.type_work = type_work
 
     def file_encryption_control(self):
+        """ Управление шифрованием """
+        def new_timed():
+            """ Генерирование новой контрольной суммы """
+            castrol = 1
+            for iterate in range(2 ** 10):
+                castrol *= random.randrange(2 ** 5, 2 ** 80)
+            return castrol
         # Получение времени
         hms = datetime.datetime.today()
         get_date = str(hms.day) + str(hms.month) + str(hms.year) + '_'
         get_time = str(hms.hour) + '-' + str(hms.minute) + '-' + str(hms.second)
-        timed = random.randrange(2**7, 2**12) * hms.minute * hms.second * random.randrange(64, 1024)
+        timed = new_timed()
         name_enc_folder = get_date + get_time + '/'
 
         def print_progress(type_work, now, total):
