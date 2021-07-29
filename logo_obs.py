@@ -10,7 +10,7 @@ import os
 from main import *
 
 
-__version__ = '1.2.0'
+__version__ = '1.2.1'
 
 
 def clear():
@@ -131,11 +131,11 @@ def wait_effect(lines, sleeper):
 
 def logo():
     cols, rows = shutil.get_terminal_size()
-    print(YELLOW)
-    lines = [
-        ("WELLCOME TO:        ").center(cols)
-    ]
-    wait_effect(lines, 0.0002)
+    # print(YELLOW)
+    # lines = [
+    #     ("WELLCOME TO:        ").center(cols)
+    # ]
+    # wait_effect(lines, 0.0002)
     print(BLUE)
     logo_lines = [
         ("                                                            ").center(cols),
