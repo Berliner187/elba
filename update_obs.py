@@ -5,10 +5,11 @@ import os
 from time import sleep
 
 
-__version__ = '1.6.1'
+__version__ = '1.6.2'
 
 
 def get_peculiarities_copy(type_copy):
+    """ Поддержка синтаксиса командных оболочек Linux, MacOS X и Windows """
     if type_copy == 'dir':
         if os.name == 'nt':
             peculiarities_copy = 'xcopy /y /o /e '
@@ -30,10 +31,12 @@ def get_peculiarities_copy(type_copy):
 
 
 def template_for_install(program_file):
+    """ Шаблон установки файлов программы """
     os.system(get_peculiarities_copy('move') + FOLDER_ELBA + program_file + ' . ')
 
 
 def template_question(text):
+    """ Шаблон вопросов от программы """
     question = input(YELLOW + ' - ' + text + ' (y/n): ' + DEFAULT_COLOR)
     return question
 
