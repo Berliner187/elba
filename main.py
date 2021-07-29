@@ -20,7 +20,7 @@ import datetime
 import shutil
 
 
-__version__ = 'v0.8.3.8'
+__version__ = 'v0.8.3.9'
 
 
 def show_name_program():
@@ -237,8 +237,10 @@ if __name__ == '__main__':
             else:  # Попытка обновиться
                 get_confirm = input(YELLOW + " - Update? (y/n): " + DEFAULT_COLOR)
                 if get_confirm == 'y':
+                    write_log('Try update', 'Run')
                     update()
                 else:
+                    write_log('Exit', 'OK')
                     quit()
             system_action('restart')
     else:
