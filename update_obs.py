@@ -5,7 +5,7 @@ import os
 from time import sleep
 
 
-__version__ = '1.5.11'
+__version__ = '1.6.0'
 
 
 def get_peculiarities_copy(type_copy):
@@ -17,10 +17,25 @@ def get_peculiarities_copy(type_copy):
         return peculiarities_copy
     elif type_copy == 'file':
         if os.name == 'nt':
-            peculiarities_copy = 'COPY '
+            peculiarities_copy = 'copy '
         else:
             peculiarities_copy = 'cp '
         return peculiarities_copy
+    elif type_copy == 'move':
+        if os.name == 'nt':
+            peculiarities_move = 'move '
+        else:
+            peculiarities_move = 'mv '
+        return peculiarities_move
+
+
+def template_for_install(program_file):
+    os.system(get_peculiarities_copy(move) + FOLDER_ELBA + program_file + ' . ')
+
+
+def template_question(text):
+    question = input(YELLOW + ' - ' + text + ' (y/n): ' + DEFAULT_COLOR)
+    return question
 
 
 def update():
@@ -29,13 +44,6 @@ def update():
 
     status_modules = check_modules()
     main_file = 'main.py'
-
-    def template_for_install(program_file):
-        os.system('mv ' + FOLDER_ELBA + program_file + ' . ')
-
-    def template_question(text):
-        question = input(YELLOW + ' - ' + text + ' (y/n): ' + DEFAULT_COLOR)
-        return question
 
     def get_installed_modules():
         installed_modules = []
@@ -46,7 +54,7 @@ def update():
 
     def message_about_status_modules():
         """ Вывод показателей о состоянии модулей """
-        template_some_message(YELLOW, " - Check Modules - ")
+        template_some_message(YELLOW, " - Check Modules -")
         system_action('clear')
         installed_modules = get_installed_modules()
         cnt_missing_mod = 0
@@ -98,7 +106,7 @@ def update():
                 os.system(get_peculiarities_copy('dir') + FOLDER_WITH_DATA + ' ' + OLD_ELBA + elba_version + '/')
             # Условие установки новой версии программы
             if os.path.getsize(main_file) != os.path.getsize(FOLDER_ELBA + main_file):
-                print(GREEN + '\n   A new version of the program is available ' + DEFAULT_COLOR)
+                template_some_message(GREEN, ' A new version of the program is available ')
                 install_or_no = template_question(' - Install new version program?')
 
                 if install_or_no == 'y':
@@ -127,10 +135,10 @@ def update():
                 template_remove_folder(FOLDER_ELBA)
                 sleep(.7)
         else:
-            print(YELLOW + ' - New folder not found... ' + DEFAULT_COLOR)
+            template_some_message(YELLOW, ' - New folder not found... -')
             write_log('New folder not exist', 'PASS')
             sleep(1)
-            change_download_or_no = input('Try download from repository? (y/n): ')
+            change_download_or_no = template_question('Try download from repository?')
             if change_download_or_no == 'y':
                 download_from_repository()
             else:
