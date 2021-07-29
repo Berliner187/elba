@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 from time import sleep
 from os import system
-from main import *
+from time import sleep
 
+import shutil
+import sys
 import os
 
+from main import *
 
-__version__ = '1.1.4'
+
+__version__ = '1.2.0'
 
 
 def clear():
@@ -116,24 +120,42 @@ def position_8():
     sleep(TIMER)
 
 
+def wait_effect(lines, sleeper):
+    for line in lines:  # for each line of text (or each message)
+        for c in line:  # for each character in each line
+            print(c, end='')  # print a single character, and keep the cursor there.
+            sys.stdout.flush()  # flush the buffer
+            sleep(sleeper)  # wait a little to make the effect look good.
+        print('')
+
+
 def logo():
-    print("                                                           ")
-    print("  _____                      ______                        ")
-    print(" |            |             |      \            /\         ")
-    print(" |            |             |       \          /  \        ")
-    print(" |            |             |       /         /    \       ")
-    print(" |------      |             |______/         /______\      ")
-    print(" |            |             |       \       /        \     ")
-    print(" |            |             |        \     /          \    ")
-    print(" |            |             |         |   /            \   ")
-    print(" |__________  |__________   |_________/  /              \  ")
+    cols, rows = shutil.get_terminal_size()
+    print(YELLOW)
+    lines = [
+        ("WELLCOME TO:        ").center(cols)
+    ]
+    wait_effect(lines, 0.002)
+    print(BLUE)
+    logo_lines = [
+        ("                                                            ").center(cols),
+        ("  EEEEEEE     LL            BBBBBBB            AAAA         ").center(cols),
+        (" E            LL            B      B         A      A       ").center(cols),
+        (" E            LL            B      BB       AA      AA      ").center(cols),
+        (" EEEEEEE      LL            BBBBBBBB       AAAAAAAAAAAA     ").center(cols),
+        (" E            LL            B      BB      AA        AA     ").center(cols),
+        (" E            LL            B       BB     AA        AA     ").center(cols),
+        (" E            LL            B        BB    AA        AA     ").center(cols),
+        (" E            LL            B         BB   AA        AA     ").center(cols),
+        (" EEEEEEEEEEE  LLLLLLLLLLL   BBBBBBBBBBB    AA        AA     ").center(cols)
+    ]
+    wait_effect(logo_lines, 0.00001)
 
 
 def position_total():
     clear()
     logo()
     sleep(TIMER)
-    # print(CLEAR_COLOR)
 
 
 def author():
@@ -173,7 +195,6 @@ def animation():
 
 
 def elba():     # Фунция вывода только логотипа
-    print(BLUE)
     logo()
     print(DEFAULT_COLOR)
 
@@ -200,12 +221,25 @@ def Ukraine():
 
 
 def first_start_message():
-    print(BLUE,
-          "\n  - Encrypt your passwords with one master-password -    "
-          "\n  -           No resources saved. Add them!         -  \n"
-          "\n ----                That's easy!                 ---- \n",
-          RED,
-          "\n          Программа не поддерживает русский язык         ",
-          YELLOW,
-          '\n --              Pick a master-password               -- ',
-          DEFAULT_COLOR)
+    cols, rows = shutil.get_terminal_size()
+    lines = [
+        BLUE,
+        ("\n  - Encrypt your passwords with one master-password -    ".center(cols)),
+        ("\n  -           No resources saved. Add them!         -  \n".center(cols)),
+        ("\n ----                That's easy!                 ---- \n".center(cols)),
+        RED,
+        ("\n          Программа не поддерживает русский язык         ".center(cols)),
+        YELLOW,
+        ("\n --              Pick a master-password               -- ".center(cols))
+    ]
+    wait_effect(lines, 0.0005)
+
+
+# lines = [BLUE,
+#         " || Delta For Linux  || ",
+#         " || by Berliner187   || ",
+#         " || Veli Afaline     || ", YELLOW, __version__
+#     ]
+# wait_effect(lines)
+# first_start_message()
+# elba()

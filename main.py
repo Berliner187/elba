@@ -17,19 +17,23 @@ import sys
 from time import sleep
 from csv import DictReader, DictWriter
 import datetime
+import shutil
 
 
-__version__ = 'v0.8.3.5'
+__version__ = 'v0.8.3.6'
 
 
 def show_name_program():
-    print(BLUE,
-          "\n || Password Manager || "
-          "\n || Keeper of Notes  || "
-          "\n || Encryption Files || ", YELLOW,
-          "\n || Delta For Linux  || "
-          "\n || by Berliner187   || ", YELLOW,
-          "\n || Veli Afaline     || ", BLUE, __version__)
+    from logo_obs import wait_effect
+    cols, rows = shutil.get_terminal_size()
+    edit_version = __version__ + '       '
+    lines = [BLUE,
+             "||  Delta For Linux  ||   ".center(cols),
+             "||  by Berliner187   ||   ".center(cols),
+             "||  Veli Afaline     ||   ".center(cols),
+             YELLOW, edit_version.center(cols)
+             ]
+    wait_effect(lines, 0.0003)
     if CHECK_FOLDER_FOR_RESOURCE is False:
         first_start_message()
 
@@ -52,8 +56,9 @@ def template_remove_folder(some_folder):
 
 
 def template_some_message(color, message):
+    cols, rows = shutil.get_terminal_size()
     """ Шаблон сообщения в ходе работы программы """
-    print(color, '\n\n', message, DEFAULT_COLOR)
+    print(color, '\n\n', message.center(cols), DEFAULT_COLOR)
 
 
 # <<<-------------------- Константы ------------------------->>>
@@ -195,8 +200,7 @@ if __name__ == '__main__':
             from stdiomask import getpass
         except ModuleNotFoundError as error_module:
             write_log(error_module, 'CRASH')
-            print(RED, 'Error: \n' + str(error_module), DEFAULT_COLOR)
-            print('\n')
+            print(RED, 'Error: \n' + str(error_module), DEFAULT_COLOR, '\n')
             template_some_message(
                 YELLOW, "Please, install module/modules with requirements"
             )
@@ -222,6 +226,7 @@ if __name__ == '__main__':
         except Exception as random_error:
             write_log(random_error, 'FAIL')
             template_some_message(RED, ' --- ERROR --- ')
+            print(random_error)
             sleep(1)
             system_action('clear')
             if os.path.exists(OLD_ELBA):  # Попытка откатиться
