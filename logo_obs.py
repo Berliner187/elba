@@ -2,6 +2,7 @@
 from time import sleep
 from os import system
 from time import sleep
+from random import choice
 
 import shutil
 import sys
@@ -10,189 +11,75 @@ import os
 from main import *
 
 
-__version__ = '1.2.2'
-
-
-TIMER = .08
-STRING_LINE = "___________________________________________________________ \n"
-STRING_BOTTOM_0 = " |__________  |__________   |_________/  /              \  "
-STRING_BOTTOM_1 = " |            |             |         |   /            \   "
-
-
-def template(string, cnt_str):
-    system_action('clear')
-    print(STRING_LINE * cnt_str)
-    print(string)
-    sleep(TIMER)
-
-
-def position_0():
-    print(PURPLE)
-    template(STRING_LINE, 9)
-
-
-def position_1():
-    system_action('clear')
-    print(STRING_LINE * 8)
-    print(STRING_BOTTOM_1)
-    sleep(TIMER)
-
-
-def position_2():
-    system_action('clear')
-    print(STRING_LINE * 7)
-    print(" |            |             |         |   /            \   ")
-    print(" |__________  |__________   |_________/  /              \  ")
-    sleep(TIMER)
-
-
-def position_3():
-    system_action('clear')
-    print(STRING_LINE * 6)
-    print(" |            |             |        \     /          \    ")
-    print(" |            |             |         |   /            \   ")
-    print(" |__________  |__________   |_________/  /              \  ")
-    sleep(TIMER)
-
-
-def position_4():
-    system_action('clear')
-    print(STRING_LINE * 5)
-    print(" |            |             |       \       /        \     ")
-    print(" |            |             |        \     /          \    ")
-    print(" |            |             |         |   /            \   ")
-    print(" |__________  |__________   |_________/  /              \  ")
-    sleep(TIMER)
-
-
-def position_5():
-    system_action('clear')
-    print(STRING_LINE * 4)
-    print(" |------      |             |______/         /______\      ")
-    print(" |            |             |       \       /        \     ")
-    print(" |            |             |        \     /          \    ")
-    print(" |            |             |         |   /            \   ")
-    print(" |__________  |__________   |_________/  /              \  ")
-    sleep(TIMER)
-
-
-def position_6():
-    system_action('clear')
-    print(STRING_LINE * 3)
-    print(" |            |             |       /         /    \       ")
-    print(" |------      |             |______/         /______\      ")
-    print(" |            |             |       \       /        \     ")
-    print(" |            |             |        \     /          \    ")
-    print(" |            |             |         |   /            \   ")
-    print(" |__________  |__________   |_________/  /              \  ")
-    sleep(TIMER)
-
-
-def position_7():
-    system_action('clear')
-    print(STRING_LINE * 2)
-    print(" |            |             |       \          /  \        ")
-    print(" |            |             |       /         /    \       ")
-    print(" |------      |             |______/         /______\      ")
-    print(" |            |             |       \       /        \     ")
-    print(" |            |             |        \     /          \    ")
-    print(" |            |             |         |   /            \   ")
-    print(" |__________  |__________   |_________/  /              \  ")
-    sleep(TIMER)
-
-
-def position_8():
-    system_action('clear')
-    print(STRING_LINE)
-    print(" |            |             |      \            /\         ")
-    print(" |            |             |       \          /  \        ")
-    print(" |            |             |       /         /    \       ")
-    print(" |------      |             |______/         /______\      ")
-    print(" |            |             |       \       /        \     ")
-    print(" |            |             |        \     /          \    ")
-    print(" |            |             |         |   /            \   ")
-    print(" |__________  |__________   |_________/  /              \  ")
-    author()
-    sleep(TIMER)
+__version__ = '1.3.0'
 
 
 def wait_effect(lines, sleeper):
-    for line in lines:  # for each line of text (or each message)
-        for c in line:  # for each character in each line
-            print(c, end='')  # print a single character, and keep the cursor there.
-            sys.stdout.flush()  # flush the buffer
-            sleep(sleeper)  # wait a little to make the effect look good.
+    cols, rows = shutil.get_terminal_size()
+    for line in lines:
+        for c in line.center(cols):
+            print(c, end='')
+            sys.stdout.flush()
+            sleep(sleeper)
         print('')
 
 
-def logo():
-    cols, rows = shutil.get_terminal_size()
-    # print(YELLOW)
-    # lines = [
-    #     ("WELLCOME TO:        ").center(cols)
-    # ]
-    # wait_effect(lines, 0.0002)
-    print(BLUE)
-    logo_lines = [
-        ("                                                            ").center(cols),
-        (" EEEEEEEE     LL            BBBBBBB            AAAA         ").center(cols),
-        (" E            LL            B      B         A      A       ").center(cols),
-        (" E            LL            B      BB       AA      AA      ").center(cols),
-        (" EEEEEEE      LL            BBBBBBBB       AAAAAAAAAAAA     ").center(cols),
-        (" E            LL            B      BB      AA        AA     ").center(cols),
-        (" E            LL            B       BB     AA        AA     ").center(cols),
-        (" E            LL            B        BB    AA        AA     ").center(cols),
-        (" E            LL            B         BB   AA        AA     ").center(cols),
-        (" EEEEEEEEEEE  LLLLLLLLLLL   BBBBBBBBBBB    AA        AA     ").center(cols)
+logo_strings_row = [
+        "",
+        " EEEEEEEE     LL            BBBBBBB            AAAA         ",
+        " E            LL            B      B         A      A       ",
+        " E            LL            B      BB       AA      AA      ",
+        " EEEEEEE      LL            BBBBBBBB       AAAAAAAAAAAA     ",
+        " E            LL            B      BB      AA        AA     ",
+        " E            LL            B       BB     AA        AA     ",
+        " E            LL            B        BB    AA        AA     ",
+        " E            LL            B         BB   AA        AA     ",
+        " EEEEEEEEEEE  LLLLLLLLLLL   BBBBBBBBBBB    AA        AA     "
     ]
-    wait_effect(logo_lines, 0)
 
 
-def position_total():
-    system_action('clear')
-    logo()
-    sleep(TIMER)
+def logo():
+    # <<< Построчная отрисовка лого >>>
+    wait_effect(logo_strings_row, 0.000003)
 
 
 def author():
     print(YELLOW)
-    print("  ___                ___                                                                     ")
-    print(" |   \              |   \                                                  ___   ____        ")
-    print(" |    \             |    \   __    __        o          __   __      /|   |   |      /       ")
-    print(" |____/   \  /      |____/  |     |  \  |    |  |\   | |    |  \      |   |___|     /        ")
-    print(" |    \    \/       |    \  |__   |__/  |    |  | \  | |__  |__/      |   |   |    /         ")
-    print(" |     |   /        |     | |     |  \  |    |  |  \ | |    |  \      |   |   |   /          ")
-    print(" |_____/  /         |_____/ |___  |   \ |___ |  |   \| |___ |   \     |   |___|  /           ")
-    print(BLUE, "__________________________________________________________________________________________________")
+    print("  ___                ___                                                                 ")
+    print(" |   \              |   \                                                  ___   ____    ")
+    print(" |    \             |    \   __    __        o          __   __      /|   |   |      /   ")
+    print(" |____/   \  /      |____/  |     |  \  |    |  |\   | |    |  \      |   |___|     /    ")
+    print(" |    \    \/       |    \  |__   |__/  |    |  | \  | |__  |__/      |   |   |    /     ")
+    print(" |     |   /        |     | |     |  \  |    |  |  \ | |    |  \      |   |   |   /      ")
+    print(" |_____/  /         |_____/ |___  |   \ |___ |  |   \| |___ |   \     |   |___|  /       ")
+    print(BLUE, "___________________________________________________________________________________")
 
 
 def animation():
+    cols, rows = shutil.get_terminal_size()
     while True:
-        position_0()
-        position_1()
-        position_2()
-        position_3()
-        position_4()
-        position_5()
-        position_6()
-        position_7()
-        position_8()
-        position_total()
+        system_action('clear')
+        print(PURPLE)
+        for row in logo_strings_row:
+            print(row.center(cols))
+            sleep(0.09)
         author()
-        sleep(2)
-        position_7()
-        position_6()
-        position_5()
-        position_4()
-        position_3()
-        position_2()
-        position_1()
-        position_0()
+        sleep(1)
+        cnt = 0
+        system_action('clear')
+        for i in range(10):
+            system_action('clear')
+            cnt += 1
+            if cnt % 2 == 0:
+                print(BLUE)
+            else:
+                print(YELLOW)
+            wait_effect(logo_strings_row, 0.000001)
+            sleep(.1)
 
 
-def elba():     # Фунция вывода только логотипа
+def elba():
     logo()
-    print(DEFAULT_COLOR)
 
 
 def Ukraine():
@@ -229,13 +116,3 @@ def first_start_message():
         ("\n --              Pick a master-password               -- ".center(cols))
     ]
     wait_effect(lines, 0.001)
-
-
-# lines = [BLUE,
-#         " || Delta For Linux  || ",
-#         " || by Berliner187   || ",
-#         " || Veli Afaline     || ", YELLOW, __version__
-#     ]
-# wait_effect(lines)
-# first_start_message()
-# elba()

@@ -20,7 +20,7 @@ import datetime
 import shutil
 
 
-__version__ = 'v0.8.3.9'
+__version__ = 'v0.8.4.0'
 
 
 def show_name_program():
@@ -33,7 +33,7 @@ def show_name_program():
              "||  Veli Afaline     ||   ".center(cols),
              YELLOW, edit_version.center(cols)
              ]
-    wait_effect(lines, 0.00001)
+    wait_effect(lines, 0.000007)
     if CHECK_FOLDER_FOR_RESOURCE is False:
         first_start_message()
 

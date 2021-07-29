@@ -14,7 +14,7 @@ import datetime
 from time import sleep
 
 
-__version__ = '1.3.3'
+__version__ = '1.3.4'
 
 
 def greeting(generic_key):   # Greating Depending On Date Time
@@ -27,8 +27,11 @@ def greeting(generic_key):   # Greating Depending On Date Time
             enc_aes(FILE_USER_NAME, name, generic_key)
         else:  # Чтение из файла с именем и вывод в консоль
             name = dec_aes(FILE_USER_NAME, generic_key)
-        lines = [GREEN, times_of_day + ' ' + name, DEFAULT_COLOR]
-        wait_effect(lines, 0.009)
+        lines = [
+            GREEN, times_of_day + ' ' + name,
+            DEFAULT_COLOR
+        ]
+        wait_effect(lines, 0.001)
     hms = datetime.datetime.today()
     time_now = hms.hour * 3600 + hms.minute * 60 + hms.second  # Время в секундах
     if 14400 <= time_now < 43200:
