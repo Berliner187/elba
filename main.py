@@ -226,8 +226,8 @@ if __name__ == '__main__':
         except Exception as random_error:
             write_log(random_error, 'FAIL')
             template_some_message(RED, ' --- ERROR --- ')
-            sleep(1)
             print(random_error)
+            sleep(1)
             system_action('clear')
             if os.path.exists(OLD_ELBA):  # Попытка откатиться
                 template_some_message(RED, ' -- You can try roll back -- \n')
