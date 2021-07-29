@@ -2,7 +2,7 @@ from main import *
 
 from enc_obs import *
 from show_dec_data_obs import *
-from del_object_obs import delete_resource
+from del_object_obs import delete_object
 
 from csv import DictReader, DictWriter
 from time import sleep
@@ -34,7 +34,7 @@ def notes(generic_key):
     if change_action == '-a':   # Пользователь выбирает добавление новой заметки
         add_new()
     elif change_action == '-d':  # Пользователь выбирает удаление старой заметки
-        delete_resource('note')
+        delete_object('note')
         show_decryption_data(generic_key, 'note')
         notes(generic_key)
     elif change_action == '-x':

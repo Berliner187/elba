@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.8.3.5'
+__version__ = 'v0.8.3.4'
 
 
 def show_name_program():
@@ -144,6 +144,25 @@ def write_log(cause, status_itself):
     })
 
 
+def check_modules():
+    """ Проверка модулей программы """
+    cnt_missing_modules = 0
+    file_type = 'obs.py'
+    installed_modules = []
+    for file in os.listdir('.'):
+        if file.endswith(file_type):
+            installed_modules.append(file)
+    for i in range(len(stock_modules)):
+        if stock_modules[i] not in installed_modules:
+            cnt_missing_modules += 1
+    if cnt_missing_modules > 0:
+        template_some_message(RED, " - Missing module/modules -")
+        write_log('Missing module/modules', 'FAIL')
+        return 1
+    else:
+        return 0
+
+
 def launcher():
     """ The main function responsible for the operation of the program """
     if CHECK_FOLDER_FOR_RESOURCE is False:  # При первом запуске
@@ -165,25 +184,6 @@ def launcher():
         write_log('Subsequent launch', 'OK')
         show_decryption_data(generic_key_from_file, 'resource')
         decryption_block(generic_key_from_file)
-
-
-def check_modules():
-    """ Проверка модулей программы """
-    cnt_missing_modules = 0
-    file_type = 'obs.py'
-    installed_modules = []
-    for file in os.listdir('.'):
-        if file.endswith(file_type):
-            installed_modules.append(file)
-    for i in range(len(stock_modules)):
-        if stock_modules[i] not in installed_modules:
-            cnt_missing_modules += 1
-    if cnt_missing_modules > 0:
-        template_some_message(RED, " - Missing module/modules -")
-        write_log('Missing module/modules', 'FAIL')
-        return 1
-    else:
-        return 0
 
 
 if __name__ == '__main__':

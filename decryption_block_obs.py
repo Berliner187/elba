@@ -1,19 +1,23 @@
 # -*- coding: UTF-8 -*-
-# Локальные модули
-from logo_obs import elba, first_start_message
-from datetime_obs import greeting
-from del_object_obs import delete_resource
+
+"""
+    Модуль, отвечающий за управление функциями программы.
+    В этом модуле пользователь выбирает дейсвия, необходимые для выполнения,
+    а decryption_block передает управление другим модулям.
+"""
+
+from del_object_obs import delete_object
 from notes_obs import notes
 from change_password_obs import change_master_password
 from actions_with_password_obs import choice_generation_or_save_self_password
-from enc_obs import enc_aes, dec_aes, WorkWithUserFiles
-from enc_obs import actions_with_encryption_files
+from enc_obs import dec_aes, actions_with_encryption_files
 from show_dec_data_obs import show_decryption_data
 from update_obs import update, install_old_saved_version
+
 from main import *
 
 
-__version__ = '2.2.0'
+__version__ = '2.2.1'
 
 
 def decryption_block(generic_key):
@@ -22,7 +26,7 @@ def decryption_block(generic_key):
     try:
         if change_resource_or_actions == '-a':  # Добавление нового ресурса
             system_action('clear')
-            template_some_message(GREEN, '\n   --- Add new resource ---   \n\n\n')
+            template_some_message(GREEN, '\n   --- Add new resource ---   \n\n')
             resource = input(YELLOW + ' Resource: ' + DEFAULT_COLOR)
             login = input(YELLOW + ' Login: ' + DEFAULT_COLOR)
             choice_generation_or_save_self_password(resource, login, generic_key)
@@ -53,7 +57,7 @@ def decryption_block(generic_key):
             write_log("Change password", "OK")
 
         elif change_resource_or_actions == '-d':    # Удаление ресурса
-            delete_resource('resource')
+            delete_object('resource')
             show_decryption_data(generic_key, 'resource')
             write_log("Delete resource", "OK")
 
