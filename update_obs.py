@@ -5,7 +5,7 @@ import os
 from time import sleep
 
 
-__version__ = '1.6.0'
+__version__ = '1.6.1'
 
 
 def get_peculiarities_copy(type_copy):
@@ -30,7 +30,7 @@ def get_peculiarities_copy(type_copy):
 
 
 def template_for_install(program_file):
-    os.system(get_peculiarities_copy(move) + FOLDER_ELBA + program_file + ' . ')
+    os.system(get_peculiarities_copy('move') + FOLDER_ELBA + program_file + ' . ')
 
 
 def template_question(text):
