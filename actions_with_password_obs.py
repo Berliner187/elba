@@ -12,7 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
 
 
-__version__ = '2.2.5'
+__version__ = '2.2.6'
 
 
 def create_and_confirm_user_password():
@@ -137,7 +137,9 @@ def choice_generation_or_save_self_password(resource, login, master_password):
 def point_of_entry():   # Точка входа в систему
     """ Получение мастер-пароля """
     def template_wrong_message(value_left):
-        print(RED, '\n  ---  Wrong password --- ',
+        cols, rows = shutil.get_terminal_size()
+        system_action('clear')
+        print(RED, '  ---  Wrong password --- '.center(cols),
               BLUE, "\n\n Attempts left:",
               RED, value_left, DEFAULT_COLOR)
         sleep(1)
@@ -172,6 +174,7 @@ def point_of_entry():   # Точка входа в систему
     hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
     cnt_left = 3
     if (hash_password and CHECK_FOLDER_FOR_RESOURCE) is False:
+        cnt_left -= 1
         template_wrong_message(cnt_left)
         while hash_password is False:
             cnt_left -= 1
@@ -179,11 +182,12 @@ def point_of_entry():   # Точка входа в систему
             master_password = get_master_password()
             file_hash = open(FILE_WITH_HASH)
             hash_password = check_password_hash(file_hash.readline(), master_password)
-            if cnt_left == 0:
+            if cnt_left <= 0:
                 system_action('clear')
                 template_some_message(RED, "  ---  Limit is exceeded  --- ")
                 write_log('Someone tried to enter', 'WARNING')
-                sleep(2**10)
+                sleep(2)
+                animation()
                 quit()
             if hash_password:
                 return master_password

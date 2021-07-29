@@ -11,11 +11,13 @@ import os
 from main import *
 
 
-__version__ = '1.3.0'
+__version__ = '1.3.1'
+
+
+cols, rows = shutil.get_terminal_size()
 
 
 def wait_effect(lines, sleeper):
-    cols, rows = shutil.get_terminal_size()
     for line in lines:
         for c in line.center(cols):
             print(c, end='')
@@ -38,6 +40,19 @@ logo_strings_row = [
     ]
 
 
+author_emb = [
+    YELLOW,
+    "  ___                ___                                                                 ",
+    " |   \              |   \                                                  ___   ____    ",
+    " |    \             |    \   __    __        o          __   __      /|   |   |      /   ",
+    " |____/   \  /      |____/  |     |  \  |    |  |\   | |    |  \      |   |___|     /    ",
+    " |    \    \/       |    \  |__   |__/  |    |  | \  | |__  |__/      |   |   |    /     ",
+    " |     |   /        |     | |     |  \  |    |  |  \ | |    |  \      |   |   |   /      ",
+    " |_____/  /         |_____/ |___  |   \ |___ |  |   \| |___ |   \     |   |___|  /       ",
+    BLUE, "___________________________________________________________________________________"
+]
+
+
 def logo():
     # <<< Построчная отрисовка лого >>>
     wait_effect(logo_strings_row, 0.000003)
@@ -45,14 +60,9 @@ def logo():
 
 def author():
     print(YELLOW)
-    print("  ___                ___                                                                 ")
-    print(" |   \              |   \                                                  ___   ____    ")
-    print(" |    \             |    \   __    __        o          __   __      /|   |   |      /   ")
-    print(" |____/   \  /      |____/  |     |  \  |    |  |\   | |    |  \      |   |___|     /    ")
-    print(" |    \    \/       |    \  |__   |__/  |    |  | \  | |__  |__/      |   |   |    /     ")
-    print(" |     |   /        |     | |     |  \  |    |  |  \ | |    |  \      |   |   |   /      ")
-    print(" |_____/  /         |_____/ |___  |   \ |___ |  |   \| |___ |   \     |   |___|  /       ")
-    print(BLUE, "___________________________________________________________________________________")
+    for i in author_emb:
+        print(i.center(cols))
+        sleep(.1)
 
 
 def animation():
