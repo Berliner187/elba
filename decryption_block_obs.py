@@ -17,7 +17,7 @@ from update_obs import update, install_old_saved_version
 from main import *
 
 
-__version__ = '2.2.1'
+__version__ = '2.2.2'
 
 
 def decryption_block(generic_key):
@@ -41,7 +41,7 @@ def decryption_block(generic_key):
 
         elif change_resource_or_actions == '-x':  # Выход
             system_action('clear')
-            template_some_message(BLUE, ' --- Close ---')
+            template_some_message(BLUE, ' --- ELBA CLOSED ---')
             write_log("Exit", "OK")
             quit()
 

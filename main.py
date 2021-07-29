@@ -19,7 +19,7 @@ from csv import DictReader, DictWriter
 import datetime
 
 
-__version__ = 'v0.8.3.4'
+__version__ = 'v0.8.3.5'
 
 
 def show_name_program():
@@ -207,8 +207,8 @@ if __name__ == '__main__':
         sleep(1)
         download_from_repository()
 
-    status = check_modules()
-    if status == 0:
+    status_mis_mod = check_modules()
+    if status_mis_mod == 0:
         from decryption_block_obs import decryption_block
         from actions_with_password_obs import point_of_entry
         from enc_obs import enc_aes, dec_aes
@@ -219,12 +219,11 @@ if __name__ == '__main__':
 
         try:
             launcher()  # Запуск лончера
-        except ValueError or TypeError as error:
-            write_log(error, 'CRITICAL CRASH')
-            template_some_message(RED, ' --- Critical error, program is restarted --- ')
+        except Exception as random_error:
+            write_log(random_error, 'FAIL')
+            template_some_message(RED, ' --- ERROR --- ')
             sleep(1)
             system_action('clear')
-            print(error)
             if os.path.exists(OLD_ELBA):  # Попытка откатиться
                 template_some_message(RED, ' -- You can try roll back -- \n')
                 change = input(YELLOW + ' - Roll back? (y/n): ' + DEFAULT_COLOR)
