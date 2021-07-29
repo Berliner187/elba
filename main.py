@@ -20,7 +20,7 @@ import datetime
 import shutil
 
 
-__version__ = 'v0.8.3.7'
+__version__ = 'v0.8.3.8'
 
 
 def show_name_program():
@@ -227,6 +227,7 @@ if __name__ == '__main__':
             write_log(random_error, 'FAIL')
             template_some_message(RED, ' --- ERROR --- ')
             sleep(1)
+            print(random_error)
             system_action('clear')
             if os.path.exists(OLD_ELBA):  # Попытка откатиться
                 template_some_message(RED, ' -- You can try roll back -- \n')
