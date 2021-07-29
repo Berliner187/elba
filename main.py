@@ -20,7 +20,7 @@ import datetime
 import shutil
 
 
-__version__ = 'v0.8.3.6'
+__version__ = 'v0.8.3.7'
 
 
 def show_name_program():
@@ -33,7 +33,7 @@ def show_name_program():
              "||  Veli Afaline     ||   ".center(cols),
              YELLOW, edit_version.center(cols)
              ]
-    wait_effect(lines, 0.0003)
+    wait_effect(lines, 0.0001)
     if CHECK_FOLDER_FOR_RESOURCE is False:
         first_start_message()
 
@@ -226,7 +226,6 @@ if __name__ == '__main__':
         except Exception as random_error:
             write_log(random_error, 'FAIL')
             template_some_message(RED, ' --- ERROR --- ')
-            print(random_error)
             sleep(1)
             system_action('clear')
             if os.path.exists(OLD_ELBA):  # Попытка откатиться

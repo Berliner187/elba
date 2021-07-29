@@ -135,7 +135,7 @@ def logo():
     lines = [
         ("WELLCOME TO:        ").center(cols)
     ]
-    wait_effect(lines, 0.002)
+    wait_effect(lines, 0.0002)
     print(BLUE)
     logo_lines = [
         ("                                                            ").center(cols),
@@ -232,7 +232,7 @@ def first_start_message():
         YELLOW,
         ("\n --              Pick a master-password               -- ".center(cols))
     ]
-    wait_effect(lines, 0.0005)
+    wait_effect(lines, 0.001)
 
 
 # lines = [BLUE,
