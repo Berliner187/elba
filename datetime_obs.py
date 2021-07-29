@@ -14,7 +14,7 @@ import datetime
 from time import sleep
 
 
-__version__ = '1.3.0'
+__version__ = '1.3.1'
 
 
 def greeting(generic_key):   # Greating Depending On Date Time
@@ -39,4 +39,4 @@ def greeting(generic_key):   # Greating Depending On Date Time
         template_greeting('Good evening,')
     elif 0 <= time_now < 14400:
         template_greeting('Good night,')
-    sleep(.5)
+    sleep(.2)
