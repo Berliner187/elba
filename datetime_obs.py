@@ -14,16 +14,16 @@ import datetime
 from time import sleep
 
 
-__version__ = '1.3.1'
+__version__ = '1.3.2'
 
 
 def greeting(generic_key):   # Greating Depending On Date Time
     """ Фунция вывода приветствия юзера """
     def template_greeting(times_of_day):
         if os.path.exists(FILE_USER_NAME) is False:  # Создание файла с именем
-            message_about_enter_nickname = ['\n -- Your nickname: ']
-            wait_effect(message_about_enter_nickname, 0.3)
-            name = input(YELLOW + message_about_enter_nickname + DEFAULT_COLOR)
+            message_about_enter_nickname = [BLUE, '\n Enter your nickname']
+            wait_effect(message_about_enter_nickname, 0.025)
+            name = input(YELLOW + '\n - Nickname: ' + DEFAULT_COLOR)
             enc_aes(FILE_USER_NAME, name, generic_key)
         else:  # Чтение из файла с именем и вывод в консоль
             name = dec_aes(FILE_USER_NAME, generic_key)
