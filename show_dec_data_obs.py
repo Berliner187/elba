@@ -2,7 +2,7 @@
 from enc_obs import *
 
 
-__version__ = '1.2.6'
+__version__ = '1.2.7'
 
 
 cols = get_size_of_terminal()
@@ -30,12 +30,12 @@ def show_decryption_data(generic_key, category):
     elif category == 'note':
         type_folder = FOLDER_WITH_NOTES
 
-    s = 0   # number_saved_data
+    number_saved_data = 0   # number_saved_data
     for category_item in os.listdir(type_folder):
         decryption_data = dec_only_base64(category_item, generic_key)
-        s += 1
-        print(f"{BLUE}{s}. {YELLOW}{decryption_data}{DEFAULT_COLOR}")
-    if s == 0:
+        number_saved_data += 1
+        print(f"{BLUE}{number_saved_data}. {YELLOW}{decryption_data}{DEFAULT_COLOR}")
+    if number_saved_data == 0:
         print(f"{YELLOW}   No saved {category}s {DEFAULT_COLOR}")
     if category == 'resource':
         backup_message = ''
