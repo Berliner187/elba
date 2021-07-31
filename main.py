@@ -20,7 +20,12 @@ import datetime
 import shutil
 
 
-__version__ = 'v0.8.4.0'
+__version__ = 'v0.8.4.1'
+
+
+def get_size_of_terminal():
+    cols, rows = shutil.get_terminal_size()  # Получение ширины и длины терминала
+    return cols
 
 
 def show_name_program():

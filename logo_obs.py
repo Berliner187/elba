@@ -11,10 +11,10 @@ import os
 from main import *
 
 
-__version__ = '1.3.1'
+__version__ = '1.3.2'
 
 
-cols, rows = shutil.get_terminal_size()
+cols = get_size_of_terminal()
 
 
 def wait_effect(lines, sleeper):

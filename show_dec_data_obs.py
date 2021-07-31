@@ -1,18 +1,28 @@
+# -*- coding: UTF-8 -*-
 from enc_obs import *
 
 
-__version__ = '1.2.5'
+__version__ = '1.2.6'
+
+
+cols = get_size_of_terminal()
 
 
 def show_decryption_data(generic_key, category):
+    """ Показ сохраненых ресурсов/заметок """
     system_action('clear')
     separator = ''
     if category == 'note':
         separator += '    '
-    print(BLUE + f"     ___________________________________")
-    print(BLUE + f"    /\/| {YELLOW}\/                       \/{BLUE} |\/\ ")
-    print(BLUE + f"   /\/\| {YELLOW}\/    Saved {category}s {separator}   \/ {BLUE}|/\/\ ", DEFAULT_COLOR)
-    print(YELLOW + "         \/                       \/ \n\n")
+
+    lines_show_category = [
+        f"{BLUE}   ___________________________________",
+        f"{BLUE}              /\/| {YELLOW}\/                       \/{BLUE} |\/\ ",
+        f"{BLUE}             /\/\| {YELLOW}\/    Saved {category}s {separator}   \/ {BLUE}|/\/\ ",
+        f"{YELLOW}     \/                       \/ \n\n"
+    ]
+    for line_pic_category in lines_show_category:
+        print(line_pic_category.center(cols))
 
     type_folder = ''
     if category == 'resource':
@@ -24,7 +34,9 @@ def show_decryption_data(generic_key, category):
     for category_item in os.listdir(type_folder):
         decryption_data = dec_only_base64(category_item, generic_key)
         s += 1
-        print(BLUE, f"{s}.", YELLOW, decryption_data, DEFAULT_COLOR)
+        print(f"{BLUE}{s}. {YELLOW}{decryption_data}{DEFAULT_COLOR}")
+    if s == 0:
+        print(f"{YELLOW}   No saved {category}s {DEFAULT_COLOR}")
     if category == 'resource':
         backup_message = ''
         if os.path.exists(OLD_ELBA):
@@ -42,12 +54,11 @@ def show_decryption_data(generic_key, category):
               '\n\n Select resource by number \n', DEFAULT_COLOR)
     elif category == 'note':
         lines_note_inst = [
-            f'{BLUE}  - Press "Enter" to go back    ',
+            BLUE,
+            '  - Press "Enter" to go back    ',
             '  - Enter "-a" to add new note  ',
-            f'  - Enter "-d" to remove note   {YELLOW}',
-            f' Select note by number \n {DEFAULT_COLOR}'
+            f'  - Enter "-d" to remove note{YELLOW}',
+            f'\n Select note by number \n {DEFAULT_COLOR}'
         ]
-        for line in lines_note_inst:
-            print(line)
-    if s == 0:
-        print(YELLOW + f"   No saved {category}s ", DEFAULT_COLOR)
+        for line_inst in lines_note_inst:
+            print(line_inst)

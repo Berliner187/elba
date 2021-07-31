@@ -12,10 +12,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
 
 
-__version__ = '2.2.7'
+__version__ = '2.2.8'
 
 
-cols, rows = shutil.get_terminal_size()     # Получение ширины и длины терминала
+cols = get_size_of_terminal()
 
 
 def create_and_confirm_user_password():
@@ -152,7 +152,7 @@ def point_of_entry():   # Точка входа в систему
         show_name_program()
         elba()
         input_master_password = getpass(
-            YELLOW + '\n -- Your master-password: ' + DEFAULT_COLOR
+            f"{YELLOW}\n\n   --- Enter the master password: {DEFAULT_COLOR}"
         )
         if input_master_password == 'x':  # Досрочный выход из программы
             quit()
