@@ -30,7 +30,7 @@ def show_decryption_data(generic_key, category):
     elif category == 'note':
         type_folder = FOLDER_WITH_NOTES
 
-    s = 0
+    s = 0   # number_saved_data
     for category_item in os.listdir(type_folder):
         decryption_data = dec_only_base64(category_item, generic_key)
         s += 1

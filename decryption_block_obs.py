@@ -17,10 +17,10 @@ from update_obs import update, install_old_saved_version
 from main import *
 
 
-__version__ = '2.2.3'
+__version__ = '2.2.4'
 
 
-cols = get_size_of_terminal     # Получение ширины и длины терминала
+cols = get_size_of_terminal()     # Получение ширины и длины терминала
 
 
 def decryption_block(generic_key):
