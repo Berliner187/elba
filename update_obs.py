@@ -5,7 +5,7 @@ import os
 from time import sleep
 
 
-__version__ = '1.6.2'
+__version__ = '1.6.3'
 
 
 def get_peculiarities_copy(type_copy):
@@ -157,7 +157,7 @@ def install_old_saved_version():
         print(str(s), '-', YELLOW + version + DEFAULT_COLOR)
 
     template_some_message(BLUE, "  - Change version by number - ")
-    change = int(input(YELLOW + "(1-" + str(s) + "): " + DEFAULT_COLOR))
+    change = int(input(YELLOW + f"(1-{s}): " + DEFAULT_COLOR))
     if change == '-z':
         template_remove_folder(OLD_ELBA)
     cnt = 0

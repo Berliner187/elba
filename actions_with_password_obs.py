@@ -12,28 +12,33 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
 
 
-__version__ = '2.2.6'
+__version__ = '2.2.7'
+
+
+cols, rows = shutil.get_terminal_size()     # Получение ширины и длины терминала
 
 
 def create_and_confirm_user_password():
     """ Создание и подтверждение пользовательского пароля """
-    print(BLUE + '\n Minimum password length — 8 characters' + DEFAULT_COLOR)
+    print(BLUE, 'Minimum password length — 8 characters'.center(cols))
 
     def template_red_messages(message):
         system_action('clear')
-        print(RED + '\n'*2 + ' - ' + message + DEFAULT_COLOR)
+        print(f"{RED}\n\n -{message}{DEFAULT_COLOR}")
 
     while True:
-        password = getpass(YELLOW + " Password: " + DEFAULT_COLOR)
-        confirm_password = getpass(YELLOW + " Confirm:  " + DEFAULT_COLOR)
+        password = getpass(f"{YELLOW} Password: {DEFAULT_COLOR}")
+        confirm_password = getpass(f"{YELLOW} Confirm:  {DEFAULT_COLOR}")
         if confirm_password == 'x':
             quit()
         if len(password) < 8:
-            template_red_messages("Make sure your password is at lest 8 letters")
+            template_red_messages("Make sure your password is at lest 8 letters".center(cols))
         elif password != confirm_password:
-            template_red_messages("Passwords don't match")
+            template_red_messages("Passwords don't match".center(cols))
         elif re.search('[0-9]', password) is None:
-            template_red_messages("Make sure your password has a number in it")
+            template_red_messages("Make sure your password has a number in it".center(cols))
+        elif password == 'x':
+            quit()
         else:
             return password
 
@@ -81,27 +86,26 @@ class ActionsWithPassword:
 
         # Сохранение пользовательского пароля для ресурсов
         elif self.type_pas == 'self':
-            template_some_message(BLUE, ' - Pick a self password - \n')
+            template_some_message(BLUE, "- Pick a self password - \n")
             password = create_and_confirm_user_password()
-            template_some_message(BLUE, ' -- Your password success saved! --')
+            template_some_message(GREEN, "--- Your password success saved! ---")
             sleep(1)
             return password
 
         # Получение нового сгенерированного пароля
         elif self.type_pas == 'gen_new':
-            length_new_pas = int(input(YELLOW + ' - Length: ' + DEFAULT_COLOR))
+            length_new_pas = int(input(f"{YELLOW}- Length: {DEFAULT_COLOR}"))
             status_adding_characters = False
             request_for_adding_characters = input(
-                BLUE + ' - Add additional symbols? (Default: no) (y/n): ' + DEFAULT_COLOR
+                f"{BLUE} - Add additional symbols? (Default: no) (y/n): {DEFAULT_COLOR}"
             )
             if request_for_adding_characters == 'y':
                 status_adding_characters = True
             password = generation_new_password(length_new_pas, status_adding_characters)
             print(
-                BLUE, ' - Your new password -', GREEN, password,
-                BLUE, '- success saved', DEFAULT_COLOR
+                f'{BLUE}\n - Your new password - {GREEN}{password}{BLUE} - success saved{DEFAULT_COLOR}'
             )
-            sleep(2)
+            sleep(3)
             return password
         # Получение общего ключа
         elif self.type_pas == 'generic':
@@ -115,10 +119,10 @@ class ActionsWithPassword:
 
 def choice_generation_or_save_self_password(resource, login, master_password):
     """ Выбор пароля: генерирование нового или сохранение пользовательского """
-    print('\n',
-          GREEN + ' 1' + YELLOW + ' - Generation new password \n',
-          GREEN + ' 2' + YELLOW + ' - Save your password      \n', DEFAULT_COLOR
-          )
+    print('\n'*2,
+          f"{BLUE}1.{YELLOW} - Generation new password \n",
+          f"{BLUE}2.{YELLOW} - Save your password      \n")
+    print(DEFAULT_COLOR)
     change_type = int(input('Change (1/2): '))
     if change_type == 1:  # Генерирование пароля и сохранение в файл
         password = ActionsWithPassword('gen_new').get_password()
@@ -127,7 +131,7 @@ def choice_generation_or_save_self_password(resource, login, master_password):
         password = ActionsWithPassword('self').get_password()
         save_data_to_file(resource, login, password, master_password, 'resource')
     else:   # Если ошибка выбора
-        print(RED + '\n  -- Error of change. Please, change again --  ' + DEFAULT_COLOR)
+        print(f"{RED}\n  -- Error of change. Please, change again -- {DEFAULT_COLOR}")
         sleep(1)
         system_action('clear')
         choice_generation_or_save_self_password(resource, login, master_password)
@@ -137,11 +141,11 @@ def choice_generation_or_save_self_password(resource, login, master_password):
 def point_of_entry():   # Точка входа в систему
     """ Получение мастер-пароля """
     def template_wrong_message(value_left):
-        cols, rows = shutil.get_terminal_size()
         system_action('clear')
-        print(RED, '  ---  Wrong password --- '.center(cols),
-              BLUE, "\n\n Attempts left:",
-              RED, value_left, DEFAULT_COLOR)
+        print("\n"*3,
+              f"{RED}  ---  Wrong password --- ".center(cols),
+              "\n"*3,
+              f"{BLUE}      Attempts left: {RED}{value_left}{DEFAULT_COLOR}".center(cols))
         sleep(1)
 
     def get_master_password():
@@ -172,7 +176,7 @@ def point_of_entry():   # Точка входа в систему
     # Проверка хэша пароля
     hash_pas_from_file = open(FILE_WITH_HASH)
     hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
-    cnt_left = 3
+    cnt_left = 4
     if (hash_password and CHECK_FOLDER_FOR_RESOURCE) is False:
         cnt_left -= 1
         template_wrong_message(cnt_left)
@@ -185,7 +189,7 @@ def point_of_entry():   # Точка входа в систему
             if cnt_left <= 0:
                 system_action('clear')
                 template_some_message(RED, "  ---  Limit is exceeded  --- ")
-                write_log('Someone tried to enter', 'WARNING')
+                write_log('Someone tried to enter', 'ALERT')
                 sleep(2)
                 animation()
                 quit()

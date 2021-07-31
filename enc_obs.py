@@ -33,7 +33,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '6.3.0'
+__version__ = '6.3.1'
 
 
 class AESCipher(object):
@@ -172,26 +172,26 @@ class WorkWithUserFiles:
     def file_encryption_control(self):
         """ Управление шифрованием """
         def new_timed():
-            """ Генерирование новой контрольной суммы """
+            """ Формирование новой контрольной суммы """
             castrol = 1
             for iterate in range(2 ** 10):
                 castrol *= random.randrange(2 ** 5, 2 ** 80)
             return castrol
-        # Получение времени
+        # <<< Получение времени >>>
         hms = datetime.datetime.today()
-        get_date = str(hms.day) + str(hms.month) + str(hms.year) + '_'
-        get_time = str(hms.hour) + '-' + str(hms.minute) + '-' + str(hms.second)
+        get_date = f"{hms.day}{hms.month}{hms.year}_"
+        get_time = f"{hms.hour}-{hms.minute}-{hms.second}"
         timed = new_timed()
         name_enc_folder = get_date + get_time + '/'
 
-        def print_progress(type_work, now, total):
-            progress_status = ((now * 100) // total)
+        def print_progress(type_work, current, total):
+            progress_status = ((current * 100) // total)
             to_print = ''
             if type_work == 'files':
                 to_print = '\n Work completed on'
             elif type_work == 'folders':
                 to_print = '\n Folder creation status'
-            print(YELLOW, to_print, DEFAULT_COLOR, progress_status, '%', '[', now, '/', total, ']')
+            print(YELLOW, to_print, DEFAULT_COLOR, f"{progress_status}%  ({current}/{total})")
 
         def encrypt_it(byte_file, key, iv):
             cfb_cipher = AES.new(key, AES.MODE_OFB, iv)
@@ -240,9 +240,9 @@ class WorkWithUserFiles:
 
                 temp = input("Press \'Enter\' key to continue...")
 
+                print("Generating KEY and IV for the recipient")
                 key = Crypto.Random.new().read(AES.block_size)
                 iv = Crypto.Random.new().read(AES.block_size)
-                print("Generating KEY and IV for the recipient")
 
                 os.chdir(FOLDER_FOR_ENCRYPTION_FILES)
 
@@ -308,7 +308,7 @@ class WorkWithUserFiles:
                 for folder in os.listdir(FOLDER_WITH_ENC_DATA):
                     if folder[:4] != PREFIX_FOR_DEC_FILE:
                         cnt += 1
-                        print(str(cnt) + '.', folder)
+                        print(f"{cnt}.", folder)
                 if cnt == 0:
                     print(YELLOW, " - No data encryption - ")
                 change_folder = int(input(YELLOW + '\n - Select folder by number: ' + DEFAULT_COLOR))
@@ -378,8 +378,8 @@ class WorkWithUserFiles:
 def actions_with_encryption_files(xzibit):
     system_action('clear')
     template_some_message(BLUE, "-- Go to the VOLARE/ENCRYPTION_DATA data folder and follow the instructions --")
-    print(BLUE, "1.", YELLOW, " - Encryption files", DEFAULT_COLOR)
-    print(BLUE, "2.", YELLOW, " - Decryption files", DEFAULT_COLOR)
+    print(BLUE, f"1.{YELLOW} - Encryption files", DEFAULT_COLOR)
+    print(BLUE, f"2.{YELLOW} - Decryption files", DEFAULT_COLOR)
     print(BLUE, "\n Press \'Enter\' to exit from encryption", DEFAULT_COLOR)
     change_action = input(YELLOW + "\n - Select by number: " + DEFAULT_COLOR)
     if change_action == '1':
