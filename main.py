@@ -20,7 +20,7 @@ import datetime
 import shutil
 
 
-__version__ = 'v0.8.4.1'
+__version__ = 'v0.8.4.2'
 
 
 def get_size_of_terminal():
@@ -61,12 +61,12 @@ def template_remove_folder(some_folder):
 
 
 def template_some_message(color, message):
-    cols, rows = shutil.get_terminal_size()
     """ Шаблон сообщения в ходе работы программы """
-    print(color, '\n\n', message.center(cols), DEFAULT_COLOR)
+    cols, rows = shutil.get_terminal_size()
+    print(color, '\n'*2, message.center(cols), DEFAULT_COLOR)
 
 
-# <<<-------------------- Константы ------------------------->>>
+# <<<----------------------- Константы --------------------------->>>
 # Цвета в терминале
 YELLOW, BLUE, PURPLE = "\033[33m", "\033[36m", "\033[35m"
 GREEN, RED, DEFAULT_COLOR = "\033[32m", "\033[31m", "\033[0m"
@@ -178,12 +178,12 @@ def launcher():
     if CHECK_FOLDER_FOR_RESOURCE is False:  # При первом запуске
         show_name_program()
         elba()
-        master_password = ActionsWithPassword('master').get_password()  # Создание мастер-пароля
-        generic_key = ActionsWithPassword('generic').get_password()  # Генерирование generic-key
+        master_password = ActionsWithPassword('master').get_password()
+        generic_key = ActionsWithPassword('generic').get_password()
         greeting(generic_key)
         enc_aes(FILE_WITH_GENERIC_KEY, generic_key, master_password)
         os.mkdir(FOLDER_WITH_RESOURCES)
-        show_decryption_data(generic_key, 'resource')   # Показ ресурсов
+        show_decryption_data(generic_key, 'resource')
         write_log('First launch', 'OK')
         decryption_block(generic_key)
     else:  # При последующем
@@ -228,6 +228,16 @@ if __name__ == '__main__':
 
         try:
             launcher()  # Запуск лончера
+        except ModuleNotFoundError as module_error:
+            write_log(module_error, 'CRASH')
+            template_some_message(RED, f"Error: {module_error}")
+            print(
+                YELLOW,
+                f"Please, install {str(module_error)[15:]} "
+                f"with PIP from requirements.txt and restart the program",
+                DEFAULT_COLOR
+            )
+            quit()
         except Exception as random_error:
             write_log(random_error, 'FAIL')
             template_some_message(RED, ' --- ERROR --- ')

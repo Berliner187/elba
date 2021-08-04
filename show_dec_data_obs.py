@@ -2,7 +2,7 @@
 from enc_obs import *
 
 
-__version__ = '1.2.7'
+__version__ = '1.2.8'
 
 
 cols = get_size_of_terminal()
@@ -34,31 +34,36 @@ def show_decryption_data(generic_key, category):
     for category_item in os.listdir(type_folder):
         decryption_data = dec_only_base64(category_item, generic_key)
         number_saved_data += 1
-        print(f"{BLUE}{number_saved_data}. {YELLOW}{decryption_data}{DEFAULT_COLOR}")
+        print(f"  {BLUE}{number_saved_data}. {YELLOW}{decryption_data}{DEFAULT_COLOR}")
     if number_saved_data == 0:
         print(f"{YELLOW}   No saved {category}s {DEFAULT_COLOR}")
+
+    # <<< Показ инструкций, которые возможны для выполнения в данном окне >>>
+    lines_instruction = []
     if category == 'resource':
         backup_message = ''
         if os.path.exists(OLD_ELBA):
-            backup_message = BLUE + '\n  - Enter \'-o\' to rollback'
-        print(BLUE,
-              '\n  - Enter \'-r\' to restart, \'-x\' to exit',
-              '\n  - Enter \'-a\' to add new resource       ',
-              '\n  - Enter \'-d\' to remove resource        ',
-              '\n  - Enter \'-c\' to change master-password ',
-              '\n  - Enter \'-n\' to go to notes            ',
-              '\n  - Enter \'-f\' to encrypt your files     ',
-              '\n  - Enter \'-u\' to update program         ',
-              '\n  - Enter \'-z\' to remove ALL data        ',
-              backup_message, YELLOW,
-              '\n\n Select resource by number \n', DEFAULT_COLOR)
-    elif category == 'note':
-        lines_note_inst = [
+            backup_message = f'{BLUE} - Enter \'-o\' to rollback'
+        lines_instruction = [
             BLUE,
-            '  - Press "Enter" to go back    ',
-            '  - Enter "-a" to add new note  ',
-            f'  - Enter "-d" to remove note{YELLOW}',
-            f'\n Select note by number \n {DEFAULT_COLOR}'
+            ' - Enter \'-r\' to restart, \'-x\' to exit',
+            ' - Enter \'-a\' to add new resource       ',
+            ' - Enter \'-d\' to remove resource        ',
+            ' - Enter \'-c\' to change master-password ',
+            ' - Enter \'-n\' to go to notes            ',
+            ' - Enter \'-f\' to encrypt your files     ',
+            ' - Enter \'-u\' to update program         ',
+            ' - Enter \'-z\' to remove ALL data        ',
+            backup_message
         ]
-        for line_inst in lines_note_inst:
-            print(line_inst)
+    elif category == 'note':
+        lines_instruction = [
+            BLUE,
+            '  - Press "Enter" to go back  ',
+            '  - Enter "-a" to add new note',
+            '  - Enter "-d" to remove note '
+        ]
+
+    for line_inst in lines_instruction:
+        print(line_inst)
+    print(f'\n{YELLOW} Select {category} by number \n', DEFAULT_COLOR)

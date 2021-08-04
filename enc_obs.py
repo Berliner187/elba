@@ -25,7 +25,7 @@ try:
     import Crypto.Random
 except ModuleNotFoundError as error_module:
     write_log(error_module, 'CRASH')
-    print(RED, 'Error: \n' + str(error_module), DEFAULT_COLOR)
+    template_some_message(RED, f"Error: {error_module}")
     print('\n')
     template_some_message(
         YELLOW, "Please, install module/modules with PIP and restart the program"
@@ -33,7 +33,7 @@ except ModuleNotFoundError as error_module:
     quit()
 
 
-__version__ = '6.3.1'
+__version__ = '6.3.2'
 
 
 class AESCipher(object):
@@ -179,10 +179,10 @@ class WorkWithUserFiles:
             return castrol
         # <<< Получение времени >>>
         hms = datetime.datetime.today()
-        get_date = f"{hms.day}{hms.month}{hms.year}_"
+        get_date = f"{hms.day}_{hms.month}_{hms.year}"
         get_time = f"{hms.hour}-{hms.minute}-{hms.second}"
         timed = new_timed()
-        name_enc_folder = get_date + get_time + '/'
+        name_enc_folder = f"{get_date}_{get_time}/"
 
         def print_progress(type_work, current, total):
             progress_status = ((current * 100) // total)
@@ -215,13 +215,19 @@ class WorkWithUserFiles:
         if os.path.exists(FOLDER_WITH_ENC_DATA) is False:
             os.system('mkdir ' + FOLDER_WITH_ENC_DATA)
 
+        def template_not_confirmed(remove):
+            write_log('Not confirm', 'ALERT')
+            os.chdir('../../')
+            template_some_message(RED, "** DA DUMM BASS **")
+            sleep(5)
+            if remove:
+                template_remove_folder(FOLDER_WITH_DATA)
+            quit()
+
         xzibit_hash_from_file = open(FILE_WITH_HASH_GENERIC_KEY).readline()
         check_generic_hash = check_password_hash(xzibit_hash_from_file, self.xzibit)
         if check_generic_hash is False:
-            template_some_message(RED, "** DA DUMM BASS **")
-            sleep(5)
-            template_remove_folder(FOLDER_WITH_DATA)
-            quit()
+            template_not_confirmed(True)
         else:
             if self.type_work == 'enc':
                 def save_keyiv(key, file):
@@ -288,9 +294,11 @@ class WorkWithUserFiles:
                         except FileNotFoundError:
                             template_some_message(RED,
                                                   'Error in encryption file: directory must not contain a SPACE')
+                            write_log('Directory has got space', 'FAIL')
                             quit()
 
                 template_some_message(GREEN, "Encryption successful \n")
+                write_log('Encryption successful', 'OK')
                 save_keyiv(key, path_to_key)
                 save_keyiv(iv, path_to_iv)
                 control_sum = str(timed) + self.xzibit + str(timed)
@@ -364,15 +372,9 @@ class WorkWithUserFiles:
                                     os.chdir('../../')
                                     sleep(1)
                                 else:
-                                    os.chdir('../../')
-                                    template_some_message(RED, "** NOT CONFIRM **")
-                                    sleep(5)
-                                    quit()
+                                    template_not_confirmed(False)
                             else:
-                                os.chdir('../../')
-                                template_some_message(RED, "** NOT CONFIRM **")
-                                sleep(5)
-                                quit()
+                                template_not_confirmed(False)
 
 
 def actions_with_encryption_files(xzibit):

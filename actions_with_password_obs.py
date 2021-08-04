@@ -24,7 +24,7 @@ def create_and_confirm_user_password():
 
     def template_red_messages(message):
         system_action('clear')
-        print(f"{RED}\n\n -{message}{DEFAULT_COLOR}")
+        print(f"{RED}\n\n - {message}{DEFAULT_COLOR} -")
 
     while True:
         password = getpass(f"{YELLOW} Password: {DEFAULT_COLOR}")
