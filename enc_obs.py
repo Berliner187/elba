@@ -17,23 +17,13 @@ import datetime
 
 from main import *
 
-
-try:
-    from stdiomask import getpass
-    from werkzeug.security import check_password_hash, generate_password_hash
-    from Crypto.Cipher import AES
-    import Crypto.Random
-except ModuleNotFoundError as error_module:
-    write_log(error_module, 'CRASH')
-    template_some_message(RED, f"Error: {error_module}")
-    print('\n')
-    template_some_message(
-        YELLOW, "Please, install module/modules with PIP and restart the program"
-    )
-    quit()
+from stdiomask import getpass
+from werkzeug.security import check_password_hash, generate_password_hash
+from Crypto.Cipher import AES
+import Crypto.Random
 
 
-__version__ = '6.3.2'
+__version__ = '6.3.3'
 
 
 class AESCipher(object):

@@ -14,10 +14,10 @@
 
 import os
 import sys
-from time import sleep
-from csv import DictReader, DictWriter
 import datetime
 import shutil
+from time import sleep
+from csv import DictReader, DictWriter
 
 
 __version__ = 'v0.8.4.2'
@@ -38,7 +38,7 @@ def show_name_program():
              "||  Veli Afaline     ||   ".center(cols),
              YELLOW, edit_version.center(cols)
              ]
-    wait_effect(lines, 0.000007)
+    wait_effect(lines, 0.000009)
     if CHECK_FOLDER_FOR_RESOURCE is False:
         first_start_message()
 
@@ -200,21 +200,23 @@ if __name__ == '__main__':
     system_action('clear')
     try:
         from update_obs import update, install_old_saved_version
-        try:
-            from werkzeug.security import generate_password_hash, check_password_hash
-            from stdiomask import getpass
-        except ModuleNotFoundError as error_module:
-            write_log(error_module, 'CRASH')
-            print(RED, 'Error: \n' + str(error_module), DEFAULT_COLOR, '\n')
-            template_some_message(
-                YELLOW, "Please, install module/modules with requirements"
-            )
-            quit()
     except ModuleNotFoundError as update_obs_error:
         write_log(update_obs_error, 'FAILED')
         template_some_message(RED, ' - Module "update" does not exist - ')
         sleep(1)
         download_from_repository()
+
+    try:
+        from werkzeug.security import generate_password_hash, check_password_hash
+        from stdiomask import getpass
+        import Crypto.Random
+    except ModuleNotFoundError as error_module:
+        write_log(error_module, 'CRASH')
+        print(RED, f"FAIL: {error_module} \n {DEFAULT_COLOR}")
+        template_some_message(
+            YELLOW, f"Please, install {str(error_module)[15:]} with requirements"
+        )
+        quit()
 
     status_mis_mod = check_modules()
     if status_mis_mod == 0:
@@ -228,16 +230,6 @@ if __name__ == '__main__':
 
         try:
             launcher()  # Запуск лончера
-        except ModuleNotFoundError as module_error:
-            write_log(module_error, 'CRASH')
-            template_some_message(RED, f"Error: {module_error}")
-            print(
-                YELLOW,
-                f"Please, install {str(module_error)[15:]} "
-                f"with PIP from requirements.txt and restart the program",
-                DEFAULT_COLOR
-            )
-            quit()
         except Exception as random_error:
             write_log(random_error, 'FAIL')
             template_some_message(RED, ' --- ERROR --- ')
