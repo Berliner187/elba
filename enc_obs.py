@@ -23,7 +23,7 @@ from Crypto.Cipher import AES
 import Crypto.Random
 
 
-__version__ = '6.4.1'
+__version__ = '6.4.2'
 
 
 class AESCipher(object):
@@ -180,12 +180,12 @@ class WorkWithUserFiles:
                 progress_status = ((current * 100) // total)
                 to_print = ''
                 if type_work == 'files':
-                    to_print = '\n Work completed on'
+                    to_print = 'Work completed on'
                 elif type_work == 'folders':
-                    to_print = '\n Folder creation status'
-                print(f" {BLUE} {to_print}{YELLOW} {progress_status}%  ({current}/{total})".center(cols))
+                    to_print = 'Folder creation status'
+                template_some_message(YELLOW, f"{to_print} {progress_status}% ({current}/{total})")
             except ZeroDivisionError:
-                template_some_message(YELLOW, 'Empty directory')
+                pass
 
         def encrypt_it(byte_file, key, iv):
             cfb_cipher = AES.new(key, AES.MODE_OFB, iv)
@@ -260,20 +260,17 @@ class WorkWithUserFiles:
                 total_progress = progress = 0
                 for i in os.walk('.'):
                     total_progress += 1
-                if total_progress != 0:
-                    for i in os.walk('.'):
-                        try:
-                            if os.path.exists('../' + name_enc_folder + i[0][2:]):
-                                pass
-                            else:
-                                progress += 1
-                                os.system('mkdir ../' + name_enc_folder + i[0][2:])
-                                system_action('clear')
-                                print_progress('folders', progress, total_progress)
-                        except FileNotFoundError:
+                for i in os.walk('.'):
+                    try:
+                        if os.path.exists('../' + name_enc_folder + i[0][2:]):
                             pass
-                else:
-                    template_some_message(YELLOW, 'Empty in encryption folder')
+                        else:
+                            progress += 1
+                            os.system('mkdir ../' + name_enc_folder + i[0][2:])
+                            system_action('clear')
+                            print_progress('folders', progress, total_progress)
+                    except FileNotFoundError:
+                        pass
 
                 total_progress = progress = 0
                 for root, dirs, files in os.walk('.', topdown=False):
@@ -295,10 +292,6 @@ class WorkWithUserFiles:
                                                       'Error in encryption file: directory must not contain a SPACE')
                                 write_log('Directory has got space', 'FAIL')
                                 quit()
-                else:
-                    system_action('clear')
-                    template_some_message(YELLOW, 'Empty directory')
-                if total_progress != 0:
                     save_keyiv(key, path_to_key)
                     save_keyiv(iv, path_to_iv)
                     control_sum = str(timed) + self.xzibit + str(timed)
@@ -307,11 +300,16 @@ class WorkWithUserFiles:
                         sign_xzibit = generate_password_hash(control_sum)
                         signature.write(sign_xzibit)
                         signature.close()
-                    os.chdir('../../../')
                     template_some_message(GREEN, "Encryption successful \n")
+                    os.chdir('../../../')
                     write_log('Encryption successful', 'OK')
+                else:
+                    system_action('clear')
+                    template_some_message(YELLOW, 'Empty directory')
+                    os.chdir('../../../')
+                    write_log('Empty directory', 'PASS')
                 template_remove_folder(FOLDER_FOR_ENCRYPTION_FILES)
-                sleep(1)
+                sleep(2)
 
             elif self.type_work == 'dec':
                 cnt = 0
@@ -370,12 +368,11 @@ class WorkWithUserFiles:
                                                     file_data = read_bin_file(need_folder + '/' + file)
                                                     write_bin_file(new_folder + '/' + file[:-5], decrypt_it(file_data, key, iv))
                                                 system_action('clear')
-                                                print_progress('files', work_progress-4, work_total-4)
+                                                print_progress('files', work_progress-4, cnt_files-4)
 
                                         template_remove_folder(need_folder)
                                         os.chdir('../../')
-                                        print(work_total)
-                                        if work_total != 4:
+                                        if cnt_files != 4:
                                             template_some_message(GREEN, "Decryption successful \n")
                                             write_log('Decryption successful', 'OK')
                                         sleep(1)
@@ -400,8 +397,10 @@ def actions_with_encryption_files(xzibit):
     if change_action == '1':
         system_action('clear')
         system_action('file_manager')
+        write_log("Try encryption", "RUN")
         WorkWithUserFiles(xzibit, 'enc').file_encryption_control()
     elif change_action == '2':
         system_action('clear')
+        write_log("Try decryption", "RUN")
         WorkWithUserFiles(xzibit, 'dec').file_encryption_control()
-    write_log("Encryption data", "OK")
+    write_log("Exit from encrypt", "OK")
