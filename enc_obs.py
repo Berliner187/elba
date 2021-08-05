@@ -23,7 +23,7 @@ from Crypto.Cipher import AES
 import Crypto.Random
 
 
-__version__ = '6.4.2'
+__version__ = '6.4.3'
 
 
 class AESCipher(object):
@@ -175,7 +175,6 @@ class WorkWithUserFiles:
         name_enc_folder = f"{get_date}_{get_time}/"
 
         def print_progress(type_work, current, total):
-            cols = get_size_of_terminal()
             try:
                 progress_status = ((current * 100) // total)
                 to_print = ''
@@ -225,14 +224,14 @@ class WorkWithUserFiles:
             template_not_confirmed(True)
         else:
             if self.type_work == 'enc':
-                def save_keyiv(key, file):
-                    file_key = open(file, mode="wb")
-                    keyiv = enc_keyiv(key, self.xzibit)
+                def save_keyiv(key_to_save, file_to_save):
+                    file_key = open(file_to_save, mode="wb")
+                    keyiv = enc_keyiv(key_to_save, self.xzibit)
                     file_key.write(keyiv)
                     file_key.close()
 
-                    key_data = read_bin_file(file)
-                    write_bin_file(file, key_data)
+                    key_data = read_bin_file(file_to_save)
+                    write_bin_file(file_to_save, key_data)
 
                 system_action('mkdir ' + FOLDER_FOR_ENCRYPTION_FILES)
 
@@ -241,9 +240,11 @@ class WorkWithUserFiles:
 
                 temp = input("Press \'Enter\' key to continue...")
 
-                print("Generating KEY and IV for the recipient")
+                template_some_message(BLUE, "Generating KEY and IV for the recipient")
                 key = Crypto.Random.new().read(AES.block_size)
                 iv = Crypto.Random.new().read(AES.block_size)
+                template_some_message(GREEN, "Keys was generated")
+                sleep(.5)
 
                 os.chdir(FOLDER_FOR_ENCRYPTION_FILES)
 
@@ -316,7 +317,7 @@ class WorkWithUserFiles:
                 for folder in os.listdir(FOLDER_WITH_ENC_DATA):
                     if folder[:4] != PREFIX_FOR_DEC_FILE:
                         cnt += 1
-                        print(f"{cnt}.", folder)
+                        print(f"{cnt}. {folder}")
                 if cnt == 0:
                     print(YELLOW, " - No data encryption - ")
                 change_folder = int(input(YELLOW + '\n - Select folder by number: ' + DEFAULT_COLOR))
@@ -366,7 +367,8 @@ class WorkWithUserFiles:
 
                                                 if file.endswith('.elba'):
                                                     file_data = read_bin_file(need_folder + '/' + file)
-                                                    write_bin_file(new_folder + '/' + file[:-5], decrypt_it(file_data, key, iv))
+                                                    write_bin_file(f"{new_folder}/{file[:-5]}",
+                                                                   decrypt_it(file_data, key, iv))
                                                 system_action('clear')
                                                 print_progress('files', work_progress-4, cnt_files-4)
 

@@ -17,10 +17,7 @@ from update_obs import update, install_old_saved_version
 from main import *
 
 
-__version__ = '2.2.4'
-
-
-cols = get_size_of_terminal()     # Получение ширины и длины терминала
+__version__ = '2.2.5'
 
 
 def decryption_block(generic_key):
@@ -29,7 +26,7 @@ def decryption_block(generic_key):
     try:
         if change_resource_or_actions == '-a':  # Добавление нового ресурса
             system_action('clear')
-            template_some_message(BLUE, '   --- Add new resource ---   \n\n'.center(cols))
+            template_some_message(BLUE, '   --- Add new resource ---   ')
             resource = input(YELLOW + ' Resource: ' + DEFAULT_COLOR)
             login = input(YELLOW + ' Login: ' + DEFAULT_COLOR)
             choice_generation_or_save_self_password(resource, login, generic_key)
@@ -92,7 +89,7 @@ def decryption_block(generic_key):
 
         elif change_resource_or_actions == '-l':
             system_action("clear")
-            template_some_message(GREEN, "\n Log program from file \n")
+            template_some_message(GREEN, " Log program from file ")
             log_data = open(FILE_LOG, 'r')
             reader_log = DictReader(log_data, delimiter=';')
             try:
