@@ -23,7 +23,7 @@ from Crypto.Cipher import AES
 import Crypto.Random
 
 
-__version__ = '6.4.0'
+__version__ = '6.4.1'
 
 
 class AESCipher(object):
@@ -298,7 +298,6 @@ class WorkWithUserFiles:
                 else:
                     system_action('clear')
                     template_some_message(YELLOW, 'Empty directory')
-                os.chdir('../../../')
                 if total_progress != 0:
                     save_keyiv(key, path_to_key)
                     save_keyiv(iv, path_to_iv)
@@ -308,6 +307,7 @@ class WorkWithUserFiles:
                         sign_xzibit = generate_password_hash(control_sum)
                         signature.write(sign_xzibit)
                         signature.close()
+                    os.chdir('../../../')
                     template_some_message(GREEN, "Encryption successful \n")
                     write_log('Encryption successful', 'OK')
                 template_remove_folder(FOLDER_FOR_ENCRYPTION_FILES)
