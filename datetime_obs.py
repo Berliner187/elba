@@ -14,24 +14,27 @@ import datetime
 from time import sleep
 
 
-__version__ = '1.3.4'
+__version__ = '1.3.5'
+
+SLEEPER_WAIT = .02     # Ожидание вывода никнейма
 
 
-def greeting(generic_key):   # Greating Depending On Date Time
+def greeting(generic_key):   # Greeting Depending On Date Time
     """ Фунция вывода приветствия юзера """
     def template_greeting(times_of_day):
         if os.path.exists(FILE_USER_NAME) is False:  # Создание файла с именем
+            system_action('clear')
             message_about_enter_nickname = [BLUE, '\n Enter your nickname']
-            wait_effect(message_about_enter_nickname, 0.025)
+            wait_effect(message_about_enter_nickname, SLEEPER_WAIT)
             name = input(YELLOW + '\n - Nickname: ' + DEFAULT_COLOR)
             enc_aes(FILE_USER_NAME, name, generic_key)
         else:  # Чтение из файла с именем и вывод в консоль
             name = dec_aes(FILE_USER_NAME, generic_key)
         lines = [
-            GREEN, times_of_day + ' ' + name,
+            YELLOW, times_of_day + ' ' + name,
             DEFAULT_COLOR
         ]
-        wait_effect(lines, 0.001)
+        wait_effect(lines, SLEEPER_WAIT)
     hms = datetime.datetime.today()
     time_now = hms.hour * 3600 + hms.minute * 60 + hms.second  # Время в секундах
     if 14400 <= time_now < 43200:

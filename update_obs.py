@@ -5,7 +5,7 @@ import os
 from time import sleep
 
 
-__version__ = '1.6.3'
+__version__ = '1.6.4'
 
 
 def get_peculiarities_copy(type_copy):
@@ -37,7 +37,7 @@ def template_for_install(program_file):
 
 def template_question(text):
     """ Шаблон вопросов от программы """
-    question = input(YELLOW + ' - ' + text + ' (y/n): ' + DEFAULT_COLOR)
+    question = input(YELLOW + f" - {text} (y/n): " + DEFAULT_COLOR)
     return question
 
 
@@ -66,12 +66,11 @@ def update():
                 print('[', color, message, DEFAULT_COLOR, ']', stock_modules[item_mod])
             if stock_modules[item_mod] not in installed_modules:
                 template_text_modules(RED, 'FAILED')
-                write_log(stock_modules[item_mod], 'FAILED')
-                sleep(.2)
+                write_log(stock_modules[item_mod], 'MISSING')
                 cnt_missing_mod += 1
             else:
                 template_text_modules(GREEN, 'OK')
-                sleep(.2)
+            sleep(.2)
         return cnt_missing_mod
 
     if status_modules != 0:
@@ -110,7 +109,7 @@ def update():
             # Условие установки новой версии программы
             if os.path.getsize(main_file) != os.path.getsize(FOLDER_ELBA + main_file):
                 template_some_message(GREEN, ' A new version of the program is available ')
-                install_or_no = template_question(' - Install new version program?')
+                install_or_no = template_question('Install new version program?')
 
                 if install_or_no == 'y':
                     template_for_install(main_file)

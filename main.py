@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'v0.8.4.2'
+__version__ = 'v0.8.4.3'
 
 
 def get_size_of_terminal():
@@ -38,7 +38,7 @@ def show_name_program():
              "||  Veli Afaline     ||   ".center(cols),
              YELLOW, edit_version.center(cols)
              ]
-    wait_effect(lines, 0.000009)
+    wait_effect(lines, 0.0001)
     if CHECK_FOLDER_FOR_RESOURCE is False:
         first_start_message()
 
