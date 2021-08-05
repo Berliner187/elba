@@ -23,7 +23,7 @@ from Crypto.Cipher import AES
 import Crypto.Random
 
 
-__version__ = '6.3.3'
+__version__ = '6.4.0'
 
 
 class AESCipher(object):
@@ -175,13 +175,17 @@ class WorkWithUserFiles:
         name_enc_folder = f"{get_date}_{get_time}/"
 
         def print_progress(type_work, current, total):
-            progress_status = ((current * 100) // total)
-            to_print = ''
-            if type_work == 'files':
-                to_print = '\n Work completed on'
-            elif type_work == 'folders':
-                to_print = '\n Folder creation status'
-            print(YELLOW, to_print, DEFAULT_COLOR, f"{progress_status}%  ({current}/{total})")
+            cols = get_size_of_terminal()
+            try:
+                progress_status = ((current * 100) // total)
+                to_print = ''
+                if type_work == 'files':
+                    to_print = '\n Work completed on'
+                elif type_work == 'folders':
+                    to_print = '\n Folder creation status'
+                print(f" {BLUE} {to_print}{YELLOW} {progress_status}%  ({current}/{total})".center(cols))
+            except ZeroDivisionError:
+                template_some_message(YELLOW, 'Empty directory')
 
         def encrypt_it(byte_file, key, iv):
             cfb_cipher = AES.new(key, AES.MODE_OFB, iv)
@@ -206,8 +210,8 @@ class WorkWithUserFiles:
             os.system('mkdir ' + FOLDER_WITH_ENC_DATA)
 
         def template_not_confirmed(remove):
-            write_log('Not confirm', 'ALERT')
             os.chdir('../../')
+            write_log('Not confirm', 'ALERT')
             template_some_message(RED, "** DA DUMM BASS **")
             sleep(5)
             if remove:
@@ -217,6 +221,7 @@ class WorkWithUserFiles:
         xzibit_hash_from_file = open(FILE_WITH_HASH_GENERIC_KEY).readline()
         check_generic_hash = check_password_hash(xzibit_hash_from_file, self.xzibit)
         if check_generic_hash is False:
+            print(True)
             template_not_confirmed(True)
         else:
             if self.type_work == 'enc':
@@ -255,49 +260,56 @@ class WorkWithUserFiles:
                 total_progress = progress = 0
                 for i in os.walk('.'):
                     total_progress += 1
-                for i in os.walk('.'):
-                    try:
-                        if os.path.exists('../' + name_enc_folder + i[0][2:]):
+                if total_progress != 0:
+                    for i in os.walk('.'):
+                        try:
+                            if os.path.exists('../' + name_enc_folder + i[0][2:]):
+                                pass
+                            else:
+                                progress += 1
+                                os.system('mkdir ../' + name_enc_folder + i[0][2:])
+                                system_action('clear')
+                                print_progress('folders', progress, total_progress)
+                        except FileNotFoundError:
                             pass
-                        else:
-                            progress += 1
-                            os.system('mkdir ../' + name_enc_folder + i[0][2:])
-                            system_action('clear')
-                            print_progress('folders', progress, total_progress)
-                    except FileNotFoundError:
-                        pass
+                else:
+                    template_some_message(YELLOW, 'Empty in encryption folder')
 
                 total_progress = progress = 0
                 for root, dirs, files in os.walk('.', topdown=False):
                     for name in files:
                         total_progress += 1
-                for root, dirs, files in os.walk('.', topdown=False):
-                    for name in files:
-                        progress += 1
-                        file = os.path.join(root, name)
-                        file = file[2:]
-                        file_data = read_bin_file(file)
-                        try:
-                            write_bin_file('../' + name_enc_folder + file + ".elba", encrypt_it(file_data, key, iv))
-                            system_action('clear')
-                            print_progress('files', progress, total_progress)
-                        except FileNotFoundError:
-                            template_some_message(RED,
-                                                  'Error in encryption file: directory must not contain a SPACE')
-                            write_log('Directory has got space', 'FAIL')
-                            quit()
-
-                template_some_message(GREEN, "Encryption successful \n")
-                write_log('Encryption successful', 'OK')
-                save_keyiv(key, path_to_key)
-                save_keyiv(iv, path_to_iv)
-                control_sum = str(timed) + self.xzibit + str(timed)
-                enc_aes(path_to_timed, control_sum, self.xzibit)
-                with open(path_to_signed, 'w') as signature:
-                    sign_xzibit = generate_password_hash(control_sum)
-                    signature.write(sign_xzibit)
-                    signature.close()
+                if total_progress != 0:
+                    for root, dirs, files in os.walk('.', topdown=False):
+                        for name in files:
+                            progress += 1
+                            file = os.path.join(root, name)
+                            file = file[2:]
+                            file_data = read_bin_file(file)
+                            try:
+                                write_bin_file('../' + name_enc_folder + file + ".elba", encrypt_it(file_data, key, iv))
+                                system_action('clear')
+                                print_progress('files', progress, total_progress)
+                            except FileNotFoundError:
+                                template_some_message(RED,
+                                                      'Error in encryption file: directory must not contain a SPACE')
+                                write_log('Directory has got space', 'FAIL')
+                                quit()
+                else:
+                    system_action('clear')
+                    template_some_message(YELLOW, 'Empty directory')
                 os.chdir('../../../')
+                if total_progress != 0:
+                    save_keyiv(key, path_to_key)
+                    save_keyiv(iv, path_to_iv)
+                    control_sum = str(timed) + self.xzibit + str(timed)
+                    enc_aes(path_to_timed, control_sum, self.xzibit)
+                    with open(path_to_signed, 'w') as signature:
+                        sign_xzibit = generate_password_hash(control_sum)
+                        signature.write(sign_xzibit)
+                        signature.close()
+                    template_some_message(GREEN, "Encryption successful \n")
+                    write_log('Encryption successful', 'OK')
                 template_remove_folder(FOLDER_FOR_ENCRYPTION_FILES)
                 sleep(1)
 
@@ -319,52 +331,63 @@ class WorkWithUserFiles:
                             os.chdir(FOLDER_WITH_ENC_DATA)
                             path_to_sign = need_folder + '/' + SIGNED
                             path_to_timed = need_folder + '/' + FILE_CONTROL_SUM
-                            if os.path.exists(path_to_sign):
-                                control_sum = dec_aes(path_to_timed, self.xzibit)
-                                signature = open(path_to_sign, 'r').readline()
-                                sign_xzibit = check_password_hash(signature, control_sum)
-                                if sign_xzibit:
-                                    new_folder = PREFIX_FOR_DEC_FILE + need_folder
-                                    if os.path.exists(new_folder) is False:
-                                        os.mkdir(new_folder)
 
-                                    for i in os.walk(need_folder):
-                                        if os.path.exists(new_folder + i[0].replace(need_folder, '')):
-                                            pass
-                                        else:
-                                            os.system('mkdir ' + new_folder + i[0].replace(need_folder, ''))
+                            cnt_files = 0
+                            for root, dirs, files in os.walk(need_folder, topdown=False):
+                                for name in files:
+                                    cnt_files += 1
 
-                                    work_total = 0
-                                    for root, dirs, files in os.walk(need_folder, topdown=False):
-                                        for name in files:
-                                            work_total += 1
-                                    work_progress = 0
-                                    for root, dirs, files in os.walk(need_folder, topdown=False):
-                                        for name in files:
-                                            work_progress += 1
-                                            file = os.path.join(root, name)
-                                            file = file.replace(need_folder + '/', '')
+                            if cnt_files != 0:
+                                if os.path.exists(path_to_sign):
+                                    control_sum = dec_aes(path_to_timed, self.xzibit)
+                                    signature = open(path_to_sign, 'r').readline()
+                                    sign_xzibit = check_password_hash(signature, control_sum)
+                                    if sign_xzibit:
+                                        new_folder = PREFIX_FOR_DEC_FILE + need_folder
+                                        if os.path.exists(new_folder) is False:
+                                            os.mkdir(new_folder)
 
-                                            enc_key = open(need_folder + '/' + KEY_FILE, 'rb').read()
-                                            enc_iv = open(need_folder + '/' + IV_FILE, 'rb').read()
+                                        for i in os.walk(need_folder):
+                                            if os.path.exists(new_folder + i[0].replace(need_folder, '')):
+                                                pass
+                                            else:
+                                                os.system('mkdir ' + new_folder + i[0].replace(need_folder, ''))
 
-                                            key = dec_keyiv(enc_key, self.xzibit)
-                                            iv = dec_keyiv(enc_iv, self.xzibit)
+                                        work_progress = 0
+                                        for root, dirs, files in os.walk(need_folder, topdown=False):
+                                            for name in files:
+                                                work_progress += 1
+                                                file = os.path.join(root, name)
+                                                file = file.replace(need_folder + '/', '')
 
-                                            if file.endswith('.elba'):
-                                                file_data = read_bin_file(need_folder + '/' + file)
-                                                write_bin_file(new_folder + '/' + file[:-5], decrypt_it(file_data, key, iv))
-                                            system_action('clear')
-                                            print_progress('files', work_progress-4, work_total-4)
+                                                enc_key = open(need_folder + '/' + KEY_FILE, 'rb').read()
+                                                enc_iv = open(need_folder + '/' + IV_FILE, 'rb').read()
 
-                                    template_some_message(GREEN, "Decryption successful \n")
-                                    template_remove_folder(need_folder)
-                                    os.chdir('../../')
-                                    sleep(1)
+                                                key = dec_keyiv(enc_key, self.xzibit)
+                                                iv = dec_keyiv(enc_iv, self.xzibit)
+
+                                                if file.endswith('.elba'):
+                                                    file_data = read_bin_file(need_folder + '/' + file)
+                                                    write_bin_file(new_folder + '/' + file[:-5], decrypt_it(file_data, key, iv))
+                                                system_action('clear')
+                                                print_progress('files', work_progress-4, work_total-4)
+
+                                        template_remove_folder(need_folder)
+                                        os.chdir('../../')
+                                        print(work_total)
+                                        if work_total != 4:
+                                            template_some_message(GREEN, "Decryption successful \n")
+                                            write_log('Decryption successful', 'OK')
+                                        sleep(1)
+                                    else:
+                                        template_not_confirmed(False)
                                 else:
                                     template_not_confirmed(False)
                             else:
-                                template_not_confirmed(False)
+                                os.chdir('../../')
+                                system_action('clear')
+                                template_some_message(YELLOW, 'Empty directory')
+                                sleep(2)
 
 
 def actions_with_encryption_files(xzibit):
