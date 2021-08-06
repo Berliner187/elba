@@ -5,7 +5,7 @@ import sys
 from memory_profiler import memory_usage
 
 
-__version__ = '2.0.5'
+__version__ = '2.0.6'
 
 
 def get_versions():
@@ -74,9 +74,9 @@ def size_all():
         dic_with_files_program[files[i]] = os.path.getsize(files[i]) * 8
     for file, size in dic_with_files_program.items():
         if len(str(size)) == 5:
-            size = str(size) + ' '
+            size = f"{size} "
         elif len(str(size)) == 4:
-            size = str(size) + '  '
+            size = f"{size}  "
         print("{0}  ---  {1}".format(size, file))
 
     # Получение размера пользовательских файлов
@@ -105,7 +105,7 @@ def size_all():
         else:
             __size__ = round(__size__, 1)
             user_measure = 'B'
-        return YELLOW + str(__size__) + ' ' + user_measure + DEFAULT_COLOR
+        return YELLOW + f"{__size__} {user_measure}" + DEFAULT_COLOR
 
     program_in_ram = memory_usage()
     program_in_ram = program_in_ram[0] * 2**20
