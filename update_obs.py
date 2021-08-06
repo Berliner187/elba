@@ -5,40 +5,7 @@ import os
 from time import sleep
 
 
-__version__ = '1.6.4'
-
-
-def get_peculiarities_copy(type_copy):
-    """ Поддержка синтаксиса командных оболочек Linux, MacOS X и Windows """
-    if type_copy == 'dir':
-        if os.name == 'nt':
-            peculiarities_copy = 'xcopy /y /o /e '
-        else:
-            peculiarities_copy = 'cp -r '
-        return peculiarities_copy
-    elif type_copy == 'file':
-        if os.name == 'nt':
-            peculiarities_copy = 'copy '
-        else:
-            peculiarities_copy = 'cp '
-        return peculiarities_copy
-    elif type_copy == 'move':
-        if os.name == 'nt':
-            peculiarities_move = 'move '
-        else:
-            peculiarities_move = 'mv '
-        return peculiarities_move
-
-
-def template_for_install(program_file):
-    """ Шаблон установки файлов программы """
-    os.system(get_peculiarities_copy('move') + FOLDER_ELBA + program_file + ' . ')
-
-
-def template_question(text):
-    """ Шаблон вопросов от программы """
-    question = input(YELLOW + f" - {text} (y/n): " + DEFAULT_COLOR)
-    return question
+__version__ = '1.6.5'
 
 
 def update():

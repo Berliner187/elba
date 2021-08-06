@@ -89,7 +89,7 @@ def enc_aes(__file__, encryption, __key__):
 
 
 def dec_aes(__file__, __key__):
-    """ Дешифрование и сохранение в файл """
+    """ Дешифрование """
     with open(__file__, 'rb') as read_file:
         payload = read_file.readlines()
         for item in payload:
@@ -235,11 +235,11 @@ class WorkWithUserFiles:
 
                 system_action('mkdir ' + FOLDER_FOR_ENCRYPTION_FILES)
 
-                template_some_message(BLUE, " The program allows you to encrypt files")
                 template_some_message(YELLOW, " - Please put the files you want to encrypt in \'FOR_ENCRYPTION\'")
 
-                temp = input("Press \'Enter\' key to continue...")
+                input("Press \'Enter\' key to continue...")
 
+                system_action('clear')
                 template_some_message(BLUE, "Generating KEY and IV for the recipient")
                 key = Crypto.Random.new().read(AES.block_size)
                 iv = Crypto.Random.new().read(AES.block_size)

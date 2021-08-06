@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'v0.8.4.4'
+__version__ = 'v0.8.4.5'
 
 
 def get_size_of_terminal():
@@ -64,6 +64,17 @@ def template_some_message(color, message):
     """ Шаблон сообщения в ходе работы программы """
     cols, rows = shutil.get_terminal_size()
     print(color, '\n'*2, message.center(cols), DEFAULT_COLOR)
+
+
+def template_for_install(program_file):
+    """ Шаблон установки файлов программы """
+    os.system(get_peculiarities_copy('move') + FOLDER_ELBA + program_file + ' . ')
+
+
+def template_question(text):
+    """ Шаблон вопросов от программы """
+    question = input(YELLOW + f" - {text} (y/n): " + DEFAULT_COLOR)
+    return question
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -121,12 +132,34 @@ for folder in FOLDERS:
         os.mkdir(folder)
 
 
+def get_peculiarities_copy(type_copy):
+    """ Поддержка синтаксиса командных оболочек Linux, MacOS X и Windows """
+    if type_copy == 'dir':
+        if os.name == 'nt':
+            peculiarities_copy = 'xcopy /y /o /e '
+        else:
+            peculiarities_copy = 'cp -r '
+        return peculiarities_copy
+    elif type_copy == 'file':
+        if os.name == 'nt':
+            peculiarities_copy = 'copy '
+        else:
+            peculiarities_copy = 'cp '
+        return peculiarities_copy
+    elif type_copy == 'move':
+        if os.name == 'nt':
+            peculiarities_move = 'move '
+        else:
+            peculiarities_move = 'mv '
+        return peculiarities_move
+
+
 def download_from_repository():
     """ Загрузка и установка из репозитория модуля обновлений """
     os.system(REPOSITORY)
     system_action('clear')
     if os.path.exists('update_obs.py') is False:
-        os.system('mv elba/update_obs.py .')
+        os.system(get_peculiarities_copy('move') + ' elba/update_obs.py .')
         system_action('restart')
 
 
@@ -236,19 +269,27 @@ if __name__ == '__main__':
             print(random_error)
             sleep(1)
             system_action('clear')
-            if os.path.exists(OLD_ELBA):  # Попытка откатиться
+            print(BLUE,
+                  '\n - Enter 1 to update \n'
+                  ' - Enter 2 to rollback ')
+            rollback_or_update = input(YELLOW + '\n - Select by number: ' + DEFAULT_COLOR)
+            if rollback_or_update == '1':  # Попытка откатиться
                 template_some_message(RED, '-- You can try roll back --')
-                change = input(YELLOW + ' - Roll back? (y/n): ' + DEFAULT_COLOR)
+                change = input(template_question(' - Roll back? (y/n): '))
                 if change == 'y':
                     install_old_saved_version()
-            else:  # Попытка обновиться
-                get_confirm = input(YELLOW + " - Update? (y/n): " + DEFAULT_COLOR)
+            elif rollback_or_update == '2':  # Попытка обновиться
+                get_confirm = input(template_question(" - Update? (y/n): "))
                 if get_confirm == 'y':
                     write_log('Try update', 'Run')
                     update()
                 else:
                     write_log('Exit', 'OK')
                     quit()
+            else:
+                system_action('clear')
+                template_some_message(RED, ' - Error in change - ')
+                sleep(1)
             system_action('restart')
     else:
         update()
