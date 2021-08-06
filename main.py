@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'v0.8.4.3'
+__version__ = 'v0.8.4.4'
 
 
 def get_size_of_terminal():
@@ -134,9 +134,9 @@ def write_log(cause, status_itself):
     """ Логирование """
     def get_time_now():      # Получение и форматирование текущего времени
         hms = datetime.datetime.today()
-        time_format = str(hms.hour) + ':' + str(hms.minute) + ':' + str(hms.second)
-        date_format = str(hms.day) + '.' + str(hms.month) + '.' + str(hms.year)
-        total = str(time_format) + '-' + str(date_format)
+        time_format = f"{hms.hour}:{hms.minute}:{hms.second}"
+        date_format = f"{hms.day}.{hms.month}.{hms.year}"
+        total = f"{time_format}-{date_format}"
         return ''.join(total)
 
     if os.path.exists(FILE_LOG) is False:
@@ -203,18 +203,18 @@ if __name__ == '__main__':
     except ModuleNotFoundError as update_obs_error:
         write_log(update_obs_error, 'FAILED')
         template_some_message(RED, ' - Module "update" does not exist - ')
-        sleep(1)
         download_from_repository()
 
     try:
         from werkzeug.security import generate_password_hash, check_password_hash
         from stdiomask import getpass
-        import Crypto.Random
+        from Crypto.Random import get_random_bytes
+        from memory_profiler import memory_usage
     except ModuleNotFoundError as error_module:
         write_log(error_module, 'CRASH')
-        print(RED, f"FAIL: {error_module} \n {DEFAULT_COLOR}")
+        template_some_message(RED, f"MISSING: {error_module}")
         template_some_message(
-            YELLOW, f"Please, install {str(error_module)[15:]} with requirements"
+            YELLOW, f"Please, install{str(error_module)[15:]} with requirements"
         )
         quit()
 
@@ -237,7 +237,7 @@ if __name__ == '__main__':
             sleep(1)
             system_action('clear')
             if os.path.exists(OLD_ELBA):  # Попытка откатиться
-                template_some_message(RED, ' -- You can try roll back -- \n')
+                template_some_message(RED, '-- You can try roll back --')
                 change = input(YELLOW + ' - Roll back? (y/n): ' + DEFAULT_COLOR)
                 if change == 'y':
                     install_old_saved_version()

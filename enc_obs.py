@@ -6,24 +6,24 @@
     Доступные методы: AES и Base64
 """
 
-from base64 import urlsafe_b64encode, urlsafe_b64decode
-from base64 import b64encode, b64decode
 import base64
 import hashlib
 import random
 import os
-from time import sleep
 import datetime
+from time import sleep
+from base64 import urlsafe_b64encode, urlsafe_b64decode
+from base64 import b64encode, b64decode
 
 from main import *
 
+import Crypto.Random
 from stdiomask import getpass
 from werkzeug.security import check_password_hash, generate_password_hash
 from Crypto.Cipher import AES
-import Crypto.Random
 
 
-__version__ = '6.4.3'
+__version__ = '6.4.4'
 
 
 class AESCipher(object):
@@ -377,7 +377,7 @@ class WorkWithUserFiles:
                                         if cnt_files != 4:
                                             template_some_message(GREEN, "Decryption successful \n")
                                             write_log('Decryption successful', 'OK')
-                                        sleep(1)
+                                            sleep(1.5)
                                     else:
                                         template_not_confirmed(False)
                                 else:
