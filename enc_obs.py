@@ -23,7 +23,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from Crypto.Cipher import AES
 
 
-__version__ = '6.4.4'
+__version__ = '6.4.5'
 
 
 class AESCipher(object):
@@ -175,6 +175,8 @@ class WorkWithUserFiles:
         name_enc_folder = f"{get_date}_{get_time}/"
 
         def print_progress(type_work, current, total):
+            if current < 0:
+                current = 1
             try:
                 progress_status = ((current * 100) // total)
                 to_print = ''
