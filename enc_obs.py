@@ -14,6 +14,13 @@ import datetime
 from time import sleep
 from base64 import urlsafe_b64encode, urlsafe_b64decode
 from base64 import b64encode, b64decode
+import sys
+
+sys.stderr = open(os.devnull, "w")
+try:
+    import psutil
+finally:
+    sys.stderr = sys.__stderr__
 
 from main import *
 
