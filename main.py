@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'v0.8.4.6'
+__version__ = 'v0.8.4.7'
 
 
 def get_size_of_terminal():
@@ -292,5 +292,7 @@ if __name__ == '__main__':
                 template_some_message(RED, ' - Error in change - ')
                 sleep(1)
             system_action('restart')
+        except KeyError:
+            pass
     else:
         update()
