@@ -243,7 +243,7 @@ if __name__ == '__main__':
         from werkzeug.security import generate_password_hash, check_password_hash
         from stdiomask import getpass
         import Crypto.Hash
-        from memory_profiler import memory_usage
+        import memory_profiler
     except ModuleNotFoundError as error_module:
         write_log(error_module, 'CRASH')
         template_some_message(RED, f"MISSING: {error_module}")
