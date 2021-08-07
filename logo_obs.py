@@ -11,7 +11,7 @@ import os
 from main import *
 
 
-__version__ = '1.3.3'
+__version__ = '1.3.4'
 
 
 cols = get_size_of_terminal()
@@ -33,7 +33,7 @@ def wait_effect(lines, sleeper):
 
 logo_strings_row = [
         "",
-        " EEEEEEEE     LL            BBBBBBB            AAAA         ",
+        " EEEEEEEE     LL            BBBBBBB           AAAAAA        ",
         " E            LL            B      B         A      A       ",
         " E            LL            B      BB       AA      AA      ",
         " EEEEEEE      LL            BBBBBBBB       AAAAAAAAAAAA     ",

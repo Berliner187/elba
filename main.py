@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'v0.8.4.5'
+__version__ = 'v0.8.4.6'
 
 
 def get_size_of_terminal():
@@ -48,7 +48,8 @@ def system_action(action):
     if action == 'restart':
         os.execv(sys.executable, [sys.executable] + sys.argv)
     if action == 'clear':
-        os.system('cls' if os.name == 'nt' else 'clear')
+        # os.system('cls' if os.name == 'nt' else 'clear')
+        print('\n')
     if action == 'file_manager':
         os.system('explorer.exe .' if os.name == 'nt' else 'nautilus .')
     else:
@@ -241,7 +242,7 @@ if __name__ == '__main__':
     try:
         from werkzeug.security import generate_password_hash, check_password_hash
         from stdiomask import getpass
-        from Crypto.Random import get_random_bytes
+        import Crypto.Hash
         from memory_profiler import memory_usage
     except ModuleNotFoundError as error_module:
         write_log(error_module, 'CRASH')

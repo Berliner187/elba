@@ -23,7 +23,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from Crypto.Cipher import AES
 
 
-__version__ = '6.4.5'
+__version__ = '6.4.6'
 
 
 class AESCipher(object):
@@ -251,7 +251,9 @@ class WorkWithUserFiles:
                 os.chdir(FOLDER_FOR_ENCRYPTION_FILES)
 
                 if os.path.exists(name_enc_folder) is False:
-                    system_action('mkdir ../' + name_enc_folder)
+                    prefix_new_enc_folder = input(
+                        YELLOW + ' - Give a name to the new encrypted folder: ' + DEFAULT_COLOR)
+                    system_action(f"mkdir ../{name_enc_folder}-{prefix_new_enc_folder}/")
 
                 path_to_key = '../' + name_enc_folder + KEY_FILE
                 path_to_iv = '../' + name_enc_folder + IV_FILE
@@ -287,7 +289,7 @@ class WorkWithUserFiles:
                             file = file[2:]
                             file_data = read_bin_file(file)
                             try:
-                                write_bin_file('../' + name_enc_folder + file + ".elba", encrypt_it(file_data, key, iv))
+                                write_bin_file(f"../{name_enc_folder}{file}.elba", encrypt_it(file_data, key, iv))
                                 system_action('clear')
                                 print_progress('files', progress, total_progress)
                             except FileNotFoundError:
@@ -297,7 +299,7 @@ class WorkWithUserFiles:
                                 quit()
                     save_keyiv(key, path_to_key)
                     save_keyiv(iv, path_to_iv)
-                    control_sum = str(timed) + self.xzibit + str(timed)
+                    control_sum = str(timed * timed)
                     enc_aes(path_to_timed, control_sum, self.xzibit)
                     with open(path_to_signed, 'w') as signature:
                         sign_xzibit = generate_password_hash(control_sum)
