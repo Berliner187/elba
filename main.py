@@ -209,6 +209,7 @@ def check_modules():
 
 def launcher():
     """ The main function responsible for the operation of the program """
+    system_action('clear')
     if CHECK_FOLDER_FOR_RESOURCE is False:  # При первом запуске
         show_name_program()
         elba()
