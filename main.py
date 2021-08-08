@@ -33,10 +33,10 @@ def show_name_program():
     cols, rows = shutil.get_terminal_size()
     edit_version = __version__ + '       '
     lines = [BLUE,
-             "||  Delta For Linux  ||   ".center(cols),
-             "||  by Berliner187   ||   ".center(cols),
-             "||  Veli Afaline     ||   ".center(cols),
-             YELLOW, edit_version.center(cols)
+             "||  Delta For Linux  ||   ",
+             "||  by Berliner187   ||   ",
+             "||  Veli Afaline     ||   ",
+             YELLOW, edit_version
              ]
     wait_effect(lines, 0.0001)
     if CHECK_FOLDER_FOR_RESOURCE is False:
@@ -48,8 +48,7 @@ def system_action(action):
     if action == 'restart':
         os.execv(sys.executable, [sys.executable] + sys.argv)
     if action == 'clear':
-        # os.system('cls' if os.name == 'nt' else 'clear')
-        print('\n')
+        os.system('cls' if os.name == 'nt' else 'clear')
     if action == 'file_manager':
         os.system('explorer.exe .' if os.name == 'nt' else 'nautilus .')
     else:
