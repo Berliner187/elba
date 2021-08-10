@@ -6,7 +6,6 @@
     Доступные методы: AES и Base64
 """
 
-import base64
 import hashlib
 import random
 import os
@@ -16,12 +15,6 @@ from base64 import urlsafe_b64encode, urlsafe_b64decode
 from base64 import b64encode, b64decode
 import sys
 
-sys.stderr = open(os.devnull, "w")
-try:
-    import psutil
-finally:
-    sys.stderr = sys.__stderr__
-
 from main import *
 
 import Crypto.Random
@@ -30,7 +23,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from Crypto.Cipher import AES
 
 
-__version__ = '6.4.6'
+__version__ = '6.4.7'
 
 
 class AESCipher(object):
@@ -44,10 +37,10 @@ class AESCipher(object):
         iv = Crypto.Random.new().read(AES.block_size)
         cipher = AES.new(self.key, AES.MODE_CBC, iv)
         code = cipher.encrypt((raw.encode()))
-        return base64.b64encode(iv + code)
+        return b64encode(iv + code)
 
     def decrypt(self, enc):
-        enc = base64.b64decode(enc)
+        enc = b64decode(enc)
         iv = enc[:AES.block_size]
         cipher = AES.new(self.key, AES.MODE_CBC, iv)
         return self._unpad(cipher.decrypt(enc[AES.block_size:])).decode('utf-8')

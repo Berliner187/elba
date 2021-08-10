@@ -2,7 +2,7 @@
 from enc_obs import *
 
 
-__version__ = '1.2.8'
+__version__ = '1.3.0'
 
 
 cols = get_size_of_terminal()
@@ -11,15 +11,17 @@ cols = get_size_of_terminal()
 def show_decryption_data(generic_key, category):
     """ Показ сохраненых ресурсов/заметок """
     system_action('clear')
-    separator = ''
+    separator = '  '
     if category == 'note':
-        separator += '    '
+        separator += '  '
 
     lines_show_category = [
-        f"{BLUE}   ___________________________________",
-        f"{BLUE}              /\/| {YELLOW}\/                       \/{BLUE} |\/\ ",
-        f"{BLUE}             /\/\| {YELLOW}\/    Saved {category}s {separator}   \/ {BLUE}|/\/\ ",
-        f"{YELLOW}     \/                       \/ \n\n"
+        BLUE,
+        f"_______________________",
+        f"                                     /\/| {YELLOW}\/           \/{BLUE} |\/\ ",
+        f"                                    /\/\|{YELLOW}\/{separator}{category.upper()}S{separator}\/{BLUE}|/\/\ ",
+        f"{YELLOW}                 \/               \/",
+        '\n'
     ]
     for line_pic_category in lines_show_category:
         print(line_pic_category.center(cols))

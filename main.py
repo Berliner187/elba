@@ -20,17 +20,17 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'v0.8.4.7'
+__version__ = 'v0.8.5.0'
 
 
 def get_size_of_terminal():
-    cols, rows = shutil.get_terminal_size()  # Получение ширины и длины терминала
+    """ Получение ширины и длины терминала """
+    cols, rows = shutil.get_terminal_size()
     return cols
 
 
 def show_name_program():
     from logo_obs import wait_effect
-    cols, rows = shutil.get_terminal_size()
     edit_version = __version__ + '       '
     lines = [BLUE,
              "||  Delta For Linux  ||   ",
@@ -77,10 +77,12 @@ def template_question(text):
     return question
 
 
+def format_hex_color(hex_color):
+    r, g, b = [int(hex_color[i:i+2], 16) for i in range(1, len(hex_color), 2)]
+    return f"\x1b[38;2;{r};{g};{b}m".format(**vars())
+
+
 # <<<----------------------- Константы --------------------------->>>
-# Цвета в терминале
-YELLOW, BLUE, PURPLE = "\033[33m", "\033[36m", "\033[35m"
-GREEN, RED, DEFAULT_COLOR = "\033[32m", "\033[31m", "\033[0m"
 # Папки
 FOLDER_ELBA = 'elba/'
 FOLDER_WITH_DATA = 'volare/'  # Mi fa volare
@@ -108,6 +110,7 @@ FILE_WITH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.generic_key.dat'
 FILE_USER_NAME = FOLDER_WITH_PROGRAM_DATA + '.self_name.dat'
 FILE_WITH_HASH = FOLDER_WITH_PROGRAM_DATA + '.hash_password.dat'
 FILE_LOG = FOLDER_WITH_PROGRAM_DATA + '.file.log'
+FILE_SETTINGS_COLOR = FOLDER_WITH_PROGRAM_DATA + 'setting_color_accent.ini'
 # <<<------------- Проверка файлов на наличие --------------->>>
 CHECK_FILE_WITH_GENERIC = os.path.exists(FILE_WITH_HASH_GENERIC_KEY)
 CHECK_FILE_WITH_HASH = os.path.exists(FILE_WITH_HASH)
@@ -125,6 +128,40 @@ stock_modules = [
     'actions_with_password_obs.py', 'show_dec_data_obs.py',
     'decryption_block_obs.py'
 ]
+# Цвета акцента цветов по умолчанию
+dictionary_colors = {
+    'ACCENT_1': '#FBC330',
+    'ACCENT_2': '#9B30FF',
+    'ACCENT_3': '#30A0E0',
+    'ACCENT_4': '#2ECC71',
+    'ACCENT_5': '#c70039',
+    'ACCENT_6': '#ffffff'
+}
+
+if os.path.exists(FILE_SETTINGS_COLOR) is False:
+    # Сохранение цветов в файл
+    with open(FILE_SETTINGS_COLOR, 'w+') as f:
+        f.write(str(dictionary_colors))
+else:
+    # Получение акцента цветов из файла
+    dic_colors = ''
+    with open(FILE_SETTINGS_COLOR, 'r') as file_accent:
+        for i in file_accent.readlines():
+            dic_colors = i
+    dictionary_colors = eval(dic_colors)
+
+# Ключи словаря с цветами добавляются в массив
+massive_colors = []
+for accent in dictionary_colors:
+    massive_colors.append(accent)
+
+# Цвета в терминале
+YELLOW = format_hex_color(dictionary_colors[massive_colors[0]])
+PURPLE = format_hex_color(dictionary_colors[massive_colors[1]])
+BLUE = format_hex_color(dictionary_colors[massive_colors[2]])
+GREEN = format_hex_color(dictionary_colors[massive_colors[3]])
+RED = format_hex_color(dictionary_colors[massive_colors[4]])
+DEFAULT_COLOR = format_hex_color(dictionary_colors[massive_colors[5]])
 
 FOLDERS = [FOLDER_WITH_DATA, FOLDER_WITH_NOTES, FOLDER_WITH_PROGRAM_DATA]
 for folder in FOLDERS:

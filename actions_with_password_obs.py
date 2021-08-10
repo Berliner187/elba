@@ -142,10 +142,16 @@ def point_of_entry():   # Точка входа в систему
     """ Получение мастер-пароля """
     def template_wrong_message(value_left):
         system_action('clear')
-        print("\n"*3,
-              f"{RED}  ---  Wrong password --- ".center(cols),
-              "\n"*3,
-              f"{BLUE}      Attempts left: {RED}{value_left}{DEFAULT_COLOR}".center(cols))
+        lines = [
+            "\n\n\n",
+            RED,
+            "-----  Wrong password  -----",
+            "\n\n\n",
+            BLUE,
+            f"Attempts left: {RED}{value_left}",
+            DEFAULT_COLOR
+        ]
+        wait_effect(lines, 0)
         sleep(1)
 
     def get_master_password():
