@@ -17,7 +17,7 @@ def show_decryption_data(generic_key, category):
 
     lines_show_category = [
         BLUE,
-        f" _______________________",
+        f"_______________________",
         f"                                     /\/| {YELLOW}\/           \/{BLUE} |\/\ ",
         f"                                    /\/\|{YELLOW}\/{separator}{category.upper()}S{separator}\/{BLUE}|/\/\ ",
         f"{YELLOW}                  \/               \/",

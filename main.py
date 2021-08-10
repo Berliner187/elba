@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'v0.8.5.0'
+__version__ = 'v0.8.5.1'
 
 
 def get_size_of_terminal():
@@ -77,11 +77,6 @@ def template_question(text):
     return question
 
 
-def format_hex_color(hex_color):
-    r, g, b = [int(hex_color[i:i+2], 16) for i in range(1, len(hex_color), 2)]
-    return f"\x1b[38;2;{r};{g};{b}m".format(**vars())
-
-
 # <<<----------------------- Константы --------------------------->>>
 # Папки
 FOLDER_ELBA = 'elba/'
@@ -128,6 +123,7 @@ stock_modules = [
     'actions_with_password_obs.py', 'show_dec_data_obs.py',
     'decryption_block_obs.py'
 ]
+
 # Цвета акцента цветов по умолчанию
 dictionary_colors = {
     'ACCENT_1': '#FBC330',
@@ -137,7 +133,6 @@ dictionary_colors = {
     'ACCENT_5': '#c70039',
     'ACCENT_6': '#ffffff'
 }
-
 if os.path.exists(FILE_SETTINGS_COLOR) is False:
     # Сохранение цветов в файл
     with open(FILE_SETTINGS_COLOR, 'w+') as f:
@@ -149,11 +144,17 @@ else:
         for i in file_accent.readlines():
             dic_colors = i
     dictionary_colors = eval(dic_colors)
-
 # Ключи словаря с цветами добавляются в массив
 massive_colors = []
 for accent in dictionary_colors:
     massive_colors.append(accent)
+
+
+def format_hex_color(hex_color):
+    """ Получение цвета в формате HEX """
+    r, g, b = [int(hex_color[item:item+2], 16) for item in range(1, len(hex_color), 2)]
+    return f"\x1b[38;2;{r};{g};{b}m".format(**vars())
+
 
 # Цвета в терминале
 YELLOW = format_hex_color(dictionary_colors[massive_colors[0]])
@@ -163,6 +164,7 @@ GREEN = format_hex_color(dictionary_colors[massive_colors[3]])
 RED = format_hex_color(dictionary_colors[massive_colors[4]])
 DEFAULT_COLOR = format_hex_color(dictionary_colors[massive_colors[5]])
 
+# Создание основных папок
 FOLDERS = [FOLDER_WITH_DATA, FOLDER_WITH_NOTES, FOLDER_WITH_PROGRAM_DATA]
 for folder in FOLDERS:
     if os.path.exists(folder) is False:

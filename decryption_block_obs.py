@@ -144,7 +144,7 @@ def decryption_block(generic_key):
                 for item in dic_colors:
                     cnt += 1
                     print(f"{YELLOW}{cnt}. "
-                          f"{DEFAULT_COLOR}{item} ={format_hex_color(dic_colors[item])}{dic_colors[item]}")
+                          f"{DEFAULT_COLOR}{item} = {format_hex_color(dic_colors[item])}{dic_colors[item]}")
 
                 template_some_message(BLUE, ' -- Color emphasis will change after restarting the program --')
                 setting_colors = int(input(YELLOW + ' - Choose a color to change the accent: '))
