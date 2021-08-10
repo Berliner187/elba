@@ -5,7 +5,7 @@ import os
 from time import sleep
 
 
-__version__ = '1.6.5'
+__version__ = '1.6.6'
 
 
 def update():
@@ -73,6 +73,7 @@ def update():
                         template_for_copy(item)
                 # Копирование данных юзера
                 os.system(get_peculiarities_copy('dir') + FOLDER_WITH_DATA + ' ' + OLD_ELBA + elba_version + '/')
+
             # Условие установки новой версии программы
             if os.path.getsize(main_file) != os.path.getsize(FOLDER_ELBA + main_file):
                 template_some_message(GREEN, ' A new version of the program is available ')
@@ -94,12 +95,17 @@ def update():
                 system_action('clear')
                 template_some_message(YELLOW, ' -- You are using the latest version of the program -- ')
 
-                # Установка обновленных модулей
-                template_for_install('update_obs.py')
+                # Установка обновленных модулей (если есть изменения)
+                def get_info_about_modules(color, message, mod):
+                    print('[', color, message, DEFAULT_COLOR, ']', stock_modules[mod])
                 for module in stock_modules:
                     if os.path.getsize(FOLDER_ELBA + module) != os.path.getsize(module):
                         template_for_install(module)
                         write_log('Upgrade: ' + module, 'OK')
+                        get_info_about_modules(YELLOW, 'UPDATE ', module)
+                    else:
+                        get_info_about_modules(YELLOW, 'REMAINS', module)
+                    sleep(.2)
 
                 template_remove_folder(FOLDER_ELBA)
                 sleep(.7)
