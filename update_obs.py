@@ -5,7 +5,7 @@ import os
 from time import sleep
 
 
-__version__ = '1.6.6'
+__version__ = '1.6.7'
 
 
 def update():
@@ -97,7 +97,7 @@ def update():
 
                 # Установка обновленных модулей (если есть изменения)
                 def get_info_about_modules(color, message, mod):
-                    print('[', color, message, DEFAULT_COLOR, ']', stock_modules[mod])
+                    print('[', color, message, DEFAULT_COLOR, ']', mod)
                 for module in stock_modules:
                     if os.path.getsize(FOLDER_ELBA + module) != os.path.getsize(module):
                         template_for_install(module)
