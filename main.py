@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'v0.8.5.1'
+__version__ = 'v0.8.5.2'
 
 
 def get_size_of_terminal():
@@ -33,9 +33,9 @@ def show_name_program():
     from logo_obs import wait_effect
     edit_version = __version__ + '       '
     lines = [BLUE,
-             "||  Delta For Linux  ||   ",
-             "||  by Berliner187   ||   ",
-             "||  Veli Afaline     ||   ",
+             "||  Delta For Linux  ||",
+             "||  by Berliner187   ||",
+             "||  Veli Afaline     ||",
              YELLOW, edit_version
              ]
     wait_effect(lines, 0.0001)
@@ -130,8 +130,8 @@ dictionary_colors = {
     'ACCENT_2': '#9B30FF',
     'ACCENT_3': '#30A0E0',
     'ACCENT_4': '#2ECC71',
-    'ACCENT_5': '#c70039',
-    'ACCENT_6': '#ffffff'
+    'ACCENT_5': '#C70039',
+    'ACCENT_6': '#FFFFFF'
 }
 if os.path.exists(FILE_SETTINGS_COLOR) is False:
     # Сохранение цветов в файл

@@ -101,8 +101,8 @@ def update():
                 for module in stock_modules:
                     if os.path.getsize(FOLDER_ELBA + module) != os.path.getsize(module):
                         template_for_install(module)
-                        write_log('Upgrade: ' + module, 'OK')
-                        get_info_about_modules(YELLOW, 'UPDATE ', module)
+                        write_log(f'Upgrade: {module}', 'OK')
+                        get_info_about_modules(GREEN, 'UPDATE ', module)
                     else:
                         get_info_about_modules(YELLOW, 'REMAINS', module)
                     sleep(.2)

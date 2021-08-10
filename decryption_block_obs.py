@@ -17,7 +17,7 @@ from update_obs import update, install_old_saved_version
 from main import *
 
 
-__version__ = '2.3.1'
+__version__ = '2.3.2'
 
 
 def decryption_block(generic_key):
@@ -122,15 +122,17 @@ def decryption_block(generic_key):
                 write_log("Success roll back", "OK")
                 system_action('restart')
 
-        elif change_resource_or_actions == '-s':
+        elif change_resource_or_actions == '-s':    # Пользовательские настройки
             system_action('clear')
-            template_some_message(GREEN, ' --- Settings ---')
+            template_some_message(GREEN, ' --- Settings --- ')
+            # Варианты настройки
             lines_set = [
                 f'{BLUE}1. {YELLOW}Customize colors accent'
             ]
             for line in lines_set:
                 print(line)
-            change_in_settings = input(' - Change setting by number: ')
+
+            change_in_settings = input('\n - Change setting by number: ')
             if change_in_settings == '1':
                 system_action('clear')
 
@@ -146,7 +148,7 @@ def decryption_block(generic_key):
                     print(f"{YELLOW}{cnt}. "
                           f"{DEFAULT_COLOR}{item} = {format_hex_color(dic_colors[item])}{dic_colors[item]}")
 
-                template_some_message(BLUE, ' -- Color emphasis will change after restarting the program --')
+                template_some_message(BLUE, '-- Color emphasis will change after restarting the program --')
                 setting_colors = int(input(YELLOW + ' - Choose a color to change the accent: '))
                 cnt = 0
                 for select in dic_colors:
@@ -157,13 +159,13 @@ def decryption_block(generic_key):
                             if len(new_color) == 6:
                                 break
                             else:
-                                template_some_message(RED, ' - HEX format should consist of 6 characters -')
+                                template_some_message(RED, '- HEX format should consist of 6 characters -')
                         dic_colors[select] = f'#{new_color}'.upper()
-                        with open(FILE_SETTINGS_COLOR, 'w+') as f:
-                            f.write(str(dic_colors))
-                            f.close()
+                        with open(FILE_SETTINGS_COLOR, 'w+') as file_colors:
+                            file_colors.write(str(dic_colors))
+                            file_colors.close()
                         system_action('clear')
-                        template_some_message(GREEN, ' - Successfully changed color accent -')
+                        template_some_message(GREEN, '- Successfully changed color accent -')
                         sleep(1)
             show_decryption_data(generic_key, 'resource')
 
