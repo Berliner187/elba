@@ -2,7 +2,7 @@
 from enc_obs import *
 
 
-__version__ = '1.3.0'
+__version__ = '1.3.1'
 
 
 cols = get_size_of_terminal()
@@ -17,10 +17,10 @@ def show_decryption_data(generic_key, category):
 
     lines_show_category = [
         BLUE,
-        f"_______________________",
+        f" _______________________",
         f"                                     /\/| {YELLOW}\/           \/{BLUE} |\/\ ",
         f"                                    /\/\|{YELLOW}\/{separator}{category.upper()}S{separator}\/{BLUE}|/\/\ ",
-        f"{YELLOW}                 \/               \/",
+        f"{YELLOW}                  \/               \/",
         '\n'
     ]
     for line_pic_category in lines_show_category:
@@ -54,6 +54,7 @@ def show_decryption_data(generic_key, category):
             ' - Enter \'-c\' to change master-password ',
             ' - Enter \'-n\' to go to notes            ',
             ' - Enter \'-f\' to encrypt your files     ',
+            ' - Enter \'-s\' to go to settings         ',
             ' - Enter \'-u\' to update program         ',
             ' - Enter \'-z\' to remove ALL data        ',
             backup_message

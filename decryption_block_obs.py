@@ -17,7 +17,7 @@ from update_obs import update, install_old_saved_version
 from main import *
 
 
-__version__ = '2.3.0'
+__version__ = '2.3.1'
 
 
 def decryption_block(generic_key):
@@ -145,10 +145,9 @@ def decryption_block(generic_key):
                     cnt += 1
                     print(f"{YELLOW}{cnt}. "
                           f"{DEFAULT_COLOR}{item} ={format_hex_color(dic_colors[item])}{dic_colors[item]}")
-                print(YELLOW)
 
                 template_some_message(BLUE, ' -- Color emphasis will change after restarting the program --')
-                setting_colors = int(input(' - Choose a color to change the accent: '))
+                setting_colors = int(input(YELLOW + ' - Choose a color to change the accent: '))
                 cnt = 0
                 for select in dic_colors:
                     cnt += 1
@@ -166,7 +165,7 @@ def decryption_block(generic_key):
                         system_action('clear')
                         template_some_message(GREEN, ' - Successfully changed color accent -')
                         sleep(1)
-                        show_decryption_data(generic_key, 'resource')
+            show_decryption_data(generic_key, 'resource')
 
         elif change_resource_or_actions == '':
             show_decryption_data(generic_key, 'resource')
