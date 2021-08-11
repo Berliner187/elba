@@ -5,6 +5,7 @@
     В этом модуле пользователь выбирает дейсвия, необходимые для выполнения,
     а decryption_block передает управление другим модулям.
 """
+import os
 
 from del_object_obs import delete_object
 from notes_obs import notes
@@ -147,6 +148,7 @@ def decryption_block(generic_key):
                     cnt += 1
                     print(f"{YELLOW}{cnt}. "
                           f"{DEFAULT_COLOR}{item} = {format_hex_color(dic_colors[item])}{dic_colors[item]}")
+                print(f"{YELLOW}{cnt + 1}. {DEFAULT_COLOR}Set default color accent")
 
                 template_some_message(BLUE, '-- Color emphasis will change after restarting the program --')
                 setting_colors = int(input(YELLOW + ' - Choose a color to change the accent: '))
@@ -167,6 +169,11 @@ def decryption_block(generic_key):
                         system_action('clear')
                         template_some_message(GREEN, '- Successfully changed color accent -')
                         sleep(1)
+                if setting_colors == 7:
+                    os.system(get_peculiarities_copy('rm') + FILE_SETTINGS_COLOR)
+                    system_action('clear')
+                    template_some_message(GREEN, '- Success -')
+                    sleep(1)
             show_decryption_data(generic_key, 'resource')
 
         elif change_resource_or_actions == '':

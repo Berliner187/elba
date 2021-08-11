@@ -45,4 +45,4 @@ def greeting(generic_key):   # Greeting Depending On Date Time
         template_greeting('Good evening,')
     elif 0 <= time_now < 14400:
         template_greeting('Good night,')
-    sleep(.5)
+    sleep(.4)

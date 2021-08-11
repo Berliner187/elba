@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'v0.8.5.2'
+__version__ = 'v0.8.5.3'
 
 
 def get_size_of_terminal():
@@ -31,7 +31,7 @@ def get_size_of_terminal():
 
 def show_name_program():
     from logo_obs import wait_effect
-    edit_version = __version__ + '       '
+    edit_version = __version__ + ' '
     lines = [BLUE,
              "||  Delta For Linux  ||",
              "||  by Berliner187   ||",
@@ -171,25 +171,31 @@ for folder in FOLDERS:
         os.mkdir(folder)
 
 
-def get_peculiarities_copy(type_copy):
+def get_peculiarities_copy(action):
     """ Поддержка синтаксиса командных оболочек Linux, MacOS X и Windows """
-    if type_copy == 'dir':
+    if action == 'dir':
         if os.name == 'nt':
             peculiarities_copy = 'xcopy /y /o /e '
         else:
             peculiarities_copy = 'cp -r '
         return peculiarities_copy
-    elif type_copy == 'file':
+    elif action == 'file':
         if os.name == 'nt':
             peculiarities_copy = 'copy '
         else:
             peculiarities_copy = 'cp '
         return peculiarities_copy
-    elif type_copy == 'move':
+    elif action == 'move':
         if os.name == 'nt':
             peculiarities_move = 'move '
         else:
             peculiarities_move = 'mv '
+        return peculiarities_move
+    elif action == 'rm':
+        if os.name == 'nt':
+            peculiarities_move = 'del '
+        else:
+            peculiarities_move = 'rm '
         return peculiarities_move
 
 
@@ -234,8 +240,8 @@ def check_modules():
     for file in os.listdir('.'):
         if file.endswith(file_type):
             installed_modules.append(file)
-    for i in range(len(stock_modules)):
-        if stock_modules[i] not in installed_modules:
+    for mod in range(len(stock_modules)):
+        if stock_modules[mod] not in installed_modules:
             cnt_missing_modules += 1
     if cnt_missing_modules > 0:
         template_some_message(RED, " - Missing module/modules -")
@@ -250,7 +256,6 @@ def launcher():
     system_action('clear')
     if CHECK_FOLDER_FOR_RESOURCE is False:  # При первом запуске
         show_name_program()
-        elba()
         master_password = ActionsWithPassword('master').get_password()
         generic_key = ActionsWithPassword('generic').get_password()
         greeting(generic_key)
@@ -281,8 +286,6 @@ if __name__ == '__main__':
     try:
         from werkzeug.security import generate_password_hash, check_password_hash
         from stdiomask import getpass
-        import Crypto.Hash
-        import memory_profiler
     except ModuleNotFoundError as error_module:
         write_log(error_module, 'CRASH')
         template_some_message(RED, f"MISSING: {error_module}")
@@ -328,7 +331,7 @@ if __name__ == '__main__':
                     quit()
             else:
                 system_action('clear')
-                template_some_message(RED, ' - Error in change - ')
+                template_some_message(RED, '- Error in change -')
                 sleep(1)
             system_action('restart')
         except KeyError:
