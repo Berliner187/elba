@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'P0.8.6.1'
+__version__ = 'P0.8.6.2'
 
 
 def get_size_of_terminal():
@@ -165,7 +165,7 @@ RED = format_hex_color('#C70039')
 
 
 def system_action(action):
-    """ Системные действия """
+    """ Системные действия (выполнение действия) """
     if action == 'restart':
         os.execv(sys.executable, [sys.executable] + sys.argv)
     if action == 'clear':
@@ -177,43 +177,43 @@ def system_action(action):
 
 
 def get_peculiarities_system(action):
-    """ Поддержка синтаксиса командных оболочек Linux, MacOS X и Windows """
+    """
+        Поддержка синтаксиса командных оболочек Linux, MacOS X и Windows
+        (возвращение аргументов к действиям)
+    """
     if action == 'copy_dir':
         if os.name == 'nt':
-            peculiarities_copy = 'xcopy /y /o /e '
+            peculiarities_system_action = 'xcopy /y /o /e '
         else:
-            peculiarities_copy = 'cp -r '
-        return peculiarities_copy
+            peculiarities_system_action = 'cp -r '
     elif action == 'rm_dir':
         if os.name == 'nt':
-            peculiarities_copy = 'rmdir '
+            peculiarities_system_action = 'rmdir '
         else:
-            peculiarities_copy = 'rm -r '
-        return peculiarities_copy
+            peculiarities_system_action = 'rm -r '
     elif action == 'mkdir':
         if os.name == 'nt':
-            peculiarities_copy = 'makedir '
+            peculiarities_system_action = 'makedir '
         else:
-            peculiarities_copy = 'mkdir '
-        return peculiarities_copy
+            peculiarities_system_action = 'mkdir '
     elif action == 'file':
         if os.name == 'nt':
-            peculiarities_copy = 'copy '
+            peculiarities_system_action = 'copy '
         else:
-            peculiarities_copy = 'cp '
-        return peculiarities_copy
+            peculiarities_system_action = 'cp '
     elif action == 'move':
         if os.name == 'nt':
-            peculiarities_move = 'move '
+            peculiarities_system_action = 'move '
         else:
-            peculiarities_move = 'mv '
-        return peculiarities_move
+            peculiarities_system_action = 'mv '
     elif action == 'rm':
         if os.name == 'nt':
-            peculiarities_move = 'del '
+            peculiarities_system_action = 'del '
         else:
-            peculiarities_move = 'rm '
-        return peculiarities_move
+            peculiarities_system_action = 'rm '
+    else:
+        peculiarities_system_action = "echo No action selected"
+    return peculiarities_system_action
 
 
 def download_from_repository():
@@ -323,15 +323,15 @@ if __name__ == '__main__':
 
         try:
             launcher()  # Запуск лончера
-        except Exception as random_error:
+        except Exception or NameError as random_error:
             write_log(random_error, 'FAIL')
             template_some_message(RED, ' --- ERROR --- ')
             print(random_error)
             sleep(1)
             system_action('clear')
-            print(ACCENT_3,
-                  '\n - Enter 1 to update \n'
-                  ' - Enter 2 to rollback ')
+            print(f"{ACCENT_3}"
+                  f'\n - Enter 1 to update'
+                  f'\n - Enter 2 to rollback')
             rollback_or_update = input(ACCENT_1 + '\n - Select by number: ' + ACCENT_4)
             if rollback_or_update == '1':  # Попытка откатиться
                 template_some_message(RED, '-- You can try roll back --')
@@ -353,5 +353,10 @@ if __name__ == '__main__':
             system_action('restart')
         except KeyError:
             pass
+        except KeyboardInterrupt as keyboard:
+            system_action('clear')
+            template_some_message(ACCENT_3, ' --- ELBA CLOSED ---')
+            write_log(keyboard, "CLOSE")
+            quit()
     else:
         update()

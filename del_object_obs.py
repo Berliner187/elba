@@ -25,4 +25,4 @@ def delete_object(category):
 	for item in os.listdir(folder_category):
 		s += 1
 		if s == change_res_by_num:
-			os.system(get_peculiarities_system("rm_dir") + folder_category + item)
+			template_remove_folder(folder_category + item)

@@ -12,7 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
 
 
-__version__ = 'P8.6_M1.0'
+__version__ = 'P8.6_M1.1'
 
 
 cols = get_size_of_terminal()
@@ -54,7 +54,7 @@ class ActionsWithPassword:
         def generation_new_password(length_password, add_random_symbols):
             """ Функция создания случайного пароля """
             symbols_for_password = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
-            additional_symbols = '!@#$%^&*()_-+[]{}№;:?'
+            additional_symbols = '!@#$%^&*()_-+[]{}?'
             if add_random_symbols:
                 symbols_for_password += additional_symbols
             while True:
