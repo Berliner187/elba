@@ -56,7 +56,7 @@ def template_some_message(color, message):
 
 def template_for_install(program_file):
     """ Шаблон установки файлов программы """
-    os.system(get_peculiarities_copy('move') + FOLDER_ELBA + program_file + ' . ')
+    os.system(get_peculiarities_system('move') + FOLDER_ELBA + program_file + ' . ')
 
 
 def template_question(text):
@@ -216,7 +216,7 @@ def download_from_repository():
     os.system(REPOSITORY)
     system_action('clear')
     if os.path.exists('update_obs.py') is False:
-        os.system(get_peculiarities_copy('move') + ' elba/update_obs.py .')
+        os.system(get_peculiarities_system('move') + ' elba/update_obs.py .')
         system_action('restart')
 
 
