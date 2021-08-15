@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'P0.8.6.0'
+__version__ = 'P0.8.6.1'
 
 
 def get_size_of_terminal():
@@ -127,7 +127,18 @@ def format_hex_color(hex_color):
     return f"\x1b[38;2;{r};{g};{b}m".format(**vars())
 
 
+# Создание основных папок
+FOLDERS = [FOLDER_WITH_DATA, FOLDER_WITH_NOTES, FOLDER_WITH_PROGRAM_DATA]
+for folder in FOLDERS:
+    if os.path.exists(folder) is False:
+        os.mkdir(folder)
+
+
+# Работа с акцентами в файле
 if os.path.exists(FILE_SETTINGS_COLOR) is False:
+    with open(FILE_SETTINGS_COLOR, 'w') as f:
+        f.write('')
+        f.close()
     # Сохранение цветов в файл
     with open(FILE_SETTINGS_COLOR, 'w+') as f:
         f.write(str(dictionary_colors))
@@ -151,12 +162,6 @@ ACCENT_3 = format_hex_color(dictionary_colors[massive_colors[2]])
 ACCENT_4 = format_hex_color(dictionary_colors[massive_colors[3]])
 GREEN = format_hex_color('#2ECC71')
 RED = format_hex_color('#C70039')
-
-# Создание основных папок
-FOLDERS = [FOLDER_WITH_DATA, FOLDER_WITH_NOTES, FOLDER_WITH_PROGRAM_DATA]
-for folder in FOLDERS:
-    if os.path.exists(folder) is False:
-        os.mkdir(folder)
 
 
 def system_action(action):
