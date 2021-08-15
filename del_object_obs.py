@@ -7,12 +7,12 @@ from time import sleep
 from main import *
 
 
-__version__ = '2.1.0'
+__version__ = 'P8.6_M1.0'
 
 
 def delete_object(category):
-	""" Удаление конкретного ресурса или конкретной заметки """
-	template_some_message(BLUE, ' -- Change by number -- ')
+	""" Удаление выбранного ресурса или заметки """
+	template_some_message(ACCENT_3, ' -- Change by number -- ')
 
 	folder_category = ''
 	if category == 'resource':
@@ -20,12 +20,9 @@ def delete_object(category):
 	elif category == 'note':
 		folder_category = FOLDER_WITH_NOTES
 
-	change_res_by_num = int(input(YELLOW + ' - Change number: ' + DEFAULT_COLOR))
+	change_res_by_num = int(input(f"{ACCENT_1} - Change number: {ACCENT_4}"))
 	s = 0
 	for item in os.listdir(folder_category):
 		s += 1
 		if s == change_res_by_num:
-			if os.name == 'nt':
-				os.system("rmdir " + folder_category + item)
-			else:
-				os.system("rm -r " + folder_category + item)
+			os.system(get_peculiarities_system("rm_dir") + folder_category + item)

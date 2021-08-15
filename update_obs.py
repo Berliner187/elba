@@ -5,7 +5,7 @@ import os
 from time import sleep
 
 
-__version__ = '1.6.7'
+__version__ = 'P8.6_M1.0'
 
 
 def update():
@@ -24,13 +24,13 @@ def update():
 
     def message_about_status_modules():
         """ Вывод показателей о состоянии модулей """
-        template_some_message(YELLOW, " - Check Modules -")
+        template_some_message(ACCENT_1, " - Check Modules -")
         system_action('clear')
         installed_modules = get_installed_modules()
         cnt_missing_mod = 0
         for item_mod in range(len(stock_modules)):
             def template_text_modules(color, message):
-                print('[', color, message, DEFAULT_COLOR, ']', stock_modules[item_mod])
+                print('[', color, message, ACCENT_4, ']', stock_modules[item_mod])
             if stock_modules[item_mod] not in installed_modules:
                 template_text_modules(RED, 'FAILED')
                 write_log(stock_modules[item_mod], 'MISSING')
@@ -60,7 +60,7 @@ def update():
         if os.path.exists(FOLDER_ELBA):
 
             def template_for_copy(item_program):
-                os.system(get_peculiarities_copy('file') + item_program + ' ' + OLD_ELBA + elba_version)
+                os.system(get_peculiarities_system('file') + item_program + ' ' + OLD_ELBA + elba_version)
 
             # Создание резервной копии
             if os.path.exists(OLD_ELBA) is False:
@@ -72,7 +72,7 @@ def update():
                     if item.endswith('.py'):
                         template_for_copy(item)
                 # Копирование данных юзера
-                os.system(get_peculiarities_copy('dir') + FOLDER_WITH_DATA + ' ' + OLD_ELBA + elba_version + '/')
+                os.system(get_peculiarities_system('copy_dir') + FOLDER_WITH_DATA + ' ' + OLD_ELBA + elba_version + '/')
 
             # Условие установки новой версии программы
             if os.path.getsize(main_file) != os.path.getsize(FOLDER_ELBA + main_file):
@@ -93,24 +93,24 @@ def update():
                 system_action('restart')
             else:
                 system_action('clear')
-                template_some_message(YELLOW, ' -- You are using the latest version of the program -- ')
+                template_some_message(ACCENT_1, ' -- You are using the latest version of the program -- ')
 
                 # Установка обновленных модулей (если есть изменения)
                 def get_info_about_modules(color, message, mod):
-                    print('[', color, message, DEFAULT_COLOR, ']', mod)
+                    print('[', color, message, ACCENT_4, ']', mod)
                 for module in stock_modules:
                     if os.path.getsize(FOLDER_ELBA + module) != os.path.getsize(module):
                         template_for_install(module)
                         write_log(f'Upgrade: {module}', 'OK')
                         get_info_about_modules(GREEN, 'UPDATE ', module)
                     else:
-                        get_info_about_modules(YELLOW, 'REMAINS', module)
+                        get_info_about_modules(ACCENT_1, 'REMAINS', module)
                     sleep(.2)
 
                 template_remove_folder(FOLDER_ELBA)
                 sleep(.7)
         else:
-            template_some_message(YELLOW, ' - New folder not found... -')
+            template_some_message(ACCENT_1, ' - New folder not found... -')
             write_log('New folder not exist', 'PASS')
             sleep(1)
             change_download_or_no = template_question('Try download from repository?')
@@ -126,10 +126,10 @@ def install_old_saved_version():
     system_action('clear')
     for version in os.listdir(OLD_ELBA):
         s += 1
-        print(str(s), '-', YELLOW + version + DEFAULT_COLOR)
+        print(f"{s} - {ACCENT_1}{version}{ACCENT_4}")
 
-    template_some_message(BLUE, "  - Change version by number - ")
-    change = int(input(YELLOW + f"(1-{s}): " + DEFAULT_COLOR))
+    template_some_message(ACCENT_3, "  - Change version by number - ")
+    change = int(input(ACCENT_1 + f"(1-{s}): " + ACCENT_4))
     if change == '-z':
         template_remove_folder(OLD_ELBA)
     cnt = 0
@@ -138,10 +138,10 @@ def install_old_saved_version():
         if cnt == change:
             for item in os.listdir(OLD_ELBA + need_version_folder):
                 if item.endswith('.py'):
-                    os.system(get_peculiarities_copy('file') + OLD_ELBA + need_version_folder + '/' + item + ' .')
+                    os.system(get_peculiarities_system('file') + OLD_ELBA + need_version_folder + '/' + item + ' .')
             template_remove_folder(FOLDER_WITH_DATA)
             os.system(
-                get_peculiarities_copy('dir') + OLD_ELBA + need_version_folder + '/' + FOLDER_WITH_DATA + '/' + ' .'
+                get_peculiarities_system('copy_dir') + OLD_ELBA + need_version_folder + '/' + FOLDER_WITH_DATA + '/' + ' .'
             )
     system_action('clear')
     template_some_message(GREEN, '  --- Success roll back! --- ')

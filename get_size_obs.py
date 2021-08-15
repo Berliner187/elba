@@ -5,10 +5,11 @@ import sys
 from memory_profiler import memory_usage
 
 
-__version__ = '2.0.6'
+__version__ = 'P8.6_M1.0'
 
 
 def get_versions():
+    """ Вывод версий модулей в консоль """
     from main import __version__ as elba_v
     from change_password_obs import __version__ as change_password_ver
     from actions_with_password_obs import __version__ as actions_with_password_ver
@@ -23,7 +24,7 @@ def get_versions():
     from decryption_block_obs import __version__ as dec_block_ver
 
     system_action("clear")
-    template_some_message(GREEN, '  - Versions installed modules -')
+    template_some_message(GREEN, '- Versions installed modules -')
 
     def template_version_module(module, version):
         print(version, '  ---  ', module)
@@ -44,8 +45,8 @@ def get_versions():
 
 
 def size_all():
-    """ Получении информации о занимаемой памяти в ОЗУ """
-    template_some_message(BLUE, " - Volume taken up by the program - ")
+    """ Получении информации о занимаемой памяти в ОЗУ и ПЗУ """
+    template_some_message(ACCENT_3, "- Volume taken up by the program -")
     size_mod_cache = size_program = size_user_data = 0
 
     # Получение файлов программы
@@ -105,7 +106,7 @@ def size_all():
         else:
             __size__ = round(__size__, 1)
             user_measure = 'B'
-        return YELLOW + f"{__size__} {user_measure}" + DEFAULT_COLOR
+        return ACCENT_1 + f"{__size__} {user_measure}" + ACCENT_4
 
     program_in_ram = memory_usage()
     program_in_ram = program_in_ram[0] * 2**20

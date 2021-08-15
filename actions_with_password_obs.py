@@ -12,7 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
 
 
-__version__ = '2.2.8'
+__version__ = 'P8.6_M1.0'
 
 
 cols = get_size_of_terminal()
@@ -20,15 +20,15 @@ cols = get_size_of_terminal()
 
 def create_and_confirm_user_password():
     """ Создание и подтверждение пользовательского пароля """
-    print(BLUE, 'Minimum password length — 8 characters'.center(cols))
+    print(ACCENT_3, 'Minimum password length — 8 characters'.center(cols))
 
     def template_red_messages(message):
         system_action('clear')
-        print(f"{RED}\n\n - {message}{DEFAULT_COLOR} -")
+        print(f"{RED}\n\n - {message}{ACCENT_4} -")
 
     while True:
-        password = getpass(f"{YELLOW} Password: {DEFAULT_COLOR}")
-        confirm_password = getpass(f"{YELLOW} Confirm:  {DEFAULT_COLOR}")
+        password = getpass(f"{ACCENT_1} Password: {ACCENT_4}")
+        confirm_password = getpass(f"{ACCENT_1} Confirm:  {ACCENT_4}")
         if confirm_password == 'x':
             quit()
         if len(password) < 8:
@@ -65,11 +65,11 @@ class ActionsWithPassword:
                     return new_password
                 else:
                     template_some_message(RED, ' The length must be at least 8 characters \n')
-                    length_password = int(input(YELLOW + ' - Length: ' + DEFAULT_COLOR))
+                    length_password = int(input(ACCENT_1 + ' - Length: ' + ACCENT_4))
 
         # Создание мастер-пароля, создание хеша и сохранение в файл
         if self.type_pas == 'master':
-            template_some_message(BLUE, ' - Pick a master-password - \n')
+            template_some_message(ACCENT_3, ' - Pick a master-password - \n')
             master_password = create_and_confirm_user_password()
             # Хэш сохраняется в файл
             if CHECK_FILE_WITH_HASH is False:
@@ -86,7 +86,7 @@ class ActionsWithPassword:
 
         # Сохранение пользовательского пароля для ресурсов
         elif self.type_pas == 'self':
-            template_some_message(BLUE, "- Pick a self password - \n")
+            template_some_message(ACCENT_3, "- Pick a self password - \n")
             password = create_and_confirm_user_password()
             template_some_message(GREEN, "--- Your password success saved! ---")
             sleep(1)
@@ -94,16 +94,16 @@ class ActionsWithPassword:
 
         # Получение нового сгенерированного пароля
         elif self.type_pas == 'gen_new':
-            length_new_pas = int(input(f"{YELLOW}- Length: {DEFAULT_COLOR}"))
+            length_new_pas = int(input(f"{ACCENT_1}- Length: {ACCENT_4}"))
             status_adding_characters = False
             request_for_adding_characters = input(
-                f"{BLUE} - Add additional symbols? (Default: no) (y/n): {DEFAULT_COLOR}"
+                f"{ACCENT_3} - Add additional symbols? (Default: no) (y/n): {ACCENT_4}"
             )
             if request_for_adding_characters == 'y':
                 status_adding_characters = True
             password = generation_new_password(length_new_pas, status_adding_characters)
             print(
-                f'{BLUE}\n - Your new password - {GREEN}{password}{BLUE} - success saved{DEFAULT_COLOR}'
+                f'{ACCENT_3}\n - Your new password - {GREEN}{password}{ACCENT_3} - success saved{ACCENT_4}'
             )
             sleep(3)
             return password
@@ -120,9 +120,9 @@ class ActionsWithPassword:
 def choice_generation_or_save_self_password(resource, login, master_password):
     """ Выбор пароля: генерирование нового или сохранение пользовательского """
     print('\n'*2,
-          f"{BLUE}1.{YELLOW} - Generation new password \n",
-          f"{BLUE}2.{YELLOW} - Save your password      \n")
-    print(DEFAULT_COLOR)
+          f"{ACCENT_3}1.{ACCENT_1} - Generation new password \n",
+          f"{ACCENT_3}2.{ACCENT_1} - Save your password      \n")
+    print(ACCENT_4)
     change_type = int(input('Change (1/2): '))
     if change_type == 1:  # Генерирование пароля и сохранение в файл
         password = ActionsWithPassword('gen_new').get_password()
@@ -131,7 +131,7 @@ def choice_generation_or_save_self_password(resource, login, master_password):
         password = ActionsWithPassword('self').get_password()
         save_data_to_file(resource, login, password, master_password, 'resource')
     else:   # Если ошибка выбора
-        print(f"{RED}\n  -- Error of change. Please, change again -- {DEFAULT_COLOR}")
+        print(f"{RED}\n  -- Error of change. Please, change again -- {ACCENT_4}")
         sleep(1)
         system_action('clear')
         choice_generation_or_save_self_password(resource, login, master_password)
@@ -147,9 +147,9 @@ def point_of_entry():   # Точка входа в систему
             RED,
             "-----  Wrong password  -----",
             "\n\n\n",
-            BLUE,
+            ACCENT_3,
             f"Attempts left: {RED}{value_left}",
-            DEFAULT_COLOR
+            ACCENT_4
         ]
         wait_effect(lines, 0)
         sleep(1)
@@ -158,7 +158,7 @@ def point_of_entry():   # Точка входа в систему
         show_name_program()
         elba()
         input_master_password = getpass(
-            f"{YELLOW}\n\n   --- Enter the master password: {DEFAULT_COLOR}"
+            f"{ACCENT_1}\n\n   --- Enter the master password: {ACCENT_4}"
         )
         if input_master_password == 'x':  # Досрочный выход из программы
             quit()

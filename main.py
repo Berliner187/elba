@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'v0.8.5.3'
+__version__ = 'P0.8.6.0'
 
 
 def get_size_of_terminal():
@@ -32,27 +32,15 @@ def get_size_of_terminal():
 def show_name_program():
     from logo_obs import wait_effect
     edit_version = __version__ + ' '
-    lines = [BLUE,
+    lines = [ACCENT_3,
              "||  Delta For Linux  ||",
              "||  by Berliner187   ||",
              "||  Veli Afaline     ||",
-             YELLOW, edit_version
+             ACCENT_1, edit_version
              ]
     wait_effect(lines, 0.0001)
     if CHECK_FOLDER_FOR_RESOURCE is False:
         first_start_message()
-
-
-def system_action(action):
-    """ Системные действия """
-    if action == 'restart':
-        os.execv(sys.executable, [sys.executable] + sys.argv)
-    if action == 'clear':
-        os.system('cls' if os.name == 'nt' else 'clear')
-    if action == 'file_manager':
-        os.system('explorer.exe .' if os.name == 'nt' else 'nautilus .')
-    else:
-        os.system(action)
 
 
 def template_remove_folder(some_folder):
@@ -63,7 +51,7 @@ def template_remove_folder(some_folder):
 def template_some_message(color, message):
     """ Шаблон сообщения в ходе работы программы """
     cols, rows = shutil.get_terminal_size()
-    print(color, '\n'*2, message.center(cols), DEFAULT_COLOR)
+    print(color, '\n'*2, message.center(cols), ACCENT_4)
 
 
 def template_for_install(program_file):
@@ -73,7 +61,7 @@ def template_for_install(program_file):
 
 def template_question(text):
     """ Шаблон вопросов от программы """
-    question = input(YELLOW + f" - {text} (y/n): " + DEFAULT_COLOR)
+    question = input(ACCENT_1 + f" - {text} (y/n): " + ACCENT_4)
     return question
 
 
@@ -118,21 +106,27 @@ REPOSITORY = 'git clone https://github.com/Berliner187/elba -b delta'
 
 # <<<--------------  Модули для работы программы  -------------->>>
 stock_modules = [
-    'datetime_obs.py', 'enc_obs.py', 'logo_obs.py', 'del_object_obs.py',
-    'notes_obs.py', 'get_size_obs.py', 'change_password_obs.py',
-    'actions_with_password_obs.py', 'show_dec_data_obs.py',
-    'decryption_block_obs.py'
+    'datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
+    'del_object_obs.py', 'notes_obs.py', 'get_size_obs.py',
+    'change_password_obs.py', 'actions_with_password_obs.py',
+    'show_dec_data_obs.py', 'decryption_block_obs.py', 'settings_obs.py'
 ]
 
-# Цвета акцента цветов по умолчанию
+# <<< -------- Цветовые акценты в программе -------- >>>
 dictionary_colors = {
     'ACCENT_1': '#FBC330',
     'ACCENT_2': '#9B30FF',
     'ACCENT_3': '#30A0E0',
-    'ACCENT_4': '#2ECC71',
-    'ACCENT_5': '#C70039',
-    'ACCENT_6': '#FFFFFF'
+    'ACCENT_4': '#FFFFFF',
 }
+
+
+def format_hex_color(hex_color):
+    """ Получение цвета в формате HEX """
+    r, g, b = [int(hex_color[item:item+2], 16) for item in range(1, len(hex_color), 2)]
+    return f"\x1b[38;2;{r};{g};{b}m".format(**vars())
+
+
 if os.path.exists(FILE_SETTINGS_COLOR) is False:
     # Сохранение цветов в файл
     with open(FILE_SETTINGS_COLOR, 'w+') as f:
@@ -150,19 +144,13 @@ for accent in dictionary_colors:
     massive_colors.append(accent)
 
 
-def format_hex_color(hex_color):
-    """ Получение цвета в формате HEX """
-    r, g, b = [int(hex_color[item:item+2], 16) for item in range(1, len(hex_color), 2)]
-    return f"\x1b[38;2;{r};{g};{b}m".format(**vars())
-
-
 # Цвета в терминале
-YELLOW = format_hex_color(dictionary_colors[massive_colors[0]])
-PURPLE = format_hex_color(dictionary_colors[massive_colors[1]])
-BLUE = format_hex_color(dictionary_colors[massive_colors[2]])
-GREEN = format_hex_color(dictionary_colors[massive_colors[3]])
-RED = format_hex_color(dictionary_colors[massive_colors[4]])
-DEFAULT_COLOR = format_hex_color(dictionary_colors[massive_colors[5]])
+ACCENT_1 = format_hex_color(dictionary_colors[massive_colors[0]])
+ACCENT_2 = format_hex_color(dictionary_colors[massive_colors[1]])
+ACCENT_3 = format_hex_color(dictionary_colors[massive_colors[2]])
+ACCENT_4 = format_hex_color(dictionary_colors[massive_colors[3]])
+GREEN = format_hex_color('#2ECC71')
+RED = format_hex_color('#C70039')
 
 # Создание основных папок
 FOLDERS = [FOLDER_WITH_DATA, FOLDER_WITH_NOTES, FOLDER_WITH_PROGRAM_DATA]
@@ -171,13 +159,37 @@ for folder in FOLDERS:
         os.mkdir(folder)
 
 
-def get_peculiarities_copy(action):
+def system_action(action):
+    """ Системные действия """
+    if action == 'restart':
+        os.execv(sys.executable, [sys.executable] + sys.argv)
+    if action == 'clear':
+        os.system('cls' if os.name == 'nt' else 'clear')
+    if action == 'file_manager':
+        os.system('explorer.exe .' if os.name == 'nt' else 'nautilus .')
+    else:
+        os.system(action)
+
+
+def get_peculiarities_system(action):
     """ Поддержка синтаксиса командных оболочек Linux, MacOS X и Windows """
-    if action == 'dir':
+    if action == 'copy_dir':
         if os.name == 'nt':
             peculiarities_copy = 'xcopy /y /o /e '
         else:
             peculiarities_copy = 'cp -r '
+        return peculiarities_copy
+    elif action == 'rm_dir':
+        if os.name == 'nt':
+            peculiarities_copy = 'rmdir '
+        else:
+            peculiarities_copy = 'rm -r '
+        return peculiarities_copy
+    elif action == 'mkdir':
+        if os.name == 'nt':
+            peculiarities_copy = 'makedir '
+        else:
+            peculiarities_copy = 'mkdir '
         return peculiarities_copy
     elif action == 'file':
         if os.name == 'nt':
@@ -214,8 +226,7 @@ def write_log(cause, status_itself):
         hms = datetime.datetime.today()
         time_format = f"{hms.hour}:{hms.minute}:{hms.second}"
         date_format = f"{hms.day}.{hms.month}.{hms.year}"
-        total = f"{time_format}-{date_format}"
-        return ''.join(total)
+        return f"{time_format}-{date_format}"
 
     if os.path.exists(FILE_LOG) is False:
         with open(FILE_LOG, mode="a", encoding='utf-8') as data:
@@ -230,6 +241,7 @@ def write_log(cause, status_itself):
         FIELDS_LOG_FILE[2]: cause,           # Запись причины
         FIELDS_LOG_FILE[3]: status_itself    # Запись статуса
     })
+    log_data.close()
 
 
 def check_modules():
@@ -280,7 +292,7 @@ if __name__ == '__main__':
         from update_obs import update, install_old_saved_version
     except ModuleNotFoundError as update_obs_error:
         write_log(update_obs_error, 'FAILED')
-        template_some_message(RED, ' - Module "update" does not exist - ')
+        template_some_message(RED, '- Module "update" does not exist -')
         download_from_repository()
 
     try:
@@ -290,7 +302,7 @@ if __name__ == '__main__':
         write_log(error_module, 'CRASH')
         template_some_message(RED, f"MISSING: {error_module}")
         template_some_message(
-            YELLOW, f"Please, install{str(error_module)[15:]} with requirements"
+            ACCENT_1, f"Please, install {str(error_module)[15:]} with requirements"
         )
         quit()
 
@@ -312,10 +324,10 @@ if __name__ == '__main__':
             print(random_error)
             sleep(1)
             system_action('clear')
-            print(BLUE,
+            print(ACCENT_3,
                   '\n - Enter 1 to update \n'
                   ' - Enter 2 to rollback ')
-            rollback_or_update = input(YELLOW + '\n - Select by number: ' + DEFAULT_COLOR)
+            rollback_or_update = input(ACCENT_1 + '\n - Select by number: ' + ACCENT_4)
             if rollback_or_update == '1':  # Попытка откатиться
                 template_some_message(RED, '-- You can try roll back --')
                 change = input(template_question(' - Roll back? (y/n): '))

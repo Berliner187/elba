@@ -23,7 +23,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from Crypto.Cipher import AES
 
 
-__version__ = '6.4.7'
+__version__ = 'P8.6_M1.0'
 
 
 class AESCipher(object):
@@ -172,11 +172,11 @@ class WorkWithUserFiles:
         get_date = f"{hms.day}_{hms.month}_{hms.year}"
         get_time = f"{hms.hour}-{hms.minute}-{hms.second}"
         timed = new_timed()
-        name_enc_folder = f"{get_date}_{get_time}/"
+        name_enc_folder = f"{get_date}_{get_time}"
 
         def print_progress(type_work, current, total):
             if current < 0:
-                current = 1
+                current = 0
             try:
                 progress_status = ((current * 100) // total)
                 to_print = ''
@@ -184,7 +184,7 @@ class WorkWithUserFiles:
                     to_print = 'Work completed on'
                 elif type_work == 'folders':
                     to_print = 'Folder creation status'
-                template_some_message(YELLOW, f"{to_print} {progress_status}% ({current}/{total})")
+                template_some_message(ACCENT_1, f"{to_print} {progress_status}% ({current}/{total})")
             except ZeroDivisionError:
                 pass
 
@@ -235,14 +235,15 @@ class WorkWithUserFiles:
                     key_data = read_bin_file(file_to_save)
                     write_bin_file(file_to_save, key_data)
 
-                system_action('mkdir ' + FOLDER_FOR_ENCRYPTION_FILES)
+                if os.path.exists(FOLDER_FOR_ENCRYPTION_FILES) is False:
+                    os.mkdir(FOLDER_FOR_ENCRYPTION_FILES)
 
-                template_some_message(YELLOW, " - Please put the files you want to encrypt in \'FOR_ENCRYPTION\'")
+                template_some_message(ACCENT_1, " - Please put the files you want to encrypt in \'FOR_ENCRYPTION\'")
 
                 input("Press \'Enter\' key to continue...")
 
                 system_action('clear')
-                template_some_message(BLUE, "Generating KEY and IV for the recipient")
+                template_some_message(ACCENT_3, "Generating KEY and IV for the recipient")
                 key = Crypto.Random.new().read(AES.block_size)
                 iv = Crypto.Random.new().read(AES.block_size)
                 template_some_message(GREEN, "Keys was generated")
@@ -250,38 +251,38 @@ class WorkWithUserFiles:
 
                 os.chdir(FOLDER_FOR_ENCRYPTION_FILES)
 
-                if os.path.exists(name_enc_folder) is False:
-                    prefix_new_enc_folder = input(
-                        YELLOW + ' - Give a name to the new encrypted folder: ' + DEFAULT_COLOR)
-                    system_action(f"mkdir ../{name_enc_folder}-{prefix_new_enc_folder}/")
-
-                path_to_key = '../' + name_enc_folder + KEY_FILE
-                path_to_iv = '../' + name_enc_folder + IV_FILE
-                path_to_signed = '../' + name_enc_folder + SIGNED
-                path_to_timed = '../' + name_enc_folder + FILE_CONTROL_SUM
-
-                template_some_message(YELLOW, "Beginning Encryption...\n")
-
-                total_progress = progress = 0
-                for i in os.walk('.'):
-                    total_progress += 1
-                for i in os.walk('.'):
-                    try:
-                        if os.path.exists('../' + name_enc_folder + i[0][2:]):
-                            pass
-                        else:
-                            progress += 1
-                            os.system('mkdir ../' + name_enc_folder + i[0][2:])
-                            system_action('clear')
-                            print_progress('folders', progress, total_progress)
-                    except FileNotFoundError:
-                        pass
-
                 total_progress = progress = 0
                 for root, dirs, files in os.walk('.', topdown=False):
                     for name in files:
                         total_progress += 1
                 if total_progress != 0:
+                    prefix_new_enc_folder = input(
+                        ACCENT_1 + ' - Give a name to the new encrypted folder: ' + ACCENT_4)
+                    name_enc_folder = f"{name_enc_folder}_{prefix_new_enc_folder}/"
+                    system_action(f"{get_peculiarities_system('mkdir')} ../{name_enc_folder}")
+
+                    path_to_key = '../' + name_enc_folder + KEY_FILE
+                    path_to_iv = '../' + name_enc_folder + IV_FILE
+                    path_to_signed = '../' + name_enc_folder + SIGNED
+                    path_to_timed = '../' + name_enc_folder + FILE_CONTROL_SUM
+
+                    template_some_message(ACCENT_1, "Beginning Encryption...\n")
+
+                    folder_progress_all = folder_progress = 0
+                    for j in os.walk('.'):
+                        folder_progress_all += 1
+                    for i in os.walk('.'):
+                        try:
+                            if os.path.exists('../' + name_enc_folder + i[0][2:]):
+                                pass
+                            else:
+                                folder_progress += 1
+                                os.system('mkdir ../' + name_enc_folder + i[0][2:])
+                                system_action('clear')
+                                print_progress('folders', folder_progress, folder_progress_all)
+                        except FileNotFoundError:
+                            pass
+
                     for root, dirs, files in os.walk('.', topdown=False):
                         for name in files:
                             progress += 1
@@ -310,7 +311,7 @@ class WorkWithUserFiles:
                     write_log('Encryption successful', 'OK')
                 else:
                     system_action('clear')
-                    template_some_message(YELLOW, 'Empty directory')
+                    template_some_message(ACCENT_1, 'Empty directory')
                     os.chdir('../../../')
                     write_log('Empty directory', 'PASS')
                 template_remove_folder(FOLDER_FOR_ENCRYPTION_FILES)
@@ -323,14 +324,14 @@ class WorkWithUserFiles:
                         cnt += 1
                         print(f"{cnt}. {folder}")
                 if cnt == 0:
-                    print(YELLOW, " - No data encryption - ")
-                change_folder = int(input(YELLOW + '\n - Select folder by number: ' + DEFAULT_COLOR))
+                    print(ACCENT_1, " - No data encryption - ")
+                change_folder = int(input(ACCENT_1 + '\n - Select folder by number: ' + ACCENT_4))
                 n_cnt = 0
                 for need_folder in os.listdir(FOLDER_WITH_ENC_DATA):
                     if need_folder[:4] != PREFIX_FOR_DEC_FILE:
                         n_cnt += 1
                         if n_cnt == change_folder:
-                            template_some_message(YELLOW, "Beginning Decryption...\n")
+                            template_some_message(ACCENT_1, "Beginning Decryption...\n")
                             os.chdir(FOLDER_WITH_ENC_DATA)
                             path_to_sign = need_folder + '/' + SIGNED
                             path_to_timed = need_folder + '/' + FILE_CONTROL_SUM
@@ -389,17 +390,17 @@ class WorkWithUserFiles:
                             else:
                                 os.chdir('../../')
                                 system_action('clear')
-                                template_some_message(YELLOW, 'Empty directory')
+                                template_some_message(ACCENT_1, 'Empty directory')
                                 sleep(2)
 
 
 def actions_with_encryption_files(xzibit):
     system_action('clear')
-    template_some_message(BLUE, "-- Go to the VOLARE/ENCRYPTION_DATA data folder and follow the instructions --")
-    print(BLUE, f"1.{YELLOW} - Encryption files", DEFAULT_COLOR)
-    print(BLUE, f"2.{YELLOW} - Decryption files", DEFAULT_COLOR)
-    print(BLUE, "\n Press \'Enter\' to exit from encryption", DEFAULT_COLOR)
-    change_action = input(YELLOW + "\n - Select by number: " + DEFAULT_COLOR)
+    template_some_message(ACCENT_3, "-- Go to the VOLARE/ENCRYPTION_DATA data folder and follow the instructions --")
+    print(ACCENT_3, f"1.{ACCENT_1} - Encryption files", ACCENT_4)
+    print(ACCENT_3, f"2.{ACCENT_1} - Decryption files", ACCENT_4)
+    print(ACCENT_3, "\n Press \'Enter\' to exit from encryption", ACCENT_4)
+    change_action = input(ACCENT_1 + "\n - Select by number: " + ACCENT_4)
     if change_action == '1':
         system_action('clear')
         system_action('file_manager')

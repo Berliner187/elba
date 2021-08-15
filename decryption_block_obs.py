@@ -14,11 +14,13 @@ from actions_with_password_obs import choice_generation_or_save_self_password
 from enc_obs import dec_aes, actions_with_encryption_files
 from show_dec_data_obs import show_decryption_data
 from update_obs import update, install_old_saved_version
+from settings_obs import settings
+
 
 from main import *
 
 
-__version__ = '2.3.2'
+__version__ = 'P8.6_M1.0'
 
 
 def decryption_block(generic_key):
@@ -27,9 +29,9 @@ def decryption_block(generic_key):
     try:
         if change_resource_or_actions == '-a':  # Добавление нового ресурса
             system_action('clear')
-            template_some_message(BLUE, '   --- Add new resource ---   ')
-            resource = input(YELLOW + ' Resource: ' + DEFAULT_COLOR)
-            login = input(YELLOW + ' Login: ' + DEFAULT_COLOR)
+            template_some_message(ACCENT_3, '   --- Add new resource ---   ')
+            resource = input(ACCENT_1 + ' Resource: ' + ACCENT_4)
+            login = input(ACCENT_1 + ' Login: ' + ACCENT_4)
             choice_generation_or_save_self_password(resource, login, generic_key)
             write_log("Add resource", "OK")
             show_decryption_data(generic_key, 'resource')
@@ -42,7 +44,7 @@ def decryption_block(generic_key):
 
         elif change_resource_or_actions == '-x':  # Выход
             system_action('clear')
-            template_some_message(BLUE, ' --- ELBA CLOSED ---')
+            template_some_message(ACCENT_3, ' --- ELBA CLOSED ---')
             write_log("Exit", "OK")
             quit()
 
@@ -75,7 +77,7 @@ def decryption_block(generic_key):
         elif change_resource_or_actions == '-z':    # Удаление всех данных
             system_action('clear')
             template_some_message(RED, ' - Are you sure you want to delete all data? - ')
-            change_yes_or_no = input(YELLOW + ' - Remove ALL data? (y/n): ' + DEFAULT_COLOR)
+            change_yes_or_no = input(ACCENT_1 + ' - Remove ALL data? (y/n): ' + ACCENT_4)
             if change_yes_or_no == 'y':
                 template_remove_folder(FOLDER_WITH_DATA)
                 system_action('clear')
@@ -104,7 +106,7 @@ def decryption_block(generic_key):
                 write_log("Check logs", "OK")
             except KeyError as error:
                 write_log(error, "FAILED")
-            template_some_message(YELLOW, " - Press Enter to exit - ")
+            template_some_message(ACCENT_1, " - Press Enter to exit - ")
 
         elif change_resource_or_actions == '-dm':  # Удаление кэша
             template_remove_folder('rm -r __pycache__/')
@@ -116,7 +118,7 @@ def decryption_block(generic_key):
 
         elif change_resource_or_actions == '-o':    # Откат к старой сохраненной версии
             if os.path.exists(OLD_ELBA) is False:
-                template_some_message(YELLOW, ' - No versions saved - ')
+                template_some_message(ACCENT_1, '- No versions saved - ')
             else:
                 write_log("Try roll back", "OK")
                 install_old_saved_version()
@@ -124,64 +126,14 @@ def decryption_block(generic_key):
                 system_action('restart')
 
         elif change_resource_or_actions == '-s':    # Пользовательские настройки
-            system_action('clear')
-            template_some_message(GREEN, ' --- Settings --- ')
-            # Варианты настройки
-            lines_set = [
-                f'{BLUE}1. {YELLOW}Customize colors accent'
-            ]
-            for line in lines_set:
-                print(line)
+            settings(generic_key)
 
-            change_in_settings = input('\n - Change setting by number: ')
-            if change_in_settings == '1':
-                system_action('clear')
-
-                dic_colors = ''
-                with open(FILE_SETTINGS_COLOR, 'r') as f:
-                    for i in f.readlines():
-                        dic_colors = i
-                dic_colors = eval(dic_colors)
-
-                cnt = 0
-                for item in dic_colors:
-                    cnt += 1
-                    print(f"{YELLOW}{cnt}. "
-                          f"{DEFAULT_COLOR}{item} = {format_hex_color(dic_colors[item])}{dic_colors[item]}")
-                print(f"{YELLOW}{cnt + 1}. {DEFAULT_COLOR}Set default color accent")
-
-                template_some_message(BLUE, '-- Color emphasis will change after restarting the program --')
-                setting_colors = int(input(YELLOW + ' - Choose a color to change the accent: '))
-                cnt = 0
-                for select in dic_colors:
-                    cnt += 1
-                    if setting_colors == cnt:
-                        while True:
-                            new_color = input(f'{GREEN} - Input new color in HEX: {DEFAULT_COLOR}#')
-                            if len(new_color) == 6:
-                                break
-                            else:
-                                template_some_message(RED, '- HEX format should consist of 6 characters -')
-                        dic_colors[select] = f'#{new_color}'.upper()
-                        with open(FILE_SETTINGS_COLOR, 'w+') as file_colors:
-                            file_colors.write(str(dic_colors))
-                            file_colors.close()
-                        system_action('clear')
-                        template_some_message(GREEN, '- Successfully changed color accent -')
-                        sleep(1)
-                if setting_colors == 7:
-                    os.system(get_peculiarities_copy('rm') + FILE_SETTINGS_COLOR)
-                    system_action('clear')
-                    template_some_message(GREEN, '- Success -')
-                    sleep(1)
+        elif change_resource_or_actions == '':  # Пасует ошибку
             show_decryption_data(generic_key, 'resource')
 
-        elif change_resource_or_actions == '':
-            show_decryption_data(generic_key, 'resource')
-
-        else:
+        else:   # Вывод сохраненных данных о ресурсе
             s = 0
-            for resource_in_folder in os.listdir(FOLDER_WITH_RESOURCES):  # Вывод данных ресурса
+            for resource_in_folder in os.listdir(FOLDER_WITH_RESOURCES):
                 s += 1
                 if s == int(change_resource_or_actions):
                     system_action('clear')
@@ -193,7 +145,7 @@ def decryption_block(generic_key):
                     password_from_file = path_to_resource + '/' + FILE_PASSWORD
 
                     def template_print_decryption_data(data_type, value):
-                        print(BLUE, data_type, YELLOW, dec_aes(value, generic_key), DEFAULT_COLOR)
+                        print(ACCENT_3, data_type, ACCENT_1, dec_aes(value, generic_key), ACCENT_4)
 
                     template_print_decryption_data(
                         'Resource --->', resource_from_file)
@@ -202,6 +154,6 @@ def decryption_block(generic_key):
                     template_print_decryption_data(
                         'Password --->', password_from_file)
 
-    except ValueError:
-        show_decryption_data(generic_key, 'resource')   # Показ ресурсов
-    decryption_block(generic_key)  # Рекусрия под-главной функции
+    except ValueError:  # Обработка ошибки
+        show_decryption_data(generic_key, 'resource')
+    decryption_block(generic_key)

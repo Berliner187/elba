@@ -11,7 +11,7 @@ import os
 from main import *
 
 
-__version__ = '1.3.4'
+__version__ = 'P8.6_M1.0'
 
 
 cols = get_size_of_terminal()
@@ -46,7 +46,7 @@ logo_strings_row = [
 
 
 author_emb = [
-    YELLOW,
+    ACCENT_1,
     " ___              ___                                                                 ",
     "|   \            |   \                                                  ___   ____    ",
     "|    \           |    \   __    __        o          __   __      /|   |   |      /   ",
@@ -54,7 +54,7 @@ author_emb = [
     "|    \    \/     |    \  |__   |__/  |    |  | \  | |__  |__/      |   |   |    /     ",
     "|     |   /      |     | |     |  \  |    |  |  \ | |    |  \      |   |   |   /      ",
     "|_____/  /       |_____/ |___  |   \ |___ |  |   \| |___ |   \     |   |___|  /       ",
-    BLUE, "________________________________________________________________________________"
+    ACCENT_3, "________________________________________________________________________________"
 ]
 
 
@@ -64,7 +64,7 @@ def logo():
 
 
 def author():
-    print(YELLOW)
+    print(ACCENT_1)
     for i in author_emb:
         print(i.center(cols))
         sleep(.1)
@@ -73,7 +73,7 @@ def author():
 def animation():
     while True:
         system_action('clear')
-        print(PURPLE)
+        print(ACCENT_2)
         for row in logo_strings_row:
             print(row.center(cols))
             sleep(0.09)
@@ -85,22 +85,22 @@ def animation():
             system_action('clear')
             cnt += 1
             if cnt % 2 == 0:
-                print(BLUE)
+                print(ACCENT_3)
             else:
-                print(YELLOW)
+                print(ACCENT_1)
             wait_effect(logo_strings_row, 0.00001)
             sleep(.1)
 
 
 def elba():
-    print(YELLOW)
+    print(ACCENT_1)
     logo()
 
 
 def Ukraine():
     system_action('clear')
     lines_flag = [
-        BLUE,
+        ACCENT_3,
         "  __________________________________________________________  ",
         " /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\ ",
         "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|",
@@ -109,7 +109,7 @@ def Ukraine():
         "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|",
         "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|",
         "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|",
-        f"      ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯ {YELLOW}",
+        f"      ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯ {ACCENT_1}",
         "  __________________________________________________________  ",
         " /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\ ",
         "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|",
@@ -130,12 +130,12 @@ def Ukraine():
 
 def first_start_message():
     lines = [
-        BLUE,
+        ACCENT_3,
         "  - Encrypt your passwords with one master-password -  ",
         "  -           No resources saved. Add them!         -  ",
         " ----                That's easy!                 ---- ",
         RED,
         "          Программа не поддерживает русский язык       ",
-        DEFAULT_COLOR
+        ACCENT_4
     ]
     wait_effect(lines, 0.03)

@@ -10,15 +10,15 @@ from shutil import copyfile
 import os
 
 
-__version__ = '3.0.1'
+__version__ = 'P8.6_M1.0'
 
 
 def notes(generic_key):
     def add_new():  # Добавление новой заметки
         system_action('clear')
-        template_some_message(BLUE, '  ---  Add new note  ---')
-        name_note = input(YELLOW + ' - Name note: ' + DEFAULT_COLOR)
-        note_itself = input(YELLOW + ' - Note: ' + DEFAULT_COLOR)
+        template_some_message(ACCENT_3, '  ---  Add new note  ---')
+        name_note = input(ACCENT_1 + ' - Name note: ' + ACCENT_4)
+        note_itself = input(ACCENT_1 + ' - Note: ' + ACCENT_4)
         save_data_to_file(name_note, note_itself, None, generic_key, 'note')
         template_some_message(GREEN, '   -- Success saved! --')
         sleep(.3)
@@ -52,7 +52,7 @@ def notes(generic_key):
                 note_itself_from_file = path_to_note + '/' + FILE_NOTE_ITSELF
 
                 def template_print_decryption_data(data_type, value):
-                    print(BLUE, data_type, YELLOW, dec_aes(value, generic_key), DEFAULT_COLOR)
+                    print(ACCENT_3, data_type, ACCENT_1, dec_aes(value, generic_key), ACCENT_4)
 
                 template_print_decryption_data(
                     'Note name ----->', name_note_from_file)

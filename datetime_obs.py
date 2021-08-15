@@ -14,7 +14,7 @@ import datetime
 from time import sleep
 
 
-__version__ = '1.3.6'
+__version__ = 'P8.6_M1.0'
 
 SLEEPER_WAIT = .02     # Ожидание вывода никнейма
 
@@ -24,15 +24,16 @@ def greeting(generic_key):   # Greeting Depending On Date Time
     def template_greeting(times_of_day):
         if os.path.exists(FILE_USER_NAME) is False:  # Создание файла с именем
             system_action('clear')
-            message_about_enter_nickname = [BLUE, '\n Enter your nickname']
+            message_about_enter_nickname = [ACCENT_3, '\n Enter your nickname']
             logo_obs.wait_effect(message_about_enter_nickname, SLEEPER_WAIT)
-            name = input(YELLOW + '\n - Nickname: ' + DEFAULT_COLOR)
+            name = input(ACCENT_1 + '\n - Nickname: ' + ACCENT_4)
             enc_obs.enc_aes(FILE_USER_NAME, name, generic_key)
         else:  # Чтение из файла с именем и вывод в консоль
             name = enc_obs.dec_aes(FILE_USER_NAME, generic_key)
         lines = [
-            YELLOW, times_of_day + ' ' + name,
-            DEFAULT_COLOR
+            f'{ACCENT_1} '
+            f'{times_of_day} {name}'
+            f'{ACCENT_4}'
         ]
         logo_obs.wait_effect(lines, SLEEPER_WAIT)
     hms = datetime.datetime.today()
