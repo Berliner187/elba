@@ -11,7 +11,7 @@ import os
 from main import *
 
 
-__version__ = 'P8.6_M1.0'
+__version__ = 'P-0.8.6_M-1.0'
 
 
 cols = get_size_of_terminal()

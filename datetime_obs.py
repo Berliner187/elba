@@ -5,6 +5,7 @@
 """
 
 from main import *
+
 import enc_obs
 import logo_obs
 
@@ -14,7 +15,7 @@ import datetime
 from time import sleep
 
 
-__version__ = 'P8.6_M1.0'
+__version__ = 'P-0.8.6_M-1.2'
 
 SLEEPER_WAIT = .02     # Ожидание вывода никнейма
 
@@ -31,9 +32,9 @@ def greeting(generic_key):   # Greeting Depending On Date Time
         else:  # Чтение из файла с именем и вывод в консоль
             name = enc_obs.dec_aes(FILE_USER_NAME, generic_key)
         lines = [
-            f'{ACCENT_1} '
-            f'{times_of_day} {name}'
-            f'{ACCENT_4}'
+            f'{ACCENT_1} ',
+            f'{times_of_day} {name}',
+            f'{ACCENT_4}',
         ]
         logo_obs.wait_effect(lines, SLEEPER_WAIT)
     hms = datetime.datetime.today()
@@ -46,4 +47,6 @@ def greeting(generic_key):   # Greeting Depending On Date Time
         template_greeting('Good evening,')
     elif 0 <= time_now < 14400:
         template_greeting('Good night,')
-    sleep(.4)
+    else:
+        write_log("Time: Oops..", "FAIL")
+    sleep(.3)

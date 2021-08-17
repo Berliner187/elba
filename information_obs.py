@@ -1,26 +1,33 @@
 #!/usr/bin/env python3
+
+"""
+    Модуль получения информации о программе: версий модулей, веса файлов
+"""
+
 from main import *
 import os
 import sys
 from memory_profiler import memory_usage
 
 
-__version__ = 'P8.6_M1.0'
+__version__ = 'P-0.8.7_M-1.0'
 
 
-def get_versions():
-    """ Вывод версий модулей в консоль """
+def information():
+    """
+        Вывод версий модулей в консоль, а также
+        получение информации о занимаемой памяти в ОЗУ и ПЗУ
+    """
+
     from main import __version__ as elba_v
-    from change_password_obs import __version__ as change_password_ver
     from actions_with_password_obs import __version__ as actions_with_password_ver
     from datetime_obs import __version__ as datetime_ver
     from del_object_obs import __version__ as del_resource_ver
     from enc_obs import __version__ as enc_ver
-    from get_size_obs import __version__ as get_size_ver
     from logo_obs import __version__ as logo_ver
     from notes_obs import __version__ as notes_ver
     from update_obs import __version__ as update_ver
-    from show_dec_data_obs import __version__ as show_dec_ver
+    from category_actions_obs import __version__ as category_actions_ver
     from decryption_block_obs import __version__ as dec_block_ver
 
     system_action("clear")
@@ -29,23 +36,18 @@ def get_versions():
     def template_version_module(module, version):
         print(version, '  ---  ', module)
 
-    template_version_module('get_size_obs', __version__)
-    template_version_module('change_password_obs', change_password_ver)
+    template_version_module('information_obs', __version__)
     template_version_module('actions_with_password_obs', actions_with_password_ver)
     template_version_module('datetime_obs', datetime_ver)
     template_version_module('del_object_obs', del_resource_ver)
     template_version_module('enc_obs', enc_ver)
-    template_version_module('get_size_obs', get_size_ver)
     template_version_module('logo_obs', logo_ver)
     template_version_module('notes_obs', notes_ver)
     template_version_module('update_obs', update_ver)
-    template_version_module('show_dec_data_obs', show_dec_ver)
+    template_version_module('category_actions_obs', category_actions_ver)
     template_version_module('decryption_block_obs', dec_block_ver)
     template_version_module('main', elba_v)
 
-
-def size_all():
-    """ Получении информации о занимаемой памяти в ОЗУ и ПЗУ """
     template_some_message(ACCENT_3, "- Volume taken up by the program -")
     size_mod_cache = size_program = size_user_data = 0
 

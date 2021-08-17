@@ -1,7 +1,7 @@
 from main import *
 
 from enc_obs import *
-from show_dec_data_obs import *
+from category_actions_obs import CategoryActions
 from del_object_obs import delete_object
 
 from csv import DictReader, DictWriter
@@ -10,7 +10,7 @@ from shutil import copyfile
 import os
 
 
-__version__ = 'P8.6_M1.0'
+__version__ = 'P0.8.6_M2.0'
 
 
 def notes(generic_key):
@@ -23,7 +23,7 @@ def notes(generic_key):
         template_some_message(GREEN, '   -- Success saved! --')
         sleep(.3)
         system_action('clear')
-        show_decryption_data(generic_key, 'note')
+        CategoryActions(generic_key, 'note').get_category_label()
         notes(generic_key)
 
     if not(os.listdir(FOLDER_WITH_NOTES)):
@@ -35,7 +35,7 @@ def notes(generic_key):
         add_new()
     elif change_action == '-d':  # Пользователь выбирает удаление старой заметки
         delete_object('note')
-        show_decryption_data(generic_key, 'note')
+        CategoryActions(generic_key, 'note').get_category_label()
         notes(generic_key)
     elif change_action == '-x':
         quit()
@@ -45,7 +45,7 @@ def notes(generic_key):
             cnt += 1
             if cnt == int(change_action):
                 system_action('clear')
-                show_decryption_data(generic_key, 'note')
+                CategoryActions(generic_key, 'note').get_category_label()
 
                 path_to_note = FOLDER_WITH_NOTES + note_in_folder
                 name_note_from_file = path_to_note + '/' + FILE_NOTE_NAME

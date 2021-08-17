@@ -1,8 +1,8 @@
 from main import *
-from show_dec_data_obs import show_decryption_data
+from category_actions_obs import CategoryActions
 
 
-__version__ = 'P8.6_M1.0'
+__version__ = 'P-0.8.7_M-1.0'
 
 
 def settings(generic_key):
@@ -61,5 +61,5 @@ def settings(generic_key):
             system_action('clear')
             template_some_message(GREEN, '- Success -')
             sleep(1)
-    show_decryption_data(generic_key, 'resource')
+    CategoryActions(generic_key, 'resource').get_category_label()
     write_log('Settings', 'Run')

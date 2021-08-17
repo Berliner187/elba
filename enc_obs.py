@@ -23,7 +23,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from Crypto.Cipher import AES
 
 
-__version__ = 'P8.6_M1.0'
+__version__ = 'P-0.8.7_M-1.0'
 
 
 class AESCipher(object):
@@ -392,22 +392,3 @@ class WorkWithUserFiles:
                                 system_action('clear')
                                 template_some_message(ACCENT_1, 'Empty directory')
                                 sleep(2)
-
-
-def actions_with_encryption_files(xzibit):
-    system_action('clear')
-    template_some_message(ACCENT_3, "-- Go to the VOLARE/ENCRYPTION_DATA data folder and follow the instructions --")
-    print(ACCENT_3, f"1.{ACCENT_1} - Encryption files", ACCENT_4)
-    print(ACCENT_3, f"2.{ACCENT_1} - Decryption files", ACCENT_4)
-    print(ACCENT_3, "\n Press \'Enter\' to exit from encryption", ACCENT_4)
-    change_action = input(ACCENT_1 + "\n - Select by number: " + ACCENT_4)
-    if change_action == '1':
-        system_action('clear')
-        system_action('file_manager')
-        write_log("Try encryption", "RUN")
-        WorkWithUserFiles(xzibit, 'enc').file_encryption_control()
-    elif change_action == '2':
-        system_action('clear')
-        write_log("Try decryption", "RUN")
-        WorkWithUserFiles(xzibit, 'dec').file_encryption_control()
-    write_log("Exit from encrypt", "OK")

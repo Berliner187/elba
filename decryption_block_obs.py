@@ -5,22 +5,22 @@
     В этом модуле пользователь выбирает дейсвия, необходимые для выполнения,
     а decryption_block передает управление другим модулям.
 """
+
 import os
 
 from del_object_obs import delete_object
 from notes_obs import notes
-from change_password_obs import change_master_password
-from actions_with_password_obs import choice_generation_or_save_self_password
-from enc_obs import dec_aes, actions_with_encryption_files
-from show_dec_data_obs import show_decryption_data
+from actions_with_password_obs import *
+from category_actions_obs import CategoryActions
 from update_obs import update, install_old_saved_version
 from settings_obs import settings
 
+import enc_obs
 
 from main import *
 
 
-__version__ = 'P8.6_M1.0'
+__version__ = 'P-0.8.7_M-1.0'
 
 
 def decryption_block(generic_key):
@@ -29,17 +29,17 @@ def decryption_block(generic_key):
     try:
         if change_resource_or_actions == '-a':  # Добавление нового ресурса
             system_action('clear')
-            template_some_message(ACCENT_3, '   --- Add new resource ---   ')
+            template_some_message(ACCENT_3, '--- Add new resource ---')
             resource = input(ACCENT_1 + ' Resource: ' + ACCENT_4)
             login = input(ACCENT_1 + ' Login: ' + ACCENT_4)
             choice_generation_or_save_self_password(resource, login, generic_key)
             write_log("Add resource", "OK")
-            show_decryption_data(generic_key, 'resource')
+            CategoryActions(generic_key, 'resource').get_category_label()
 
         elif change_resource_or_actions == '-u':    # Обновление программы
             system_action('clear')
             update()
-            show_decryption_data(generic_key, 'resource')
+            CategoryActions(generic_key, 'resource').get_category_label()
             write_log("Update", "OK")
 
         elif change_resource_or_actions == '-x':  # Выход
@@ -50,8 +50,6 @@ def decryption_block(generic_key):
 
         elif change_resource_or_actions == '-r':  # Перезапуск
             system_action('clear')
-            template_some_message(GREEN, ' --- Restart ---')
-            sleep(.2)
             write_log("Restart", "OK")
             system_action('restart')
 
@@ -61,18 +59,28 @@ def decryption_block(generic_key):
 
         elif change_resource_or_actions == '-d':    # Удаление ресурса
             delete_object('resource')
-            show_decryption_data(generic_key, 'resource')
+            CategoryActions(generic_key, 'resource').get_category_label()
             write_log("Delete resource", "OK")
 
         elif change_resource_or_actions == '-n':    # Добавление заметок
-            show_decryption_data(generic_key, 'note')
+            CategoryActions(generic_key, 'note').get_category_label()
             notes(generic_key)
-            write_log("Go to notes", "OK")
+            write_log("Exit from notes", "OK")
 
         elif change_resource_or_actions == '-f':    # Шифрование файлов
-            # Переписать под show_dec_data_obs
-            actions_with_encryption_files(generic_key)
-            show_decryption_data(generic_key, 'resource')
+            CategoryActions(generic_key, 'encryption').get_category_label()
+            change_action = input(ACCENT_1 + "\n - Select by number: " + ACCENT_4)
+            if change_action == '-e':
+                system_action('clear')
+                system_action('file_manager')
+                write_log("Try encryption", "RUN")
+                enc_obs.WorkWithUserFiles(generic_key, 'enc').file_encryption_control()
+            elif change_action == '-d':
+                system_action('clear')
+                write_log("Try decryption", "RUN")
+                enc_obs.WorkWithUserFiles(generic_key, 'dec').file_encryption_control()
+            write_log("Exit from encrypt", "OK")
+            CategoryActions(generic_key, 'resource').get_category_label()
 
         elif change_resource_or_actions == '-z':    # Удаление всех данных
             system_action('clear')
@@ -84,10 +92,9 @@ def decryption_block(generic_key):
                 quit()
 
         elif change_resource_or_actions == '-i':
-            from get_size_obs import size_all, get_versions
-            get_versions()
-            size_all()
-            write_log("Get size and versions", "OK")
+            from information_obs import information
+            information()
+            write_log("Get info", "OK")
             decryption_block(generic_key)
 
         elif change_resource_or_actions == '-l':
@@ -129,7 +136,7 @@ def decryption_block(generic_key):
             settings(generic_key)
 
         elif change_resource_or_actions == '':  # Пасует ошибку
-            show_decryption_data(generic_key, 'resource')
+            CategoryActions(generic_key, 'resource').get_category_label()
 
         else:   # Вывод сохраненных данных о ресурсе
             s = 0
@@ -137,7 +144,7 @@ def decryption_block(generic_key):
                 s += 1
                 if s == int(change_resource_or_actions):
                     system_action('clear')
-                    show_decryption_data(generic_key, 'resource')
+                    CategoryActions(generic_key, 'resource').get_category_label()
 
                     path_to_resource = FOLDER_WITH_RESOURCES + resource_in_folder
                     resource_from_file = path_to_resource + '/' + FILE_RESOURCE
@@ -145,7 +152,7 @@ def decryption_block(generic_key):
                     password_from_file = path_to_resource + '/' + FILE_PASSWORD
 
                     def template_print_decryption_data(data_type, value):
-                        print(ACCENT_3, data_type, ACCENT_1, dec_aes(value, generic_key), ACCENT_4)
+                        print(ACCENT_3, data_type, ACCENT_1, enc_obs.dec_aes(value, generic_key), ACCENT_4)
 
                     template_print_decryption_data(
                         'Resource --->', resource_from_file)
@@ -155,5 +162,5 @@ def decryption_block(generic_key):
                         'Password --->', password_from_file)
 
     except ValueError:  # Обработка ошибки
-        show_decryption_data(generic_key, 'resource')
+        CategoryActions(generic_key, 'resource').get_category_label()
     decryption_block(generic_key)

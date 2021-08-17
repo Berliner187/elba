@@ -1,3 +1,9 @@
+# -*- coding: UTF-8 -*-
+
+"""
+    В этот модуль вынесены все действия с паролями
+"""
+
 from main import *
 
 from enc_obs import *
@@ -12,7 +18,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
 
 
-__version__ = 'P8.6_M1.1'
+__version__ = 'P-0.8.7_M-1.0'
 
 
 cols = get_size_of_terminal()
@@ -97,7 +103,7 @@ class ActionsWithPassword:
             length_new_pas = int(input(f"{ACCENT_1}- Length: {ACCENT_4}"))
             status_adding_characters = False
             request_for_adding_characters = input(
-                f"{ACCENT_3} - Add additional symbols? (Default: no) (y/n): {ACCENT_4}"
+                f"{ACCENT_1}- Add additional symbols? (Default: no) (y/n): {ACCENT_4}"
             )
             if request_for_adding_characters == 'y':
                 status_adding_characters = True
@@ -115,6 +121,63 @@ class ActionsWithPassword:
             hash_gen.write(hash_to_file)
             hash_gen.close()
             return generic
+
+    @staticmethod
+    def point_of_entry():
+        """ Точка входа в программу """
+        def get_master_password():
+            show_name_program()
+            elba()
+            input_master_password = getpass(
+                f"{ACCENT_1}\n\n   --- Enter the master password: {ACCENT_4}"
+            )
+            if input_master_password == 'x':
+                quit()
+            elif input_master_password == 'r':
+                system_action('restart')
+            elif input_master_password == 'a':
+                animation()
+            return input_master_password
+
+        cnt_left = 4
+        while True:
+            master_password = get_master_password()
+            # Проверка хэша пароля
+            hash_password = check_password_hash(open(FILE_WITH_HASH).readline(), master_password)
+            if (CHECK_FILE_WITH_HASH is False) or (CHECK_FILE_WITH_GENERIC is False):
+                if CHECK_FOLDER_FOR_RESOURCE:
+                    template_remove_folder(FOLDER_WITH_DATA)
+                    quit()
+            # Если нет подтверждения
+            if hash_password is False:
+                system_action('clear')
+                cnt_left -= 1
+                print('\n'*3)
+                print(RED, "-----  Wrong password  -----".center(cols), ACCENT_3)
+                print('\n'*3)
+                print(f"Attempts left: {RED}{cnt_left}".center(cols), ACCENT_4)
+                sleep(1)
+                system_action('clear')
+                if cnt_left <= 0:
+                    system_action('clear')
+                    template_some_message(RED, "---  Limit is exceeded  ---")
+                    write_log('Someone tried to enter', 'ALERT')
+                    sleep(1)
+                    animation()
+            # Если есть подтверждение
+            else:
+                if hash_password and CHECK_FOLDER_FOR_RESOURCE:
+                    if CHECK_FILE_WITH_GENERIC:
+                        xzibit = dec_aes(FILE_WITH_GENERIC_KEY, master_password)
+                        check_with_xzibit = check_password_hash(open(FILE_WITH_HASH_GENERIC_KEY).readline(), xzibit)
+                        if check_with_xzibit:
+                            return master_password
+                        else:
+                            template_remove_folder(FOLDER_WITH_DATA)
+                            quit()
+                    else:
+                        template_remove_folder(FOLDER_WITH_DATA)
+                        quit()
 
 
 def choice_generation_or_save_self_password(resource, login, master_password):
@@ -138,79 +201,38 @@ def choice_generation_or_save_self_password(resource, login, master_password):
     system_action('clear')
 
 
-def point_of_entry():   # Точка входа в систему
-    """ Получение мастер-пароля """
-    def template_wrong_message(value_left):
-        system_action('clear')
-        lines = [
-            "\n\n\n",
-            RED,
-            "-----  Wrong password  -----",
-            "\n\n\n",
-            ACCENT_3,
-            f"Attempts left: {RED}{value_left}",
-            ACCENT_4
-        ]
-        wait_effect(lines, 0)
-        sleep(1)
+def change_master_password():
+    """ Смена мастер-пароля """
 
-    def get_master_password():
-        show_name_program()
-        elba()
-        input_master_password = getpass(
-            f"{ACCENT_1}\n\n   --- Enter the master password: {ACCENT_4}"
-        )
-        if input_master_password == 'x':  # Досрочный выход из программы
-            quit()
-        elif input_master_password == 'r':
-            system_action('restart')
-        elif input_master_password == 'a':    # Показ анимации
-            animation()
-        elif input_master_password == 'n':   # Показ ника автора
-            author()
-        elif input_master_password == 'u':   # Слава Україні
-            from logo_obs import Ukraine
-            Ukraine()
-        return input_master_password
-
-    master_password = get_master_password()
-    if (CHECK_FILE_WITH_HASH is False) or (CHECK_FILE_WITH_GENERIC is False):
-        if CHECK_FOLDER_FOR_RESOURCE:
-            template_remove_folder(FOLDER_WITH_DATA)
-            quit()
-
-    # Проверка хэша пароля
-    hash_pas_from_file = open(FILE_WITH_HASH)
-    hash_password = check_password_hash(hash_pas_from_file.readline(), master_password)
-    cnt_left = 4
-    if (hash_password and CHECK_FOLDER_FOR_RESOURCE) is False:
-        cnt_left -= 1
-        template_wrong_message(cnt_left)
-        while hash_password is False:
-            cnt_left -= 1
+    def get_confirm_master_password():
+        while True:
             system_action('clear')
-            master_password = get_master_password()
-            file_hash = open(FILE_WITH_HASH)
-            hash_password = check_password_hash(file_hash.readline(), master_password)
-            if cnt_left <= 0:
-                system_action('clear')
-                template_some_message(RED, "  ---  Limit is exceeded  --- ")
-                write_log('Someone tried to enter', 'ALERT')
-                sleep(2)
-                animation()
-                quit()
-            if hash_password:
-                return master_password
+            _confirm_master_password = getpass(ACCENT_1 + ' -- Enter your master-password: ' + ACCENT_4)
+            open_file_with_hash = open(FILE_WITH_HASH).readline()
+            check_master_password = check_password_hash(open_file_with_hash, _confirm_master_password)
+            if check_master_password:
+                return _confirm_master_password
             else:
-                template_wrong_message(cnt_left)
-    elif hash_password and CHECK_FOLDER_FOR_RESOURCE:
-        xzibit_from_file = open(FILE_WITH_HASH_GENERIC_KEY)
-        xzibit = dec_aes(FILE_WITH_GENERIC_KEY, master_password)
-        check_with_exibit = check_password_hash(xzibit_from_file.readline(), xzibit)
-        if check_with_exibit is False:
-            template_remove_folder(FOLDER_WITH_DATA)
-            quit()
-        else:
-            return master_password
-    else:
-        quit()
+                template_some_message(RED, ' --- Wrong master-password --- ')
+                sleep(1)
+
+    confirm_master_password = get_confirm_master_password()
+    system_action('clear')
+    template_some_message(GREEN, '  --  Success confirm  --')
+    sleep(.6)
+    system_action('clear')
+    template_some_message(ACCENT_3, ' - Pick a new master-password -')
+    new_master_password = create_and_confirm_user_password()
+    # Generic-key шифруется новым мастер-паролем
+    generic_key_from_file = dec_aes(FILE_WITH_GENERIC_KEY, confirm_master_password)
+    enc_aes(FILE_WITH_GENERIC_KEY, generic_key_from_file, new_master_password)
+
+    new_hash = generate_password_hash(new_master_password)
+    with open(FILE_WITH_HASH, 'w') as hash_pas:
+        hash_pas.write(new_hash)
+        hash_pas.close()
+
+    system_action('clear')
+    template_some_message(GREEN, '-  Password changed successfully!  -')
+    sleep(1)
+    system_action('restart')

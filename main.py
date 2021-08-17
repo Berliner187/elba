@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'P0.8.6.2'
+__version__ = 'P-0.8.7.0'
 
 
 def get_size_of_terminal():
@@ -50,7 +50,7 @@ def template_remove_folder(some_folder):
 
 def template_some_message(color, message):
     """ Шаблон сообщения в ходе работы программы """
-    cols, rows = shutil.get_terminal_size()
+    cols = get_size_of_terminal()
     print(color, '\n'*2, message.center(cols), ACCENT_4)
 
 
@@ -107,9 +107,9 @@ REPOSITORY = 'git clone https://github.com/Berliner187/elba -b delta'
 # <<<--------------  Модули для работы программы  -------------->>>
 stock_modules = [
     'datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
-    'del_object_obs.py', 'notes_obs.py', 'get_size_obs.py',
-    'change_password_obs.py', 'actions_with_password_obs.py',
-    'show_dec_data_obs.py', 'decryption_block_obs.py', 'settings_obs.py'
+    'del_object_obs.py', 'notes_obs.py', 'information_obs.py',
+    'actions_with_password_obs.py', 'category_actions_obs.py',
+    'decryption_block_obs.py', 'settings_obs.py'
 ]
 
 # <<< -------- Цветовые акценты в программе -------- >>>
@@ -167,12 +167,15 @@ RED = format_hex_color('#C70039')
 def system_action(action):
     """ Системные действия (выполнение действия) """
     if action == 'restart':
+        template_some_message(GREEN, ' --- Restart ---')
+        sleep(.2)
         os.execv(sys.executable, [sys.executable] + sys.argv)
     if action == 'clear':
         os.system('cls' if os.name == 'nt' else 'clear')
     if action == 'file_manager':
         os.system('explorer.exe .' if os.name == 'nt' else 'nautilus .')
     else:
+        # if action != 'clear':
         os.system(action)
 
 
@@ -278,16 +281,16 @@ def launcher():
         greeting(generic_key)
         enc_aes(FILE_WITH_GENERIC_KEY, generic_key, master_password)
         os.mkdir(FOLDER_WITH_RESOURCES)
-        show_decryption_data(generic_key, 'resource')
+        CategoryActions(generic_key, 'resource').get_category_label()
         write_log('First launch', 'OK')
         decryption_block(generic_key)
     else:  # При последующем
-        master_password = point_of_entry()
+        master_password = ActionsWithPassword(None).point_of_entry()
         generic_key_from_file = dec_aes(FILE_WITH_GENERIC_KEY, master_password)
         system_action('clear')
         greeting(generic_key_from_file)
         write_log('Subsequent launch', 'OK')
-        show_decryption_data(generic_key_from_file, 'resource')
+        CategoryActions(generic_key_from_file, 'resource').get_category_label()
         decryption_block(generic_key_from_file)
 
 
@@ -314,49 +317,49 @@ if __name__ == '__main__':
     status_mis_mod = check_modules()
     if status_mis_mod == 0:
         from decryption_block_obs import decryption_block
-        from actions_with_password_obs import point_of_entry
         from enc_obs import enc_aes, dec_aes
         from datetime_obs import greeting
-        from show_dec_data_obs import show_decryption_data
+        from category_actions_obs import CategoryActions
         from actions_with_password_obs import ActionsWithPassword
         from logo_obs import first_start_message, elba
-
-        try:
-            launcher()  # Запуск лончера
-        except Exception or NameError as random_error:
-            write_log(random_error, 'FAIL')
-            template_some_message(RED, ' --- ERROR --- ')
-            print(random_error)
-            sleep(1)
-            system_action('clear')
-            print(f"{ACCENT_3}"
-                  f'\n - Enter 1 to update'
-                  f'\n - Enter 2 to rollback')
-            rollback_or_update = input(ACCENT_1 + '\n - Select by number: ' + ACCENT_4)
-            if rollback_or_update == '1':  # Попытка откатиться
-                template_some_message(RED, '-- You can try roll back --')
-                change = input(template_question(' - Roll back? (y/n): '))
-                if change == 'y':
-                    install_old_saved_version()
-            elif rollback_or_update == '2':  # Попытка обновиться
-                get_confirm = input(template_question(" - Update? (y/n): "))
-                if get_confirm == 'y':
-                    write_log('Try update', 'Run')
-                    update()
-                else:
-                    write_log('Exit', 'OK')
-                    quit()
-            else:
-                system_action('clear')
-                template_some_message(RED, '- Error in change -')
-                sleep(1)
-            system_action('restart')
-        except KeyError:
-            pass
-        except KeyboardInterrupt as keyboard:
-            system_action('clear')
-            template_some_message(ACCENT_3, ' --- ELBA CLOSED ---')
-            write_log(keyboard, "CLOSE")
-            quit()
+        launcher()
+        #
+        # try:
+        #     launcher()  # Запуск лончера
+        # except Exception or NameError as random_error:
+        #     write_log(random_error, 'FAIL')
+        #     template_some_message(RED, ' --- ERROR --- ')
+        #     print(random_error)
+        #     sleep(1)
+        #     system_action('clear')
+        #     print(f"{ACCENT_3}"
+        #           f'\n - Enter 1 to update'
+        #           f'\n - Enter 2 to rollback')
+        #     rollback_or_update = input(ACCENT_1 + '\n - Select by number: ' + ACCENT_4)
+        #     if rollback_or_update == '1':  # Попытка откатиться
+        #         template_some_message(RED, '-- You can try roll back --')
+        #         change = input(template_question(' - Roll back? (y/n): '))
+        #         if change == 'y':
+        #             install_old_saved_version()
+        #     elif rollback_or_update == '2':  # Попытка обновиться
+        #         get_confirm = input(template_question(" - Update? (y/n): "))
+        #         if get_confirm == 'y':
+        #             write_log('Try update', 'Run')
+        #             update()
+        #         else:
+        #             write_log('Exit', 'OK')
+        #             quit()
+        #     else:
+        #         system_action('clear')
+        #         template_some_message(RED, '- Error in change -')
+        #         sleep(1)
+        #     system_action('restart')
+        # except KeyError:
+        #     pass
+        # except KeyboardInterrupt as keyboard:
+        #     system_action('clear')
+        #     template_some_message(ACCENT_3, ' --- ELBA CLOSED ---')
+        #     write_log(keyboard, "CLOSE")
+        #     quit()
     else:
         update()

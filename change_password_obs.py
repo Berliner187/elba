@@ -1,6 +1,6 @@
 from main import *
 
-from enc_obs import enc_aes, dec_aes
+from enc_obs import *
 from actions_with_password_obs import create_and_confirm_user_password
 
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -13,7 +13,7 @@ import os
 __version__ = 'P8.6_M1.0'
 
 
-def change_master_password():
+# def change_master_password():
     """ Смена мастер-пароля """
 
     def get_confirm_master_password():

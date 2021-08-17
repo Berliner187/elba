@@ -1,13 +1,11 @@
 # -*- coding: UTF-8 -*-
-from csv import DictReader, DictWriter
-from shutil import copyfile
 import os
 from time import sleep
 
 from main import *
 
 
-__version__ = 'P8.6_M1.0'
+__version__ = 'P-0.8.6_M-1.1'
 
 
 def delete_object(category):
