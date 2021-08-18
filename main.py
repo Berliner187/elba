@@ -130,7 +130,10 @@ def format_hex_color(hex_color):
 
 
 # Создание основных папок
-FOLDERS = [FOLDER_WITH_DATA, FOLDER_WITH_NOTES, FOLDER_WITH_PROGRAM_DATA]
+FOLDERS = [
+    FOLDER_WITH_DATA, FOLDER_WITH_NOTES,
+    FOLDER_WITH_PROGRAM_DATA, FOLDER_WITH_ENC_DATA
+]
 for folder in FOLDERS:
     if os.path.exists(folder) is False:
         os.mkdir(folder)

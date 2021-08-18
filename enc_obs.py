@@ -207,7 +207,7 @@ class WorkWithUserFiles:
             file_to_write.close()
 
         if os.path.exists(FOLDER_WITH_ENC_DATA) is False:
-            os.system('mkdir ' + FOLDER_WITH_ENC_DATA)
+            os.mkdir(FOLDER_WITH_ENC_DATA)
 
         def template_not_confirmed(remove):
             os.chdir('../../')
@@ -217,9 +217,6 @@ class WorkWithUserFiles:
             if remove:
                 template_remove_folder(FOLDER_WITH_DATA)
             quit()
-
-        if os.path.exists(FOLDER_WITH_ENC_DATA) is False:
-            os.mkdir(FOLDER_WITH_ENC_DATA)
 
         xzibit_hash_from_file = open(FILE_WITH_HASH_GENERIC_KEY).readline()
         check_generic_hash = check_password_hash(xzibit_hash_from_file, self.xzibit)
@@ -236,9 +233,6 @@ class WorkWithUserFiles:
 
                     key_data = read_bin_file(file_to_save)
                     write_bin_file(file_to_save, key_data)
-
-                if os.path.exists(FOLDER_FOR_ENCRYPTION_FILES) is False:
-                    os.mkdir(FOLDER_FOR_ENCRYPTION_FILES)
 
                 template_some_message(ACCENT_1, " - Please put the files you want to encrypt in \'FOR_ENCRYPTION\'")
 

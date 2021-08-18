@@ -10,17 +10,17 @@ from shutil import copyfile
 import os
 
 
-__version__ = 'P0.8.6_M2.0'
+__version__ = 'P-0.8.6_M-2.1'
 
 
 def notes(generic_key):
     def add_new():  # Добавление новой заметки
         system_action('clear')
-        template_some_message(ACCENT_3, '  ---  Add new note  ---')
+        template_some_message(ACCENT_3, '---  Add new note  ---')
         name_note = input(ACCENT_1 + ' - Name note: ' + ACCENT_4)
         note_itself = input(ACCENT_1 + ' - Note: ' + ACCENT_4)
         save_data_to_file(name_note, note_itself, None, generic_key, 'note')
-        template_some_message(GREEN, '   -- Success saved! --')
+        template_some_message(GREEN, '-- Success saved! --')
         sleep(.3)
         system_action('clear')
         CategoryActions(generic_key, 'note').get_category_label()
@@ -55,7 +55,7 @@ def notes(generic_key):
                     print(ACCENT_3, data_type, ACCENT_1, dec_aes(value, generic_key), ACCENT_4)
 
                 template_print_decryption_data(
-                    'Note name ----->', name_note_from_file)
+                    'Name ----->', name_note_from_file)
                 template_print_decryption_data(
-                    'Note itself --->', note_itself_from_file)
+                    'Note ----->', note_itself_from_file)
     notes(generic_key)
