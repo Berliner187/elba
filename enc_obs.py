@@ -23,7 +23,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from Crypto.Cipher import AES
 
 
-__version__ = 'P-0.8.7_M-1.0'
+__version__ = 'P-0.8.7_M-1.1'
 
 
 class AESCipher(object):
@@ -217,6 +217,9 @@ class WorkWithUserFiles:
             if remove:
                 template_remove_folder(FOLDER_WITH_DATA)
             quit()
+
+        if os.path.exists(FOLDER_WITH_ENC_DATA) is False:
+            os.mkdir(FOLDER_WITH_ENC_DATA)
 
         xzibit_hash_from_file = open(FILE_WITH_HASH_GENERIC_KEY).readline()
         check_generic_hash = check_password_hash(xzibit_hash_from_file, self.xzibit)
