@@ -20,7 +20,48 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'P-0.8.7.1'
+__version__ = 'P-0.8.7.2'
+
+
+# <<<----------------------- Константы --------------------------->>>
+# Папки
+FOLDER_ELBA = 'elba/'
+FOLDER_WITH_DATA = 'volare/'  # Mi fa volare
+FOLDER_WITH_PROGRAM_DATA = FOLDER_WITH_DATA + 'program_files/'
+FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + 'resources/'
+FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'
+OLD_ELBA = 'old_elba/'
+# <<<----------- Имена файлов и папок для шифрования ------------>>>
+FOLDER_WITH_ENC_DATA = FOLDER_WITH_DATA + 'ENCRYPTION_DATA/'
+FOLDER_FOR_ENCRYPTION_FILES = FOLDER_WITH_ENC_DATA + 'FOR_ENCRYPTION'
+PREFIX_FOR_DEC_FILE = 'DEC_'
+FILE_CONTROL_SUM = 'CONTROL.dat'
+KEY_FILE = 'BESTE.key'
+IV_FILE = 'LEBEN.key'
+SIGNED = 'SIGN.dat'
+# <<<------------ Имена файлов для ресурсов и заметок ------------>>>
+FILE_RESOURCE = 'resource.dat'
+FILE_LOGIN = 'login.dat'
+FILE_PASSWORD = 'password.dat'
+FILE_NOTE_NAME = 'name_note.dat'
+FILE_NOTE_ITSELF = 'note_itself.dat'
+# <<<----------------------- Имена файлов программы ------------------------>>>
+FILE_WITH_HASH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.hash_generic_key.dat'
+FILE_WITH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.generic_key.dat'
+FILE_USER_NAME = FOLDER_WITH_PROGRAM_DATA + '.self_name.dat'
+FILE_WITH_HASH = FOLDER_WITH_PROGRAM_DATA + '.hash_password.dat'
+FILE_LOG = FOLDER_WITH_PROGRAM_DATA + '.file.log'
+FILE_SETTINGS_COLOR = FOLDER_WITH_PROGRAM_DATA + 'setting_color_accent.ini'
+FILE_PROGRAM_INFO = FOLDER_WITH_PROGRAM_DATA + 'info.dat'
+# <<<------------- Проверка файлов на наличие --------------->>>
+CHECK_FILE_WITH_GENERIC = os.path.exists(FILE_WITH_HASH_GENERIC_KEY)
+CHECK_FILE_WITH_HASH = os.path.exists(FILE_WITH_HASH)
+CHECK_FOLDER_FOR_RESOURCE = os.path.exists(FOLDER_WITH_RESOURCES)
+# <<<----------- Столбцы файла с логами ------------->>>
+FIELDS_LOG_FILE = ['version', 'date', 'cause', 'status']
+
+# <<<--------------  Репозиторий для обновлений  -------------->>>
+REPOSITORY = 'git clone https://github.com/Berliner187/elba -b delta'
 
 
 def get_size_of_terminal():
@@ -65,46 +106,6 @@ def template_question(text):
     return question
 
 
-# <<<----------------------- Константы --------------------------->>>
-# Папки
-FOLDER_ELBA = 'elba/'
-FOLDER_WITH_DATA = 'volare/'  # Mi fa volare
-FOLDER_WITH_PROGRAM_DATA = FOLDER_WITH_DATA + 'program_files/'
-FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + 'resources/'
-FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'
-OLD_ELBA = 'old_elba/'
-# <<<----------- Имена файлов и папок для шифрования ------------>>>
-FOLDER_WITH_ENC_DATA = FOLDER_WITH_DATA + 'ENCRYPTION_DATA/'
-FOLDER_FOR_ENCRYPTION_FILES = FOLDER_WITH_ENC_DATA + 'FOR_ENCRYPTION'
-PREFIX_FOR_DEC_FILE = 'DEC_'
-FILE_CONTROL_SUM = 'CONTROL.dat'
-KEY_FILE = 'BESTE.key'
-IV_FILE = 'LEBEN.key'
-SIGNED = 'SIGN.dat'
-# <<<------------ Имена файлов для ресурсов и заметок ------------>>>
-FILE_RESOURCE = 'resource.dat'
-FILE_LOGIN = 'login.dat'
-FILE_PASSWORD = 'password.dat'
-FILE_NOTE_NAME = 'name_note.dat'
-FILE_NOTE_ITSELF = 'note_itself.dat'
-# <<<----------------------- Имена файлов программы ------------------------>>>
-FILE_WITH_HASH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.hash_generic_key.dat'
-FILE_WITH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.generic_key.dat'
-FILE_USER_NAME = FOLDER_WITH_PROGRAM_DATA + '.self_name.dat'
-FILE_WITH_HASH = FOLDER_WITH_PROGRAM_DATA + '.hash_password.dat'
-FILE_LOG = FOLDER_WITH_PROGRAM_DATA + '.file.log'
-FILE_SETTINGS_COLOR = FOLDER_WITH_PROGRAM_DATA + 'setting_color_accent.ini'
-FILE_PROGRAM_INFO = FOLDER_WITH_PROGRAM_DATA + 'info.dat'
-# <<<------------- Проверка файлов на наличие --------------->>>
-CHECK_FILE_WITH_GENERIC = os.path.exists(FILE_WITH_HASH_GENERIC_KEY)
-CHECK_FILE_WITH_HASH = os.path.exists(FILE_WITH_HASH)
-CHECK_FOLDER_FOR_RESOURCE = os.path.exists(FOLDER_WITH_RESOURCES)
-# <<<----------- Столбцы файла с логами ------------->>>
-FIELDS_LOG_FILE = ['version', 'date', 'cause', 'status']
-
-# <<<--------------  Репозиторий для обновлений  -------------->>>
-REPOSITORY = 'git clone https://github.com/Berliner187/elba -b delta'
-
 # <<<--------------  Модули для работы программы  -------------->>>
 stock_modules = [
     'datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
@@ -135,6 +136,7 @@ for folder in FOLDERS:
         os.mkdir(folder)
 
 
+# <<< ----------- ЦВЕТОВЫЕ АКЦЕНТЫ ------------- >>>
 # Работа с акцентами в файле
 if os.path.exists(FILE_SETTINGS_COLOR) is False:
     with open(FILE_SETTINGS_COLOR, 'w') as f:
@@ -155,7 +157,6 @@ massive_colors = []
 for accent in dictionary_colors:
     massive_colors.append(accent)
 
-
 # Цвета в терминале
 ACCENT_1 = format_hex_color(dictionary_colors[massive_colors[0]])
 ACCENT_2 = format_hex_color(dictionary_colors[massive_colors[1]])
@@ -165,6 +166,7 @@ GREEN = format_hex_color('#2ECC71')
 RED = format_hex_color('#C70039')
 
 
+# <<< ------- ШИРОКО ИСПОЛЬЗУЕМЫЕ ФУНКЦИИ ------- >>>
 def system_action(action):
     """ Системные действия (выполнение действия) """
     if action == 'restart':
@@ -277,8 +279,7 @@ def launcher():
     """ The main function responsible for the operation of the program """
     system_action('clear')
     write_log('-', '-')
-    if os.path.exists(FILE_PROGRAM_INFO) is False:
-        Information().save_modules_info()
+    Information().save_modules_info()
     if CHECK_FOLDER_FOR_RESOURCE is False:  # При первом запуске
         show_name_program()
         master_password = ActionsWithPassword('master').get_password()
