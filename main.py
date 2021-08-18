@@ -349,12 +349,12 @@ if __name__ == '__main__':
                     install_old_saved_version()
             elif rollback_or_update == '1':  # Попытка обновиться
                 get_confirm = input(template_question(" - Update? (y/n): "))
-                if get_confirm == 'y':
-                    write_log('Try update', 'Run')
-                    update()
-                else:
+                if get_confirm == 'n':
                     write_log('Exit', 'OK')
                     quit()
+                else:
+                    write_log('Try update', 'Run')
+                    update()
             else:
                 system_action('clear')
                 template_some_message(RED, '- Error in change -')
