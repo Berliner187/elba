@@ -1,11 +1,13 @@
 from main import *
 from main import __version__ as elba_version
 
+from information_obs import Information
+
 import os
 from time import sleep
 
 
-__version__ = 'P-0.8.6_M-1.0'
+__version__ = 'P-0.8.6_M-1.1'
 
 
 def update():
@@ -109,6 +111,7 @@ def update():
 
                 template_remove_folder(FOLDER_ELBA)
                 sleep(.7)
+            Information().save_modules_info()
         else:
             template_some_message(ACCENT_1, ' - New folder not found... -')
             write_log('New folder not exist', 'PASS')

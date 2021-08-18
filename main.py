@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'P-0.8.7.0'
+__version__ = 'P-0.8.7.1'
 
 
 def get_size_of_terminal():
@@ -94,6 +94,7 @@ FILE_USER_NAME = FOLDER_WITH_PROGRAM_DATA + '.self_name.dat'
 FILE_WITH_HASH = FOLDER_WITH_PROGRAM_DATA + '.hash_password.dat'
 FILE_LOG = FOLDER_WITH_PROGRAM_DATA + '.file.log'
 FILE_SETTINGS_COLOR = FOLDER_WITH_PROGRAM_DATA + 'setting_color_accent.ini'
+FILE_PROGRAM_INFO = FOLDER_WITH_PROGRAM_DATA + 'info.dat'
 # <<<------------- Проверка файлов на наличие --------------->>>
 CHECK_FILE_WITH_GENERIC = os.path.exists(FILE_WITH_HASH_GENERIC_KEY)
 CHECK_FILE_WITH_HASH = os.path.exists(FILE_WITH_HASH)
@@ -109,7 +110,7 @@ stock_modules = [
     'datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
     'del_object_obs.py', 'notes_obs.py', 'information_obs.py',
     'actions_with_password_obs.py', 'category_actions_obs.py',
-    'decryption_block_obs.py', 'settings_obs.py'
+    'decryption_block_obs.py', 'settings_obs.py', 'update_obs.py'
 ]
 
 # <<< -------- Цветовые акценты в программе -------- >>>
@@ -167,6 +168,7 @@ RED = format_hex_color('#C70039')
 def system_action(action):
     """ Системные действия (выполнение действия) """
     if action == 'restart':
+        system_action('clear')
         template_some_message(GREEN, ' --- Restart ---')
         sleep(.2)
         os.execv(sys.executable, [sys.executable] + sys.argv)
@@ -274,6 +276,9 @@ def check_modules():
 def launcher():
     """ The main function responsible for the operation of the program """
     system_action('clear')
+    write_log('-', '-')
+    if os.path.exists(FILE_PROGRAM_INFO) is False:
+        Information().save_modules_info()
     if CHECK_FOLDER_FOR_RESOURCE is False:  # При первом запуске
         show_name_program()
         master_password = ActionsWithPassword('master').get_password()
@@ -322,44 +327,44 @@ if __name__ == '__main__':
         from category_actions_obs import CategoryActions
         from actions_with_password_obs import ActionsWithPassword
         from logo_obs import first_start_message, elba
-        launcher()
-        #
-        # try:
-        #     launcher()  # Запуск лончера
-        # except Exception or NameError as random_error:
-        #     write_log(random_error, 'FAIL')
-        #     template_some_message(RED, ' --- ERROR --- ')
-        #     print(random_error)
-        #     sleep(1)
-        #     system_action('clear')
-        #     print(f"{ACCENT_3}"
-        #           f'\n - Enter 1 to update'
-        #           f'\n - Enter 2 to rollback')
-        #     rollback_or_update = input(ACCENT_1 + '\n - Select by number: ' + ACCENT_4)
-        #     if rollback_or_update == '1':  # Попытка откатиться
-        #         template_some_message(RED, '-- You can try roll back --')
-        #         change = input(template_question(' - Roll back? (y/n): '))
-        #         if change == 'y':
-        #             install_old_saved_version()
-        #     elif rollback_or_update == '2':  # Попытка обновиться
-        #         get_confirm = input(template_question(" - Update? (y/n): "))
-        #         if get_confirm == 'y':
-        #             write_log('Try update', 'Run')
-        #             update()
-        #         else:
-        #             write_log('Exit', 'OK')
-        #             quit()
-        #     else:
-        #         system_action('clear')
-        #         template_some_message(RED, '- Error in change -')
-        #         sleep(1)
-        #     system_action('restart')
-        # except KeyError:
-        #     pass
-        # except KeyboardInterrupt as keyboard:
-        #     system_action('clear')
-        #     template_some_message(ACCENT_3, ' --- ELBA CLOSED ---')
-        #     write_log(keyboard, "CLOSE")
-        #     quit()
+        from information_obs import Information
+
+        try:
+            launcher()  # Запуск лончера
+        except Exception or NameError as random_error:
+            write_log(random_error, 'FAIL')
+            template_some_message(RED, ' --- ERROR --- ')
+            print(random_error)
+            sleep(1)
+            system_action('clear')
+            print(f"{ACCENT_3}"
+                  f'\n - Enter 1 to update'
+                  f'\n - Enter 2 to rollback')
+            rollback_or_update = input(ACCENT_1 + '\n - Select by number: ' + ACCENT_4)
+            if rollback_or_update == '1':  # Попытка откатиться
+                template_some_message(RED, '-- You can try roll back --')
+                change = input(template_question(' - Roll back? (y/n): '))
+                if change == 'y':
+                    install_old_saved_version()
+            elif rollback_or_update == '2':  # Попытка обновиться
+                get_confirm = input(template_question(" - Update? (y/n): "))
+                if get_confirm == 'y':
+                    write_log('Try update', 'Run')
+                    update()
+                else:
+                    write_log('Exit', 'OK')
+                    quit()
+            else:
+                system_action('clear')
+                template_some_message(RED, '- Error in change -')
+                sleep(1)
+            system_action('restart')
+        except KeyError:
+            pass
+        except KeyboardInterrupt as keyboard:
+            system_action('clear')
+            template_some_message(ACCENT_3, ' --- ELBA CLOSED ---')
+            write_log(keyboard, "CLOSE")
+            quit()
     else:
         update()

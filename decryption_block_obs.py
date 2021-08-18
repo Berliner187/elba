@@ -44,7 +44,7 @@ def decryption_block(generic_key):
 
         elif change_resource_or_actions == '-x':  # Выход
             system_action('clear')
-            template_some_message(ACCENT_3, ' --- ELBA CLOSED ---')
+            template_some_message(ACCENT_3, '--- ELBA CLOSED ---')
             write_log("Exit", "OK")
             quit()
 
@@ -92,8 +92,8 @@ def decryption_block(generic_key):
                 quit()
 
         elif change_resource_or_actions == '-i':
-            from information_obs import information
-            information()
+            from information_obs import Information
+            Information().get_info()
             write_log("Get info", "OK")
             decryption_block(generic_key)
 

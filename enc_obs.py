@@ -121,10 +121,10 @@ def save_data_to_file(data_1, data_2, data_3, xzibit, type_data):
     def path_to_data_to_save_note(enc_name_type_folder):
         return FOLDER_WITH_NOTES + enc_name_type_folder
 
+    enc_name_category_folder = enc_only_base64(data_1, xzibit) + '/'
     if type_data == 'resource':
-        enc_name_resource_folder = enc_only_base64(data_1, xzibit) + '/'
-        if os.path.exists(path_to_data_to_save_resource(enc_name_resource_folder)) is False:
-            os.mkdir(path_to_data_to_save_resource(enc_name_resource_folder))
+        if os.path.exists(path_to_data_to_save_resource(enc_name_category_folder)) is False:
+            os.mkdir(path_to_data_to_save_resource(enc_name_category_folder))
 
         resource_folder = path_to_data_to_save_resource(enc_name_resource_folder)
         login_folder = path_to_data_to_save_resource(enc_name_resource_folder)
@@ -139,9 +139,8 @@ def save_data_to_file(data_1, data_2, data_3, xzibit, type_data):
         enc_aes(password_file, data_3, xzibit)
 
     if type_data == 'note':
-        enc_name_note_folder = enc_only_base64(data_1, xzibit) + '/'
-        if os.path.exists(path_to_data_to_save_note(enc_name_note_folder)) is False:
-            os.mkdir(path_to_data_to_save_note(enc_name_note_folder))
+        if os.path.exists(path_to_data_to_save_note(enc_name_category_folder)) is False:
+            os.mkdir(path_to_data_to_save_note(enc_name_category_folder))
 
         name_note = path_to_data_to_save_note(enc_name_note_folder)
         self_note = path_to_data_to_save_note(enc_name_note_folder)
