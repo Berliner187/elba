@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'P-0.8.7.2'
+__version__ = 'P-0.8.7.3'
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -342,12 +342,12 @@ if __name__ == '__main__':
                   f'\n - Enter 1 to update'
                   f'\n - Enter 2 to rollback')
             rollback_or_update = input(ACCENT_1 + '\n - Select by number: ' + ACCENT_4)
-            if rollback_or_update == '1':  # Попытка откатиться
+            if rollback_or_update == '2':  # Попытка откатиться
                 template_some_message(RED, '-- You can try roll back --')
                 change = input(template_question(' - Roll back? (y/n): '))
                 if change == 'y':
                     install_old_saved_version()
-            elif rollback_or_update == '2':  # Попытка обновиться
+            elif rollback_or_update == '1':  # Попытка обновиться
                 get_confirm = input(template_question(" - Update? (y/n): "))
                 if get_confirm == 'y':
                     write_log('Try update', 'Run')
