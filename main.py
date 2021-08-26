@@ -63,6 +63,22 @@ FIELDS_LOG_FILE = ['version', 'date', 'cause', 'status']
 # <<<--------------  Репозиторий для обновлений  -------------->>>
 REPOSITORY = 'git clone https://github.com/Berliner187/elba -b delta'
 
+# <<<--------------  Модули для работы программы  -------------->>>
+stock_modules = [
+    'datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
+    'del_object_obs.py', 'notes_obs.py', 'information_obs.py',
+    'actions_with_password_obs.py', 'category_actions_obs.py',
+    'decryption_block_obs.py', 'settings_obs.py', 'update_obs.py'
+]
+
+# <<< -------- Цветовые акценты в программе -------- >>>
+dictionary_colors = {
+    'ACCENT_1': '#FBC330',
+    'ACCENT_2': '#9B30FF',
+    'ACCENT_3': '#30A0E0',
+    'ACCENT_4': '#FFFFFF',
+}
+
 
 def get_size_of_terminal():
     """ Получение ширины и длины терминала """
@@ -104,23 +120,6 @@ def template_question(text):
     """ Шаблон вопросов от программы """
     question = input(ACCENT_1 + f" - {text} (y/n): " + ACCENT_4)
     return question
-
-
-# <<<--------------  Модули для работы программы  -------------->>>
-stock_modules = [
-    'datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
-    'del_object_obs.py', 'notes_obs.py', 'information_obs.py',
-    'actions_with_password_obs.py', 'category_actions_obs.py',
-    'decryption_block_obs.py', 'settings_obs.py', 'update_obs.py'
-]
-
-# <<< -------- Цветовые акценты в программе -------- >>>
-dictionary_colors = {
-    'ACCENT_1': '#FBC330',
-    'ACCENT_2': '#9B30FF',
-    'ACCENT_3': '#30A0E0',
-    'ACCENT_4': '#FFFFFF',
-}
 
 
 def format_hex_color(hex_color):

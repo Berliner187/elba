@@ -6,7 +6,6 @@ from del_object_obs import delete_object
 
 from csv import DictReader, DictWriter
 from time import sleep
-from shutil import copyfile
 import os
 
 

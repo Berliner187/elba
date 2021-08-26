@@ -88,8 +88,8 @@ class CategoryActions:
             lines_instruction = [
                 ACCENT_3,
                 '  - Press "Enter" to go back  ',
-                '  - Enter "-a" to add new note',
-                '  - Enter "-d" to remove note '
+                '  - Enter \'-a\' to add new note',
+                '  - Enter \'-d\' to remove note '
             ]
         # Для шифрованных файлов:
         elif self.category == 'encryption':
