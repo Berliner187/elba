@@ -9,16 +9,16 @@ from main import *
 from enc_obs import *
 from logo_obs import *
 
-import random
 from time import sleep
 import os
 import re
+import random
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
 
 
-__version__ = 'P-0.8.7_M-1.0'
+__version__ = 'P-0.8.7_M-2.0'
 
 
 cols = get_size_of_terminal()
@@ -60,7 +60,7 @@ class ActionsWithPassword:
         def generation_new_password(length_password, add_random_symbols):
             """ Функция создания случайного пароля """
             symbols_for_password = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
-            additional_symbols = '!@#$%^&*()_-+[]{}?'
+            additional_symbols = '!#$*()_-+[]{}?'
             if add_random_symbols:
                 symbols_for_password += additional_symbols
             while True:
@@ -115,7 +115,7 @@ class ActionsWithPassword:
             return password
         # Получение общего ключа
         elif self.type_pas == 'generic':
-            generic = generation_new_password(32, False)
+            generic = generation_new_password(random.randrange(2**5, 2**6), False)
             hash_to_file = generate_password_hash(generic)
             hash_gen = open(FILE_WITH_HASH_GENERIC_KEY, 'w')
             hash_gen.write(hash_to_file)
