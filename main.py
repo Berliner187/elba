@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'P-0.9.0.0'
+__version__ = 'P-0.9.0.1'
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -118,8 +118,7 @@ def template_for_install(program_file):
 
 def template_question(text):
     """ Шаблон вопросов от программы """
-    question = input(ACCENT_1 + f" - {text} (y/n): " + ACCENT_4)
-    return question
+    return input(ACCENT_1 + f" - {text} (y/n): " + ACCENT_4)
 
 
 def format_hex_color(hex_color):

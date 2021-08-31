@@ -23,7 +23,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from Crypto.Cipher import AES
 
 
-__version__ = 'P-0.8.7_M-1.2'
+__version__ = 'P-0.8.7_M-1.3'
 
 
 class AESCipher(object):
@@ -251,10 +251,12 @@ class WorkWithUserFiles:
 
                 os.chdir(FOLDER_FOR_ENCRYPTION_FILES)
 
+                # Счет всех файлов в папке
                 total_progress = progress = 0
                 for root, dirs, files in os.walk('.', topdown=False):
                     for name in files:
                         total_progress += 1
+                # Шифрование файлов в папке и поддерикториях
                 if total_progress != 0:
                     prefix_new_enc_folder = input(
                         ACCENT_1 + ' - Give a name to the new encrypted folder: ' + ACCENT_4)
@@ -280,7 +282,9 @@ class WorkWithUserFiles:
                                 os.system('mkdir ../' + name_enc_folder + i[0][2:])
                                 system_action('clear')
                                 print_progress('folders', folder_progress, folder_progress_all)
-                        except FileNotFoundError:
+                        except FileNotFoundError as not_found:
+                            print(not_found)
+                            sleep(2)
                             pass
 
                     for root, dirs, files in os.walk('.', topdown=False):
@@ -364,9 +368,12 @@ class WorkWithUserFiles:
                                                 file = os.path.join(root, name)
                                                 file = file.replace(need_folder + '/', '')
 
-                                                enc_key = open(need_folder + '/' + KEY_FILE, 'rb').read()
-                                                enc_iv = open(need_folder + '/' + IV_FILE, 'rb').read()
-
+                                                def open_key_from_file(type_key):
+                                                    return open(need_folder + '/' + type_key, 'rb').read()
+                                                # Открываются ключи
+                                                enc_key = open_key_from_file(KEY_FILE)
+                                                enc_iv = open_key_from_file(IV_FILE)
+                                                # Дешифруются ключи
                                                 key = dec_keyiv(enc_key, self.xzibit)
                                                 iv = dec_keyiv(enc_iv, self.xzibit)
 

@@ -1,8 +1,8 @@
 from main import *
-from category_actions_obs import CategoryActions
+import category_actions_obs
 
 
-__version__ = 'P-0.8.7_M-1.1'
+__version__ = 'P-0.8.7_M-1.2'
 
 
 def settings(generic_key):
@@ -57,5 +57,5 @@ def settings(generic_key):
             system_action('clear')
             template_some_message(GREEN, '- Success -')
             sleep(1)
-    CategoryActions(generic_key, 'resource').get_category_label()
+    category_actions_obs.CategoryActions(generic_key, 'resource').get_category_label()
     write_log('Settings', 'Run')
