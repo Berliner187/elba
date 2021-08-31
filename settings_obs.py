@@ -2,7 +2,7 @@ from main import *
 from category_actions_obs import CategoryActions
 
 
-__version__ = 'P-0.8.7_M-1.0'
+__version__ = 'P-0.8.7_M-1.1'
 
 
 def settings(generic_key):
@@ -10,11 +10,7 @@ def settings(generic_key):
     write_log('Settings', 'Run')
     template_some_message(GREEN, '--- Settings ---')
     # Варианты настройки
-    lines_set = [
-        f'{ACCENT_3}1. {ACCENT_1}Customize colors accent'
-    ]
-    for line in lines_set:
-        print(line)
+    print(f'{ACCENT_3}1. {ACCENT_1}Customize colors accent')
 
     change_in_settings = input('\n - Change setting by number: ')
     if change_in_settings == '1':
