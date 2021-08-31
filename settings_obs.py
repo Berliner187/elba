@@ -8,7 +8,7 @@ __version__ = 'P-0.8.7_M-1.0'
 def settings(generic_key):
     system_action('clear')
     write_log('Settings', 'Run')
-    template_some_message(GREEN, ' --- Settings --- ')
+    template_some_message(GREEN, '--- Settings ---')
     # Варианты настройки
     lines_set = [
         f'{ACCENT_3}1. {ACCENT_1}Customize colors accent'

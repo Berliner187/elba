@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'P-0.8.7.3'
+__version__ = 'P-0.9.0.0'
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -36,8 +36,8 @@ FOLDER_WITH_ENC_DATA = FOLDER_WITH_DATA + 'ENCRYPTION_DATA/'
 FOLDER_FOR_ENCRYPTION_FILES = FOLDER_WITH_ENC_DATA + 'FOR_ENCRYPTION'
 PREFIX_FOR_DEC_FILE = 'DEC_'
 FILE_CONTROL_SUM = 'CONTROL.dat'
-KEY_FILE = 'BESTE.key'
-IV_FILE = 'LEBEN.key'
+KEY_FILE = '---KEY_1---.key'
+IV_FILE = '---KEY_2---.key'
 SIGNED = 'SIGN.dat'
 # <<<------------ Имена файлов для ресурсов и заметок ------------>>>
 FILE_RESOURCE = 'resource.dat'

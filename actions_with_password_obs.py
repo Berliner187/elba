@@ -18,7 +18,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
 
 
-__version__ = 'P-0.8.7_M-2.0'
+__version__ = 'P-0.8.7_M-2.2'
 
 
 cols = get_size_of_terminal()
@@ -39,6 +39,8 @@ def create_and_confirm_user_password():
             quit()
         if len(password) < 8:
             template_red_messages("Make sure your password is at lest 8 letters".center(cols))
+        elif len(password) > 64:
+            template_red_messages("Maximální délka hesla - 64 Symbol".center(cols))
         elif password != confirm_password:
             template_red_messages("Passwords don't match".center(cols))
         elif re.search('[0-9]', password) is None:
@@ -69,9 +71,11 @@ class ActionsWithPassword:
                     for i in range(length_password):
                         new_password += random.choice(symbols_for_password)
                     return new_password
-                else:
+                elif length_password < 8:
                     template_some_message(RED, ' The length must be at least 8 characters \n')
                     length_password = int(input(ACCENT_1 + ' - Length: ' + ACCENT_4))
+                elif len(password) > 64:
+                    template_red_messages("Maximální délka hesla - 64 Symbol".center(cols))
 
         # Создание мастер-пароля, создание хеша и сохранение в файл
         if self.type_pas == 'master':
@@ -186,19 +190,18 @@ def choice_generation_or_save_self_password(resource, login, master_password):
           f"{ACCENT_3}1.{ACCENT_1} - Generation new password \n",
           f"{ACCENT_3}2.{ACCENT_1} - Save your password      \n")
     print(ACCENT_4)
-    change_type = int(input('Change (1/2): '))
-    if change_type == 1:  # Генерирование пароля и сохранение в файл
-        password = ActionsWithPassword('gen_new').get_password()
-        save_data_to_file(resource, login, password, master_password, 'resource')
-    elif change_type == 2:  # Сохранение пользовательского пароля
-        password = ActionsWithPassword('self').get_password()
-        save_data_to_file(resource, login, password, master_password, 'resource')
-    else:   # Если ошибка выбора
-        print(f"{RED}\n  -- Error of change. Please, change again -- {ACCENT_4}")
-        sleep(1)
+    while True:
+        change_type = int(input('Change (1/2): '))
+        if change_type == 1:  # Генерирование пароля и сохранение в файл
+            password = ActionsWithPassword('gen_new').get_password()
+            save_data_to_file(resource, login, password, master_password, 'resource')
+        elif change_type == 2:  # Сохранение пользовательского пароля
+            password = ActionsWithPassword('self').get_password()
+            save_data_to_file(resource, login, password, master_password, 'resource')
+        else:   # Если ошибка выбора
+            print(f"{RED}\n  -- Error of change. Please, change again -- {ACCENT_4}")
+            sleep(1)
         system_action('clear')
-        choice_generation_or_save_self_password(resource, login, master_password)
-    system_action('clear')
 
 
 def change_master_password():
