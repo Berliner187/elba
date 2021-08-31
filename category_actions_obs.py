@@ -9,7 +9,7 @@ from enc_obs import *
 from main import *
 
 
-__version__ = 'P-0.8.7_M-1.1'
+__version__ = 'P-0.8.7_M-1.2'
 
 
 cols = get_size_of_terminal()
@@ -99,8 +99,8 @@ class CategoryActions:
             lines_instruction = [
                 ACCENT_3,
                 ' - Press \'Enter\' to exit from encryption',
-                ' - Enter "-e" to encryption files',
-                ' - Enter "-d" to decryption files'
+                ' - Enter \'-e\' to encryption files',
+                ' - Enter \'-d\' to decryption files'
             ]
 
         for line_inst in lines_instruction:
