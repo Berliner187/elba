@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'P-0.9.0.1'
+__version__ = 'P-0.9.0.2'
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -79,7 +79,7 @@ dictionary_colors = {
     'ACCENT_4': '#FFFFFF',
 }
 
-
+# <<< ------- ШИРОКО ИСПОЛЬЗУЕМЫЕ ФУНКЦИИ ------- >>>
 def get_size_of_terminal():
     """ Получение ширины и длины терминала """
     cols, rows = shutil.get_terminal_size()
@@ -157,7 +157,6 @@ else:
 massive_colors = []
 for accent in dictionary_colors:
     massive_colors.append(accent)
-
 # Цвета в терминале
 ACCENT_1 = format_hex_color(dictionary_colors[massive_colors[0]])
 ACCENT_2 = format_hex_color(dictionary_colors[massive_colors[1]])
@@ -167,7 +166,7 @@ GREEN = format_hex_color('#2ECC71')
 RED = format_hex_color('#C70039')
 
 
-# <<< ------- ШИРОКО ИСПОЛЬЗУЕМЫЕ ФУНКЦИИ ------- >>>
+# <<< ------- ДЕЙСТВИЯ С СИСТЕМОЙ ------- >>>
 def system_action(action):
     """ Системные действия (выполнение действия) """
     if action == 'restart':
@@ -268,12 +267,12 @@ def check_modules():
     for mod in range(len(stock_modules)):
         if stock_modules[mod] not in installed_modules:
             cnt_missing_modules += 1
-    if cnt_missing_modules > 0:
-        template_some_message(RED, " - Missing module/modules -")
+    if cnt_missing_modules == 0:
+        return 0
+    else:
+        template_some_message(RED, "- Missing module/modules -")
         write_log('Missing module/modules', 'FAIL')
         return 1
-    else:
-        return 0
 
 
 def launcher():
