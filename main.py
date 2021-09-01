@@ -80,6 +80,8 @@ dictionary_colors = {
 }
 
 # <<< ------- ШИРОКО ИСПОЛЬЗУЕМЫЕ ФУНКЦИИ ------- >>>
+
+
 def get_size_of_terminal():
     """ Получение ширины и длины терминала """
     cols, rows = shutil.get_terminal_size()

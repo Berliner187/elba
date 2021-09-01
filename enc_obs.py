@@ -23,7 +23,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from Crypto.Cipher import AES
 
 
-__version__ = 'P-0.8.7_M-1.3'
+__version__ = 'P-0.8.7_M-1.4'
 
 
 class AESCipher(object):
