@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'P-0.9.0.2'
+__version__ = 'P-0.9.0.3'
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -152,6 +152,7 @@ else:
     with open(FILE_SETTINGS_COLOR, 'r') as file_accent:
         for i in file_accent.readlines():
             dic_colors = i
+        file_accent.close()
     dictionary_colors = eval(dic_colors)
 # Ключи словаря с цветами добавляются в массив
 massive_colors = []
@@ -171,7 +172,7 @@ def system_action(action):
     """ Системные действия (выполнение действия) """
     if action == 'restart':
         system_action('clear')
-        template_some_message(GREEN, ' --- Restart ---')
+        template_some_message(GREEN, '--- Restart ---')
         sleep(.2)
         os.execv(sys.executable, [sys.executable] + sys.argv)
     if action == 'clear':

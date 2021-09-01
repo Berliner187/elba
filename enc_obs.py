@@ -105,9 +105,9 @@ def enc_keyiv(keyiv, xzibit):
     return aes.encrypt(keyiv)
 
 
-def dec_keyiv(enc_keyiv, xzibit):
+def dec_keyiv(enc_saved_keyiv, xzibit):
     aes = AESCipher(xzibit)
-    dec_key = aes.decrypt(enc_keyiv)
+    dec_key = aes.decrypt(enc_saved_keyiv)
     keyiv = str.encode(dec_key)
     keyiv = b64decode(keyiv)
     return keyiv
@@ -188,6 +188,14 @@ class WorkWithUserFiles:
             except ZeroDivisionError:
                 pass
 
+        def count_all_files(dir_with_files):
+            """ Счет всех файлов """
+            cnt_files = 0
+            for root, dirs, files in os.walk(dir_with_files, topdown=False):
+                for name in files:
+                    cnt_files += 1
+            return cnt_files
+
         def encrypt_it(byte_file, key, iv):
             cfb_cipher = AES.new(key, AES.MODE_OFB, iv)
             return cfb_cipher.encrypt(byte_file)
@@ -252,10 +260,8 @@ class WorkWithUserFiles:
                 os.chdir(FOLDER_FOR_ENCRYPTION_FILES)
 
                 # Счет всех файлов в папке
-                total_progress = progress = 0
-                for root, dirs, files in os.walk('.', topdown=False):
-                    for name in files:
-                        total_progress += 1
+                progress = 0
+                total_progress = count_all_files('.')
                 # Шифрование файлов в папке и поддерикториях
                 if total_progress != 0:
                     prefix_new_enc_folder = input(
@@ -270,9 +276,9 @@ class WorkWithUserFiles:
 
                     template_some_message(ACCENT_1, "Beginning Encryption...\n")
 
-                    folder_progress_all = folder_progress = 0
-                    for j in os.walk('.'):
-                        folder_progress_all += 1
+                    folder_progress = 0
+                    # Получение кол-ва файлов в директории
+                    folder_progress_all = count_all_files('.')
                     for i in os.walk('.'):
                         try:
                             if os.path.exists('../' + name_enc_folder + i[0][2:]):
@@ -282,8 +288,8 @@ class WorkWithUserFiles:
                                 os.system('mkdir ../' + name_enc_folder + i[0][2:])
                                 system_action('clear')
                                 print_progress('folders', folder_progress, folder_progress_all)
-                        except FileNotFoundError as not_found:
-                            print(not_found)
+                        except FileNotFoundError as not_found_error:
+                            print(not_found_error)
                             sleep(2)
                             pass
 
@@ -312,7 +318,7 @@ class WorkWithUserFiles:
                         signature.close()
                     template_some_message(GREEN, "Encryption successful \n")
                     os.chdir('../../../')
-                    write_log('Encryption successful', 'OK')
+                    write_log('Encryption successful', 'QUIT')
                 else:
                     system_action('clear')
                     template_some_message(ACCENT_1, 'Empty directory')
@@ -339,12 +345,9 @@ class WorkWithUserFiles:
                             os.chdir(FOLDER_WITH_ENC_DATA)
                             path_to_sign = need_folder + '/' + SIGNED
                             path_to_timed = need_folder + '/' + FILE_CONTROL_SUM
-
-                            cnt_files = 0
-                            for root, dirs, files in os.walk(need_folder, topdown=False):
-                                for name in files:
-                                    cnt_files += 1
-
+                            # Счет всех файлов
+                            cnt_files = count_all_files('.')
+                            # Дешифрование файлов в директории
                             if cnt_files != 0:
                                 if os.path.exists(path_to_sign):
                                     control_sum = dec_aes(path_to_timed, self.xzibit)

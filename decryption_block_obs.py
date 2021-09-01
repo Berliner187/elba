@@ -33,7 +33,7 @@ def decryption_block(generic_key):
             resource = input(ACCENT_1 + ' Resource: ' + ACCENT_4)
             login = input(ACCENT_1 + ' Login: ' + ACCENT_4)
             choice_generation_or_save_self_password(resource, login, generic_key)
-            write_log("Add resource", "OK")
+            write_log("Add resource", "QUIT")
             CategoryActions(generic_key, 'resource').get_category_label()
 
         elif change_resource_or_actions == '-u':    # Обновление программы
@@ -55,17 +55,17 @@ def decryption_block(generic_key):
 
         elif change_resource_or_actions == '-c':    # Смена мастер-пароля
             change_master_password()
-            write_log("Change password", "OK")
+            write_log("Change password", "QUIT")
 
         elif change_resource_or_actions == '-d':    # Удаление ресурса
             delete_object('resource')
             CategoryActions(generic_key, 'resource').get_category_label()
-            write_log("Delete resource", "OK")
+            write_log("Delete resource", "QUIT")
 
         elif change_resource_or_actions == '-n':    # Добавление заметок
             CategoryActions(generic_key, 'note').get_category_label()
             notes(generic_key)
-            write_log("Exit from notes", "OK")
+            write_log("Exit from notes", "QUIT")
 
         elif change_resource_or_actions == '-f':    # Шифрование файлов
             CategoryActions(generic_key, 'encryption').get_category_label()
@@ -79,7 +79,7 @@ def decryption_block(generic_key):
                 system_action('clear')
                 write_log("Try decryption", "RUN")
                 enc_obs.WorkWithUserFiles(generic_key, 'dec').file_encryption_control()
-            write_log("Exit from encrypt", "OK")
+            write_log("Exit from encrypt", "QUIT")
             CategoryActions(generic_key, 'resource').get_category_label()
 
         elif change_resource_or_actions == '-z':    # Удаление всех данных
@@ -94,7 +94,7 @@ def decryption_block(generic_key):
         elif change_resource_or_actions == '-i':
             from information_obs import Information
             Information().get_info()
-            write_log("Get info", "OK")
+            write_log("Get info", "QUIT")
             decryption_block(generic_key)
 
         elif change_resource_or_actions == '-l':
@@ -110,7 +110,7 @@ def decryption_block(generic_key):
                         line[FIELDS_LOG_FILE[2]],
                         line[FIELDS_LOG_FILE[3]]
                     )
-                write_log("Check logs", "OK")
+                write_log("Check logs", "QUIT")
             except KeyError as error:
                 write_log(error, "FAILED")
             template_some_message(ACCENT_1, " - Press Enter to exit - ")
@@ -119,7 +119,7 @@ def decryption_block(generic_key):
             template_remove_folder('rm -r __pycache__/')
             system_action('clear')
             template_some_message(GREEN, " Success delete cache")
-            write_log("Delete cache", "OK")
+            write_log("Delete cache", "QUIT")
             sleep(1)
             system_action('restart')
 
@@ -127,9 +127,9 @@ def decryption_block(generic_key):
             if os.path.exists(OLD_ELBA) is False:
                 template_some_message(ACCENT_1, '- No versions saved - ')
             else:
-                write_log("Try roll back", "OK")
+                write_log("Try roll back", "RUN")
                 install_old_saved_version()
-                write_log("Success roll back", "OK")
+                write_log("Success roll back", "QUIT")
                 system_action('restart')
 
         elif change_resource_or_actions == '-s':    # Пользовательские настройки
