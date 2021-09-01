@@ -23,7 +23,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from Crypto.Cipher import AES
 
 
-__version__ = 'P-0.8.7_M-1.4'
+__version__ = 'P-0.9.0_M-1.1'
 
 
 class AESCipher(object):
@@ -175,6 +175,7 @@ class WorkWithUserFiles:
         name_enc_folder = f"{get_date}_{get_time}"
 
         def print_progress(type_work, current, total):
+            """ Выводит статус шифрования/дешифрования """
             if current < 0:
                 current = 0
             try:
@@ -216,7 +217,7 @@ class WorkWithUserFiles:
             file_to_write.close()
 
         if os.path.exists(FOLDER_WITH_ENC_DATA) is False:
-            os.system('mkdir ' + FOLDER_WITH_ENC_DATA)
+            os.mkdir(FOLDER_WITH_ENC_DATA)
 
         def template_not_confirmed(remove):
             os.chdir('../../')
@@ -267,7 +268,7 @@ class WorkWithUserFiles:
                     prefix_new_enc_folder = input(
                         ACCENT_1 + ' - Give a name to the new encrypted folder: ' + ACCENT_4)
                     name_enc_folder = f"{name_enc_folder}_{prefix_new_enc_folder}/"
-                    system_action(f"{get_peculiarities_system('mkdir')} ../{name_enc_folder}")
+                    os.mkdir(f"../{name_enc_folder}")
 
                     path_to_key = '../' + name_enc_folder + KEY_FILE
                     path_to_iv = '../' + name_enc_folder + IV_FILE
@@ -336,11 +337,12 @@ class WorkWithUserFiles:
                 if cnt == 0:
                     print(ACCENT_1, " - No data encryption - ")
                 change_folder = int(input(ACCENT_1 + '\n - Select folder by number: ' + ACCENT_4))
-                n_cnt = 0
+
+                progress = 0
                 for need_folder in os.listdir(FOLDER_WITH_ENC_DATA):
                     if need_folder[:4] != PREFIX_FOR_DEC_FILE:
-                        n_cnt += 1
-                        if n_cnt == change_folder:
+                        progress += 1
+                        if progress == change_folder:
                             template_some_message(ACCENT_1, "Beginning Decryption...\n")
                             os.chdir(FOLDER_WITH_ENC_DATA)
                             path_to_sign = need_folder + '/' + SIGNED
@@ -359,10 +361,11 @@ class WorkWithUserFiles:
                                             os.mkdir(new_folder)
 
                                         for i in os.walk(need_folder):
-                                            if os.path.exists(new_folder + i[0].replace(need_folder, '')):
+                                            path_to_exist_folder = new_folder + i[0].replace(need_folder, '')
+                                            if os.path.exists(path_to_exist_folder):
                                                 pass
                                             else:
-                                                os.system('mkdir ' + new_folder + i[0].replace(need_folder, ''))
+                                                os.system(get_peculiarities_system('mkdir') + path_to_exist_folder)
 
                                         work_progress = 0
                                         for root, dirs, files in os.walk(need_folder, topdown=False):
