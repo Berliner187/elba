@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'P-0.9.0.3'
+__version__ = 'P-0.9.0.4'
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -110,7 +110,7 @@ def template_remove_folder(some_folder):
 def template_some_message(color, message):
     """ Шаблон сообщения в ходе работы программы """
     cols = get_size_of_terminal()
-    print(color, '\n'*2, message.center(cols), ACCENT_4)
+    print(color, '\n'*2, f"{message.center(cols)}{ACCENT_4}")
 
 
 def template_for_install(program_file):
@@ -323,7 +323,9 @@ if __name__ == '__main__':
         )
         quit()
 
+    # Проверка модулей на наличие
     status_mis_mod = check_modules()
+    # Если модули на месте
     if status_mis_mod == 0:
         from decryption_block_obs import decryption_block
         from enc_obs import enc_aes, dec_aes

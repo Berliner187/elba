@@ -20,7 +20,7 @@ import enc_obs
 from main import *
 
 
-__version__ = 'P-0.8.7_M-1.0'
+__version__ = 'P-0.8.7_M-1.1'
 
 
 def decryption_block(generic_key):
@@ -92,6 +92,7 @@ def decryption_block(generic_key):
                 quit()
 
         elif change_resource_or_actions == '-i':
+            system_action("clear")
             from information_obs import Information
             Information().get_info()
             write_log("Get info", "QUIT")
@@ -114,14 +115,6 @@ def decryption_block(generic_key):
             except KeyError as error:
                 write_log(error, "FAILED")
             template_some_message(ACCENT_1, " - Press Enter to exit - ")
-
-        elif change_resource_or_actions == '-dm':  # Удаление кэша
-            template_remove_folder('rm -r __pycache__/')
-            system_action('clear')
-            template_some_message(GREEN, " Success delete cache")
-            write_log("Delete cache", "QUIT")
-            sleep(1)
-            system_action('restart')
 
         elif change_resource_or_actions == '-o':    # Откат к старой сохраненной версии
             if os.path.exists(OLD_ELBA) is False:

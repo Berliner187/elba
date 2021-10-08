@@ -25,7 +25,7 @@ from category_actions_obs import __version__ as category_actions_ver
 from decryption_block_obs import __version__ as dec_block_ver
 
 
-__version__ = 'P-0.8.7_M-1.1'
+__version__ = 'P-0.8.7_M-1.2'
 
 
 class Information(object):
@@ -33,8 +33,6 @@ class Information(object):
         Вывод версий модулей в консоль, а также
         получение информации о занимаемой памяти в ОЗУ и ПЗУ
     """
-
-    system_action("clear")
 
     @staticmethod
     def save_modules_info():
