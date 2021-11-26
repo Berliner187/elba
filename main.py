@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = '0.9.0.4'
+__version__ = '0.9.0.5'
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -94,7 +94,7 @@ def show_name_program():
     lines = [ACCENT_3,
              "||  Delta For Linux  ||",
              "||  by Berliner187   ||",
-             "||  Veli Afaline     ||",
+             "||  Seal Barrilla    ||",
              ACCENT_1, edit_version
              ]
     wait_effect(lines, 0.0001)
@@ -180,7 +180,7 @@ def system_action(action):
     if action == 'clear':
         os.system('cls' if os.name == 'nt' else 'clear')
     if action == 'file_manager':
-        os.system('explorer.exe .' if os.name == 'nt' else 'nautilus .')
+        os.system('explorer.exe .' if os.name == 'nt' else None)
     else:
         # if action != 'clear':
         os.system(action)

@@ -9,13 +9,13 @@ from enc_obs import *
 from main import *
 
 
-__version__ = '0.9-00'
+__version__ = '0.9-01'
 
 
-cols = get_size_of_terminal()
+cols = get_size_of_terminal()   # Получение масштаба терминала
 
 
-class CategoryActions:
+class CategoryActions(object):
     """
         1. Показ сохраненных ресурсов и действий в этой категории
         2. Показ сохраненных заметок и действий в этой категории
@@ -95,7 +95,7 @@ class CategoryActions:
         elif self.category == 'encryption':
             system_action('clear')
             template_some_message(ACCENT_3,
-                                  "-- Go to the VOLARE/ENCRYPTION_DATA data folder and follow the instructions --")
+                                  f"-- Go to the {FOLDER_WITH_ENC_DATA} data folder and follow the instructions --")
             lines_instruction = [
                 ACCENT_3,
                 ' - Press \'Enter\' to exit from encryption',

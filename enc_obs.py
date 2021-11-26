@@ -232,6 +232,7 @@ class WorkWithUserFiles:
         check_generic_hash = check_password_hash(xzibit_hash_from_file, self.xzibit)
         if check_generic_hash is False:
             print(True)
+            sleep(1)
             template_not_confirmed(True)
         else:
             if self.type_work == 'enc':
