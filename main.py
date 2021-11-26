@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = 'P-0.9.0.4'
+__version__ = '0.9.0.4'
 
 
 # <<<----------------------- Константы --------------------------->>>

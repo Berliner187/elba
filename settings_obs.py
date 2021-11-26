@@ -3,7 +3,7 @@ from main import *
 import category_actions_obs
 
 
-__version__ = 'P-0.8.7_M-1.3'
+__version__ = '0.9-01'
 
 
 def settings(generic_key):

@@ -9,7 +9,7 @@ from time import sleep
 import os
 
 
-__version__ = 'P-0.8.6_M-2.1'
+__version__ = '0.9-00'
 
 
 def notes(generic_key):

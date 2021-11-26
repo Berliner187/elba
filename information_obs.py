@@ -25,7 +25,7 @@ from category_actions_obs import __version__ as category_actions_ver
 from decryption_block_obs import __version__ as dec_block_ver
 
 
-__version__ = 'P-0.8.7_M-1.2'
+__version__ = '0.9-02'
 
 
 class Information(object):

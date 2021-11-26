@@ -10,10 +10,10 @@ from time import sleep
 import os
 
 
-__version__ = 'P8.6_M1.0'
+__version__ = '0.9-00'
 
 
-# def change_master_password():
+def change_master_password():
     """ Смена мастер-пароля """
 
     def get_confirm_master_password():

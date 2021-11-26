@@ -9,7 +9,7 @@ from enc_obs import *
 from main import *
 
 
-__version__ = 'P-0.8.7_M-1.2'
+__version__ = '0.9-00'
 
 
 cols = get_size_of_terminal()

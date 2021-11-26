@@ -19,7 +19,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
 
 
-__version__ = 'P-0.8.7_M-2.3'
+__version__ = '0.9-02'
 
 
 cols = get_size_of_terminal()

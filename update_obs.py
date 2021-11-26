@@ -5,7 +5,7 @@ import os
 from time import sleep
 
 
-__version__ = 'P-0.8.6_M-1.0'
+__version__ = '0.9-00'
 
 
 def update():

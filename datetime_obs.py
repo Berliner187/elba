@@ -15,7 +15,7 @@ import datetime
 from time import sleep
 
 
-__version__ = 'P-0.8.6_M-1.2'
+__version__ = '0.9-02'
 
 SLEEPER_WAIT = .02     # Ожидание вывода никнейма
 

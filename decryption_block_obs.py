@@ -20,7 +20,7 @@ import enc_obs
 from main import *
 
 
-__version__ = 'P-0.8.7_M-1.1'
+__version__ = '0.9-01'
 
 
 def decryption_block(generic_key):

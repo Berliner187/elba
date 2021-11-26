@@ -5,7 +5,7 @@ from time import sleep
 from main import *
 
 
-__version__ = 'P-0.8.6_M-1.1'
+__version__ = '0.9-00'
 
 
 def delete_object(category):
