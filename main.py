@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = '0.9.0.5'
+__version__ = '0.9.0.6__DEBUG__'
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -36,8 +36,8 @@ FOLDER_WITH_ENC_DATA = FOLDER_WITH_DATA + 'ENCRYPTION_DATA/'
 FOLDER_FOR_ENCRYPTION_FILES = FOLDER_WITH_ENC_DATA + 'FOR_ENCRYPTION'
 PREFIX_FOR_DEC_FILE = 'DEC_'
 FILE_CONTROL_SUM = 'CONTROL.dat'
-KEY_FILE = '---KEY_1---.key'
-IV_FILE = '---KEY_2---.key'
+KEY_FILE = '___KEY_1___.key'
+IV_FILE = '___KEY_2___.key'
 SIGNED = 'SIGN.dat'
 # <<<------------ Имена файлов для ресурсов и заметок ------------>>>
 FILE_RESOURCE = 'resource.dat'
@@ -123,6 +123,10 @@ def template_question(text):
     return input(ACCENT_1 + f" - {text} (y/n): " + ACCENT_4)
 
 
+def template_input(text):
+    return input(ACCENT_1 + f" - {text} " + ACCENT_4)
+
+
 def format_hex_color(hex_color):
     """ Получение цвета в формате HEX """
     r, g, b = [int(hex_color[item:item+2], 16) for item in range(1, len(hex_color), 2)]
@@ -178,12 +182,14 @@ def system_action(action):
         sleep(.2)
         os.execv(sys.executable, [sys.executable] + sys.argv)
     if action == 'clear':
-        os.system('cls' if os.name == 'nt' else 'clear')
+        print('\n'*3)
+        # os.system('cls' if os.name == 'nt' else 'clear')
     if action == 'file_manager':
-        os.system('explorer.exe .' if os.name == 'nt' else None)
+        if os.name == 'nt':
+            os.system('explorer.exe .')
     else:
-        # if action != 'clear':
-        os.system(action)
+        if action != 'clear':
+            os.system(action)
 
 
 def get_peculiarities_system(action):

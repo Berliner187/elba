@@ -3,7 +3,7 @@ from main import *
 import category_actions_obs
 
 
-__version__ = '0.9-01'
+__version__ = '0.9-02'
 
 
 def settings(generic_key):
@@ -22,10 +22,10 @@ def settings(generic_key):
 
     # Выбор варианта настройки
     change_in_settings = input('\n - Change setting by number: ')
+
     # Первый вариант
     if change_in_settings == '1':
         system_action('clear')
-
         dic_colors = ''
         with open(FILE_SETTINGS_COLOR, 'r') as f:
             for i in f.readlines():
@@ -42,7 +42,7 @@ def settings(generic_key):
         print(f"{ACCENT_1}{cnt + 1}. {ACCENT_4}Set default color accent")
 
         template_some_message(ACCENT_3, '-- Color emphasis will change after restarting the program --')
-        setting_colors = int(input(ACCENT_1 + ' - Choose a color to change the accent: '))
+        setting_colors = int(template_input('Choose a color to change the accent:'))
         cnt = 0
         # Прокрутка до нужной настройки
         for select in dic_colors:
@@ -67,9 +67,10 @@ def settings(generic_key):
             system_action('clear')
             template_some_message(GREEN, '- Success -')
             sleep(1)
+
     # Второй вариант
     elif change_in_settings == '2':
-        # Оптимизация за счёт удаления лишнего кэша модулей
+        # Оптимизация за счёт очистки кэша
         template_remove_folder('rm -r __pycache__/')
         system_action('clear')
         template_some_message(GREEN, "Success optimization")

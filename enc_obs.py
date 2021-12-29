@@ -23,7 +23,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from Crypto.Cipher import AES
 
 
-__version__ = '0.9-01'
+__version__ = '0.9-02'
 
 
 class AESCipher(object):
@@ -161,17 +161,17 @@ class WorkWithUserFiles:
 
     def file_encryption_control(self):
         """ Управление шифрованием """
-        def new_timed():
-            """ Формирование новой контрольной суммы """
-            castrol = 1
-            for iterate in range(2 ** 10):
-                castrol *= random.randrange(2 ** 5, 2 ** 80)
-            return castrol
-        # <<< Получение времени >>>
+        # Получение времени
         hms = datetime.datetime.today()
         get_date = f"{hms.day}_{hms.month}_{hms.year}"
         get_time = f"{hms.hour}-{hms.minute}-{hms.second}"
-        timed = new_timed()
+
+        castrol = 1
+        for iterate in range(2 ** 10):
+            castrol *= random.randrange(2 ** 5, 2 ** 80)
+            castrol += hms.day * hms.month * hms.year
+
+        timed = castrol
         name_enc_folder = f"{get_date}_{get_time}"
 
         def print_progress(type_work, current, total):
@@ -295,24 +295,32 @@ class WorkWithUserFiles:
                             sleep(2)
                             pass
 
+                    file_size = 0
                     for root, dirs, files in os.walk('.', topdown=False):
                         for name in files:
                             progress += 1
                             file = os.path.join(root, name)
                             file = file[2:]
                             file_data = read_bin_file(file)
+                            file_size += os.path.getsize(file)
+                            if ' ' in file:
+                                file = file.replace(' ', '_')
+                                name_enc_folder = name_enc_folder.replace(' ', '_')
+                                write_bin_file(f"../{name_enc_folder}{file}.elba", encrypt_it(file_data, key, iv))
+                            elif '  ' in file:
+                                file = file.replace('  ', '__')
+                                # safe pass
+                            print(file)
                             try:
                                 write_bin_file(f"../{name_enc_folder}{file}.elba", encrypt_it(file_data, key, iv))
                                 system_action('clear')
                                 print_progress('files', progress, total_progress)
                             except FileNotFoundError:
-                                template_some_message(RED,
-                                                      'Error in encryption file: directory must not contain a SPACE')
-                                write_log('Directory has got space', 'FAIL')
-                                quit()
+                                os.chdir('../../../')
+                                # PASS
                     save_keyiv(key, path_to_key)
                     save_keyiv(iv, path_to_iv)
-                    control_sum = str(timed * timed)
+                    control_sum = str(timed * file_size)
                     enc_aes(path_to_timed, control_sum, self.xzibit)
                     with open(path_to_signed, 'w') as signature:
                         sign_xzibit = generate_password_hash(control_sum)
@@ -336,7 +344,7 @@ class WorkWithUserFiles:
                         cnt += 1
                         print(f"{cnt}. {folder}")
                 if cnt == 0:
-                    print(ACCENT_1, " - No data encryption - ")
+                    template_some_message(ACCENT_1, " - No data encryption - ")
                 change_folder = int(input(ACCENT_1 + '\n - Select folder by number: ' + ACCENT_4))
 
                 progress = 0
@@ -352,10 +360,12 @@ class WorkWithUserFiles:
                             cnt_files = count_all_files('.')
                             # Дешифрование файлов в директории
                             if cnt_files != 0:
+                                # <--- Проверка требований безопасности --->
                                 if os.path.exists(path_to_sign):
                                     control_sum = dec_aes(path_to_timed, self.xzibit)
                                     signature = open(path_to_sign, 'r').readline()
                                     sign_xzibit = check_password_hash(signature, control_sum)
+                                    # Если подпись совпадает
                                     if sign_xzibit:
                                         new_folder = PREFIX_FOR_DEC_FILE + need_folder
                                         if os.path.exists(new_folder) is False:

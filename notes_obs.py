@@ -9,15 +9,15 @@ from time import sleep
 import os
 
 
-__version__ = '0.9-00'
+__version__ = '0.9-01'
 
 
 def notes(generic_key):
     def add_new():  # Добавление новой заметки
         system_action('clear')
         template_some_message(ACCENT_3, '---  Add new note  ---')
-        name_note = input(ACCENT_1 + ' - Name note: ' + ACCENT_4)
-        note_itself = input(ACCENT_1 + ' - Note: ' + ACCENT_4)
+        name_note = template_input('Name note:')
+        note_itself = template_input('Note:')
         save_data_to_file(name_note, note_itself, None, generic_key, 'note')
         template_some_message(GREEN, '-- Success saved! --')
         sleep(.3)
