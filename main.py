@@ -4,7 +4,7 @@
     Password Manager For Linux (SFL)
     Elba - Password manager, keeper notes and encryption files and folders
     Resources and notes related to them are encrypted with a single password
-    Copyright (C) 2021  by Berliner187
+    Copyright (C) 2022  by Berliner187
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = '0.9.0.6__DEBUG__'
+__version__ = '0.9.0.6'
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -182,8 +182,8 @@ def system_action(action):
         sleep(.2)
         os.execv(sys.executable, [sys.executable] + sys.argv)
     if action == 'clear':
-        print('\n'*3)
-        # os.system('cls' if os.name == 'nt' else 'clear')
+        # print('\n'*3)
+        os.system('cls' if os.name == 'nt' else 'clear')
     if action == 'file_manager':
         if os.name == 'nt':
             os.system('explorer.exe .')
@@ -279,8 +279,8 @@ def check_modules():
     if cnt_missing_modules == 0:
         return 0
     else:
-        template_some_message(RED, "- Missing module/modules -")
-        write_log('Missing module/modules', 'FAIL')
+        template_some_message(RED, "- Missing module(-s) -")
+        write_log('Missing module(-s)', 'FAIL')
         return 1
 
 
@@ -304,7 +304,7 @@ def launcher():
         generic_key_from_file = dec_aes(FILE_WITH_GENERIC_KEY, master_password)
         system_action('clear')
         greeting(generic_key_from_file)
-        write_log('Subsequent launch', 'OK')
+        write_log('Authorization', 'OK')
         CategoryActions(generic_key_from_file, 'resource').get_category_label()
         decryption_block(generic_key_from_file)
 
