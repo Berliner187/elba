@@ -9,7 +9,7 @@ from enc_obs import *
 from main import *
 
 
-__version__ = '0.9-02'
+__version__ = '0.9-03'
 
 
 cols = get_size_of_terminal()   # Получение масштаба терминала
@@ -29,9 +29,8 @@ class CategoryActions(object):
 
     def get_category_label(self):
         """ Вывод окна нужной категории """
-        # system_action('clear')
+        system_action('clear')
         separator = "|"
-        sep_for_enc = ""
 
         type_folder = ''
         if self.category == 'resource':
@@ -43,7 +42,7 @@ class CategoryActions(object):
         elif self.category == 'encryption':
             type_folder = FOLDER_WITH_ENC_DATA
 
-        print(ACCENT_2, "|"*44)
+        print(ACCENT_2, "\n", "|"*44)
         print(f" ||||||||||||{separator}{GREEN} ELBA/{self.category.upper()}S {ACCENT_2}{separator}||||||||||||")
         print(ACCENT_2, "|"*44, '\n'*2)
 
