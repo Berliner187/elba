@@ -9,7 +9,7 @@ from enc_obs import *
 from main import *
 
 
-__version__ = '0.9-03'
+__version__ = '0.9-04'
 
 
 cols = get_size_of_terminal()   # Получение масштаба терминала
@@ -20,7 +20,7 @@ class CategoryActions(object):
         1. Показ сохраненных ресурсов и действий в этой категории
         2. Показ сохраненных заметок и действий в этой категории
         3. Показ наименований папок, в которых были зашифрованы файлы,
-        а также и действий в этой категории
+        а также действий в этой категории
     """
 
     def __init__(self, generic_key, category):
@@ -42,6 +42,7 @@ class CategoryActions(object):
         elif self.category == 'encryption':
             type_folder = FOLDER_WITH_ENC_DATA
 
+        # <<< Показ категории >>>
         print(ACCENT_2, "\n", "|"*44)
         print(f" ||||||||||||{separator}{GREEN} ELBA/{self.category.upper()}S {ACCENT_2}{separator}||||||||||||")
         print(ACCENT_2, "|"*44, '\n'*2)
@@ -58,45 +59,59 @@ class CategoryActions(object):
             print(f"{ACCENT_1}   No saved {self.category}s {ACCENT_4}")
 
         # <<< Показ инструкций, которые возможны для выполнения в данном окне >>>
+        def template_show_instructions(key, message):
+            """ Шаблон инструкций для пользователя """
+            user_input = "Enter"
+            if key == 'Enter':
+                user_input = "Press"
+            return f"{ACCENT_3} |  {user_input} {ACCENT_1}{key}{ACCENT_3} to {message}"
+
         # Для ресурсов:
         lines_instruction = []
         if self.category == 'resource':
             backup_message = ''
             if os.path.exists(OLD_ELBA):
-                backup_message = f'{ACCENT_3} |  Enter \'-o\' to rollback'
+                backup_message = template_show_instructions('-O', 'rollback')
             lines_instruction = [
                 ACCENT_3,
-                ' |  Enter \'-r\' to restart, \'-x\' to exit',
-                ' |  Enter \'-a\' to add new resource       ',
-                ' |  Enter \'-d\' to remove resource        ',
-                ' |  Enter \'-c\' to change master-password ',
-                ' |  Enter \'-n\' to go to notes            ',
-                ' |  Enter \'-f\' to encrypt your files     ',
-                ' |  Enter \'-s\' to go to settings         ',
-                ' |  Enter \'-u\' to update program         ',
-                ' |  Enter \'-z\' to remove ALL data        ',
+                template_show_instructions('-R', 'restart'),
+                template_show_instructions('-X', 'exit'),
+                template_show_instructions('-A', 'add new resource'),
+                template_show_instructions('-D', 'remove resource'),
+                template_show_instructions('-C', 'change master-password'),
+                template_show_instructions('-N', 'go to notes'),
+                template_show_instructions('-F', 'encrypt your files'),
+                template_show_instructions('-S', 'go to settings'),
+                template_show_instructions('-U', 'update program'),
+                template_show_instructions('-Z', 'remove ALL data'),
                 backup_message
             ]
+
         # Для заметок:
         elif self.category == 'note':
             lines_instruction = [
                 ACCENT_3,
-                '  - Press "Enter" to go back  ',
-                '  - Enter \'-a\' to add new note',
-                '  - Enter \'-d\' to remove note '
+                template_show_instructions("Enter", 'go back'),
+                template_show_instructions("-A", 'add new note'),
+                template_show_instructions("-D", 'remove note')
             ]
+
         # Для шифрованных файлов:
         elif self.category == 'encryption':
             template_some_message(ACCENT_3,
                                   f"-- Go to the {FOLDER_WITH_ENC_DATA} data folder and follow the instructions --")
             lines_instruction = [
                 ACCENT_3,
-                ' - Press \'Enter\' to exit from encryption',
-                ' - Enter \'-e\' to encryption files',
-                ' - Enter \'-d\' to decryption files'
+                template_show_instructions('Enter', 'exit from encryption'),
+                template_show_instructions('-E', 'encryption files'),
+                template_show_instructions('-D', 'decryption files')
             ]
 
         for line_inst in lines_instruction:
             print(line_inst)
-        if self.category != 'encryption':
+
+        if self.category != 'encryption':   # Исключения для лейбла заметок и ресурсов
             print(ACCENT_1, f'\n [ - Select {self.category} by number - ]\n'.upper(), ACCENT_4)
+
+
+# CategoryActions('xxx', 'encryption').get_category_label()
