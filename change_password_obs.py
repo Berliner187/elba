@@ -25,12 +25,12 @@ def change_master_password():
             if check_master_password:
                 return _confirm_master_password
             else:
-                template_some_message(RED, ' --- Wrong master-password --- ')
+                template_some_message(RED, '--- Wrong master-password ---')
                 sleep(1)
 
     confirm_master_password = get_confirm_master_password()
     system_action('clear')
-    template_some_message(GREEN, '  --  Success confirm  --')
+    template_some_message(GREEN, '--  Success confirm  --')
     sleep(.6)
     system_action('clear')
     template_some_message(ACCENT_3, ' - Pick a new master-password -')
