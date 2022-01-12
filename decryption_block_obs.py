@@ -21,14 +21,14 @@ import enc_obs
 from main import *
 
 
-__version__ = '0.9-02'
+__version__ = '0.9-03'
 
 
 def decryption_block(generic_key):
     """ Цикл с выводом сохраненных ресурсов и выбор действий """
-    change_resource_or_actions = input('\n ELBA: ~$ ')   # Выбор действия
+    change_resource_or_actions = input('\n ELBA: ~$ ').lower()   # Выбор действия
     try:
-        if change_resource_or_actions == '-a':  # Добавление нового ресурса
+        if '-a' in change_resource_or_actions:  # Добавление нового ресурса
             system_action('clear')
             template_some_message(ACCENT_3, '--- Add new resource ---')
             resource = input(ACCENT_1 + ' Resource: ' + ACCENT_4)
@@ -37,53 +37,53 @@ def decryption_block(generic_key):
             write_log("Add resource", "QUIT")
             CategoryActions(generic_key, 'resource').get_category_label()
 
-        elif change_resource_or_actions == '-u':    # Обновление программы
-            system_action('clear')
-            update()
-            CategoryActions(generic_key, 'resource').get_category_label()
-            write_log("Update", "OK")
-
-        elif change_resource_or_actions == '-x':  # Выход
+        elif '-x' in change_resource_or_actions:  # Выход
             system_action('clear')
             template_some_message(ACCENT_3, '--- ELBA CLOSED ---')
             write_log("Exit", "OK")
             quit()
 
-        elif change_resource_or_actions == '-r':  # Перезапуск
+        elif '-r' in change_resource_or_actions:  # Перезапуск
             system_action('clear')
             write_log("Restart", "OK")
             system_action('restart')
 
-        elif change_resource_or_actions == '-c':    # Смена мастер-пароля
+        elif '-c' in change_resource_or_actions:    # Смена мастер-пароля
             change_master_password()
             write_log("Change password", "QUIT")
 
-        elif change_resource_or_actions == '-d':    # Удаление ресурса
+        elif '-d' in change_resource_or_actions:    # Удаление ресурса
             delete_object('resource')
             CategoryActions(generic_key, 'resource').get_category_label()
             write_log("Delete resource", "QUIT")
 
-        elif change_resource_or_actions == '-n':    # Добавление заметок
+        elif '-n' in change_resource_or_actions:    # Добавление заметок
             CategoryActions(generic_key, 'note').get_category_label()
             notes(generic_key)
             write_log("Exit from notes", "QUIT")
 
-        elif change_resource_or_actions == '-f':    # Шифрование файлов
+        elif '-f' in change_resource_or_actions:    # Шифрование файлов
             CategoryActions(generic_key, 'encryption').get_category_label()
-            change_action = input(ACCENT_1 + "\n - Select: " + ACCENT_4)
-            if change_action == '-e':
+            change_action = input(ACCENT_1 + "\n - ELBA/ENCRYPTION: ~$ (-E or -D): " + ACCENT_4)
+            if '-e' in change_action:
                 system_action('clear')
                 system_action('file_manager')
                 write_log("Try encryption", "RUN")
                 enc_obs.WorkWithUserFiles(generic_key, 'enc').file_encryption_control()
-            elif change_action == '-d':
+            elif '-d' in change_action:
                 system_action('clear')
                 write_log("Try decryption", "RUN")
                 enc_obs.WorkWithUserFiles(generic_key, 'dec').file_encryption_control()
             write_log("Exit from encrypt", "QUIT")
             CategoryActions(generic_key, 'resource').get_category_label()
 
-        elif change_resource_or_actions == '-z':    # Удаление всех данных
+        elif '-u' in change_resource_or_actions:    # Обновление программы
+            system_action('clear')
+            update()
+            CategoryActions(generic_key, 'resource').get_category_label()
+            write_log("Update", "OK")
+
+        elif '-z' in change_resource_or_actions:    # Удаление всех данных
             system_action('clear')
             template_some_message(RED, ' - Are you sure you want to delete all data? - ')
             change_yes_or_no = input(ACCENT_1 + ' - Remove ALL data? (y/n): ' + ACCENT_4)
@@ -92,14 +92,14 @@ def decryption_block(generic_key):
                 system_action('clear')
                 quit()
 
-        elif change_resource_or_actions == '-i':
+        elif '-i' in change_resource_or_actions:
             system_action("clear")
             from information_obs import Information
             Information().get_info()
             write_log("Get info", "QUIT")
             decryption_block(generic_key)
 
-        elif change_resource_or_actions == '-l':
+        elif '-l' in change_resource_or_actions:
             system_action("clear")
             template_some_message(GREEN, " Log program from file ")
             log_data = open(FILE_LOG, 'r')
@@ -117,7 +117,7 @@ def decryption_block(generic_key):
                 write_log(error, "FAILED")
             template_some_message(ACCENT_1, " - Press Enter to exit - ")
 
-        elif change_resource_or_actions == '-o':    # Откат к старой сохраненной версии
+        elif '-o' in change_resource_or_actions:    # Откат к старой сохраненной версии
             if os.path.exists(OLD_ELBA) is False:
                 template_some_message(ACCENT_1, '- No versions saved - ')
             else:
@@ -126,11 +126,8 @@ def decryption_block(generic_key):
                 write_log("Success roll back", "QUIT")
                 system_action('restart')
 
-        elif change_resource_or_actions == '-s':    # Пользовательские настройки
+        elif '-s' in change_resource_or_actions:    # Пользовательские настройки
             settings(generic_key)
-
-        elif change_resource_or_actions == '':  # Пасует ошибку
-            CategoryActions(generic_key, 'resource').get_category_label()
 
         else:   # Вывод сохраненных данных о ресурсе
             s = 0

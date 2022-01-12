@@ -235,9 +235,10 @@ def get_peculiarities_system(action):
 def download_from_repository():
     """ Загрузка и установка из репозитория модуля обновлений """
     os.system(REPOSITORY)
+    module_update = 'update_obs.py'
     system_action('clear')
-    if os.path.exists('update_obs.py') is False:
-        os.system(get_peculiarities_system('move') + ' elba/update_obs.py .')
+    if os.path.exists(module_update) is False:
+        os.system(get_peculiarities_system('move') + f' elba/{module_update} .')
         system_action('restart')
 
 
@@ -353,6 +354,7 @@ if __name__ == '__main__':
                   f'\n - Enter 1 to rollback'
                   f'\n - Enter 2 to update')
             rollback_or_update = input(ACCENT_1 + '\n - Select by number: ' + ACCENT_4)
+
             if rollback_or_update == '1':  # Попытка откатиться
                 template_some_message(RED, '-- You can try roll back --')
                 change = input(template_question(' - Roll back? (y/n): '))
@@ -371,6 +373,7 @@ if __name__ == '__main__':
                 template_some_message(RED, '- Error in change -')
                 sleep(1)
             system_action('restart')
+
         except KeyError:
             pass
         except KeyboardInterrupt as keyboard:
