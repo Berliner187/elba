@@ -19,7 +19,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
 
 
-__version__ = '0.9-02'
+__version__ = '0.9-03'
 
 
 cols = get_size_of_terminal()
@@ -157,10 +157,8 @@ class ActionsWithPassword:
             if hash_password is False:
                 system_action('clear')
                 cnt_left -= 1
-                print('\n'*3)
-                print(RED, "-----  Wrong password  -----".center(cols), ACCENT_3)
-                print('\n'*3)
-                print(f"Attempts left: {RED}{cnt_left}".center(cols), ACCENT_4)
+                print(RED, '\n'*3, "-----  Wrong password  -----".center(cols), '\n'*3, ACCENT_3)
+                print(' '*16, f"Attempts left: {RED}{cnt_left}{ACCENT_4}".center(cols))
                 sleep(1)
                 system_action('clear')
                 if cnt_left <= 0:
