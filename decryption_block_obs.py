@@ -2,6 +2,7 @@
 
 """
     Модуль, отвечающий за управление функциями программы.
+    API для взаимодействия пользователя с программой.
     В этом модуле пользователь выбирает дейсвия, необходимые для выполнения,
     а decryption_block передает управление другим модулям.
 """
@@ -20,12 +21,12 @@ import enc_obs
 from main import *
 
 
-__version__ = '0.9-01'
+__version__ = '0.9-02'
 
 
 def decryption_block(generic_key):
     """ Цикл с выводом сохраненных ресурсов и выбор действий """
-    change_resource_or_actions = input('\n Change action: ')   # Выбор действия
+    change_resource_or_actions = input('\n ELBA: ~$ ')   # Выбор действия
     try:
         if change_resource_or_actions == '-a':  # Добавление нового ресурса
             system_action('clear')
@@ -69,7 +70,7 @@ def decryption_block(generic_key):
 
         elif change_resource_or_actions == '-f':    # Шифрование файлов
             CategoryActions(generic_key, 'encryption').get_category_label()
-            change_action = input(ACCENT_1 + "\n - Select by number: " + ACCENT_4)
+            change_action = input(ACCENT_1 + "\n - Select: " + ACCENT_4)
             if change_action == '-e':
                 system_action('clear')
                 system_action('file_manager')
