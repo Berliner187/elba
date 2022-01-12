@@ -9,7 +9,7 @@ from enc_obs import *
 from main import *
 
 
-__version__ = '0.9-01'
+__version__ = '0.9-02'
 
 
 cols = get_size_of_terminal()   # Получение масштаба терминала
@@ -29,28 +29,23 @@ class CategoryActions(object):
 
     def get_category_label(self):
         """ Вывод окна нужной категории """
-        system_action('clear')
-        separator = '  '
+        # system_action('clear')
+        separator = "|"
+        sep_for_enc = ""
 
         type_folder = ''
         if self.category == 'resource':
             type_folder = FOLDER_WITH_RESOURCES
+            separator += "|"
         elif self.category == 'note':
-            separator *= 2
             type_folder = FOLDER_WITH_NOTES
+            separator += "|||"
         elif self.category == 'encryption':
             type_folder = FOLDER_WITH_ENC_DATA
 
-        lines_show_category = [
-            ACCENT_3,
-            f"    _______________________\n"
-            f"   /\/| {ACCENT_1}\/           \/{ACCENT_3} |\/\ \n"
-            f"  /\/\|{ACCENT_1}\/{separator}{self.category.upper()}S{separator}\/{ACCENT_3}|/\/\ \n"
-            f"  {ACCENT_1}    \/               \/",
-            '\n'
-        ]
-        for line_pic_category in lines_show_category:
-            print(line_pic_category.center(cols))
+        print(ACCENT_2, "|"*44)
+        print(f" ||||||||||||{separator}{GREEN} ELBA/{self.category.upper()}S {ACCENT_2}{separator}||||||||||||")
+        print(ACCENT_2, "|"*44, '\n'*2)
 
         number_saved_data = 0
         for category_item in os.listdir(type_folder):
@@ -59,7 +54,7 @@ class CategoryActions(object):
             else:
                 decryption_data = category_item
             number_saved_data += 1
-            print(f"  {ACCENT_3}{number_saved_data}. {ACCENT_1}{decryption_data}{ACCENT_4}")
+            print(f" {ACCENT_3}[{ACCENT_1}{number_saved_data}{ACCENT_3}] {ACCENT_1}{decryption_data}{ACCENT_4}")
         if number_saved_data == 0:
             print(f"{ACCENT_1}   No saved {self.category}s {ACCENT_4}")
 
@@ -69,18 +64,18 @@ class CategoryActions(object):
         if self.category == 'resource':
             backup_message = ''
             if os.path.exists(OLD_ELBA):
-                backup_message = f'{ACCENT_3} - Enter \'-o\' to rollback'
+                backup_message = f'{ACCENT_3} |  Enter \'-o\' to rollback'
             lines_instruction = [
                 ACCENT_3,
-                ' - Enter \'-r\' to restart, \'-x\' to exit',
-                ' - Enter \'-a\' to add new resource       ',
-                ' - Enter \'-d\' to remove resource        ',
-                ' - Enter \'-c\' to change master-password ',
-                ' - Enter \'-n\' to go to notes            ',
-                ' - Enter \'-f\' to encrypt your files     ',
-                ' - Enter \'-s\' to go to settings         ',
-                ' - Enter \'-u\' to update program         ',
-                ' - Enter \'-z\' to remove ALL data        ',
+                ' |  Enter \'-r\' to restart, \'-x\' to exit',
+                ' |  Enter \'-a\' to add new resource       ',
+                ' |  Enter \'-d\' to remove resource        ',
+                ' |  Enter \'-c\' to change master-password ',
+                ' |  Enter \'-n\' to go to notes            ',
+                ' |  Enter \'-f\' to encrypt your files     ',
+                ' |  Enter \'-s\' to go to settings         ',
+                ' |  Enter \'-u\' to update program         ',
+                ' |  Enter \'-z\' to remove ALL data        ',
                 backup_message
             ]
         # Для заметок:
@@ -93,7 +88,6 @@ class CategoryActions(object):
             ]
         # Для шифрованных файлов:
         elif self.category == 'encryption':
-            system_action('clear')
             template_some_message(ACCENT_3,
                                   f"-- Go to the {FOLDER_WITH_ENC_DATA} data folder and follow the instructions --")
             lines_instruction = [
@@ -105,4 +99,5 @@ class CategoryActions(object):
 
         for line_inst in lines_instruction:
             print(line_inst)
-        print(f'\n{ACCENT_1} Select {self.category} by number \n', ACCENT_4)
+        if self.category != 'encryption':
+            print(ACCENT_1, f'\n [ - Select {self.category} by number - ]\n'.upper(), ACCENT_4)
