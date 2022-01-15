@@ -2,6 +2,11 @@
 
 With this program you can securely store passwords to resources, store encrypted notes, and encrypt any type of files.
 
+Update to v0.9.x:
+- Modified interface
+- Improved code due to unnecessary removal
+- Improved file encryption security
+
 Update to v0.8.x:
 - Added optional resource addition at the beginning
 
