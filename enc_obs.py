@@ -14,6 +14,7 @@ from time import sleep
 from base64 import urlsafe_b64encode, urlsafe_b64decode
 from base64 import b64encode, b64decode
 import sys
+import shutil
 
 from main import *
 
@@ -23,7 +24,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from Crypto.Cipher import AES
 
 
-__version__ = '0.9-02'
+__version__ = '0.9-10-B01'
 
 
 class AESCipher(object):
@@ -171,7 +172,7 @@ class WorkWithUserFiles:
             castrol *= random.randrange(2 ** 5, 2 ** 80)
             castrol += hms.day * hms.month * hms.year
 
-        timed = castrol
+        get_control_sum = castrol
         name_enc_folder = f"{get_date}_{get_time}"
 
         def print_progress(type_work, current, total):
@@ -191,18 +192,18 @@ class WorkWithUserFiles:
 
         def count_all_files(dir_with_files):
             """ Счет всех файлов """
-            cnt_files = 0
-            for root, dirs, files in os.walk(dir_with_files, topdown=False):
-                for name in files:
-                    cnt_files += 1
-            return cnt_files
+            cnt_files_dir = 0
+            for root_dir, all_dirs, files_dir in os.walk(dir_with_files, topdown=False):
+                for _foo in files_dir:  # _foo - не используется
+                    cnt_files_dir += 1
+            return cnt_files_dir
 
-        def encrypt_it(byte_file, key, iv):
-            cfb_cipher = AES.new(key, AES.MODE_OFB, iv)
+        def encrypt_it(byte_file, e_key, e_iv):
+            cfb_cipher = AES.new(e_key, AES.MODE_OFB, e_iv)
             return cfb_cipher.encrypt(byte_file)
 
-        def decrypt_it(byte_file, key, iv):
-            cfb_decipher = AES.new(key, AES.MODE_OFB, iv)
+        def decrypt_it(byte_file, d_key, d_iv):
+            cfb_decipher = AES.new(d_key, AES.MODE_OFB, d_iv)
             return cfb_decipher.decrypt(byte_file)
 
         def read_bin_file(directory):
@@ -230,12 +231,16 @@ class WorkWithUserFiles:
 
         xzibit_hash_from_file = open(FILE_WITH_HASH_GENERIC_KEY).readline()
         check_generic_hash = check_password_hash(xzibit_hash_from_file, self.xzibit)
+        # Проверка подлинности ключа
         if check_generic_hash is False:
-            print(True)
+            print(False)
             sleep(1)
             template_not_confirmed(True)
         else:
             if self.type_work == 'enc':
+                """ 
+                    1. Зашифровка файлов и поддиректорий 
+                """
                 def save_keyiv(key_to_save, file_to_save):
                     file_key = open(file_to_save, mode="wb")
                     keyiv = enc_keyiv(key_to_save, self.xzibit)
@@ -248,10 +253,12 @@ class WorkWithUserFiles:
                 if os.path.exists(FOLDER_FOR_ENCRYPTION_FILES) is False:
                     os.mkdir(FOLDER_FOR_ENCRYPTION_FILES)
 
-                template_some_message(ACCENT_1, " - Please put the files you want to encrypt in \'FOR_ENCRYPTION\'")
+                template_some_message(ACCENT_1,
+                                      f" - Please put the files you want to encrypt in {GREEN}\'FOR_ENCRYPTION\'\n")
 
                 input("Press \'Enter\' key to continue...")
 
+                # Подготовка к шифрованию (создание ключей)
                 system_action('clear')
                 template_some_message(ACCENT_3, "Generating KEY and IV for the recipient")
                 key = Crypto.Random.new().read(AES.block_size)
@@ -264,17 +271,18 @@ class WorkWithUserFiles:
                 # Счет всех файлов в папке
                 progress = 0
                 total_progress = count_all_files('.')
-                # Шифрование файлов в папке и поддерикториях
+
                 if total_progress != 0:
-                    prefix_new_enc_folder = input(
-                        ACCENT_1 + ' - Give a name to the new encrypted folder: ' + ACCENT_4)
+                    # Проверка на пустоту директории
+                    prefix_new_enc_folder = template_input('Give a name to the new encrypted folder:')
+
                     name_enc_folder = f"{name_enc_folder}_{prefix_new_enc_folder}/"
                     os.mkdir(f"../{name_enc_folder}")
 
                     path_to_key = '../' + name_enc_folder + KEY_FILE
                     path_to_iv = '../' + name_enc_folder + IV_FILE
                     path_to_signed = '../' + name_enc_folder + SIGNED
-                    path_to_timed = '../' + name_enc_folder + FILE_CONTROL_SUM
+                    path_to_get_control_sum = '../' + name_enc_folder + FILE_CONTROL_SUM
 
                     template_some_message(ACCENT_1, "Beginning Encryption...\n")
 
@@ -298,30 +306,37 @@ class WorkWithUserFiles:
                     file_size = 0
                     for root, dirs, files in os.walk('.', topdown=False):
                         for name in files:
+                            # for file_from_list in os.listdir('.'):
+                            #     print('List', file_from_list)
                             progress += 1
                             file = os.path.join(root, name)
                             file = file[2:]
                             file_data = read_bin_file(file)
                             file_size += os.path.getsize(file)
-                            if ' ' in file:
-                                file = file.replace(' ', '_')
-                                name_enc_folder = name_enc_folder.replace(' ', '_')
-                                write_bin_file(f"../{name_enc_folder}{file}.elba", encrypt_it(file_data, key, iv))
-                            elif '  ' in file:
-                                file = file.replace('  ', '__')
-                                # safe pass
-                            print(file)
+                            # safe pass
                             try:
-                                write_bin_file(f"../{name_enc_folder}{file}.elba", encrypt_it(file_data, key, iv))
+                                write_bin_file("../" + f"{name_enc_folder}{file}.elba", encrypt_it(file_data, key, iv))
                                 system_action('clear')
                                 print_progress('files', progress, total_progress)
                             except FileNotFoundError:
+                                if ' ' in root:
+                                    fix_root = root.replace(' ', '_')
+                                    fix_root = fix_root[2:]
+                                    os.mkdir(fix_root)
+
+                                    for i in os.listdir('.'):
+                                        shutil.copyfile('', fix_root)
+                                        print(i)
+                                    # file_data = file_data.replace(' ', '_')
+                                    write_bin_file(f"../{name_enc_folder}{file}.elba", encrypt_it(file_data, key, iv))
                                 os.chdir('../../../')
                                 # PASS
+
+                    # Шифрование и сохранение ключей
                     save_keyiv(key, path_to_key)
                     save_keyiv(iv, path_to_iv)
-                    control_sum = str(timed * file_size)
-                    enc_aes(path_to_timed, control_sum, self.xzibit)
+                    control_sum = str(get_control_sum * file_size)
+                    enc_aes(path_to_get_control_sum, control_sum, self.xzibit)
                     with open(path_to_signed, 'w') as signature:
                         sign_xzibit = generate_password_hash(control_sum)
                         signature.write(sign_xzibit)
@@ -336,8 +351,10 @@ class WorkWithUserFiles:
                     write_log('Empty directory', 'PASS')
                 template_remove_folder(FOLDER_FOR_ENCRYPTION_FILES)
                 sleep(2)
-
             elif self.type_work == 'dec':
+                """
+                    2. Дешифровка файлов и поддиректорий
+                """
                 cnt = 0
                 for folder in os.listdir(FOLDER_WITH_ENC_DATA):
                     if folder[:4] != PREFIX_FOR_DEC_FILE:
@@ -355,14 +372,14 @@ class WorkWithUserFiles:
                             template_some_message(ACCENT_1, "Beginning Decryption...\n")
                             os.chdir(FOLDER_WITH_ENC_DATA)
                             path_to_sign = need_folder + '/' + SIGNED
-                            path_to_timed = need_folder + '/' + FILE_CONTROL_SUM
+                            path_to_get_control_sum = need_folder + '/' + FILE_CONTROL_SUM
                             # Счет всех файлов
                             cnt_files = count_all_files('.')
                             # Дешифрование файлов в директории
                             if cnt_files != 0:
                                 # <--- Проверка требований безопасности --->
                                 if os.path.exists(path_to_sign):
-                                    control_sum = dec_aes(path_to_timed, self.xzibit)
+                                    control_sum = dec_aes(path_to_get_control_sum, self.xzibit)
                                     signature = open(path_to_sign, 'r').readline()
                                     sign_xzibit = check_password_hash(signature, control_sum)
                                     # Если подпись совпадает
@@ -376,7 +393,7 @@ class WorkWithUserFiles:
                                             if os.path.exists(path_to_exist_folder):
                                                 pass
                                             else:
-                                                os.system(get_peculiarities_system('mkdir') + path_to_exist_folder)
+                                                os.mkdir(path_to_exist_folder)
 
                                         work_progress = 0
                                         for root, dirs, files in os.walk(need_folder, topdown=False):
@@ -416,3 +433,6 @@ class WorkWithUserFiles:
                                 system_action('clear')
                                 template_some_message(ACCENT_1, 'Empty directory')
                                 sleep(2)
+
+
+WorkWithUserFiles('YxSKGZ1kUaPab3gJdYc2EiP0AKoksFTnPbPjLLDpwJTJScPvSqt2ZMOI34RmQHEI', 'enc').file_encryption_control()
