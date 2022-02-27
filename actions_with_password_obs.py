@@ -114,7 +114,9 @@ class ActionsWithPassword:
                 status_adding_characters = True
             password = generation_new_password(length_new_pas, status_adding_characters)
             print(
-                f'{ACCENT_3}\n - Your new password - {GREEN}{password}{ACCENT_3} - success saved{ACCENT_4}'
+                f'{ACCENT_3}\n - Your new password - '
+                f'{GREEN}{password}{ACCENT_3}'
+                f' - success saved{ACCENT_4}'
             )
             sleep(3)
             return password
