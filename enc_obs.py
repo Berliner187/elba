@@ -435,4 +435,3 @@ class WorkWithUserFiles:
                                 sleep(2)
 
 
-WorkWithUserFiles('YxSKGZ1kUaPab3gJdYc2EiP0AKoksFTnPbPjLLDpwJTJScPvSqt2ZMOI34RmQHEI', 'enc').file_encryption_control()
