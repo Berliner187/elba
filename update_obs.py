@@ -5,7 +5,7 @@ import os
 from time import sleep
 
 
-__version__ = '0.9-00'
+__version__ = '0.9-10'
 
 
 def update():
@@ -60,7 +60,7 @@ def update():
         if os.path.exists(FOLDER_ELBA):
 
             def template_for_copy(item_program):
-                os.system(get_peculiarities_system('file') + item_program + ' ' + OLD_ELBA + elba_version)
+                os.system(get_peculiarities_system('copy_file') + item_program + ' ' + OLD_ELBA + elba_version)
 
             # Создание резервной копии
             if os.path.exists(OLD_ELBA) is False:
@@ -138,7 +138,7 @@ def install_old_saved_version():
         if cnt == change:
             for item in os.listdir(OLD_ELBA + need_version_folder):
                 if item.endswith('.py'):
-                    os.system(get_peculiarities_system('file') + OLD_ELBA + need_version_folder + '/' + item + ' .')
+                    os.system(get_peculiarities_system('copy_file') + OLD_ELBA + need_version_folder + '/' + item + ' .')
             template_remove_folder(FOLDER_WITH_DATA)
             os.system(
                 get_peculiarities_system('copy_dir') + OLD_ELBA + need_version_folder + '/' + FOLDER_WITH_DATA + '/' + ' .'
