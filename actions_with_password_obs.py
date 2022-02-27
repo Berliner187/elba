@@ -19,7 +19,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
 
 
-__version__ = '0.9-03'
+__version__ = '0.9-04'
 
 
 cols = get_size_of_terminal()
@@ -187,23 +187,22 @@ class ActionsWithPassword:
 
 def choice_generation_or_save_self_password(resource, login, master_password):
     """ Выбор пароля: генерирование нового или сохранение пользовательского """
-    system_action('clear')
     print('\n'*2,
           f"{ACCENT_3}1.{ACCENT_1} - Generation new password \n",
           f"{ACCENT_3}2.{ACCENT_1} - Save your password      \n")
     print(ACCENT_4)
-    change_type = int(input('Change (1/2): '))
-    if change_type == 1:  # Генерирование пароля и сохранение в файл
-        password = ActionsWithPassword('gen_new').get_password()
-        save_data_to_file(resource, login, password, master_password, 'resource')
-    elif change_type == 2:  # Сохранение пользовательского пароля
-        password = ActionsWithPassword('self').get_password()
-        save_data_to_file(resource, login, password, master_password, 'resource')
-    else:   # Если ошибка выбора
-        print(f"{RED}\n  -- Error of change. Please, change again -- {ACCENT_4}")
-        sleep(1)
-        choice_generation_or_save_self_password(resource, login, master_password)
-    system_action('clear')
+    while True:
+        change_type = int(input('Change (1/2): '))
+        if change_type == 1:  # Генерирование пароля и сохранение в файл
+            password = ActionsWithPassword('gen_new').get_password()
+            save_data_to_file(resource, login, password, master_password, 'resource')
+        elif change_type == 2:  # Сохранение пользовательского пароля
+            password = ActionsWithPassword('self').get_password()
+            save_data_to_file(resource, login, password, master_password, 'resource')
+        else:   # Если ошибка выбора
+            print(f"{RED}\n  -- Error of change. Please, change again -- {ACCENT_4}")
+            sleep(1)
+        system_action('clear')
 
 
 def change_master_password():
