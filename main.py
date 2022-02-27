@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = '0.9.0.6'
+__version__ = '0.9.0.7'
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -207,12 +207,7 @@ def get_peculiarities_system(action):
             peculiarities_system_action = 'rmdir '
         else:
             peculiarities_system_action = 'rm -r '
-    elif action == 'mkdir':
-        if os.name == 'nt':
-            peculiarities_system_action = 'makedir '
-        else:
-            peculiarities_system_action = 'mkdir '
-    elif action == 'file':
+    elif action == 'copy_file':
         if os.name == 'nt':
             peculiarities_system_action = 'copy '
         else:
@@ -382,4 +377,5 @@ if __name__ == '__main__':
             write_log(keyboard, "CLOSE")
             quit()
     else:
+        # Попытка установить отсутствующие модули
         update()
