@@ -182,8 +182,8 @@ def system_action(action):
         sleep(.2)
         os.execv(sys.executable, [sys.executable] + sys.argv)
     if action == 'clear':
-        # print('\n'*3)
-        os.system('cls' if os.name == 'nt' else 'clear')
+        print('\n'*3)
+        # os.system('cls' if os.name == 'nt' else 'clear')
     if action == 'file_manager':
         if os.name == 'nt':
             os.system('explorer.exe .')
@@ -352,11 +352,11 @@ if __name__ == '__main__':
 
             if rollback_or_update == '1':  # Попытка откатиться
                 template_some_message(RED, '-- You can try roll back --')
-                change = input(template_question(' - Roll back? (y/n): '))
+                change = input(template_question(' - Roll back?: '))
                 if change == 'y':
                     install_old_saved_version()
             elif rollback_or_update == '2':  # Попытка обновиться
-                get_confirm = input(template_question(" - Update? (y/n): "))
+                get_confirm = input(template_question(" - Update?: "))
                 if get_confirm == 'n':
                     write_log('Exit', 'OK')
                     quit()
