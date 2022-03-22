@@ -182,8 +182,8 @@ def system_action(action):
         sleep(.2)
         os.execv(sys.executable, [sys.executable] + sys.argv)
     if action == 'clear':
-        print('\n'*3)
-        # os.system('cls' if os.name == 'nt' else 'clear')
+        # print('\n'*3)
+        os.system('cls' if os.name == 'nt' else 'clear')
     if action == 'file_manager':
         if os.name == 'nt':
             os.system('explorer.exe .')
