@@ -19,7 +19,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from stdiomask import getpass
 
 
-__version__ = '0.9-04'
+__version__ = '0.9-05'
 
 
 cols = get_size_of_terminal()
@@ -136,7 +136,7 @@ class ActionsWithPassword:
             show_name_program()
             elba()
             input_master_password = getpass(
-                f"{ACCENT_1}\n\n   --- Enter the master password: {ACCENT_4}"
+                f"{ACCENT_1}\n\n   --- Enter the master-password: {ACCENT_4}"
             )
             if input_master_password == 'x':
                 quit()

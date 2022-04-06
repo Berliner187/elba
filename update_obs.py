@@ -87,6 +87,7 @@ def update():
                     system_action('clear')
                     template_some_message(GREEN, "  - Successfully installed! -")
                     sleep(.7)
+                    authentication_check(False, True)
                     write_log('Upgrade', 'OK')
 
                 template_remove_folder(FOLDER_ELBA)

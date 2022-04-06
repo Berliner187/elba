@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = '0.9.0.7'
+__version__ = '0.9.1.0'
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -53,6 +53,7 @@ FILE_WITH_HASH = FOLDER_WITH_PROGRAM_DATA + '.hash_password.dat'
 FILE_LOG = FOLDER_WITH_PROGRAM_DATA + '.file.log'
 FILE_SETTINGS_COLOR = FOLDER_WITH_PROGRAM_DATA + 'setting_color_accent.ini'
 FILE_PROGRAM_INFO = FOLDER_WITH_PROGRAM_DATA + 'info.dat'
+FILE_WITH_SHA256 = FOLDER_WITH_PROGRAM_DATA + 'SHA256.dat'
 # <<<------------- Проверка файлов на наличие --------------->>>
 CHECK_FILE_WITH_GENERIC = os.path.exists(FILE_WITH_HASH_GENERIC_KEY)
 CHECK_FILE_WITH_HASH = os.path.exists(FILE_WITH_HASH)
@@ -91,12 +92,18 @@ def get_size_of_terminal():
 def show_name_program():
     from logo_obs import wait_effect
     edit_version = __version__ + ' '
-    lines = [ACCENT_3,
-             "||  Delta For Linux  ||",
-             "||  by Berliner187   ||",
-             "||  Seal Barrilla    ||",
-             ACCENT_1, edit_version
-             ]
+    lines = [
+        ACCENT_3,
+        f"#####################",
+        f"#####################",
+        f"{ACCENT_1}                  #####################",
+        f"#####################",
+        ACCENT_3,
+        "||  Delta For Linux  ||",
+        "||  by Berliner187   ||",
+        "||  Seal Barrilla    ||",
+        ACCENT_1, edit_version
+    ]
     wait_effect(lines, 0.0001)
     if CHECK_FOLDER_FOR_RESOURCE is False:
         first_start_message()
@@ -227,6 +234,70 @@ def get_peculiarities_system(action):
     return peculiarities_system_action
 
 
+def authentication_check(first_start, after_update):
+    """ Проверка программы на подлинность """
+
+    def bin_reading_modules():
+        """ Чтение модулей и запись в строку подряд """
+        string_all_modules = ''
+        # Добавление в хэш главного файла (main.py)
+        with open('main.py', 'rb') as binary_main:
+            string_all_modules += str(binary_main.readlines())
+        # Прокрутка имеющихся модулей
+        for module in stock_modules:
+            with open(module, 'rb') as binary_module:
+                string_all_modules += str(binary_module.readlines())
+                binary_module.close()
+        return string_all_modules
+
+    def create_signature():
+        # Прокрутка имеющихся модулей
+        reading_all_modules = bin_reading_modules()
+        hash_module = generate_password_hash(reading_all_modules)
+        with open(FILE_WITH_SHA256, 'w') as sha256:
+            sha256.write(hash_module)
+            sha256.close()
+        system_action('clear')
+        template_some_message(GREEN, 'Program signature created')
+        sleep(2)
+        system_action('clear')
+
+    write_log('Authentication check', 'START')
+    if os.path.exists(FILE_WITH_SHA256) is False:
+        write_log('Not verified', 'WAIT')
+        template_some_message(RED, 'It is impossible to establish the authenticity of the program')
+        sleep(3)
+        change_continue_or_not = template_question('Continue?')
+        if change_continue_or_not == 'y':
+            write_log('Not verified: setting current', 'OK')
+            # Прокрутка имеющихся модулей
+            create_signature()
+        else:
+            system_action('clear')
+            template_some_message(RED, 'REFUSAL')
+            write_log('Not confirmed', 'EXIT')
+            quit()
+    else:
+        # Чтение имеющихся модулей
+        reading_all_modules = bin_reading_modules()
+        # Чтение хэша
+        with open(FILE_WITH_SHA256, 'r') as hash_modules:
+            saved_hash_modules = hash_modules.readline()
+        # Проверка на подлинность
+        check = check_password_hash(saved_hash_modules, str(reading_all_modules))
+        if (check and after_update) is False:
+            template_some_message(RED, 'The authenticity of the program is not installed')
+            sleep(2)
+            quit()
+        if first_start:
+            system_action('clear')
+            template_some_message(GREEN, 'Signature is valid!')
+            sleep(2)
+            system_action('clear')
+        if after_update:
+            create_signature()
+
+
 def download_from_repository():
     """ Загрузка и установка из репозитория модуля обновлений """
     os.system(REPOSITORY)
@@ -284,8 +355,9 @@ def launcher():
     """ The main function responsible for the operation of the program """
     system_action('clear')
     write_log('-', '-')
-    Information().save_modules_info()
+    Information().save_modules_info()   # Запись информации о версии
     if CHECK_FOLDER_FOR_RESOURCE is False:  # При первом запуске
+        authentication_check(True, False)  # Проверка на подлинность
         show_name_program()
         master_password = ActionsWithPassword('master').get_password()
         generic_key = ActionsWithPassword('generic').get_password()
@@ -296,6 +368,7 @@ def launcher():
         write_log('First launch', 'OK')
         decryption_block(generic_key)
     else:  # При последующем
+        authentication_check(False, False)  # Проверка на подлинность
         master_password = ActionsWithPassword(None).point_of_entry()
         generic_key_from_file = dec_aes(FILE_WITH_GENERIC_KEY, master_password)
         system_action('clear')
