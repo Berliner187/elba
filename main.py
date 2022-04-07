@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = '0.9.1.0'
+__version__ = '0.9.1.1'
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -53,7 +53,8 @@ FILE_WITH_HASH = FOLDER_WITH_PROGRAM_DATA + '.hash_password.dat'
 FILE_LOG = FOLDER_WITH_PROGRAM_DATA + '.file.log'
 FILE_SETTINGS_COLOR = FOLDER_WITH_PROGRAM_DATA + 'setting_color_accent.ini'
 FILE_PROGRAM_INFO = FOLDER_WITH_PROGRAM_DATA + 'info.dat'
-FILE_WITH_SHA256 = FOLDER_WITH_PROGRAM_DATA + 'SHA256.dat'
+FILE_WITH_SHA256 = 'ELBA_CPA.sign'  # Confirmed Protocol Authenticity
+# FILE_WITH_SECRET_KEY_FOR_SHA256 = ''
 # <<<------------- Проверка файлов на наличие --------------->>>
 CHECK_FILE_WITH_GENERIC = os.path.exists(FILE_WITH_HASH_GENERIC_KEY)
 CHECK_FILE_WITH_HASH = os.path.exists(FILE_WITH_HASH)
@@ -251,9 +252,9 @@ def authentication_check(first_start, after_update):
         return string_all_modules
 
     def create_signature():
-        # Прокрутка имеющихся модулей
-        reading_all_modules = bin_reading_modules()
-        hash_module = generate_password_hash(reading_all_modules)
+        # Чтение имеющихся модулей
+        reading_all_modules_for_sign = bin_reading_modules()
+        hash_module = generate_password_hash(reading_all_modules_for_sign)
         with open(FILE_WITH_SHA256, 'w') as sha256:
             sha256.write(hash_module)
             sha256.close()
@@ -266,7 +267,7 @@ def authentication_check(first_start, after_update):
     if os.path.exists(FILE_WITH_SHA256) is False:
         write_log('Not verified', 'WAIT')
         template_some_message(RED, 'It is impossible to establish the authenticity of the program')
-        sleep(3)
+        sleep(2)
         change_continue_or_not = template_question('Continue?')
         if change_continue_or_not == 'y':
             write_log('Not verified: setting current', 'OK')
@@ -285,7 +286,7 @@ def authentication_check(first_start, after_update):
             saved_hash_modules = hash_modules.readline()
         # Проверка на подлинность
         check = check_password_hash(saved_hash_modules, str(reading_all_modules))
-        if (check and after_update) is False:
+        if (check or after_update) is False:
             template_some_message(RED, 'The authenticity of the program is not installed')
             sleep(2)
             quit()
