@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = '0.9.1.1'
+__version__ = '0.9.1.1_DEV'
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -51,6 +51,7 @@ FILE_WITH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.generic_key.dat'
 FILE_USER_NAME = FOLDER_WITH_PROGRAM_DATA + '.self_name.dat'
 FILE_WITH_HASH = FOLDER_WITH_PROGRAM_DATA + '.hash_password.dat'
 FILE_LOG = FOLDER_WITH_PROGRAM_DATA + '.file.log'
+FILE_SETTINGS_THEMES = FOLDER_WITH_PROGRAM_DATA + 'settings_themes.ini'
 FILE_SETTINGS_COLOR = FOLDER_WITH_PROGRAM_DATA + 'setting_color_accent.ini'
 FILE_PROGRAM_INFO = FOLDER_WITH_PROGRAM_DATA + 'info.dat'
 FILE_WITH_SHA256 = 'ELBA_CPA.sign'  # Confirmed Protocol Authenticity
@@ -74,11 +75,11 @@ stock_modules = [
 ]
 
 # <<< -------- Цветовые акценты в программе -------- >>>
-dictionary_colors = {
+dictionary_default_accents = {
     'ACCENT_1': '#FBC330',
     'ACCENT_2': '#9B30FF',
     'ACCENT_3': '#30A0E0',
-    'ACCENT_4': '#FFFFFF',
+    'ACCENT_4': '#FFFFFF'
 }
 
 # <<< ------- ШИРОКО ИСПОЛЬЗУЕМЫЕ ФУНКЦИИ ------- >>>
@@ -92,18 +93,15 @@ def get_size_of_terminal():
 
 def show_name_program():
     from logo_obs import wait_effect
-    edit_version = __version__ + ' '
     lines = [
         ACCENT_3,
-        f"#####################",
-        f"#####################",
-        f"{ACCENT_1}                  #####################",
-        f"#####################",
-        ACCENT_3,
-        "||  Delta For Linux  ||",
-        "||  by Berliner187   ||",
-        "||  Seal Barrilla    ||",
-        ACCENT_1, edit_version
+        f"E  DELTA FOR LINUX  A",
+        f"L  by Berliner187   B",
+        f"B  Seal Barrilla    L",
+        f"A       DISCO       E",
+        ACCENT_2,
+        "_" * get_size_of_terminal(),
+        ACCENT_1, __version__
     ]
     wait_effect(lines, 0.0001)
     if CHECK_FOLDER_FOR_RESOURCE is False:
@@ -152,31 +150,36 @@ for folder in FOLDERS:
 
 
 # <<< ----------- ЦВЕТОВЫЕ АКЦЕНТЫ ------------- >>>
-# Работа с акцентами в файле
-if os.path.exists(FILE_SETTINGS_COLOR) is False:
+
+def create_file_with_theme(record_content):
     with open(FILE_SETTINGS_COLOR, 'w') as f:
         f.write('')
         f.close()
     # Сохранение цветов в файл
     with open(FILE_SETTINGS_COLOR, 'w+') as f:
-        f.write(str(dictionary_colors))
+        f.write(str(record_content))
+
+
+# < ----- Работа с акцентами в файле >
+if os.path.exists(FILE_SETTINGS_COLOR) is False:    # При отсутствии файла
+    create_file_with_theme(dictionary_default_accents)
 else:
-    # Получение акцента цветов из файла
+    # Получение цветовой схемы из файла
     dic_colors = ''
     with open(FILE_SETTINGS_COLOR, 'r') as file_accent:
         for i in file_accent.readlines():
             dic_colors = i
         file_accent.close()
-    dictionary_colors = eval(dic_colors)
+    dictionary_default_accents = eval(dic_colors)
 # Ключи словаря с цветами добавляются в массив
 massive_colors = []
-for accent in dictionary_colors:
+for accent in dictionary_default_accents:
     massive_colors.append(accent)
 # Цвета в терминале
-ACCENT_1 = format_hex_color(dictionary_colors[massive_colors[0]])
-ACCENT_2 = format_hex_color(dictionary_colors[massive_colors[1]])
-ACCENT_3 = format_hex_color(dictionary_colors[massive_colors[2]])
-ACCENT_4 = format_hex_color(dictionary_colors[massive_colors[3]])
+ACCENT_1 = format_hex_color(dictionary_default_accents[massive_colors[0]])
+ACCENT_2 = format_hex_color(dictionary_default_accents[massive_colors[1]])
+ACCENT_3 = format_hex_color(dictionary_default_accents[massive_colors[2]])
+ACCENT_4 = format_hex_color(dictionary_default_accents[massive_colors[3]])
 GREEN = format_hex_color('#2ECC71')
 RED = format_hex_color('#C70039')
 
@@ -287,9 +290,10 @@ def authentication_check(first_start, after_update):
         # Проверка на подлинность
         check = check_password_hash(saved_hash_modules, str(reading_all_modules))
         if (check or after_update) is False:
-            template_some_message(RED, 'The authenticity of the program is not installed')
-            sleep(2)
-            quit()
+            pass
+            # template_some_message(RED, 'The authenticity of the program is not installed')
+            # sleep(2)
+            # quit()
         if first_start:
             system_action('clear')
             template_some_message(GREEN, 'Signature is valid!')
@@ -334,7 +338,7 @@ def write_log(cause, status_itself):
 
 
 def check_modules():
-    """ Проверка модулей программы """
+    """ Проверка наличия модулей программы """
     cnt_missing_modules = 0
     file_type = 'obs.py'
     installed_modules = []
@@ -370,7 +374,7 @@ def launcher():
         decryption_block(generic_key)
     else:  # При последующем
         authentication_check(False, False)  # Проверка на подлинность
-        master_password = ActionsWithPassword(None).point_of_entry()
+        # master_password = ActionsWithPassword(None).point_of_entry()
         generic_key_from_file = dec_aes(FILE_WITH_GENERIC_KEY, master_password)
         system_action('clear')
         greeting(generic_key_from_file)
@@ -411,45 +415,45 @@ if __name__ == '__main__':
         from logo_obs import first_start_message, elba
         from information_obs import Information
 
-        try:
-            launcher()  # Запуск лончера
-        except Exception or NameError as random_error:
-            write_log(random_error, 'FAIL')
-            template_some_message(RED, ' --- ERROR --- ')
-            print(random_error)
-            sleep(1)
-            system_action('clear')
-            print(f"{ACCENT_3}"
-                  f'\n - Enter 1 to rollback'
-                  f'\n - Enter 2 to update')
-            rollback_or_update = input(ACCENT_1 + '\n - Select by number: ' + ACCENT_4)
-
-            if rollback_or_update == '1':  # Попытка откатиться
-                template_some_message(RED, '-- You can try roll back --')
-                change = input(template_question(' - Roll back?: '))
-                if change == 'y':
-                    install_old_saved_version()
-            elif rollback_or_update == '2':  # Попытка обновиться
-                get_confirm = input(template_question(" - Update?: "))
-                if get_confirm == 'n':
-                    write_log('Exit', 'OK')
-                    quit()
-                else:
-                    write_log('Try update', 'Run')
-                    update()
-            else:
-                system_action('clear')
-                template_some_message(RED, '- Error in change -')
-                sleep(1)
-            system_action('restart')
-
-        except KeyError:
-            pass
-        except KeyboardInterrupt as keyboard:
-            system_action('clear')
-            template_some_message(ACCENT_3, '--- ELBA CLOSED ---')
-            write_log(keyboard, "CLOSE")
-            quit()
+        # try:
+        launcher()  # Запуск лончера
+        # except Exception or NameError as random_error:
+        #     write_log(random_error, 'FAIL')
+        #     template_some_message(RED, ' --- ERROR --- ')
+        #     print(random_error)
+        #     sleep(1)
+        #     system_action('clear')
+        #     print(f"{ACCENT_3}"
+        #           f'\n - Enter 1 to rollback'
+        #           f'\n - Enter 2 to update')
+        #     rollback_or_update = input(ACCENT_1 + '\n - Select by number: ' + ACCENT_4)
+        #
+        #     if rollback_or_update == '1':  # Попытка откатиться
+        #         template_some_message(RED, '-- You can try roll back --')
+        #         change = input(template_question(' - Roll back?: '))
+        #         if change == 'y':
+        #             install_old_saved_version()
+        #     elif rollback_or_update == '2':  # Попытка обновиться
+        #         get_confirm = input(template_question(" - Update?: "))
+        #         if get_confirm == 'n':
+        #             write_log('Exit', 'OK')
+        #             quit()
+        #         else:
+        #             write_log('Try update', 'Run')
+        #             update()
+        #     else:
+        #         system_action('clear')
+        #         template_some_message(RED, '- Error in change -')
+        #         sleep(1)
+        #     system_action('restart')
+        #
+        # except KeyError:
+        #     pass
+        # except KeyboardInterrupt as keyboard:
+        #     system_action('clear')
+        #     template_some_message(ACCENT_3, '--- ELBA CLOSED ---')
+        #     write_log(keyboard, "CLOSE")
+        #     quit()
     else:
         # Попытка установить отсутствующие модули
         update()

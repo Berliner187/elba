@@ -3,29 +3,35 @@ from main import *
 import category_actions_obs
 
 
-__version__ = '0.9-02'
+__version__ = '0.9-10'
 
 
 def settings(generic_key):
-    system_action('clear')
     write_log('Settings', 'Run')
-    template_some_message(GREEN, '--- Settings ---')
+    system_action('clear')
+    cols = get_size_of_terminal()
+    cols = cols - 1
+    category = 'ELBA/SETTINGS'
+    delta_category_len = (cols - (len('ELBA/SETTINGS') + 4)) // 2
+
+    print(ACCENT_2, "\n", "|" * cols)
+    print("", "|" * delta_category_len, GREEN, category, ACCENT_2, "|" * delta_category_len)
+    print(ACCENT_2, "|" * cols, '\n' * 2)
     # Варианты настройки
     variation_settings = [
-        'Customize colors accent',
-        'Optimization program'
+        'Customize Color Accent',
+        'Manage Themes',
+        'Optimization Program'
     ]
     cnt_variant = 0
     for variant in variation_settings:
         cnt_variant += 1
-        print(f'{ACCENT_3}{cnt_variant}. {ACCENT_1}{variant}')
+        print(f" {ACCENT_3}[{ACCENT_1}{cnt_variant}{ACCENT_3}] {ACCENT_1}{variant}{ACCENT_4}")
 
-    # Выбор варианта настройки
-    change_in_settings = input('\n - Change setting by number: ')
-
-    # Первый вариант
-    if change_in_settings == '1':
+    def change_color_accent():
+        """ Управление цветовыми акцентами """
         system_action('clear')
+        # Выгрузка акцентов из файла
         dic_colors = ''
         with open(FILE_SETTINGS_COLOR, 'r') as f:
             for i in f.readlines():
@@ -62,20 +68,77 @@ def settings(generic_key):
                 system_action('clear')
                 template_some_message(GREEN, '- Successfully changed color accent -')
                 sleep(1)
-        if setting_colors == 5:
+        if setting_colors == 5:     # Костыль
             os.system(get_peculiarities_copy('rm') + FILE_SETTINGS_COLOR)
             system_action('clear')
             template_some_message(GREEN, '- Success -')
             sleep(1)
 
-    # Второй вариант
-    elif change_in_settings == '2':
-        # Оптимизация за счёт очистки кэша
-        template_remove_folder('rm -r __pycache__/')
+    def manage_themes():
+        lines_themes = [
+            "Light Theme",
+            "Dark Theme"
+        ]
+
+        light_theme_default = {
+            'ACCENT_1': '#FFFFFF',
+            'ACCENT_2': '#FFFFFF',
+            'ACCENT_3': '#FFFFFF',
+            'ACCENT_4': '#000000',
+        }
+        dark_theme_default = {
+            'ACCENT_1': '#FBC330',
+            'ACCENT_2': '#9B30FF',
+            'ACCENT_3': '#30A0E0',
+            'ACCENT_4': '#FFFFFF'
+        }
+
+        def load_light_theme():
+            create_file_with_theme(light_theme_default)
+
+        def load_dark_theme():
+            create_file_with_theme(dark_theme_default)
+
+        dict_themes = {
+            "1": load_light_theme,
+            "2": load_dark_theme
+        }
+
+        # Прокрутка возможных действий
+        print('\n')
+        s = 0
+        for theme in lines_themes:
+            s += 1
+            print(f" {ACCENT_3}[{ACCENT_1}{s}{ACCENT_3}] {ACCENT_1}{theme}{ACCENT_4}")
+
+        user_change_theme = input(f"\n ELBA/SETTINGS/THEMES: ~$ {ACCENT_4}")
+        try:
+            dict_themes[user_change_theme]()
+            system_action('restart')
+        except KeyError:
+            pass
+
+    def optimisation():
+        """ Оптимизация за счёт очистки кэша """
+        template_remove_folder(get_peculiarities_system('rm_dir') + ' __pycache__/')
         system_action('clear')
         template_some_message(GREEN, "Success optimization")
         write_log("Delete cache", "QUIT")
         sleep(1)
         system_action('restart')
+
+    actions_dict = {
+        "1": change_color_accent,
+        "2": manage_themes,
+        "3": optimisation
+    }
+
+    # Выбор варианта настройки
+    user_change = input('\n ELBA/SETTINGS: ~$ ')
+    try:
+        actions_dict[user_change]()
+    except KeyError:
+        pass
+    # Возвращение в цикл decryption_block
     category_actions_obs.CategoryActions(generic_key, 'resource').get_category_label()
-    write_log('Settings', 'Run')
+    write_log('Settings', 'Exit')

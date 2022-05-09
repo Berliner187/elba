@@ -24,7 +24,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from Crypto.Cipher import AES
 
 
-__version__ = '0.9-10-B01'
+__version__ = '0.9-10-B01_DEV'
 
 
 class AESCipher(object):
@@ -271,14 +271,30 @@ class WorkWithUserFiles:
                 # Счет всех файлов в папке
                 progress = 0
                 total_progress = count_all_files('.')
+                directory = os.walk('.')
 
                 if total_progress != 0:
                     # Проверка на пустоту директории
                     prefix_new_enc_folder = template_input('Give a name to the new encrypted folder:')
 
+                    # !!! УДАЛЕНИЕ ПРОБЕЛОВ В ДИРЕКТОРИЯХ !!!
+                    # for dir_with_file in directory:  # Вывод всех директорий
+                    #     normal_dir_with_file = dir_with_file[0][2:]  # Приведение к нормальному виду
+                    #     massive_name_file = dir_with_file[2]  # Преобразование в нормальное имя файла
+                    #     normal_dir_with_file = str(normal_dir_with_file)  # Преобразование в строку
+                    #     for file in list(massive_name_file):
+                    #         if ' ' in normal_dir_with_file:  # Замена пробела
+                    #             old_dir = normal_dir_with_file
+                    #             new_dir = normal_dir_with_file.replace(' ', '_')
+                    #             if os.path.exists(new_dir) is False:
+                    #                 os.mkdir(new_dir)
+                    #             shutil.copyfile(f"{old_dir}/{file}", f"{new_dir}/{file}")
+                    #             os.system('rm -r ' + old_dir + ' -f')
+
                     name_enc_folder = f"{name_enc_folder}_{prefix_new_enc_folder}/"
                     os.mkdir(f"../{name_enc_folder}")
 
+                    # path_to_key = f'../{name_enc_folder}{KEY_FILE}'
                     path_to_key = '../' + name_enc_folder + KEY_FILE
                     path_to_iv = '../' + name_enc_folder + IV_FILE
                     path_to_signed = '../' + name_enc_folder + SIGNED
@@ -286,16 +302,17 @@ class WorkWithUserFiles:
 
                     template_some_message(ACCENT_1, "Beginning Encryption...\n")
 
-                    folder_progress = 0
                     # Получение кол-ва файлов в директории
+                    folder_progress = 0
                     folder_progress_all = count_all_files('.')
                     for i in os.walk('.'):
+                        print('I =', i[0][2:])
                         try:
-                            if os.path.exists('../' + name_enc_folder + i[0][2:]):
+                            if os.path.exists(f'../{name_enc_folder}%{i[0][2:]}%'):
                                 pass
                             else:
                                 folder_progress += 1
-                                os.system('mkdir ../' + name_enc_folder + i[0][2:])
+                                os.mkdir('../{name_enc_folder}' + f'%{i[0][2:]}%'.upper())
                                 system_action('clear')
                                 print_progress('folders', folder_progress, folder_progress_all)
                         except FileNotFoundError as not_found_error:
@@ -315,20 +332,12 @@ class WorkWithUserFiles:
                             file_size += os.path.getsize(file)
                             # safe pass
                             try:
-                                write_bin_file("../" + f"{name_enc_folder}{file}.elba", encrypt_it(file_data, key, iv))
+                                print('FILE =', file)
+                                write_bin_file(f"../{name_enc_folder}{file}.elba", encrypt_it(file_data, key, iv))
                                 system_action('clear')
                                 print_progress('files', progress, total_progress)
-                            except FileNotFoundError:
-                                if ' ' in root:
-                                    fix_root = root.replace(' ', '_')
-                                    fix_root = fix_root[2:]
-                                    os.mkdir(fix_root)
-
-                                    for i in os.listdir('.'):
-                                        shutil.copyfile('', fix_root)
-                                        print(i)
-                                    # file_data = file_data.replace(' ', '_')
-                                    write_bin_file(f"../{name_enc_folder}{file}.elba", encrypt_it(file_data, key, iv))
+                            except FileNotFoundError as FileNotFound:
+                                print(FileNotFound)
                                 os.chdir('../../../')
                                 # PASS
 
@@ -349,8 +358,10 @@ class WorkWithUserFiles:
                     template_some_message(ACCENT_1, 'Empty directory')
                     os.chdir('../../../')
                     write_log('Empty directory', 'PASS')
+
                 template_remove_folder(FOLDER_FOR_ENCRYPTION_FILES)
                 sleep(2)
+
             elif self.type_work == 'dec':
                 """
                     2. Дешифровка файлов и поддиректорий
@@ -435,3 +446,4 @@ class WorkWithUserFiles:
                                 sleep(2)
 
 
+# WorkWithUserFiles('YxSKGZ1kUaPab3gJdYc2EiP0AKoksFTnPbPjLLDpwJTJScPvSqt2ZMOI34RmQHEI', 'enc').file_encryption_control()

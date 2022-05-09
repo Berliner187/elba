@@ -40,7 +40,7 @@ def decryption_block(generic_key):
         elif '-x' in change_resource_or_actions:  # Выход
             system_action('clear')
             template_some_message(ACCENT_3, '--- ELBA CLOSED ---')
-            write_log("Exit", "OK")
+            write_log("ELBA", "CLOSE")
             quit()
 
         elif '-r' in change_resource_or_actions:  # Перезапуск
