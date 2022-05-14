@@ -30,22 +30,24 @@ class CategoryActions(object):
     def get_category_label(self):
         """ Вывод окна нужной категории """
         system_action('clear')
-        separator = "|"
 
         type_folder = ''
         if self.category == 'resource':
             type_folder = FOLDER_WITH_RESOURCES
-            separator += "|"
         elif self.category == 'note':
             type_folder = FOLDER_WITH_NOTES
-            separator += "|||"
         elif self.category == 'encryption':
             type_folder = FOLDER_WITH_ENC_DATA
 
         # <<< Показ категории >>>
-        print(ACCENT_2, "\n", "|"*44)
-        print(f" ||||||||||||{separator}{GREEN} ELBA/{self.category.upper()}S {ACCENT_2}{separator}||||||||||||")
-        print(ACCENT_2, "|"*44, '\n'*2)
+        def name_on_top():
+            return f"||{GREEN} ELBA/{self.category.upper()}S {ACCENT_2}"
+
+        total_surface_length = "|" * (cols - 1)
+
+        print(ACCENT_2, "\n", total_surface_length)      # 1 строка
+        print(ACCENT_2, name_on_top() + ('|' * (len(total_surface_length) - (len(f'ELBA/{self.category.upper()}S') + 4))))  # 2 строка
+        print(ACCENT_2, total_surface_length, "\n"*2)      # 3 строка
 
         number_saved_data = 0
         for category_item in os.listdir(type_folder):
@@ -114,4 +116,4 @@ class CategoryActions(object):
             print(ACCENT_1, f'\n [ - Select {self.category} by number - ]\n'.upper(), ACCENT_4)
 
 
-# CategoryActions('xxx', 'encryption').get_category_label()
+# CategoryActions('xxx', 'resource').get_category_label()

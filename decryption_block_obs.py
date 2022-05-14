@@ -2,8 +2,8 @@
 
 """
     Модуль, отвечающий за управление функциями программы.
-    API для взаимодействия пользователя с программой.
-    В этом модуле пользователь выбирает дейсвия, необходимые для выполнения,
+    Тут можно подключать новые функции программы.
+    В этом модуле пользователь выбирает действия для выполнения,
     а decryption_block передает управление другим модулям.
 """
 
@@ -30,7 +30,7 @@ def decryption_block(generic_key):
     try:
         if '-a' in change_resource_or_actions:  # Добавление нового ресурса
             system_action('clear')
-            template_some_message(ACCENT_3, '--- Add new resource ---')
+            template_some_message(ACCENT_3, '--- ADD NEW RESOURCE ---')
             resource = input(ACCENT_1 + ' Resource: ' + ACCENT_4)
             login = input(ACCENT_1 + ' Login: ' + ACCENT_4)
             choice_generation_or_save_self_password(resource, login, generic_key)
@@ -101,7 +101,7 @@ def decryption_block(generic_key):
 
         elif '-l' in change_resource_or_actions:
             system_action("clear")
-            template_some_message(GREEN, " Log program from file ")
+            template_some_message(GREEN, "Log program from file")
             log_data = open(FILE_LOG, 'r')
             reader_log = DictReader(log_data, delimiter=';')
             try:
@@ -143,15 +143,17 @@ def decryption_block(generic_key):
                     password_from_file = path_to_resource + '/' + FILE_PASSWORD
 
                     def template_print_decryption_data(data_type, value):
-                        print(ACCENT_3, data_type, ACCENT_1, enc_obs.dec_aes(value, generic_key), ACCENT_4)
-
+                        print(
+                            ACCENT_3, data_type, ACCENT_1, enc_obs.dec_aes(value, generic_key), ACCENT_4
+                        )
                     template_print_decryption_data(
                         'Resource --->', resource_from_file)
                     template_print_decryption_data(
                         'Login ------>', login_from_file)
                     template_print_decryption_data(
                         'Password --->', password_from_file)
-
+            if s == 0:
+                CategoryActions(generic_key, 'resource').get_category_label()
     except ValueError:  # Обработка ошибки
         CategoryActions(generic_key, 'resource').get_category_label()
     decryption_block(generic_key)

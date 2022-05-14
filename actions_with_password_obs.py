@@ -9,6 +9,7 @@ from main import *
 from enc_obs import *
 from logo_obs import *
 from category_actions_obs import CategoryActions
+from getpass_obs import getpass
 
 from time import sleep
 import os
@@ -16,7 +17,6 @@ import re
 import random
 
 from werkzeug.security import generate_password_hash, check_password_hash
-from stdiomask import getpass
 
 
 __version__ = '0.9-05'

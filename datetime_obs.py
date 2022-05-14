@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 """
-   Модуль вывода приветсвия при старте программы
+   Модуль времени
 """
 
 from main import *
@@ -21,7 +21,7 @@ SLEEPER_WAIT = .02     # Константа задержки вывода
 
 
 def greeting(generic_key):   # Greeting Depending On Date Time
-    """ Фунция вывода приветствия юзера """
+    """ Функция вывода приветствия юзера """
     def template_greeting(times_of_day):
         if os.path.exists(FILE_USER_NAME) is False:  # Создание файла с именем
             system_action('clear')

@@ -122,7 +122,7 @@ def update():
 
 
 def install_old_saved_version():
-    """ Откат к сохраненым версиям """
+    """ Откат к сохраненным версиям """
     s = 0
     system_action('clear')
     for version in os.listdir(OLD_ELBA):
