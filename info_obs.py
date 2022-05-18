@@ -12,17 +12,17 @@ import sys
 
 from memory_profiler import memory_usage
 
-from main import __version__ as elba_v
-from actions_with_password_obs import __version__ as actions_with_password_ver
-from datetime_obs import __version__ as datetime_ver
-from del_object_obs import __version__ as del_object_obs
-from enc_obs import __version__ as enc_ver
-from logo_obs import __version__ as logo_ver
-from notes_obs import __version__ as notes_ver
-from update_obs import __version__ as update_ver
-from settings_obs import __version__ as settings_ver
-from category_actions_obs import __version__ as category_actions_ver
-from decryption_block_obs import __version__ as dec_block_ver
+# from main import __version__ as elba_v
+# from actions_with_password_obs import __version__ as actions_with_password_ver
+# from datetime_obs import __version__ as datetime_ver
+# from del_object_obs import __version__ as del_object_obs
+# from enc_obs import __version__ as enc_ver
+# from logo_obs import __version__ as logo_ver
+# from notes_obs import __version__ as notes_ver
+# from update_obs import __version__ as update_ver
+# from settings_obs import __version__ as settings_ver
+# from category_actions_obs import __version__ as category_actions_ver
+# from decryption_block_obs import __version__ as dec_block_ver
 
 
 __version__ = '0.9-02'
@@ -34,53 +34,53 @@ class Information(object):
         получение информации о занимаемой памяти в ОЗУ и ПЗУ
     """
 
-    @staticmethod
-    def save_modules_info():
-        massive_versions = [
-            datetime_ver, enc_ver, logo_ver,
-            del_object_obs, notes_ver, __version__,
-            actions_with_password_ver, category_actions_ver,
-            dec_block_ver, settings_ver, update_ver
-        ]
-        if os.path.exists(FILE_PROGRAM_INFO) is not True:
-            with open(FILE_PROGRAM_INFO, mode="w", encoding='utf-8') as data:
-                info_writer = DictWriter(data, fieldnames=stock_modules, delimiter=';')
-                info_writer.writeheader()
-
-        info_writer_file = open(FILE_PROGRAM_INFO, mode="a", encoding='utf-8')
-        info_writer = DictWriter(info_writer_file, fieldnames=stock_modules, delimiter=';')
-        info_writer.writerow({
-            stock_modules[0]: massive_versions[0],
-            stock_modules[1]: massive_versions[1],
-            stock_modules[2]: massive_versions[2],
-            stock_modules[3]: massive_versions[3],
-            stock_modules[4]: massive_versions[4],
-            stock_modules[5]: massive_versions[5],
-            stock_modules[6]: massive_versions[6],
-            stock_modules[7]: massive_versions[7],
-            stock_modules[8]: massive_versions[8],
-            stock_modules[9]: massive_versions[9],
-            stock_modules[10]: massive_versions[10]
-        })
+    # @staticmethod
+    # def save_modules_info():
+    #     massive_versions = [
+    #         datetime_ver, enc_ver, logo_ver,
+    #         del_object_obs, notes_ver, __version__,
+    #         actions_with_password_ver, category_actions_ver,
+    #         dec_block_ver, settings_ver, update_ver
+    #     ]
+    #     if os.path.exists(FILE_PROGRAM_INFO) is not True:
+    #         with open(FILE_PROGRAM_INFO, mode="w", encoding='utf-8') as data:
+    #             info_writer = DictWriter(data, fieldnames=stock_modules, delimiter=';')
+    #             info_writer.writeheader()
+    #
+    #     info_writer_file = open(FILE_PROGRAM_INFO, mode="a", encoding='utf-8')
+    #     info_writer = DictWriter(info_writer_file, fieldnames=stock_modules, delimiter=';')
+    #     info_writer.writerow({
+    #         stock_modules[0]: massive_versions[0],
+    #         stock_modules[1]: massive_versions[1],
+    #         stock_modules[2]: massive_versions[2],
+    #         stock_modules[3]: massive_versions[3],
+    #         stock_modules[4]: massive_versions[4],
+    #         stock_modules[5]: massive_versions[5],
+    #         stock_modules[6]: massive_versions[6],
+    #         stock_modules[7]: massive_versions[7],
+    #         stock_modules[8]: massive_versions[8],
+    #         stock_modules[9]: massive_versions[9],
+    #         stock_modules[10]: massive_versions[10]
+    #     })
 
     @staticmethod
     def get_info():
         template_some_message(GREEN, '- Versions installed modules -')
 
-        def template_version_module(module, version):
-            print(version, '  ---  ', module)
-
-        template_version_module('main', elba_v)
-        template_version_module('information_obs', __version__)
-        template_version_module('actions_with_password_obs', actions_with_password_ver)
-        template_version_module('datetime_obs', datetime_ver)
-        template_version_module('del_object_obs', del_object_obs)
-        template_version_module('enc_obs', enc_ver)
-        template_version_module('logo_obs', logo_ver)
-        template_version_module('notes_obs', notes_ver)
-        template_version_module('update_obs', update_ver)
-        template_version_module('category_actions_obs', category_actions_ver)
-        template_version_module('decryption_block_obs', dec_block_ver)
+        # def template_version_module(module, version):
+        #     print(version, '  ---  ', module)
+        #
+        # template_version_module('main', elba_v)
+        # template_version_module('information_obs', __version__)
+        # template_version_module('actions_with_password_obs', actions_with_password_ver)
+        # template_version_module('datetime_obs', datetime_ver)
+        # template_version_module('del_object_obs', del_object_obs)
+        # template_version_module('enc_obs', enc_ver)
+        # template_version_module('logo_obs', logo_ver)
+        # template_version_module('notes_obs', notes_ver)
+        # template_version_module('update_obs', update_ver)
+        # template_version_module('category_actions_obs', category_actions_ver)
+        # template_version_module('decryption_block_obs', dec_block_ver)
 
         template_some_message(ACCENT_3, "- Volume taken up by the program -")
         size_mod_cache = size_program = size_user_data = 0

@@ -60,7 +60,7 @@ author_emb = [
 
 def logo():
     # <<< Посимвольная отрисовка лого >>>
-    wait_effect(logo_strings_row, 0.000003)
+    wait_effect(logo_strings_row, 0.0000003)
 
 
 def author():

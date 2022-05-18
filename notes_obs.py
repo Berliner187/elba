@@ -1,8 +1,8 @@
 from main import *
 
-from enc_obs import *
-from category_actions_obs import CategoryActions
-from del_object_obs import delete_object
+from security_obs import *
+from functions_obs import ProgramFunctions
+import remove_obs
 
 from csv import DictReader, DictWriter
 from time import sleep
@@ -22,19 +22,19 @@ def notes(generic_key):
         template_some_message(GREEN, '-- Success saved! --')
         sleep(.3)
         system_action('clear')
-        CategoryActions(generic_key, 'note').get_category_label()
+        ProgramFunctions(generic_key, 'note').get_category_label()
         notes(generic_key)
 
     if not(os.listdir(FOLDER_WITH_NOTES)):
         add_new()
 
-    change_action = input('\n - Change action: ')  # Выбор между действиями
+    change_action = input(standard_location('/NOTES'))  # Выбор между действиями
 
     if change_action == '-a':   # Пользователь выбирает добавление новой заметки
         add_new()
     elif change_action == '-d':  # Пользователь выбирает удаление старой заметки
-        delete_object('note')
-        CategoryActions(generic_key, 'note').get_category_label()
+        remove_obs.remove_object('note')
+        ProgramFunctions(generic_key, 'note').get_category_label()
         notes(generic_key)
     elif change_action == '-x':
         quit()
@@ -44,7 +44,7 @@ def notes(generic_key):
             cnt += 1
             if cnt == int(change_action):
                 system_action('clear')
-                CategoryActions(generic_key, 'note').get_category_label()
+                ProgramFunctions(generic_key, 'note').get_category_label()
 
                 path_to_note = FOLDER_WITH_NOTES + note_in_folder
                 name_note_from_file = path_to_note + '/' + FILE_NOTE_NAME

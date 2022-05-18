@@ -1,10 +1,10 @@
 from main import *
 
-from enc_obs import *
-from actions_with_password_obs import create_and_confirm_user_password
+from security_obs import *
+from passwords_obs import create_and_confirm_user_password
 
 from werkzeug.security import generate_password_hash, check_password_hash
-from stdiomask import getpass
+from getpass_obs import getpass
 
 from time import sleep
 import os

@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = '0.9.1.1_DEV'
+__version__ = '0.10_ALPHA'
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -68,19 +68,22 @@ REPOSITORY = 'git clone https://github.com/Berliner187/elba -b delta'
 
 # <<<--------------  Модули для работы программы  -------------->>>
 stock_modules = [
-    'datetime_obs.py', 'enc_obs.py', 'logo_obs.py',
-    'del_object_obs.py', 'notes_obs.py', 'information_obs.py',
-    'actions_with_password_obs.py', 'category_actions_obs.py',
-    'decryption_block_obs.py', 'settings_obs.py', 'update_obs.py'
+    'datetime_obs.py', 'security_obs.py', 'logo_obs.py',
+    'remove_obs.py', 'notes_obs.py', 'info_obs.py',
+    'passwords_obs.py', 'functions_obs.py', 'change_mp_obs.py',
+    'control_bus_obs.py', 'settings_obs.py', 'update_obs.py',
+    'getpass_obs.py', 'resources_obs.py', 'rollback_obs.py'
 ]
 
 # <<< -------- Цветовые акценты в программе -------- >>>
 dictionary_default_accents = {
     'ACCENT_1': '#FBC330',
-    'ACCENT_2': '#9B30FF',
+    'ACCENT_2': '#904c77',
     'ACCENT_3': '#30A0E0',
-    'ACCENT_4': '#FFFFFF'
+    'ACCENT_4': '#FFFFFF',
+    'ACCENT_5': '#9B30FF'
 }
+
 
 # <<< ------- ШИРОКО ИСПОЛЬЗУЕМЫЕ ФУНКЦИИ ------- >>>
 
@@ -99,13 +102,17 @@ def show_name_program():
         f"L  by Berliner187   B",
         f"B  Seal Barrilla    L",
         f"A       DISCO       E",
+        ACCENT_1, __version__,
         ACCENT_2,
-        "_" * get_size_of_terminal(),
-        ACCENT_1, __version__
+        "_" * get_size_of_terminal()
     ]
-    wait_effect(lines, 0.0001)
+    ACCENT_3, wait_effect(lines, 0.0001)
     if CHECK_FOLDER_FOR_RESOURCE is False:
         first_start_message()
+
+
+def standard_location(right_now):
+    return f"\n ELBA{right_now}: ~$ "
 
 
 def template_remove_folder(some_folder):
@@ -115,8 +122,7 @@ def template_remove_folder(some_folder):
 
 def template_some_message(color, message):
     """ Шаблон сообщения в ходе работы программы """
-    cols = get_size_of_terminal()
-    print(color, '\n'*2, f"{message.center(cols)}{ACCENT_4}")
+    print(color, '\n'*2, f"{message.center(get_size_of_terminal())}{ACCENT_4}")
 
 
 def template_for_install(program_file):
@@ -290,10 +296,9 @@ def authentication_check(first_start, after_update):
         # Проверка на подлинность
         check = check_password_hash(saved_hash_modules, str(reading_all_modules))
         if (check or after_update) is False:
-            pass
-            # template_some_message(RED, 'The authenticity of the program is not installed')
-            # sleep(2)
-            # quit()
+            template_some_message(RED, 'The authenticity of the program is not installed')
+            sleep(2)
+            quit()
         if first_start:
             system_action('clear')
             template_some_message(GREEN, 'Signature is valid!')
@@ -352,7 +357,6 @@ def check_modules():
         return 0
     else:
         template_some_message(RED, "- Missing module(-s) -")
-        write_log('Missing module(-s)', 'FAIL')
         return 1
 
 
@@ -360,33 +364,33 @@ def launcher():
     """ The main function responsible for the operation of the program """
     system_action('clear')
     write_log('-', '-')
-    Information().save_modules_info()   # Запись информации о версии
+    # info_obs.Information().save_modules_info()   # Запись информации о версии
     if CHECK_FOLDER_FOR_RESOURCE is False:  # При первом запуске
         authentication_check(True, False)  # Проверка на подлинность
-        show_name_program()
-        master_password = ActionsWithPassword('master').get_password()
-        generic_key = ActionsWithPassword('generic').get_password()
-        greeting(generic_key)
-        enc_aes(FILE_WITH_GENERIC_KEY, generic_key, master_password)
+        logo_obs.show_name_program()
+        master_password = passwords_obs.ActionsWithPassword('master').get_password()
+        generic_key = passwords_obs.ActionsWithPassword('generic').get_password()
+        datetime_obs.greeting(generic_key)
+        security_obs.enc_aes(FILE_WITH_GENERIC_KEY, generic_key, master_password)
         os.mkdir(FOLDER_WITH_RESOURCES)
-        CategoryActions(generic_key, 'resource').get_category_label()
+        functions_obs.ProgramFunctions(generic_key, 'resource').get_category_label()
         write_log('First launch', 'OK')
-        decryption_block(generic_key)
+        control_bus_obs.control_bus(generic_key)
     else:  # При последующем
         authentication_check(False, False)  # Проверка на подлинность
-        # master_password = ActionsWithPassword(None).point_of_entry()
-        generic_key_from_file = dec_aes(FILE_WITH_GENERIC_KEY, master_password)
+        master_password = passwords_obs.ActionsWithPassword(None).point_of_entry()
+        generic_key_from_file = security_obs.dec_aes(FILE_WITH_GENERIC_KEY, master_password)
         system_action('clear')
-        greeting(generic_key_from_file)
+        datetime_obs.greeting(generic_key_from_file)
         write_log('Authorization', 'OK')
-        CategoryActions(generic_key_from_file, 'resource').get_category_label()
-        decryption_block(generic_key_from_file)
+        functions_obs.ProgramFunctions(generic_key_from_file, 'resource').get_category_label()
+        control_bus_obs.control_bus(generic_key_from_file)
 
 
 if __name__ == '__main__':
     system_action('clear')
     try:
-        from update_obs import update, install_old_saved_version
+        from update_obs import update
     except ModuleNotFoundError as update_obs_error:
         write_log(update_obs_error, 'FAILED')
         template_some_message(RED, '- Module "update" does not exist -')
@@ -394,7 +398,6 @@ if __name__ == '__main__':
 
     try:
         from werkzeug.security import generate_password_hash, check_password_hash
-        from stdiomask import getpass
     except ModuleNotFoundError as error_module:
         write_log(error_module, 'CRASH')
         template_some_message(RED, f"MISSING: {error_module}")
@@ -407,53 +410,55 @@ if __name__ == '__main__':
     status_mis_mod = check_modules()
     # Если модули на месте
     if status_mis_mod == 0:
-        from decryption_block_obs import decryption_block
-        from enc_obs import enc_aes, dec_aes
-        from datetime_obs import greeting
-        from category_actions_obs import CategoryActions
-        from actions_with_password_obs import ActionsWithPassword
-        from logo_obs import first_start_message, elba
-        from information_obs import Information
+        import control_bus_obs
+        import security_obs
+        import datetime_obs
+        import functions_obs
+        import passwords_obs
+        import logo_obs
+        import info_obs
+        import getpass_obs
+        import rollback_obs
 
-        # try:
-        launcher()  # Запуск лончера
-        # except Exception or NameError as random_error:
-        #     write_log(random_error, 'FAIL')
-        #     template_some_message(RED, ' --- ERROR --- ')
-        #     print(random_error)
-        #     sleep(1)
-        #     system_action('clear')
-        #     print(f"{ACCENT_3}"
-        #           f'\n - Enter 1 to rollback'
-        #           f'\n - Enter 2 to update')
-        #     rollback_or_update = input(ACCENT_1 + '\n - Select by number: ' + ACCENT_4)
-        #
-        #     if rollback_or_update == '1':  # Попытка откатиться
-        #         template_some_message(RED, '-- You can try roll back --')
-        #         change = input(template_question(' - Roll back?: '))
-        #         if change == 'y':
-        #             install_old_saved_version()
-        #     elif rollback_or_update == '2':  # Попытка обновиться
-        #         get_confirm = input(template_question(" - Update?: "))
-        #         if get_confirm == 'n':
-        #             write_log('Exit', 'OK')
-        #             quit()
-        #         else:
-        #             write_log('Try update', 'Run')
-        #             update()
-        #     else:
-        #         system_action('clear')
-        #         template_some_message(RED, '- Error in change -')
-        #         sleep(1)
-        #     system_action('restart')
-        #
-        # except KeyError:
-        #     pass
-        # except KeyboardInterrupt as keyboard:
-        #     system_action('clear')
-        #     template_some_message(ACCENT_3, '--- ELBA CLOSED ---')
-        #     write_log(keyboard, "CLOSE")
-        #     quit()
+        try:
+            launcher()  # Запуск лончера
+        except Exception or NameError as random_error:
+            write_log(random_error, 'FAIL')
+            template_some_message(RED, ' --- ERROR --- ')
+            print(random_error)
+            sleep(1)
+            system_action('clear')
+            print(f"{ACCENT_3}"
+                  f'\n - Enter 1 to rollback'
+                  f'\n - Enter 2 to update')
+            rollback_or_update = input(ACCENT_1 + '\n - Select by number: ' + ACCENT_4)
+
+            if rollback_or_update == '1':  # Попытка откатиться
+                template_some_message(RED, '-- You can try roll back --')
+                change = input(template_question(' - Roll back?: '))
+                if change == 'y':
+                    rollback_obs.rollback()
+            elif rollback_or_update == '2':  # Попытка обновиться
+                get_confirm = input(template_question(" - Update?: "))
+                if get_confirm == 'n':
+                    write_log('Exit', 'OK')
+                    quit()
+                else:
+                    write_log('Try update', 'Run')
+                    update()
+            else:
+                system_action('clear')
+                template_some_message(RED, '- Error in change -')
+                sleep(1)
+            system_action('restart')
+
+        except KeyError:
+            pass
+        except KeyboardInterrupt as keyboard:
+            system_action('clear')
+            template_some_message(ACCENT_3, '--- ELBA CLOSED ---')
+            write_log(keyboard, "CLOSE")
+            quit()
     else:
         # Попытка установить отсутствующие модули
         update()

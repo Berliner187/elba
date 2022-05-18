@@ -6,9 +6,8 @@
 
 from main import *
 
-from enc_obs import *
-from logo_obs import *
-from category_actions_obs import CategoryActions
+import security_obs
+import logo_obs
 from getpass_obs import getpass
 
 from time import sleep
@@ -19,7 +18,7 @@ import random
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-__version__ = '0.9-05'
+__version__ = '0.10-01'
 
 
 cols = get_size_of_terminal()
@@ -27,7 +26,11 @@ cols = get_size_of_terminal()
 
 def create_and_confirm_user_password():
     """ Создание и подтверждение пользовательского пароля """
-    print(ACCENT_3, 'Minimum password length — 8 characters'.center(cols))
+    print(ACCENT_3, '— Minimum password length — 8 characters')
+    print(ACCENT_3, '— Your password must contain lowercase letters')
+    print(ACCENT_3, '— Your password must contain upper letters')
+    print(ACCENT_3, '— Your password must contain numbers')
+    print('\n')
 
     def template_red_messages(message):
         system_action('clear')
@@ -46,10 +49,16 @@ def create_and_confirm_user_password():
             template_red_messages("Passwords don't match".center(cols))
         elif re.search('[0-9]', password) is None:
             template_red_messages("Make sure your password has a number in it".center(cols))
+        elif re.search('[a-z]', password) is None:
+            template_red_messages("Make sure your password has lower case letters".center(cols))
+        # elif re.search('[A-Z]', password) is None:
+        #     template_red_messages("Make sure your password has upper case letters".center(cols))
         elif password == 'x':
             quit()
-        else:
+        elif password == confirm_password:
             return password
+        else:
+            template_red_messages("-_-".center(cols))
 
 
 class ActionsWithPassword:
@@ -120,6 +129,7 @@ class ActionsWithPassword:
             )
             sleep(3)
             return password
+
         # Получение общего ключа
         elif self.type_pas == 'generic':
             generic = generation_new_password(random.randrange(2**5, 2**6), False)
@@ -134,7 +144,7 @@ class ActionsWithPassword:
         """ Точка входа в программу """
         def get_master_password():
             show_name_program()
-            elba()
+            logo_obs.elba()
             input_master_password = getpass(
                 f"{ACCENT_1}\n\n   --- Enter the master-password: {ACCENT_4}"
             )
@@ -143,7 +153,7 @@ class ActionsWithPassword:
             elif input_master_password == 'r':
                 system_action('restart')
             elif input_master_password == 'a':
-                animation()
+                logo_obs.animation()
             return input_master_password
 
         cnt_left = 4
@@ -173,7 +183,7 @@ class ActionsWithPassword:
             else:
                 if hash_password and CHECK_FOLDER_FOR_RESOURCE:
                     if CHECK_FILE_WITH_GENERIC:
-                        xzibit = dec_aes(FILE_WITH_GENERIC_KEY, master_password)
+                        xzibit = security_obs.dec_aes(FILE_WITH_GENERIC_KEY, master_password)
                         check_with_xzibit = check_password_hash(open(FILE_WITH_HASH_GENERIC_KEY).readline(), xzibit)
                         if check_with_xzibit:
                             return master_password
@@ -188,17 +198,20 @@ class ActionsWithPassword:
 def choice_generation_or_save_self_password(resource, login, master_password):
     """ Выбор пароля: генерирование нового или сохранение пользовательского """
     print('\n'*2,
-          f"{ACCENT_3}1.{ACCENT_1} - Generation new password \n",
-          f"{ACCENT_3}2.{ACCENT_1} - Save your password      \n")
+          f"{ACCENT_3}[{ACCENT_1}1{ACCENT_3}] - Generation new password \n",
+          f"{ACCENT_3}[{ACCENT_1}2{ACCENT_3}] - Save your password      \n")
     print(ACCENT_4)
     while True:
         change_type = int(input('Change (1/2): '))
         if change_type == 1:  # Генерирование пароля и сохранение в файл
             password = ActionsWithPassword('gen_new').get_password()
-            save_data_to_file(resource, login, password, master_password, 'resource')
+            security_obs.save_data_to_file(resource, login, password, master_password, 'resource')
+            # Костыль для выхода из цикла
+            return 0
         elif change_type == 2:  # Сохранение пользовательского пароля
             password = ActionsWithPassword('self').get_password()
-            save_data_to_file(resource, login, password, master_password, 'resource')
+            security_obs.save_data_to_file(resource, login, password, master_password, 'resource')
+            return 0
         else:   # Если ошибка выбора
             print(f"{RED}\n  -- Error of change. Please, change again -- {ACCENT_4}")
             sleep(1)
@@ -228,8 +241,8 @@ def change_master_password():
     template_some_message(ACCENT_3, ' - Pick a new master-password -')
     new_master_password = create_and_confirm_user_password()
     # Generic-key шифруется новым мастер-паролем
-    generic_key_from_file = dec_aes(FILE_WITH_GENERIC_KEY, confirm_master_password)
-    enc_aes(FILE_WITH_GENERIC_KEY, generic_key_from_file, new_master_password)
+    generic_key_from_file = security_obs.dec_aes(FILE_WITH_GENERIC_KEY, confirm_master_password)
+    security_obs.enc_aes(FILE_WITH_GENERIC_KEY, generic_key_from_file, new_master_password)
 
     new_hash = generate_password_hash(new_master_password)
     with open(FILE_WITH_HASH, 'w') as hash_pas:

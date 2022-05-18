@@ -1,22 +1,28 @@
 # -*- coding: UTF-8 -*-
 from main import *
-import category_actions_obs
 
 
 __version__ = '0.9-10'
 
 
-def settings(generic_key):
-    write_log('Settings', 'Run')
-    system_action('clear')
+def settings():
     cols = get_size_of_terminal()
     cols = cols - 1
     category = 'ELBA/SETTINGS'
-    delta_category_len = (cols - (len('ELBA/SETTINGS') + 4)) // 2
 
-    print(ACCENT_2, "\n", "|" * cols)
-    print("", "|" * delta_category_len, GREEN, category, ACCENT_2, "|" * delta_category_len)
-    print(ACCENT_2, "|" * cols, '\n' * 2)
+    # <<<<<<<<<<<<< ПЕРЕДЕЛАТЬ >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    def name_on_top():
+        return f"||{GREEN} {category} "
+
+    total_surface_length = "|" * (cols - 1)
+
+    print(ACCENT_2, "\n", total_surface_length)  # 1 строка
+    print(
+        ACCENT_2, name_on_top() + ACCENT_3 + ('|' * (len(total_surface_length) - (len(category) + 4)))
+    )  # 2 строка
+    print(ACCENT_2, total_surface_length, "\n" * 2)  # 3 строка
+    # <<<<<<<<<<<<<  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
     # Варианты настройки
     variation_settings = [
         'Customize Color Accent',
@@ -31,6 +37,21 @@ def settings(generic_key):
     def change_color_accent():
         """ Управление цветовыми акцентами """
         system_action('clear')
+
+        # <<<<<<<<<<<<< ПЕРЕДЕЛАТЬ >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+        def name_on_top():
+            return f"||{GREEN} ELBA/SETTINGS/ACCENTS "
+
+        total_surface_length = "|" * (cols - 1)
+
+        print(ACCENT_2, "\n", total_surface_length)  # 1 строка
+        print(
+            ACCENT_2, name_on_top() + ACCENT_3 + ('|' * (len(total_surface_length) - (len(f'ELBA/SETTINGS/ACCENTS') + 4)))
+        )  # 2 строка
+        print(ACCENT_2, total_surface_length, "\n" * 2)  # 3 строка
+        # <<<<<<<<<<<<<  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
         # Выгрузка акцентов из файла
         dic_colors = ''
         with open(FILE_SETTINGS_COLOR, 'r') as f:
@@ -42,13 +63,13 @@ def settings(generic_key):
         cnt = 0
         for item in dic_colors:
             cnt += 1
-            print(f"{ACCENT_1}{cnt}. "
+            print(f"{ACCENT_3}[{ACCENT_1}{cnt}{ACCENT_3}] "
                   f"{ACCENT_4}{item} = {format_hex_color(dic_colors[item])}"
                   f"{dic_colors[item]}")
-        print(f"{ACCENT_1}{cnt + 1}. {ACCENT_4}Set default color accent")
+        print(f"{ACCENT_3}[{ACCENT_1}{cnt + 1}{ACCENT_3}] {ACCENT_4}Set default color accent")
 
         template_some_message(ACCENT_3, '-- Color emphasis will change after restarting the program --')
-        setting_colors = int(template_input('Choose a color to change the accent:'))
+        setting_colors = int(input(standard_location(ACCENT_4 + '/SETTINGS/ACCENTS')))
         cnt = 0
         # Прокрутка до нужной настройки
         for select in dic_colors:
@@ -77,7 +98,10 @@ def settings(generic_key):
     def manage_themes():
         lines_themes = [
             "Light Theme",
-            "Dark Theme"
+            "Dark Theme",
+            "Green Theme",
+            "Ocean Theme (Light)",
+            "Coffee Theme"
         ]
 
         light_theme_default = {
@@ -85,12 +109,35 @@ def settings(generic_key):
             'ACCENT_2': '#FFFFFF',
             'ACCENT_3': '#FFFFFF',
             'ACCENT_4': '#000000',
+            'ACCENT_5': '9B30FF'
         }
         dark_theme_default = {
-            'ACCENT_1': '#FBC330',
-            'ACCENT_2': '#9B30FF',
-            'ACCENT_3': '#30A0E0',
-            'ACCENT_4': '#FFFFFF'
+            'ACCENT_1': '#595959',  # Основной №1
+            'ACCENT_2': '#a5a5a5',  # Доп. цвет
+            'ACCENT_3': '#cccccc',  # Основной №2
+            'ACCENT_4': '#FFFFFF',
+            'ACCENT_5': '9B30FF'
+        }
+        green_theme = {
+            'ACCENT_1': '#cbef43',
+            'ACCENT_2': '#8de969',
+            'ACCENT_3': '#72a98f',
+            'ACCENT_4': '#FFFFFF',
+            'ACCENT_5': '9B30FF'
+        }
+        light_ocean_theme = {
+            'ACCENT_1': '#2f4550',
+            'ACCENT_2': '#2f4550',
+            'ACCENT_3': '#586f7c',
+            'ACCENT_4': '#000000',
+            'ACCENT_5': '9B30FF'
+        }
+        coffee_theme = {
+            'ACCENT_1': '#997d60',
+            'ACCENT_2': '#bbbcbf',
+            'ACCENT_3': '#bca58d',
+            'ACCENT_4': '#e3d1df',
+            'ACCENT_5': '9B30FF'
         }
 
         def load_light_theme():
@@ -99,19 +146,31 @@ def settings(generic_key):
         def load_dark_theme():
             create_file_with_theme(dark_theme_default)
 
+        def load_green_theme():
+            create_file_with_theme(green_theme)
+
+        def load_light_ocean_theme():
+            create_file_with_theme(light_ocean_theme)
+
+        def load_coffee_theme():
+            create_file_with_theme(coffee_theme)
+
         dict_themes = {
             "1": load_light_theme,
-            "2": load_dark_theme
+            "2": load_dark_theme,
+            "3": load_green_theme,
+            "4": load_light_ocean_theme,
+            "5": load_coffee_theme
         }
 
         # Прокрутка возможных действий
         print('\n')
-        s = 0
+        cnt = 0
         for theme in lines_themes:
-            s += 1
-            print(f" {ACCENT_3}[{ACCENT_1}{s}{ACCENT_3}] {ACCENT_1}{theme}{ACCENT_4}")
+            cnt += 1
+            print(f" {ACCENT_3}[{ACCENT_1}{cnt}{ACCENT_3}] {ACCENT_1}{theme}{ACCENT_4}")
 
-        user_change_theme = input(f"\n ELBA/SETTINGS/THEMES: ~$ {ACCENT_4}")
+        user_change_theme = input(standard_location('/SETTINGS/THEMES'))
         try:
             dict_themes[user_change_theme]()
             system_action('restart')
@@ -134,11 +193,8 @@ def settings(generic_key):
     }
 
     # Выбор варианта настройки
-    user_change = input('\n ELBA/SETTINGS: ~$ ')
+    user_change = input(standard_location('/SETTINGS'))
     try:
         actions_dict[user_change]()
     except KeyError:
         pass
-    # Возвращение в цикл decryption_block
-    category_actions_obs.CategoryActions(generic_key, 'resource').get_category_label()
-    write_log('Settings', 'Exit')

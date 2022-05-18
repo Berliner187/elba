@@ -2,42 +2,45 @@
 
 """
     Модуль, отвечающий за управление функциями программы.
-    Тут можно подключать новые функции программы.
+    Тут можно подключать новые функции Эльбы.
     В этом модуле пользователь выбирает действия для выполнения,
-    а decryption_block передает управление другим модулям.
+    а control_bus (шина управления) передает управление другим модулям.
 """
 
 import os
 
-from del_object_obs import delete_object
-from notes_obs import notes
-from actions_with_password_obs import *
-from category_actions_obs import CategoryActions
-from update_obs import update, install_old_saved_version
-from settings_obs import settings
-
-import enc_obs
+import resources_obs
+import remove_obs
+import functions_obs
+import change_mp_obs
+import notes_obs
+import update_obs
+import settings_obs
+import info_obs
+import rollback_obs
+import security_obs
 
 from main import *
 
 
-__version__ = '0.9-03'
+__version__ = '0.10-01'
 
 
-def decryption_block(generic_key):
+def control_bus(generic_key):
     """ Цикл с выводом сохраненных ресурсов и выбор действий """
-    change_resource_or_actions = input('\n ELBA: ~$ ').lower()   # Выбор действия
+
+    def drawing_instructions():
+        functions_obs.ProgramFunctions(generic_key, 'resource').get_category_label()
+
+    change_resource_or_actions = input(standard_location('')).lower()   # Выбор действия
     try:
         if '-a' in change_resource_or_actions:  # Добавление нового ресурса
             system_action('clear')
-            template_some_message(ACCENT_3, '--- ADD NEW RESOURCE ---')
-            resource = input(ACCENT_1 + ' Resource: ' + ACCENT_4)
-            login = input(ACCENT_1 + ' Login: ' + ACCENT_4)
-            choice_generation_or_save_self_password(resource, login, generic_key)
+            resources_obs.add_new_resource(generic_key)
+            drawing_instructions()
             write_log("Add resource", "QUIT")
-            CategoryActions(generic_key, 'resource').get_category_label()
 
-        elif '-x' in change_resource_or_actions:  # Выход
+        if '-x' in change_resource_or_actions:  # Выход
             system_action('clear')
             template_some_message(ACCENT_3, '--- ELBA CLOSED ---')
             write_log("ELBA", "CLOSE")
@@ -49,38 +52,39 @@ def decryption_block(generic_key):
             system_action('restart')
 
         elif '-c' in change_resource_or_actions:    # Смена мастер-пароля
-            change_master_password()
+            system_action('clear')
+            change_mp_obs.change_master_password()
             write_log("Change password", "QUIT")
 
         elif '-d' in change_resource_or_actions:    # Удаление ресурса
-            delete_object('resource')
-            CategoryActions(generic_key, 'resource').get_category_label()
-            write_log("Delete resource", "QUIT")
+            remove_obs.remove_object('resource')
+            functions_obs.ProgramFunctions(generic_key, 'resource').get_category_label()
+            write_log("Remove object", "QUIT")
 
         elif '-n' in change_resource_or_actions:    # Добавление заметок
-            CategoryActions(generic_key, 'note').get_category_label()
-            notes(generic_key)
+            functions_obs.ProgramFunctions(generic_key, 'note').get_category_label()
+            notes_obs.notes(generic_key)
             write_log("Exit from notes", "QUIT")
 
         elif '-f' in change_resource_or_actions:    # Шифрование файлов
-            CategoryActions(generic_key, 'encryption').get_category_label()
-            change_action = input(ACCENT_1 + "\n - ELBA/ENCRYPTION: ~$ (-E or -D): " + ACCENT_4)
+            functions_obs.ProgramFunctions(generic_key, 'encryption').get_category_label()
+            change_action = input(ACCENT_4 + standard_location('/ENCRYPTION') + ACCENT_4)
             if '-e' in change_action:
                 system_action('clear')
                 system_action('file_manager')
                 write_log("Try encryption", "RUN")
-                enc_obs.WorkWithUserFiles(generic_key, 'enc').file_encryption_control()
+                security_obs.WorkWithUserFiles(generic_key, 'enc').file_encryption_control()
             elif '-d' in change_action:
                 system_action('clear')
                 write_log("Try decryption", "RUN")
-                enc_obs.WorkWithUserFiles(generic_key, 'dec').file_encryption_control()
+                security_obs.WorkWithUserFiles(generic_key, 'dec').file_encryption_control()
             write_log("Exit from encrypt", "QUIT")
-            CategoryActions(generic_key, 'resource').get_category_label()
+            functions_obs.ProgramFunctions(generic_key, 'resource').get_category_label()
 
         elif '-u' in change_resource_or_actions:    # Обновление программы
             system_action('clear')
-            update()
-            CategoryActions(generic_key, 'resource').get_category_label()
+            update_obs.update()
+            functions_obs.ProgramFunctions(generic_key, 'resource').get_category_label()
             write_log("Update", "OK")
 
         elif '-z' in change_resource_or_actions:    # Удаление всех данных
@@ -91,13 +95,13 @@ def decryption_block(generic_key):
                 template_remove_folder(FOLDER_WITH_DATA)
                 system_action('clear')
                 quit()
+            drawing_instructions()
 
         elif '-i' in change_resource_or_actions:
             system_action("clear")
-            from information_obs import Information
-            Information().get_info()
+            info_obs.Information().get_info()
             write_log("Get info", "QUIT")
-            decryption_block(generic_key)
+            control_bus(generic_key)
 
         elif '-l' in change_resource_or_actions:
             system_action("clear")
@@ -122,20 +126,24 @@ def decryption_block(generic_key):
                 template_some_message(ACCENT_1, '- No versions saved - ')
             else:
                 write_log("Try roll back", "RUN")
-                install_old_saved_version()
+                rollback_obs.rollback()
                 write_log("Success roll back", "QUIT")
                 system_action('restart')
 
         elif '-s' in change_resource_or_actions:    # Пользовательские настройки
-            settings(generic_key)
+            write_log('Settings', 'Run')
+            system_action('clear')
+            settings_obs.settings()
+            functions_obs.ProgramFunctions(generic_key, 'resource').get_category_label()
+            write_log('Settings', 'Exit')
 
-        else:   # Вывод сохраненных данных о ресурсе
-            s = 0
+        elif change_resource_or_actions.isnumeric():   # Вывод сохраненных данных о ресурсе
+            match_string = 0
             for resource_in_folder in os.listdir(FOLDER_WITH_RESOURCES):
-                s += 1
-                if s == int(change_resource_or_actions):
+                match_string += 1
+                if match_string == int(change_resource_or_actions):
                     system_action('clear')
-                    CategoryActions(generic_key, 'resource').get_category_label()
+                    drawing_instructions()
 
                     path_to_resource = FOLDER_WITH_RESOURCES + resource_in_folder
                     resource_from_file = path_to_resource + '/' + FILE_RESOURCE
@@ -144,7 +152,7 @@ def decryption_block(generic_key):
 
                     def template_print_decryption_data(data_type, value):
                         print(
-                            ACCENT_3, data_type, ACCENT_1, enc_obs.dec_aes(value, generic_key), ACCENT_4
+                            ACCENT_3, data_type, ACCENT_4, security_obs.dec_aes(value, generic_key)
                         )
                     template_print_decryption_data(
                         'Resource --->', resource_from_file)
@@ -152,8 +160,10 @@ def decryption_block(generic_key):
                         'Login ------>', login_from_file)
                     template_print_decryption_data(
                         'Password --->', password_from_file)
-            if s == 0:
-                CategoryActions(generic_key, 'resource').get_category_label()
+            if match_string == 0:
+                drawing_instructions()
+        else:
+            drawing_instructions()
     except ValueError:  # Обработка ошибки
-        CategoryActions(generic_key, 'resource').get_category_label()
-    decryption_block(generic_key)
+        drawing_instructions()
+    control_bus(generic_key)

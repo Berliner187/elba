@@ -19,7 +19,7 @@ import shutil
 from main import *
 
 import Crypto.Random
-from stdiomask import getpass
+from getpass_obs import getpass
 from werkzeug.security import check_password_hash, generate_password_hash
 from Crypto.Cipher import AES
 

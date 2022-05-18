@@ -6,7 +6,7 @@
 
 from main import *
 
-import enc_obs
+import security_obs
 import logo_obs
 
 import os
@@ -17,7 +17,7 @@ from time import sleep
 
 __version__ = '0.9-03'
 
-SLEEPER_WAIT = .02     # Константа задержки вывода
+SLEEPER_WAIT = 0     # Константа задержки вывода
 
 
 def greeting(generic_key):   # Greeting Depending On Date Time
@@ -28,9 +28,9 @@ def greeting(generic_key):   # Greeting Depending On Date Time
             message_about_enter_nickname = [ACCENT_3, '\n Enter your nickname']
             logo_obs.wait_effect(message_about_enter_nickname, SLEEPER_WAIT)
             name = template_input('Nickname:')
-            enc_obs.enc_aes(FILE_USER_NAME, name, generic_key)
+            security_obs.enc_aes(FILE_USER_NAME, name, generic_key)
         else:  # Чтение из файла с именем и вывод в консоль
-            name = enc_obs.dec_aes(FILE_USER_NAME, generic_key)
+            name = security_obs.dec_aes(FILE_USER_NAME, generic_key)
         lines = [
             f'{ACCENT_1} ',
             f'{times_of_day} {name}',
