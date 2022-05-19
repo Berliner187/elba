@@ -10,7 +10,7 @@ from time import sleep
 import os
 
 
-__version__ = '0.9-00'
+__version__ = '0.10-01'
 
 
 def change_master_password():
@@ -19,7 +19,7 @@ def change_master_password():
     def get_confirm_master_password():
         while True:
             system_action('clear')
-            _confirm_master_password = getpass(ACCENT_1 + ' -- Enter your master-password: ' + ACCENT_4)
+            _confirm_master_password = getpass(ACCENT_1 + standard_location('/LOGIN') + ACCENT_4)
             open_file_with_hash = open(FILE_WITH_HASH).readline()
             check_master_password = check_password_hash(open_file_with_hash, _confirm_master_password)
             if check_master_password:
