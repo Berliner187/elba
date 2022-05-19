@@ -5,7 +5,7 @@ import os
 from time import sleep
 
 
-__version__ = '0.10-00'
+__version__ = '0.10-01'
 
 
 def update():
@@ -52,6 +52,7 @@ def update():
         cnt_missing_modules = message_about_status_modules()
         if cnt_missing_modules == 0:
             template_some_message(GREEN, 'The missing module has been installed!')
+            authentication_check(False, True)
         else:
             template_some_message(RED, 'Not all modules were installed')
         sleep(1)
@@ -68,6 +69,7 @@ def update():
             if os.path.exists(OLD_ELBA + elba_version) is False:
                 os.mkdir(OLD_ELBA + elba_version)
                 # Копирование файлов программы
+                template_for_copy(FILE_WITH_SHA256)
                 for item in os.listdir('.'):
                     if item.endswith('.py'):
                         template_for_copy(item)
@@ -81,6 +83,17 @@ def update():
 
                 if install_or_no == 'y':
                     template_for_install(main_file)
+
+                    def get_info_about_modules(color, message, mod):    # ИСПРАВИТЬ
+                        print('[', color, message, ACCENT_4, ']', mod)
+
+                    for module in stock_modules:
+                        if os.path.getsize(FOLDER_ELBA + module) != os.path.getsize(module):
+                            get_info_about_modules(GREEN, 'UPDATE ', module)
+                        else:
+                            get_info_about_modules(ACCENT_1, 'REMAINS', module)
+                        sleep(.2)
+
                     template_for_install('update_obs.py')
                     for i in range(len(stock_modules)):
                         template_for_install(stock_modules[i])
@@ -89,6 +102,17 @@ def update():
                     sleep(.7)
                     authentication_check(False, True)
                     write_log('Upgrade', 'OK')
+                else:
+                    # Показ актуальности модулей
+                    def get_info_about_modules(color, message, mod):
+                        print('[', color, message, ACCENT_4, ']', mod)
+
+                    for module in stock_modules:
+                        if os.path.getsize(FOLDER_ELBA + module) != os.path.getsize(module):
+                            get_info_about_modules(GREEN, 'UPDATE ', module)
+                        else:
+                            get_info_about_modules(ACCENT_1, 'REMAINS', module)
+                        sleep(.2)
 
                 template_remove_folder(FOLDER_ELBA)
                 system_action('restart')
@@ -106,6 +130,7 @@ def update():
                         get_info_about_modules(GREEN, 'UPDATE ', module)
                     else:
                         get_info_about_modules(ACCENT_1, 'REMAINS', module)
+                    authentication_check(False, True)
                     sleep(.2)
 
                 template_remove_folder(FOLDER_ELBA)
