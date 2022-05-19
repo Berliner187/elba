@@ -4,13 +4,14 @@
     Модуль для вывода ресурсов и заметок с действиями,
     которые могут выполнятся пользователем в данном окне
 """
+import random
 
 from main import *
 
 import security_obs
 
 
-__version__ = '0.9-05'
+__version__ = '0.10-01'
 
 
 cols = get_size_of_terminal()   # Получение масштаба терминала
@@ -41,16 +42,23 @@ class ProgramFunctions(object):
             type_folder = FOLDER_WITH_ENC_DATA
 
         # <<< Показ категории >>>
-        def name_on_top():
-            return f"||{GREEN} ELBA/{self.category.upper()}S {ACCENT_2}"
+        """ Топпер """
+        location_above = f'ELBA/{self.category.upper()}S'
 
-        total_surface_length = "|" * (cols - 1)
+        def random_design(length):
+            number_str = ''
+            for i in range(length):
+                number = random.randrange(0, 9)
+                number_str += str(number)
+            return number_str
 
-        print(ACCENT_2, "\n", total_surface_length)      # 1 строка
-        print(
-            ACCENT_2, name_on_top() + ('|' * (len(total_surface_length) - (len(f'ELBA/{self.category.upper()}S') + 4)))
-        )  # 2 строка
-        print(ACCENT_2, total_surface_length, "\n"*2)      # 3 строка
+        top_string = random_design(cols-1)
+        middle_string = random_design(((cols - 1) - (len(location_above) + 4)))
+        bottom_string = random_design(cols-1)
+
+        print(ACCENT_2, "\n", top_string)               # 1 строка
+        print(ACCENT_2, f"19{ACCENT_5} {location_above} {ACCENT_2}" + middle_string)  # 2 строка
+        print(ACCENT_2, bottom_string, "\n"*2)          # 3 строка
 
         number_saved_data = 0
         for category_item in os.listdir(type_folder):
@@ -100,7 +108,9 @@ class ProgramFunctions(object):
 
         # Для шифрованных файлов:
         elif self.category == 'encryption':
-            template_some_message(ACCENT_3, f"-- Go to the {ACCENT_1}{FOLDER_WITH_ENC_DATA}{ACCENT_3} data folder and follow the instructions below --")
+            template_some_message(ACCENT_3,
+                                  f"-- Go to the {FOLDER_WITH_ENC_DATA} "
+                                  f"data folder and follow the instructions below --")
             lines_instruction = [
                 ACCENT_3,
                 template_show_functions('-E', 'Encryption files'),
@@ -113,6 +123,3 @@ class ProgramFunctions(object):
 
         if self.category != 'encryption':   # Исключения для лейбла заметок и ресурсов
             print(ACCENT_1, f'\n [ - Select {self.category} by number - ]\n'.upper(), ACCENT_4)
-
-
-# CategoryActions('xxx', 'resource').get_category_label()
