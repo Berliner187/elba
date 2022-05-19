@@ -15,9 +15,9 @@ import datetime
 from time import sleep
 
 
-__version__ = '0.9-03'
+__version__ = '0.10-00'
 
-SLEEPER_WAIT = 0     # Константа задержки вывода
+SLEEPER_WAIT = .015     # Константа задержки вывода
 
 
 def greeting(generic_key):   # Greeting Depending On Date Time
@@ -25,8 +25,9 @@ def greeting(generic_key):   # Greeting Depending On Date Time
     def template_greeting(times_of_day):
         if os.path.exists(FILE_USER_NAME) is False:  # Создание файла с именем
             system_action('clear')
-            message_about_enter_nickname = [ACCENT_3, '\n Enter your nickname']
-            logo_obs.wait_effect(message_about_enter_nickname, SLEEPER_WAIT)
+            message_about_enter_nickname = '\n Enter your nickname'
+            print(ACCENT_3)
+            logo_obs.iterate_over_characters(message_about_enter_nickname, SLEEPER_WAIT)
             name = template_input('Nickname:')
             security_obs.enc_aes(FILE_USER_NAME, name, generic_key)
         else:  # Чтение из файла с именем и вывод в консоль
