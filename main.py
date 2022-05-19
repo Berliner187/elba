@@ -263,7 +263,7 @@ def authentication_check(first_start, after_update):
     def create_signature():
         # Чтение имеющихся модулей
         reading_all_modules_for_sign = bin_reading_modules()
-        hash_module = werkzeug.generate_password_hash(reading_all_modules_for_sign)
+        hash_module = generate_password_hash(reading_all_modules_for_sign)
         with open(FILE_WITH_SHA256, 'w') as sha256:
             sha256.write(hash_module)
             sha256.close()
@@ -294,7 +294,7 @@ def authentication_check(first_start, after_update):
         with open(FILE_WITH_SHA256, 'r') as hash_modules:
             saved_hash_modules = hash_modules.readline()
         # Проверка на подлинность
-        check = werkzeug.check_password_hash(saved_hash_modules, str(reading_all_modules))
+        check = check_password_hash(saved_hash_modules, str(reading_all_modules))
         if (check or after_update) is False:
             template_some_message(RED, 'The authenticity of the program is not installed')
             sleep(2)
@@ -397,7 +397,7 @@ if __name__ == '__main__':
         download_from_repository()
 
     try:
-        import werkzeug.security as werkzeug
+        from werkzeug.security import check_password_hash, generate_password_hash
         # generate_password_hash, check_password_hash
     except ModuleNotFoundError as error_module:
         write_log(error_module, 'CRASH')
