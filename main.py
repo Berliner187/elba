@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = '0.10.1_ALPHA'
+__version__ = '0.10.2_ALPHA'
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -95,7 +95,7 @@ def get_size_of_terminal():
 
 
 def show_name_program():
-    from logo_obs import wait_effect
+    from logo_obs import wait_effect, first_start_message
     lines = [
         ACCENT_3,
         f"E  DELTA FOR LINUX  A",
@@ -108,7 +108,7 @@ def show_name_program():
     ]
     ACCENT_3, wait_effect(lines, 0.0001)
     if CHECK_FOLDER_FOR_RESOURCE is False:
-        logo_obs.first_start_message()
+        first_start_message()
 
 
 def standard_location(right_now):
@@ -263,7 +263,7 @@ def authentication_check(first_start, after_update):
     def create_signature():
         # Чтение имеющихся модулей
         reading_all_modules_for_sign = bin_reading_modules()
-        hash_module = generate_password_hash(reading_all_modules_for_sign)
+        hash_module = werkzeug.generate_password_hash(reading_all_modules_for_sign)
         with open(FILE_WITH_SHA256, 'w') as sha256:
             sha256.write(hash_module)
             sha256.close()
@@ -294,7 +294,7 @@ def authentication_check(first_start, after_update):
         with open(FILE_WITH_SHA256, 'r') as hash_modules:
             saved_hash_modules = hash_modules.readline()
         # Проверка на подлинность
-        check = check_password_hash(saved_hash_modules, str(reading_all_modules))
+        check = werkzeug.check_password_hash(saved_hash_modules, str(reading_all_modules))
         if (check or after_update) is False:
             template_some_message(RED, 'The authenticity of the program is not installed')
             sleep(2)
@@ -397,7 +397,8 @@ if __name__ == '__main__':
         download_from_repository()
 
     try:
-        from werkzeug.security import generate_password_hash, check_password_hash
+        import werkzeug.security as werkzeug
+        # generate_password_hash, check_password_hash
     except ModuleNotFoundError as error_module:
         write_log(error_module, 'CRASH')
         template_some_message(RED, f"MISSING: {error_module}")
@@ -435,17 +436,11 @@ if __name__ == '__main__':
 
             if rollback_or_update == '1':  # Попытка откатиться
                 template_some_message(RED, '-- You can try roll back --')
-                change = input(template_question(' - Roll back?: '))
-                if change == 'y':
-                    rollback_obs.rollback()
+                rollback_obs.rollback()
+
             elif rollback_or_update == '2':  # Попытка обновиться
-                get_confirm = input(template_question(" - Update?: "))
-                if get_confirm == 'n':
-                    write_log('Exit', 'OK')
-                    quit()
-                else:
-                    write_log('Try update', 'Run')
-                    update()
+                write_log('Try update', 'Run')
+                update()
             else:
                 system_action('clear')
                 template_some_message(RED, '- Error in change -')
