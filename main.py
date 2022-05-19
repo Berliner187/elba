@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = '0.10.3_ALPHA'
+__version__ = '0.10.4_ALPHA'
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -126,7 +126,7 @@ def template_some_message(color, message):
 
 def template_for_install(program_file):
     """ Шаблон установки файлов программы """
-    os.system(get_peculiarities_system('move') + FOLDER_ELBA + program_file + ' . ')
+    os.system(get_peculiarities_system('copy_file') + FOLDER_ELBA + program_file + ' . ')
 
 
 def template_question(text):
@@ -246,6 +246,7 @@ def get_peculiarities_system(action):
 
 def authentication_check(first_start, after_update):
     """ Проверка программы на подлинность """
+    from werkzeug.security import generate_password_hash, check_password_hash
 
     def bin_reading_modules():
         """ Чтение модулей и запись в строку подряд """
@@ -295,7 +296,7 @@ def authentication_check(first_start, after_update):
             saved_hash_modules = hash_modules.readline()
         # Проверка на подлинность
         check = check_password_hash(saved_hash_modules, str(reading_all_modules))
-        if (check or after_update) is False:
+        if (check and after_update) is False:
             # template_some_message(RED, 'The authenticity of the program is not installed')
             # sleep(2)
             # quit()
@@ -397,6 +398,15 @@ if __name__ == '__main__':
         template_some_message(RED, '- Module "update" does not exist -')
         download_from_repository()
 
+    try:
+        import werkzeug.security
+    except ModuleNotFoundError as error_module:
+        write_log(error_module, 'CRASH')
+        template_some_message(RED, f"MISSING: {error_module}")
+        template_some_message(
+            ACCENT_1, f"Please, install {str(error_module)[15:]} with requirements"
+        )
+        quit()
     # Проверка модулей на наличие
     status_mis_mod = check_modules()
     # Если модули на месте
@@ -412,7 +422,7 @@ if __name__ == '__main__':
         import rollback_obs
 
         try:
-            from werkzeug.security import check_password_hash, generate_password_hash
+            import werkzeug.security
         except ModuleNotFoundError as error_module:
             write_log(error_module, 'CRASH')
             template_some_message(RED, f"MISSING: {error_module}")
