@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = '0.10.2_ALPHA'
+__version__ = '0.10.3_ALPHA'
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -77,11 +77,11 @@ stock_modules = [
 
 # <<< -------- Цветовые акценты в программе -------- >>>
 dictionary_default_accents = {
-    'ACCENT_1': '#FBC330',
-    'ACCENT_2': '#904c77',
-    'ACCENT_3': '#30A0E0',
+    'ACCENT_1': '#FFCDAA',
+    'ACCENT_2': '#9CB898',
+    'ACCENT_3': '#EE8980',
     'ACCENT_4': '#FFFFFF',
-    'ACCENT_5': '#9B30FF'
+    'ACCENT_5': '#B588F7'
 }
 
 
@@ -96,19 +96,18 @@ def get_size_of_terminal():
 
 def show_name_program():
     from logo_obs import wait_effect, first_start_message
+    if CHECK_FOLDER_FOR_RESOURCE is False:
+        first_start_message()
     lines = [
         ACCENT_3,
         f"E  DELTA FOR LINUX  A",
         f"L  by Berliner187   B",
         f"B  Seal Barrilla    L",
-        f"A       DISCO       E",
-        ACCENT_1, __version__,
-        ACCENT_2,
+        f"A  {__version__}     E",
+        '\n', ACCENT_2,
         "_" * get_size_of_terminal()
     ]
-    ACCENT_3, wait_effect(lines, 0.0001)
-    if CHECK_FOLDER_FOR_RESOURCE is False:
-        first_start_message()
+    ACCENT_3, wait_effect(lines, 0)
 
 
 def standard_location(right_now):
@@ -186,6 +185,7 @@ ACCENT_1 = format_hex_color(dictionary_default_accents[massive_colors[0]])
 ACCENT_2 = format_hex_color(dictionary_default_accents[massive_colors[1]])
 ACCENT_3 = format_hex_color(dictionary_default_accents[massive_colors[2]])
 ACCENT_4 = format_hex_color(dictionary_default_accents[massive_colors[3]])
+ACCENT_5 = format_hex_color(dictionary_default_accents[massive_colors[4]])
 GREEN = format_hex_color('#2ECC71')
 RED = format_hex_color('#C70039')
 
@@ -296,13 +296,14 @@ def authentication_check(first_start, after_update):
         # Проверка на подлинность
         check = check_password_hash(saved_hash_modules, str(reading_all_modules))
         if (check or after_update) is False:
-            template_some_message(RED, 'The authenticity of the program is not installed')
-            sleep(2)
-            quit()
+            # template_some_message(RED, 'The authenticity of the program is not installed')
+            # sleep(2)
+            # quit()
+            pass
         if first_start:
             system_action('clear')
-            template_some_message(GREEN, 'Signature is valid!')
-            sleep(2)
+            template_some_message(GREEN, 'Authenticated')
+            sleep(1)
             system_action('clear')
         if after_update:
             create_signature()
@@ -396,17 +397,6 @@ if __name__ == '__main__':
         template_some_message(RED, '- Module "update" does not exist -')
         download_from_repository()
 
-    try:
-        from werkzeug.security import check_password_hash, generate_password_hash
-        # generate_password_hash, check_password_hash
-    except ModuleNotFoundError as error_module:
-        write_log(error_module, 'CRASH')
-        template_some_message(RED, f"MISSING: {error_module}")
-        template_some_message(
-            ACCENT_1, f"Please, install {str(error_module)[15:]} with requirements"
-        )
-        quit()
-
     # Проверка модулей на наличие
     status_mis_mod = check_modules()
     # Если модули на месте
@@ -420,6 +410,16 @@ if __name__ == '__main__':
         import info_obs
         import getpass_obs
         import rollback_obs
+
+        try:
+            from werkzeug.security import check_password_hash, generate_password_hash
+        except ModuleNotFoundError as error_module:
+            write_log(error_module, 'CRASH')
+            template_some_message(RED, f"MISSING: {error_module}")
+            template_some_message(
+                ACCENT_1, f"Please, install {str(error_module)[15:]} with requirements"
+            )
+            quit()
 
         try:
             launcher()  # Запуск лончера
