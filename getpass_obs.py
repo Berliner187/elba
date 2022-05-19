@@ -1,7 +1,7 @@
 import sys
 
 """
-    asweigart/stdiomask (https://github.com/asweigart/stdiomask) 
+    Taken from: asweigart/stdiomask (https://github.com/asweigart/stdiomask) 
     is licensed under the GNU General Public License v3.0
 
     Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>

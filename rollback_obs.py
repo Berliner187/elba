@@ -5,7 +5,7 @@ import os
 from time import sleep
 
 
-__version__ = '0.9-10'
+__version__ = '0.10-01'
 
 
 def rollback():
