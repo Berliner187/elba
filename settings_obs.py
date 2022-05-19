@@ -1,26 +1,39 @@
 # -*- coding: UTF-8 -*-
 from main import *
+import random
 
 
-__version__ = '0.9-10'
+__version__ = '0.10-01'
+
+
+cols = get_size_of_terminal()
+
+
+def topper(category):
+    """ Топпер """
+    location_above = f'ELBA{category}'
+
+    def random_design(length):
+        number_str = ''
+        for i in range(length):
+            number = random.randrange(0, 9)
+            number_str += str(number)
+        return number_str
+
+    top_string = random_design(cols - 1)
+    middle_string = random_design(((cols - 1) - (len(location_above) + 4)))
+    bottom_string = random_design(cols - 1)
+
+    print(ACCENT_2, "\n", top_string)  # 1 строка
+    print(ACCENT_2, f"19{ACCENT_5} {location_above} {ACCENT_2}" + middle_string)  # 2 строка
+    print(ACCENT_2, bottom_string, "\n" * 2)  # 3 строка
 
 
 def settings():
-    cols = get_size_of_terminal()
-    cols = cols - 1
-    category = 'ELBA/SETTINGS'
+    category = '/SETTINGS'
 
     # <<<<<<<<<<<<< ПЕРЕДЕЛАТЬ >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    def name_on_top():
-        return f"||{GREEN} {category} "
-
-    total_surface_length = "|" * (cols - 1)
-
-    print(ACCENT_2, "\n", total_surface_length)  # 1 строка
-    print(
-        ACCENT_2, name_on_top() + ACCENT_3 + ('|' * (len(total_surface_length) - (len(category) + 4)))
-    )  # 2 строка
-    print(ACCENT_2, total_surface_length, "\n" * 2)  # 3 строка
+    topper(category)
     # <<<<<<<<<<<<<  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
     # Варианты настройки
@@ -37,19 +50,10 @@ def settings():
     def change_color_accent():
         """ Управление цветовыми акцентами """
         system_action('clear')
+        accents_location = f"{category}/ACCENTS"
 
-        # <<<<<<<<<<<<< ПЕРЕДЕЛАТЬ >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-        def name_on_top():
-            return f"||{GREEN} ELBA/SETTINGS/ACCENTS "
-
-        total_surface_length = "|" * (cols - 1)
-
-        print(ACCENT_2, "\n", total_surface_length)  # 1 строка
-        print(
-            ACCENT_2, name_on_top() + ACCENT_3 + ('|' * (len(total_surface_length) - (len(f'ELBA/SETTINGS/ACCENTS') + 4)))
-        )  # 2 строка
-        print(ACCENT_2, total_surface_length, "\n" * 2)  # 3 строка
+        # <<<<<<<<<<<<< СВЯЗАТЬ С functions_obs >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        topper(accents_location)
         # <<<<<<<<<<<<<  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
         # Выгрузка акцентов из файла
@@ -69,7 +73,7 @@ def settings():
         print(f"{ACCENT_3}[{ACCENT_1}{cnt + 1}{ACCENT_3}] {ACCENT_4}Set default color accent")
 
         template_some_message(ACCENT_3, '-- Color emphasis will change after restarting the program --')
-        setting_colors = int(input(standard_location(ACCENT_4 + '/SETTINGS/ACCENTS')))
+        setting_colors = int(input(standard_location(ACCENT_4 + accents_location)))
         cnt = 0
         # Прокрутка до нужной настройки
         for select in dic_colors:
@@ -96,9 +100,17 @@ def settings():
             sleep(1)
 
     def manage_themes():
+        """ Управление темами """
+        system_action('clear')
+        themes_location = f"{category}/THEMES"
+        # <<<<<<<<<<<<< СВЯЗАТЬ С functions_obs >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        topper(themes_location)
+        # <<<<<<<<<<<<<  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
         lines_themes = [
             "Light Theme",
             "Dark Theme",
+            "Strawberry Theme",
             "Green Theme",
             "Ocean Theme (Light)",
             "Coffee Theme"
@@ -111,12 +123,12 @@ def settings():
             'ACCENT_4': '#000000',
             'ACCENT_5': '9B30FF'
         }
-        dark_theme_default = {
-            'ACCENT_1': '#595959',  # Основной №1
-            'ACCENT_2': '#a5a5a5',  # Доп. цвет
-            'ACCENT_3': '#cccccc',  # Основной №2
+        strawberry_theme = {
+            'ACCENT_1': '#FFCDAA',
+            'ACCENT_2': '#9CB898',
+            'ACCENT_3': '#EE8980',
             'ACCENT_4': '#FFFFFF',
-            'ACCENT_5': '9B30FF'
+            'ACCENT_5': '#B588F7'
         }
         green_theme = {
             'ACCENT_1': '#cbef43',
@@ -144,7 +156,7 @@ def settings():
             create_file_with_theme(light_theme_default)
 
         def load_dark_theme():
-            create_file_with_theme(dark_theme_default)
+            create_file_with_theme(dictionary_default_accents)
 
         def load_green_theme():
             create_file_with_theme(green_theme)
@@ -155,12 +167,16 @@ def settings():
         def load_coffee_theme():
             create_file_with_theme(coffee_theme)
 
+        def load_strawberry_theme():
+            create_file_with_theme(strawberry_theme)
+
         dict_themes = {
             "1": load_light_theme,
             "2": load_dark_theme,
-            "3": load_green_theme,
-            "4": load_light_ocean_theme,
-            "5": load_coffee_theme
+            "3": load_strawberry_theme,
+            "4": load_green_theme,
+            "5": load_light_ocean_theme,
+            "6": load_coffee_theme
         }
 
         # Прокрутка возможных действий
@@ -170,7 +186,7 @@ def settings():
             cnt += 1
             print(f" {ACCENT_3}[{ACCENT_1}{cnt}{ACCENT_3}] {ACCENT_1}{theme}{ACCENT_4}")
 
-        user_change_theme = input(standard_location('/SETTINGS/THEMES'))
+        user_change_theme = input(standard_location(themes_location))
         try:
             dict_themes[user_change_theme]()
             system_action('restart')
