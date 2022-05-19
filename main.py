@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = '0.10_ALPHA'
+__version__ = '0.10.1_ALPHA'
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -68,11 +68,11 @@ REPOSITORY = 'git clone https://github.com/Berliner187/elba -b delta'
 
 # <<<--------------  Модули для работы программы  -------------->>>
 stock_modules = [
-    'datetime_obs.py', 'security_obs.py', 'logo_obs.py',
-    'remove_obs.py', 'notes_obs.py', 'info_obs.py',
-    'passwords_obs.py', 'functions_obs.py', 'change_mp_obs.py',
-    'control_bus_obs.py', 'settings_obs.py', 'update_obs.py',
-    'getpass_obs.py', 'resources_obs.py', 'rollback_obs.py'
+    'change_mp_obs.py', 'control_bus_obs.py', 'datetime_obs.py',
+    'functions_obs.py', 'getpass_obs.py', 'info_obs.py',
+    'logo_obs.py', 'notes_obs.py', 'passwords_obs.py',
+    'remove_obs.py', 'resources_obs.py', 'rollback_obs.py',
+    'security_obs.py', 'settings_obs.py', 'update_obs.py'
 ]
 
 # <<< -------- Цветовые акценты в программе -------- >>>
@@ -108,7 +108,7 @@ def show_name_program():
     ]
     ACCENT_3, wait_effect(lines, 0.0001)
     if CHECK_FOLDER_FOR_RESOURCE is False:
-        first_start_message()
+        logo_obs.first_start_message()
 
 
 def standard_location(right_now):
