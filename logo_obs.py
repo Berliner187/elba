@@ -78,7 +78,8 @@ author_emb = [
 
 def logo():
     # <<< Посимвольная отрисовка лого >>>
-    wait_effect(logo_strings_row, 0)
+    for line in logo_strings_row:
+        print(line.center(cols))
 
 
 def author():
