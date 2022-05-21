@@ -165,7 +165,7 @@ def first_start_message():
     sleep(2)
     system_action('clear')
     print(ACCENT_4)
-    wait_effect(hello, 0.05)    # Приветствие
+    wait_effect(hello, 0.03)    # Приветствие
     sleep(3)
     system_action('clear')
     print(ACCENT_5)
