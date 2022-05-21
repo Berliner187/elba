@@ -5,7 +5,7 @@ import os
 from time import sleep
 
 
-__version__ = '0.10-01'
+__version__ = '0.10-02'
 
 
 def update():
@@ -52,7 +52,6 @@ def update():
         cnt_missing_modules = message_about_status_modules()
         if cnt_missing_modules == 0:
             template_some_message(GREEN, 'The missing module has been installed!')
-            authentication_check(False, True)
         else:
             template_some_message(RED, 'Not all modules were installed')
         sleep(1)
@@ -134,8 +133,8 @@ def update():
                         get_info_about_modules(GREEN, 'UPDATE ', module)
                     else:
                         get_info_about_modules(ACCENT_1, 'REMAINS', module)
-                    authentication_check(False, True)
                     sleep(.2)
+                authentication_check(False, True)
 
                 template_remove_folder(FOLDER_ELBA)
                 sleep(.7)
