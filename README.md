@@ -1,22 +1,18 @@
 # Elba - Password Manager, Keeper of Notes and Encryption Files.
 
 With this program you can securely store passwords to resources, store encrypted notes, and encrypt any type of files.
-![ELBA](https://github.com/Berliner187/elba/blob/delta/img/start_window.png)
+![ELBA](https://github.com/Berliner187/elba/blob/delta/img/logo.png)
 
-
-
-![ELBA](https://github.com/Berliner187/elba/blob/delta/img/hello.png)
 # Цель программы - сохранить Ваши данные в конфиденциальности.
 - Только Вы знаете пароли от своих сервисов.
 - Ваши заметки остаются в тайне.
 - Файлы остаются в сохранности.
+![ELBA](https://github.com/Berliner187/elba/blob/delta/img/start_window.png)
 
-![ELBA](https://github.com/Berliner187/elba/blob/delta/img/logo.png)
 За конфиденциальность данных отвечают Base64 и AES, а также собственные методы безопасности.
 (Проверка подлинности, хеши подтверждения и прочие)
 
 Мы старались сделать программу максимально простой в использовании, но с мощной начинкой внутри.
-
 
 Update to v0.10:
 - Refactoring of functions and local modules
