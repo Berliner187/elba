@@ -4,17 +4,43 @@
     Модуль для вывода ресурсов и заметок с действиями,
     которые могут выполнятся пользователем в данном окне
 """
-import random
 
 from main import *
-
+import random
 import security_obs
 
 
-__version__ = '0.10-01'
+__version__ = '0.10-02'
 
 
 cols = get_size_of_terminal()   # Получение масштаба терминала
+
+
+class Topper:
+    """ Отображение топпера сверху """
+    def __init__(self, category_display):
+        self.category_display = category_display
+
+    def topper(self):
+        location_above = f'ELBA/{self.category_display.upper()}S'
+
+        def topper(topper_string):
+            print(ACCENT_2, topper_string)
+
+        def filling(length):
+            number_str = ''
+            for i in range(length):
+                char = random.randrange(65, 91)
+                number_str += chr(char)
+            return number_str
+
+        hollow_filled_string = filling(cols - 1)
+        middle_string = filling(((cols - 1) - (len(location_above) + 4)))
+
+        topper(hollow_filled_string)  # 1 строка
+        topper(f"19 {ACCENT_5}{location_above}{ACCENT_2} " + middle_string)  # 2 строка
+        topper(hollow_filled_string)  # 3 строка
+        print("\n" * 2)
 
 
 class ProgramFunctions(object):
@@ -41,24 +67,7 @@ class ProgramFunctions(object):
         elif self.category == 'encryption':
             type_folder = FOLDER_WITH_ENC_DATA
 
-        # <<< Показ категории >>>
-        """ Топпер """
-        location_above = f'ELBA/{self.category.upper()}S'
-
-        def random_design(length):
-            number_str = ''
-            for i in range(length):
-                number = random.randrange(0, 9)
-                number_str += str(number)
-            return number_str
-
-        top_string = random_design(cols-1)
-        middle_string = random_design(((cols - 1) - (len(location_above) + 4)))
-        bottom_string = random_design(cols-1)
-
-        print(ACCENT_2, "\n", top_string)               # 1 строка
-        print(ACCENT_2, f"19{ACCENT_5} {location_above} {ACCENT_2}" + middle_string)  # 2 строка
-        print(ACCENT_2, bottom_string, "\n"*2)          # 3 строка
+        Topper(self.category).topper()
 
         number_saved_data = 0
         for category_item in os.listdir(type_folder):
