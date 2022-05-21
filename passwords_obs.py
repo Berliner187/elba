@@ -184,7 +184,9 @@ class ActionsWithPassword:
                 if hash_password and CHECK_FOLDER_FOR_RESOURCE:
                     if CHECK_FILE_WITH_GENERIC:
                         xzibit = security_obs.dec_aes(FILE_WITH_GENERIC_KEY, master_password)
-                        check_with_xzibit = check_password_hash(open(FILE_WITH_HASH_GENERIC_KEY).readline(), xzibit)
+                        check_with_xzibit = check_password_hash(
+                            open(FILE_WITH_HASH_GENERIC_KEY).readline(), xzibit
+                        )
                         if check_with_xzibit:
                             return master_password
                         else:
