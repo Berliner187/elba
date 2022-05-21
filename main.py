@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = '0.10.4_ALPHA'
+__version__ = '0.10.5_ALPHA'
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -72,7 +72,7 @@ stock_modules = [
     'functions_obs.py', 'getpass_obs.py', 'info_obs.py',
     'logo_obs.py', 'notes_obs.py', 'passwords_obs.py',
     'remove_obs.py', 'resources_obs.py', 'rollback_obs.py',
-    'security_obs.py', 'settings_obs.py', 'update_obs.py'
+    'security_obs.py', 'settings_obs.py'
 ]
 
 # <<< -------- Цветовые акценты в программе -------- >>>
@@ -102,7 +102,7 @@ def show_name_program():
         ACCENT_3,
         f"E  DELTA FOR LINUX  A",
         f"L  by Berliner187   B",
-        f"B  Seal Barrilla    L",
+        f"B  Mino Arimo       L",
         f"A  {__version__}     E",
         '\n', ACCENT_2,
         "_" * get_size_of_terminal()
@@ -316,7 +316,7 @@ def download_from_repository():
     module_update = 'update_obs.py'
     system_action('clear')
     if os.path.exists(module_update) is False:
-        os.system(get_peculiarities_system('move') + f' elba/{module_update} .')
+        os.system(get_peculiarities_system('copy') + f' elba/{module_update} .')
         system_action('restart')
 
 
@@ -409,8 +409,8 @@ if __name__ == '__main__':
         quit()
     # Проверка модулей на наличие
     status_mis_mod = check_modules()
-    # Если модули на месте
-    if status_mis_mod == 0:
+
+    if status_mis_mod == 0:     # Если модули на месте
         import control_bus_obs
         import security_obs
         import datetime_obs
@@ -420,16 +420,6 @@ if __name__ == '__main__':
         import info_obs
         import getpass_obs
         import rollback_obs
-
-        try:
-            import werkzeug.security
-        except ModuleNotFoundError as error_module:
-            write_log(error_module, 'CRASH')
-            template_some_message(RED, f"MISSING: {error_module}")
-            template_some_message(
-                ACCENT_1, f"Please, install {str(error_module)[15:]} with requirements"
-            )
-            quit()
 
         try:
             launcher()  # Запуск лончера
@@ -464,6 +454,5 @@ if __name__ == '__main__':
             template_some_message(ACCENT_3, '--- ELBA CLOSED ---')
             write_log(keyboard, "CLOSE")
             quit()
-    else:
-        # Попытка установить отсутствующие модули
+    else:   # Попытка установить отсутствующие модули
         update()
