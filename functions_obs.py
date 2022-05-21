@@ -10,19 +10,18 @@ import random
 import security_obs
 
 
-__version__ = '0.10-02'
+__version__ = '0.10-03'
 
 
 cols = get_size_of_terminal()   # Получение масштаба терминала
 
 
-class Topper:
-    """ Отображение топпера сверху """
-    def __init__(self, category_display):
-        self.category_display = category_display
-
-    def topper(self):
-        location_above = f'ELBA/{self.category_display.upper()}S'
+class StylishLook:
+    """ Стандартизация стиля в программе """
+    @staticmethod
+    def topper(category_display):
+        """ Отображение топпера сверху """
+        location_above = f'ELBA/{category_display.upper()}'
 
         def topper(topper_string):
             print(ACCENT_2, topper_string)
@@ -40,7 +39,15 @@ class Topper:
         topper(hollow_filled_string)  # 1 строка
         topper(f"19 {ACCENT_5}{location_above}{ACCENT_2} " + middle_string)  # 2 строка
         topper(hollow_filled_string)  # 3 строка
-        print("\n" * 2)
+        print(ACCENT_4, "\n" * 2)
+
+    @staticmethod
+    def scrolling_and_numbering_content(what_scrolls):
+        cnt = 0
+        for content in what_scrolls:
+            cnt += 1
+            print(f" {ACCENT_3}[{ACCENT_1}{cnt}{ACCENT_3}] - {ACCENT_1}{content}{ACCENT_4}")
+        return cnt
 
 
 class ProgramFunctions(object):
@@ -67,7 +74,7 @@ class ProgramFunctions(object):
         elif self.category == 'encryption':
             type_folder = FOLDER_WITH_ENC_DATA
 
-        Topper(self.category).topper()
+        StylishLook().topper(self.category + 'S')
 
         number_saved_data = 0
         for category_item in os.listdir(type_folder):

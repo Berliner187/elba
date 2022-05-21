@@ -105,7 +105,7 @@ def control_bus(generic_key):
 
         elif '-l' in change_resource_or_actions:
             system_action("clear")
-            template_some_message(GREEN, "Log program from file")
+            functions_obs.Topper('LOG').topper()
             log_data = open(FILE_LOG, 'r')
             reader_log = DictReader(log_data, delimiter=';')
             try:
@@ -145,21 +145,18 @@ def control_bus(generic_key):
                     system_action('clear')
                     drawing_instructions()
 
-                    path_to_resource = FOLDER_WITH_RESOURCES + resource_in_folder
-                    resource_from_file = path_to_resource + '/' + FILE_RESOURCE
-                    login_from_file = path_to_resource + '/' + FILE_LOGIN
-                    password_from_file = path_to_resource + '/' + FILE_PASSWORD
-
                     def template_print_decryption_data(data_type, value):
                         print(
                             ACCENT_3, data_type, ACCENT_4, security_obs.dec_aes(value, generic_key)
                         )
+
+                    path_to_resource = FOLDER_WITH_RESOURCES + resource_in_folder
                     template_print_decryption_data(
-                        'Resource --->', resource_from_file)
+                        'Resource --->', f"{path_to_resource}/{FILE_RESOURCE}")
                     template_print_decryption_data(
-                        'Login ------>', login_from_file)
+                        'Login ------>', f"{path_to_resource}/{FILE_LOGIN}")
                     template_print_decryption_data(
-                        'Password --->', password_from_file)
+                        'Password --->', f"{path_to_resource}/{FILE_PASSWORD}")
             if match_string == 0:
                 drawing_instructions()
         else:

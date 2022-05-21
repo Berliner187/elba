@@ -2,22 +2,21 @@
 from main import *
 
 import os
+import functions_obs
 from time import sleep
 
 
-__version__ = '0.10-01'
+__version__ = '0.10-02'
 
 
 def rollback():
     """ Откат к сохраненным версиям """
-    s = 0
     system_action('clear')
-    for version in os.listdir(OLD_ELBA):
-        s += 1
-        print(f"{s} - {ACCENT_1}{version}{ACCENT_4}")
+    functions_obs.StylishLook().topper('ROLLBACK')
+    cnt_versions = functions_obs.StylishLook().scrolling_and_numbering_content(os.listdir(OLD_ELBA))
 
     template_some_message(ACCENT_3, "  - Change version by number - ")
-    change = int(input(ACCENT_1 + f"(1-{s}): " + ACCENT_4))
+    change = int(input(ACCENT_1 + f"(1-{cnt_versions}): " + ACCENT_4))
     if change == '-z':
         template_remove_folder(OLD_ELBA)
     cnt = 0
