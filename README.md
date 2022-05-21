@@ -1,6 +1,7 @@
 # Elba - Password Manager, Keeper of Notes and Encryption Files.
 
 With this program you can securely store passwords to resources, store encrypted notes, and encrypt any type of files.
+![ELBA](https://github.com/Berliner187/elba/tree/delta/elba_start_window.png)
 
 Update to v0.9.x:
 - Modified interface
