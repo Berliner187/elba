@@ -89,7 +89,7 @@ def update():
                     template_for_install(main_file)
 
                     def get_info_about_modules(color, message, mod):    # ИСПРАВИТЬ
-                        print('[', color, message, ACCENT_4, ']', mod)
+                        print(f'[{color}{message}{ACCENT_4}]', mod)
 
                     for module in stock_modules:
                         if os.path.getsize(FOLDER_ELBA + module) != os.path.getsize(module):
