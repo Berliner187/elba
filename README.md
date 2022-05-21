@@ -7,7 +7,7 @@ With this program you can securely store passwords to resources, store encrypted
 - Только Вы знаете пароли от своих сервисов.
 - Ваши заметки остаются в тайне.
 - Файлы остаются в сохранности.
-![ELBA](https://github.com/Berliner187/elba/blob/delta/img/start_window.png)
+![ELBA](https://github.com/Berliner187/elba/blob/delta/img/hello.png)
 
 За конфиденциальность данных отвечают Base64 и AES, а также собственные методы безопасности.
 (Проверка подлинности, хеши подтверждения и прочие)
