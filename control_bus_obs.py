@@ -105,7 +105,7 @@ def control_bus(generic_key):
 
         elif '-l' in change_resource_or_actions:
             system_action("clear")
-            functions_obs.Topper('LOG').topper()
+            functions_obs.StylishLook().topper('LOGS')
             log_data = open(FILE_LOG, 'r')
             reader_log = DictReader(log_data, delimiter=';')
             try:
