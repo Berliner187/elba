@@ -67,6 +67,7 @@ def update():
             if os.path.exists(OLD_ELBA) is False:
                 os.mkdir(OLD_ELBA)
             if os.path.exists(OLD_ELBA + elba_version) is False:
+                template_some_message(GREEN, "- Creating a backup -")
                 os.mkdir(OLD_ELBA + elba_version)
                 # Копирование файлов программы
                 template_for_copy(FILE_WITH_SHA256)
@@ -75,6 +76,9 @@ def update():
                         template_for_copy(item)
                 # Копирование данных юзера
                 os.system(get_peculiarities_system('copy_dir') + FOLDER_WITH_DATA + ' ' + OLD_ELBA + elba_version + '/')
+            else:
+                template_some_message(ACCENT_1, "- Backup already exists -")
+            sleep(1)
 
             # Условие установки новой версии программы
             if os.path.getsize(main_file) != os.path.getsize(FOLDER_ELBA + main_file):
