@@ -132,7 +132,6 @@ def control_bus(generic_key):
 
         elif '-s' in change_resource_or_actions:    # Пользовательские настройки
             write_log('Settings', 'Run')
-            system_action('clear')
             settings_obs.settings()
             functions_obs.ProgramFunctions(generic_key, 'resource').get_category_label()
             write_log('Settings', 'Exit')
