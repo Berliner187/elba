@@ -115,6 +115,7 @@ def update():
                             get_info_about_modules(GREEN, 'UPDATE ', module)
                         else:
                             get_info_about_modules(ACCENT_1, 'REMAINS', module)
+                        template_for_install('update_obs.py')
                         sleep(.2)
 
                 template_remove_folder(FOLDER_ELBA)
