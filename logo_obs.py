@@ -11,13 +11,14 @@ import os
 from main import *
 
 
-__version__ = '0.10-00'
+__version__ = '0.10-01'
 
 
 cols = get_size_of_terminal()
 
 
 def iterate_over_characters(string, sleeper):
+    """ Анимация печати символов """
     crutch = sleeper
     for c in string.center(cols):
         if c == ' ':
@@ -151,9 +152,9 @@ def first_start_message():
     """ Сообщения в самом начале """
     elba_say_list = [
         'Your data is kept confidential through Elba.',
-        'Only you know your service passwords',
-        'Your notes will remain secret',
-        RED + 'Нет поддержки русского языка'
+        'Only you know your service passwords.',
+        'Your notes will remain secret.',
+        RED + 'Нет поддержки русского языка.'
     ]
 
     def template_elba_say():
@@ -174,4 +175,3 @@ def first_start_message():
     template_elba_say()
     input(ACCENT_4 + '\n Continue...')
     system_action('clear')
-# first_start_message()
