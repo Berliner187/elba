@@ -12,6 +12,7 @@ cols = get_size_of_terminal()
 
 
 def settings():
+    system_action('clear')
     category = 'SETTINGS'
     functions_obs.StylishLook().topper(category)
 
@@ -47,31 +48,30 @@ def settings():
         print(f"{ACCENT_3}[{ACCENT_1}{cnt + 1}{ACCENT_3}] {ACCENT_4}Set default color accent")
 
         template_some_message(ACCENT_3, '-- Color emphasis will change after restarting the program --')
-        setting_colors = int(input(standard_location(ACCENT_4 + accents_location)))
-        cnt = 0
-        # Прокрутка до нужной настройки
-        for select in accents_from_file:
-            cnt += 1
-            # Кастомизация цвета
-            if setting_colors == cnt:
-                while True:
-                    new_color = input(f'{GREEN} - Input new color in HEX: {ACCENT_4}#')
-                    if len(new_color) == 6:
-                        break
-                    else:
-                        template_some_message(RED, '- HEX format should consist of 6 characters -')
-                accents_from_file[select] = f'#{new_color}'.upper()
-                with open(FILE_SETTINGS_COLOR, 'w+') as file_colors:
-                    file_colors.write(str(accents_from_file))
-                    file_colors.close()
+        keys = [*accents_from_file]     # Сбор ключей словаря в массив
+        setting_colors = input(standard_location(ACCENT_4 + accents_location))
+        # Кастомизация цвета
+        if setting_colors.isdigit():
+            if int(setting_colors) == 6:     # Костыль
+                os.system(get_peculiarities_system('rm') + FILE_SETTINGS_COLOR)
                 system_action('clear')
-                template_some_message(GREEN, '- Successfully changed color accent -')
+                template_some_message(GREEN, '- Success -')
                 sleep(1)
-        if setting_colors == 6:     # Костыль
-            os.system(get_peculiarities_copy('rm') + FILE_SETTINGS_COLOR)
+                system_action('restart')
+            while True:
+                new_color = input(f'{GREEN} - Input new color in HEX: {ACCENT_4}#')
+                if len(new_color) == 6:
+                    break
+                else:
+                    template_some_message(RED, '- HEX format should consist of 6 characters -')
+            accents_from_file[keys[int(setting_colors)-1]] = f'#{new_color}'.upper()
+            with open(FILE_SETTINGS_COLOR, 'w+') as file_colors:
+                file_colors.write(str(accents_from_file))
+                file_colors.close()
             system_action('clear')
-            template_some_message(GREEN, '- Success -')
+            template_some_message(GREEN, '- Successfully changed color accent -')
             sleep(1)
+        settings()
 
     def manage_themes():
         """ Управление темами """
@@ -164,7 +164,6 @@ def settings():
         }
 
         # Прокрутка возможных действий
-        print('\n')
         functions_obs.StylishLook().scrolling_and_numbering_content(lines_themes)
 
         user_change_theme = input(standard_location(themes_location))
@@ -173,6 +172,7 @@ def settings():
             system_action('restart')
         except KeyError:
             pass
+        settings()
 
     def optimisation():
         """ Оптимизация за счёт очистки кэша """
