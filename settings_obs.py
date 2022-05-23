@@ -5,7 +5,7 @@ import getpass
 import functions_obs
 
 
-__version__ = '0.10-02'
+__version__ = '0.10-03'
 
 
 cols = get_size_of_terminal()
@@ -21,7 +21,9 @@ def settings():
         'Customize Color Accent',
         'Manage Themes',
         'Optimization Program'
+        'Срок действия общего ключа'
     ]
+
     functions_obs.StylishLook().scrolling_and_numbering_content(variation_settings)
 
     def change_color_accent():
@@ -49,7 +51,7 @@ def settings():
 
         template_some_message(ACCENT_3, '-- Color emphasis will change after restarting the program --')
         keys = [*accents_from_file]     # Сбор ключей словаря в массив
-        setting_colors = input(standard_location(ACCENT_4 + accents_location))
+        setting_colors = input(standard_location(f"/{accents_location}"))
         # Кастомизация цвета
         if setting_colors.isdigit():
             if int(setting_colors) == 6:     # Костыль
@@ -94,24 +96,24 @@ def settings():
             'ACCENT_5': '#B588F7'
         }
         green_theme = {
-            'ACCENT_1': '#cbef43',
-            'ACCENT_2': '#8de969',
-            'ACCENT_3': '#72a98f',
+            'ACCENT_1': '#CBEF43',
+            'ACCENT_2': '#8DE969',
+            'ACCENT_3': '#72A98F',
             'ACCENT_4': '#FFFFFF',
             'ACCENT_5': '#9B30FF'
         }
         light_ocean_theme = {
-            'ACCENT_1': '#2f4550',
-            'ACCENT_2': '#2f4550',
-            'ACCENT_3': '#586f7c',
+            'ACCENT_1': '#2F4550',
+            'ACCENT_2': '#2F4550',
+            'ACCENT_3': '#586F7C',
             'ACCENT_4': '#000000',
             'ACCENT_5': '#9B30FF'
         }
         coffee_theme = {
-            'ACCENT_1': '#997d60',
-            'ACCENT_2': '#bbbcbf',
-            'ACCENT_3': '#bca58d',
-            'ACCENT_4': '#e3d1df',
+            'ACCENT_1': '#997D60',
+            'ACCENT_2': '#BBBCBF',
+            'ACCENT_3': '#BCA58D',
+            'ACCENT_4': '#E3D1Df',
             'ACCENT_5': '#9B30FF'
         }
         pastel_theme = {
@@ -166,7 +168,7 @@ def settings():
         # Прокрутка возможных действий
         functions_obs.StylishLook().scrolling_and_numbering_content(lines_themes)
 
-        user_change_theme = input(standard_location(themes_location))
+        user_change_theme = input(standard_location(f"/{themes_location}"))
         try:
             dict_themes[user_change_theme]()
             system_action('restart')
@@ -182,6 +184,9 @@ def settings():
         write_log("Delete cache", "QUIT")
         sleep(1)
         system_action('restart')
+
+    def expiry_of_the_generic_key():
+        pass
 
     actions_dict = {
         "1": change_color_accent,
