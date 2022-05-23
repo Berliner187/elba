@@ -8,6 +8,7 @@ from main import *
 
 import security_obs
 import logo_obs
+import functions_obs
 from getpass_obs import getpass
 
 from time import sleep
@@ -18,7 +19,7 @@ import random
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-__version__ = '0.10-02'
+__version__ = '0.10-03'
 
 
 cols = get_size_of_terminal()
@@ -140,11 +141,9 @@ class ActionsWithPassword:
             return generic
 
     @staticmethod
-    def point_of_entry():
+    def verify_master_password():
         """ Точка входа в программу """
         def get_master_password():
-            show_name_program()
-            logo_obs.elba()
             input_master_password = getpass(
                 f"{ACCENT_1}\n\n   {standard_location('/LOGIN')}{ACCENT_4}"
             )
@@ -199,10 +198,15 @@ class ActionsWithPassword:
 
 def choice_generation_or_save_self_password(resource, login, master_password):
     """ Выбор пароля: генерирование нового или сохранение пользовательского """
-    print('\n'*2,
-          f"{ACCENT_3}[{ACCENT_1}1{ACCENT_3}] - Generation new password \n",
-          f"{ACCENT_3}[{ACCENT_1}2{ACCENT_3}] - Save your password      \n")
-    print(ACCENT_4)
+    proposed_options = [
+        "Generation new password",
+        "Save your password"
+    ]
+
+    print('\n')
+    functions_obs.StylishLook().scrolling_and_numbering_content(proposed_options)
+    print('\n')
+
     while True:
         change_type = int(input('Change (1/2): '))
         if change_type == 1:  # Генерирование пароля и сохранение в файл
