@@ -20,7 +20,7 @@ from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = '0.10.5_ALPHA'
+__version__ = '0.10.6_ALPHA'
 
 
 # <<<----------------------- Константы --------------------------->>>
@@ -114,19 +114,9 @@ def standard_location(right_now):
     return f"\n ELBA{right_now}: ~$ "
 
 
-def template_remove_folder(some_folder):
-    """ Шаблон удаления папки """
-    os.system('rmdir ' + some_folder if os.name == 'nt' else 'rm -r ' + some_folder + ' -f')
-
-
 def template_some_message(color, message):
     """ Шаблон сообщения в ходе работы программы """
     print(color, '\n'*2, f"{message.center(get_size_of_terminal())}{ACCENT_4}")
-
-
-def template_for_install(program_file):
-    """ Шаблон установки файлов программы """
-    os.system(get_peculiarities_system('copy_file') + FOLDER_ELBA + program_file + ' . ')
 
 
 def template_question(text):
@@ -136,6 +126,16 @@ def template_question(text):
 
 def template_input(text):
     return input(ACCENT_1 + f" - {text} " + ACCENT_4)
+
+
+def template_for_install(program_file):
+    """ Шаблон установки файлов программы """
+    os.system(get_peculiarities_system('copy_file') + FOLDER_ELBA + program_file + ' . ')
+
+
+def template_remove_folder(some_folder):
+    """ Шаблон удаления папки """
+    os.system('rmdir ' + some_folder if os.name == 'nt' else 'rm -r ' + some_folder + ' -f')
 
 
 def format_hex_color(hex_color):
@@ -186,7 +186,7 @@ ACCENT_2 = format_hex_color(dictionary_default_accents[massive_colors[1]])
 ACCENT_3 = format_hex_color(dictionary_default_accents[massive_colors[2]])
 ACCENT_4 = format_hex_color(dictionary_default_accents[massive_colors[3]])
 ACCENT_5 = format_hex_color(dictionary_default_accents[massive_colors[4]])
-GREEN = format_hex_color('#2ECC71')
+GREEN = format_hex_color('#6B8E4E')
 RED = format_hex_color('#C70039')
 
 
@@ -297,10 +297,9 @@ def authentication_check(first_start, after_update):
         # Проверка на подлинность
         check = check_password_hash(saved_hash_modules, str(reading_all_modules))
         if (check and after_update) is False:
-            # template_some_message(RED, 'The authenticity of the program is not installed')
-            # sleep(2)
-            # quit()
-            pass
+            template_some_message(RED, 'The authenticity of the program is not installed')
+            sleep(2)
+            quit()
         if first_start:
             system_action('clear')
             template_some_message(GREEN, 'Authenticated')
@@ -362,7 +361,7 @@ def check_modules():
         return 1
 
 
-def launcher():
+def point_of_entry():
     """ The main function responsible for the operation of the program """
     system_action('clear')
     write_log('-', '-')
@@ -379,8 +378,8 @@ def launcher():
         write_log('First launch', 'OK')
         control_bus_obs.control_bus(generic_key)
     else:  # При последующем
-        authentication_check(False, False)  # Проверка на подлинность
-        master_password = passwords_obs.ActionsWithPassword(None).point_of_entry()
+        # authentication_check(False, False)  # Проверка на подлинность
+        master_password = passwords_obs.ActionsWithPassword(None).verify_master_password(True)
         generic_key_from_file = security_obs.dec_aes(FILE_WITH_GENERIC_KEY, master_password)
         system_action('clear')
         datetime_obs.greeting(generic_key_from_file)
@@ -422,7 +421,7 @@ if __name__ == '__main__':
         import rollback_obs
 
         try:
-            launcher()  # Запуск лончера
+            point_of_entry()  # Запуск лончера
         except Exception or NameError as random_error:
             write_log(random_error, 'FAIL')
             template_some_message(RED, ' --- ERROR --- ')
@@ -450,7 +449,7 @@ if __name__ == '__main__':
         except KeyboardInterrupt as keyboard:
             system_action('clear')
             template_some_message(ACCENT_3, '--- ELBA CLOSED ---')
-            write_log(keyboard, "CLOSE")
+            write_log("ELBA", "QUIT")
             quit()
     else:   # Попытка установить отсутствующие модули
         update()
