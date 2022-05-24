@@ -141,8 +141,8 @@ class ActionsWithPassword:
             return generic
 
     @staticmethod
-    def verify_master_password():
-        """ Точка входа в программу """
+    def verify_master_password(show_logotype):
+        """ Проверка мастер-пароля """
         def get_master_password():
             input_master_password = getpass(
                 f"{ACCENT_1}\n\n   {standard_location('/LOGIN')}{ACCENT_4}"
@@ -155,8 +155,11 @@ class ActionsWithPassword:
                 logo_obs.animation()
             return input_master_password
 
-        cnt_left = 4
+        cnt_left = 3
         while True:
+            if show_logotype:   # Вывод версии и логотипа
+                logo_obs.show_name_program()
+                logo_obs.elba()
             master_password = get_master_password()
             # Проверка хэша пароля
             hash_password = check_password_hash(open(FILE_WITH_HASH).readline(), master_password)
@@ -167,9 +170,9 @@ class ActionsWithPassword:
             # Если нет подтверждения
             if hash_password is False:
                 system_action('clear')
-                cnt_left -= 1
                 print(RED, '\n'*3, "-----  Wrong password  -----".center(cols), '\n'*3, ACCENT_3)
                 print(' '*16, f"Attempts left: {RED}{cnt_left}{ACCENT_4}".center(cols))
+                cnt_left -= 1
                 sleep(1)
                 system_action('clear')
                 if cnt_left <= 0:

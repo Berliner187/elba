@@ -38,29 +38,29 @@ def wait_effect(lines, sleeper):
 
 logo_strings_row = [
         "",
-        " EEEEEEEE     LL            BBBBBBB           AAAAAA        ",
-        " E            LL            B      B         A      A       ",
-        " E            LL            B      BB       AA      AA      ",
-        " EEEEEEE      LL            BBBBBBBB       AAAAAAAAAAAA     ",
-        " E            LL            B      BB      AA        AA     ",
-        " E            LL            B       BB     AA        AA     ",
-        " E            LL            B        BB    AA        AA     ",
-        " E            LL            B         BB   AA        AA     ",
-        " EEEEEEEEEEE  LLLLLLLLLLL   BBBBBBBBBBB    AA        AA     "
+        "EEEEEEEE     LL            BBBBBBB           AAAAAA   ",
+        "E            LL            B      B         A      A  ",
+        "E            LL            B      BB       AA      AA ",
+        "EEEEEEE      LL            BBBBBBBB       AAAAAAAAAAAA",
+        "E            LL            B      BB      AA        AA",
+        "E            LL            B       BB     AA        AA",
+        "E            LL            B        BB    AA        AA",
+        "E            LL            B         BB   AA        AA",
+        "EEEEEEEEEEE  LLLLLLLLLLL   BBBBBBBBBBB    AA        AA"
     ]
 
 
 hello = [
         "",
-        " HH        HH   EEEEEEEE      LL            LL             OOOOOOOOO           ",
-        " HH        HH   EE            LL            LL            OO       OO          ",
-        " HH        HH   EE            LL            LL            OO       OO          ",
-        " HHHHHHHHHHHH   EEEEEEE       LL            LL            OO       OO          ",
-        " HH        HH   EE            LL            LL            OO       OO          ",
-        " HH        HH   EE            LL            LL            OO       OO          ",
-        " HH        HH   EE            LL            LL            OO       OO          ",
-        " HH        HH   EE            LL            LL            OO       OO          ",
-        " HH        HH   EEEEEEEEEEE   LLLLLLLLLLL   LLLLLLLLLLL    OOOOOOOOO           "
+        "HH        HH   EEEEEEEE      LL            LL             OOOOOOOOO ",
+        "HH        HH   EE            LL            LL            OO       OO",
+        "HH        HH   EE            LL            LL            OO       OO",
+        "HHHHHHHHHHHH   EEEEEEE       LL            LL            OO       OO",
+        "HH        HH   EE            LL            LL            OO       OO",
+        "HH        HH   EE            LL            LL            OO       OO",
+        "HH        HH   EE            LL            LL            OO       OO",
+        "HH        HH   EE            LL            LL            OO       OO",
+        "HH        HH   EEEEEEEEEEE   LLLLLLLLLLL   LLLLLLLLLLL    OOOOOOOOO "
 ]
 
 
