@@ -77,11 +77,11 @@ stock_modules = [
 
 # <<< -------- Цветовые акценты в программе -------- >>>
 dictionary_default_accents = {
-    'ACCENT_1': '#FFCDAA',
-    'ACCENT_2': '#9CB898',
-    'ACCENT_3': '#EE8980',
+    'ACCENT_1': '#EAE7E3',
+    'ACCENT_2': '#BDB4AA',
+    'ACCENT_3': '#9C9792',
     'ACCENT_4': '#FFFFFF',
-    'ACCENT_5': '#B588F7'
+    'ACCENT_5': '#5FC599'
 }
 
 
