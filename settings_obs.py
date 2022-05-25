@@ -20,8 +20,8 @@ def settings():
     variation_settings = [
         'Customize Color Accent',
         'Manage Themes',
-        'Optimization Program'
-        'Срок действия общего ключа'
+        'Optimization Program',
+        'Public key validity period'
     ]
 
     functions_obs.StylishLook().scrolling_and_numbering_content(variation_settings)
@@ -86,7 +86,14 @@ def settings():
             'ACCENT_2': '#FFFFFF',
             'ACCENT_3': '#FFFFFF',
             'ACCENT_4': '#000000',
-            'ACCENT_5': '9B30FF'
+            'ACCENT_5': '#B1ABEB'
+        }
+        dark_theme_default = {
+            'ACCENT_1': '#EAE7E3',
+            'ACCENT_2': '#BDB4AA',
+            'ACCENT_3': '#9C9792',
+            'ACCENT_4': '#FFFFFF',
+            'ACCENT_5': '#5FC599'
         }
         strawberry_theme = {
             'ACCENT_1': '#FFCDAA',
@@ -100,21 +107,21 @@ def settings():
             'ACCENT_2': '#8DE969',
             'ACCENT_3': '#72A98F',
             'ACCENT_4': '#FFFFFF',
-            'ACCENT_5': '#9B30FF'
+            'ACCENT_5': '#B1ABEB'
         }
         light_ocean_theme = {
             'ACCENT_1': '#2F4550',
             'ACCENT_2': '#2F4550',
             'ACCENT_3': '#586F7C',
             'ACCENT_4': '#000000',
-            'ACCENT_5': '#9B30FF'
+            'ACCENT_5': '#B1ABEB'
         }
         coffee_theme = {
             'ACCENT_1': '#997D60',
             'ACCENT_2': '#BBBCBF',
             'ACCENT_3': '#BCA58D',
             'ACCENT_4': '#E3D1Df',
-            'ACCENT_5': '#9B30FF'
+            'ACCENT_5': '#B1ABEB'
         }
         pastel_theme = {
             'ACCENT_1': '#EBC4AB',
@@ -123,12 +130,26 @@ def settings():
             'ACCENT_4': '#E3D1DF',
             'ACCENT_5': '#B1ABEB'
         }
+        falcon_theme = {
+            'ACCENT_1': '#7E9680',
+            'ACCENT_2': '#D87F81',
+            'ACCENT_3': '#B5838D',
+            'ACCENT_4': '#E3D1DF',
+            'ACCENT_5': '#B1ABEB'
+        }
+        cascade_theme = {
+            'ACCENT_1': '#8DAAAA',
+            'ACCENT_2': '#F6D5B6',
+            'ACCENT_3': '#E9AE8C',
+            'ACCENT_4': '#E3D1DF',
+            'ACCENT_5': '#B1ABEB'
+        }
 
         def load_light_theme():
             create_file_with_theme(light_theme_default)
 
         def load_dark_theme():
-            create_file_with_theme(dictionary_default_accents)
+            create_file_with_theme(dark_theme_default)
 
         def load_green_theme():
             create_file_with_theme(green_theme)
@@ -145,6 +166,12 @@ def settings():
         def load_pastel_theme():
             create_file_with_theme(pastel_theme)
 
+        def load_falcon_theme():
+            create_file_with_theme(falcon_theme)
+
+        def load_cascade_theme():
+            create_file_with_theme(cascade_theme)
+
         lines_themes = [
             "Light Theme",
             "Dark Theme",
@@ -152,7 +179,9 @@ def settings():
             "Green Theme",
             "Ocean Theme (Light)",
             "Coffee Theme",
-            "Pastel Theme"
+            "Pastel Theme",
+            "Falcon Theme",
+            "Cascade Theme"
         ]
 
         dict_themes = {
@@ -162,7 +191,9 @@ def settings():
             "4": load_green_theme,
             "5": load_light_ocean_theme,
             "6": load_coffee_theme,
-            "7": load_pastel_theme
+            "7": load_pastel_theme,
+            "8": load_falcon_theme,
+            "9": load_cascade_theme
         }
 
         # Прокрутка возможных действий
@@ -191,7 +222,8 @@ def settings():
     actions_dict = {
         "1": change_color_accent,
         "2": manage_themes,
-        "3": optimisation
+        "3": optimisation,
+        "4": expiry_of_the_generic_key
     }
 
     # Выбор варианта настройки
