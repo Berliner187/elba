@@ -2,24 +2,34 @@
 import os
 from time import sleep
 
+from functions_obs import ProgramFunctions
+
 from main import *
 
 
-__version__ = '0.10-01'
+__version__ = '0.10-02'
 
 
-def remove_object(category):
+class Remove(object):
 	""" Удаление выбранного ресурса или заметки """
-	template_some_message(ACCENT_3, '||| Change by number |||')
 
-	folder_category = ''
-	if category == 'resource':
-		folder_category = FOLDER_WITH_RESOURCES
-	elif category == 'note':
-		folder_category = FOLDER_WITH_NOTES
-	change_res_by_num = int(input(standard_location('/REMOVE')))
-	s = 0
-	for item in os.listdir(folder_category):
-		s += 1
-		if s == change_res_by_num:
-			template_remove_folder(folder_category + item)
+	def __init__(self, generic_key, category):
+		self.category_object = category
+		self.generic_key = generic_key
+
+	def remove_object(self):
+		system_action('clear')
+		ProgramFunctions(self.generic_key, 'resource').get_category_label()
+		template_some_message(ACCENT_3, '--- Change by number ---')
+
+		folder = ''
+		if self.category_object == 'resource':
+			folder = FOLDER_WITH_RESOURCES
+		elif self.category_object == 'note':
+			folder = FOLDER_WITH_NOTES
+
+		user_change = int(input(standard_location(f'/REMOVE_{str(self.category_object).upper()}')))
+		try:
+			template_remove_folder(folder + os.listdir(folder)[user_change-1])
+		except IndexError:
+			pass

@@ -82,67 +82,40 @@ def settings():
         functions_obs.StylishLook().topper(themes_location)
 
         light_theme_default = {
-            'ACCENT_1': '#FFFFFF',
-            'ACCENT_2': '#FFFFFF',
-            'ACCENT_3': '#FFFFFF',
-            'ACCENT_4': '#000000',
-            'ACCENT_5': '#B1ABEB'
+            'ACCENT_1': '#FFFFFF', 'ACCENT_2': '#FFFFFF', 'ACCENT_3': '#FFFFFF',
+            'ACCENT_4': '#000000', 'ACCENT_5': '#B1ABEB'
         }
         dark_theme_default = {
-            'ACCENT_1': '#EAE7E3',
-            'ACCENT_2': '#BDB4AA',
-            'ACCENT_3': '#9C9792',
-            'ACCENT_4': '#FFFFFF',
-            'ACCENT_5': '#5FC599'
+            'ACCENT_1': '#EAE7E3', 'ACCENT_2': '#BDB4AA', 'ACCENT_3': '#9C9792',
+            'ACCENT_4': '#FFFFFF', 'ACCENT_5': '#5FC599'
         }
         strawberry_theme = {
-            'ACCENT_1': '#FFCDAA',
-            'ACCENT_2': '#9CB898',
-            'ACCENT_3': '#EE8980',
-            'ACCENT_4': '#FFFFFF',
-            'ACCENT_5': '#B588F7'
+            'ACCENT_1': '#FFCDAA', 'ACCENT_2': '#9CB898', 'ACCENT_3': '#EE8980',
+            'ACCENT_4': '#FFFFFF', 'ACCENT_5': '#B588F7'
         }
         green_theme = {
-            'ACCENT_1': '#CBEF43',
-            'ACCENT_2': '#8DE969',
-            'ACCENT_3': '#72A98F',
-            'ACCENT_4': '#FFFFFF',
-            'ACCENT_5': '#B1ABEB'
+            'ACCENT_1': '#CBEF43', 'ACCENT_2': '#8DE969', 'ACCENT_3': '#72A98F',
+            'ACCENT_4': '#FFFFFF', 'ACCENT_5': '#B1ABEB'
         }
         light_ocean_theme = {
-            'ACCENT_1': '#2F4550',
-            'ACCENT_2': '#2F4550',
-            'ACCENT_3': '#586F7C',
-            'ACCENT_4': '#000000',
-            'ACCENT_5': '#B1ABEB'
+            'ACCENT_1': '#2F4550', 'ACCENT_2': '#2F4550', 'ACCENT_3': '#586F7C',
+            'ACCENT_4': '#000000', 'ACCENT_5': '#B1ABEB'
         }
         coffee_theme = {
-            'ACCENT_1': '#997D60',
-            'ACCENT_2': '#BBBCBF',
-            'ACCENT_3': '#BCA58D',
-            'ACCENT_4': '#E3D1Df',
-            'ACCENT_5': '#B1ABEB'
+            'ACCENT_1': '#997D60', 'ACCENT_2': '#BBBCBF', 'ACCENT_3': '#BCA58D',
+            'ACCENT_4': '#E3D1Df', 'ACCENT_5': '#B1ABEB'
         }
         pastel_theme = {
-            'ACCENT_1': '#EBC4AB',
-            'ACCENT_2': '#C7EBC3',
-            'ACCENT_3': '#9CB898',
-            'ACCENT_4': '#E3D1DF',
-            'ACCENT_5': '#B1ABEB'
+            'ACCENT_1': '#EBC4AB', 'ACCENT_2': '#C7EBC3', 'ACCENT_3': '#9CB898',
+            'ACCENT_4': '#E3D1DF', 'ACCENT_5': '#B1ABEB'
         }
         falcon_theme = {
-            'ACCENT_1': '#7E9680',
-            'ACCENT_2': '#D87F81',
-            'ACCENT_3': '#B5838D',
-            'ACCENT_4': '#E3D1DF',
-            'ACCENT_5': '#B1ABEB'
+            'ACCENT_1': '#7E9680', 'ACCENT_2': '#D87F81', 'ACCENT_3': '#B5838D',
+            'ACCENT_4': '#E3D1DF', 'ACCENT_5': '#B1ABEB'
         }
         cascade_theme = {
-            'ACCENT_1': '#8DAAAA',
-            'ACCENT_2': '#F6D5B6',
-            'ACCENT_3': '#E9AE8C',
-            'ACCENT_4': '#E3D1DF',
-            'ACCENT_5': '#B1ABEB'
+            'ACCENT_1': '#8DAAAA', 'ACCENT_2': '#F6D5B6', 'ACCENT_3': '#E9AE8C',
+            'ACCENT_4': '#E3D1DF', 'ACCENT_5': '#B1ABEB'
         }
 
         def load_light_theme():
