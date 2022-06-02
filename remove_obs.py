@@ -7,7 +7,7 @@ from functions_obs import ProgramFunctions
 from main import *
 
 
-__version__ = '0.10-02'
+__version__ = '0.10-03'
 
 
 class Remove(object):
@@ -19,7 +19,7 @@ class Remove(object):
 
 	def remove_object(self):
 		system_action('clear')
-		ProgramFunctions(self.generic_key, 'resource').get_category_label()
+		ProgramFunctions(self.generic_key, self.category_object).get_category_label()
 		template_some_message(ACCENT_3, '--- Change by number ---')
 
 		folder = ''
