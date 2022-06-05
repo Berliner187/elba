@@ -18,7 +18,7 @@ def update():
 
     def get_info_about_modules(color, message, mod):
         """ Отображение актуальности модулей """
-        print(f'[ {color}{message}{ACCENT_4} ]', mod)
+        print("[ {:s}{:7s}{:s} ] - {:s}".format(color, message, ACCENT_4, mod))
 
     def get_installed_modules():
         installed_modules = []
@@ -108,6 +108,7 @@ def update():
                     for module in stock_modules:
                         if os.path.getsize(FOLDER_ELBA + module) != os.path.getsize(module):
                             get_info_about_modules(GREEN, 'UPDATE ', module)
+                            template_for_install(module)
                         else:
                             get_info_about_modules(ACCENT_1, 'REMAINS', module)
                         template_for_install('update_obs.py')
