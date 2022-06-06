@@ -5,7 +5,7 @@ import os
 from time import sleep
 
 
-__version__ = '0.10-03'
+__version__ = '0.10-04'
 
 MAIN_FILE = 'main.py'
 
@@ -141,3 +141,26 @@ def update():
                 download_from_repository()
             else:
                 quit()
+
+
+def trying_to_correct_an_error_in_execution():
+    write_log(random_error, 'FAIL')
+    template_warning_message(RED, '--- ERROR ---')
+    print(random_error)
+    sleep(1)
+    system_action('clear')
+    print(f"{ACCENT_3}"
+          f'\n - Enter 1 to rollback'
+          f'\n - Enter 2 to update')
+    rollback_or_update = template_input('Select by number: ')
+    if rollback_or_update == '1':  # Попытка откатиться
+        template_some_message(RED, '-- You can try roll back --')
+        rollback_obs.rollback()
+    elif rollback_or_update == '2':  # Попытка обновиться
+        write_log('Try update', 'RUN')
+        update()
+    else:
+        system_action('clear')
+        template_warning_message(RED, '--- ERROR IN CHANGE ---')
+        sleep(1)
+    system_action('restart')
