@@ -73,7 +73,7 @@ def control_bus(generic_key):
 
         elif '-f' in user_actions:    # Шифрование файлов
             functions_obs.ProgramFunctions(generic_key, 'encryption').get_category_label()
-            change_action = input(ACCENT_4 + standard_location('/ENCRYPTION') + ACCENT_4)
+            change_action = template_input(standard_location('/ENCRYPTION') + ACCENT_4)
             if '-e' in change_action:
                 system_action('clear')
                 system_action('file_manager')
@@ -122,7 +122,7 @@ def control_bus(generic_key):
                     print(
                         "{:s} -- {:19s} --- {:5s} -- {:50s}".format(
                             line[FIELDS_LOG_FILE[0]], line[FIELDS_LOG_FILE[1]],
-                            line[FIELDS_LOG_FILE[3]], line[FIELDS_LOG_FILE[2]]
+                            line[FIELDS_LOG_FILE[2]], line[FIELDS_LOG_FILE[3]]
                         )
                     )
                 write_log("Check logs", "OK")
@@ -143,27 +143,22 @@ def control_bus(generic_key):
             write_log('Settings', 'RUN')
             settings_obs.settings()
             functions_obs.ProgramFunctions(generic_key, 'resource').get_category_label()
-            write_log('Settings', 'QUIT')
 
         elif user_actions.isnumeric():  # Отображение сохраненных данных о ресурсе
-            user_actions = int(user_actions)
-            system_action('clear')
-            functions_obs.ProgramFunctions(generic_key, 'resource').get_category_label()
+            try:
+                user_actions = int(user_actions)
+                system_action('clear')
+                functions_obs.ProgramFunctions(generic_key, 'resource').get_category_label()
 
-            def template_print_decryption_data(data_type, value):
-                print(
-                    " {:8s} {:s}---{:s} {:s}".format(
-                        data_type, ACCENT_2, ACCENT_4,
-                        security_obs.dec_aes(value, generic_key))
-                )
-
-            path_to_resource = FOLDER_WITH_RESOURCES + os.listdir(FOLDER_WITH_RESOURCES)[user_actions-1]
-            template_print_decryption_data(
-                'Resource', f"{path_to_resource}/{FILE_RESOURCE}")
-            template_print_decryption_data(
-                'Login', f"{path_to_resource}/{FILE_LOGIN}")
-            template_print_decryption_data(
-                'Password', f"{path_to_resource}/{FILE_PASSWORD}")
+                path_to_resource = FOLDER_WITH_RESOURCES + os.listdir(FOLDER_WITH_RESOURCES)[user_actions-1]
+                template_print_decryption_data(
+                    'Resource', f"{path_to_resource}/{FILE_RESOURCE}", generic_key)
+                template_print_decryption_data(
+                    'Login', f"{path_to_resource}/{FILE_LOGIN}", generic_key)
+                template_print_decryption_data(
+                    'Password', f"{path_to_resource}/{FILE_PASSWORD}", generic_key)
+            except IndexError:
+                pass
         else:
             functions_obs.ProgramFunctions(generic_key, 'resource').get_category_label()
     except ValueError:  # Обработка ошибки
