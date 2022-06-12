@@ -16,20 +16,21 @@ import os
 import sys
 import datetime
 import shutil
+import time
 from time import sleep
 from csv import DictReader, DictWriter
 
 
-__version__ = '0.10.6_ALPHA'
+__version__ = '0.10.7_ALPHA'
 
 
 # <<<----------------------- Константы --------------------------->>>
-# Папки
+# <--- Директории --->
 FOLDER_ELBA = 'elba/'
-FOLDER_WITH_DATA = 'volare/'  # Mi fa volare
-FOLDER_WITH_PROGRAM_DATA = FOLDER_WITH_DATA + 'program_files/'
-FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + 'resources/'
-FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'notes/'
+FOLDER_WITH_DATA = 'seele/'  # Zwei Seelen
+FOLDER_WITH_PROGRAM_DATA = FOLDER_WITH_DATA + 'Program_Files/'
+FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + 'RESOURCES/'
+FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'NOTES/'
 OLD_ELBA = 'old_elba/'
 # <<<----------- Имена файлов и папок для шифрования ------------>>>
 FOLDER_WITH_ENC_DATA = FOLDER_WITH_DATA + 'ENCRYPTION_DATA/'
@@ -50,22 +51,23 @@ FILE_WITH_HASH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.hash_generic_key.dat'
 FILE_WITH_GENERIC_KEY = FOLDER_WITH_PROGRAM_DATA + '.generic_key.dat'
 FILE_USER_NAME = FOLDER_WITH_PROGRAM_DATA + '.self_name.dat'
 FILE_WITH_HASH = FOLDER_WITH_PROGRAM_DATA + '.hash_password.dat'
-FILE_LOG = FOLDER_WITH_PROGRAM_DATA + '.file.log'
+FILE_LOG = FOLDER_WITH_PROGRAM_DATA + 'elba.log'
 FILE_SETTINGS_THEMES = FOLDER_WITH_PROGRAM_DATA + 'settings_themes.ini'
 FILE_SETTINGS_COLOR = FOLDER_WITH_PROGRAM_DATA + 'setting_color_accent.ini'
 FILE_PROGRAM_INFO = FOLDER_WITH_PROGRAM_DATA + 'info.dat'
 FILE_WITH_SHA256 = 'ELBA_CPA.sign'  # Confirmed Protocol Authenticity
+FILE_TOKEN = FOLDER_WITH_PROGRAM_DATA + 'token.dat'
+FILE_FACTORY_UNLOCK_KEY = FOLDER_WITH_PROGRAM_DATA + '.unlock.key'
 # FILE_WITH_SECRET_KEY_FOR_SHA256 = ''
 # <<<------------- Проверка файлов на наличие --------------->>>
 CHECK_FILE_WITH_GENERIC = os.path.exists(FILE_WITH_HASH_GENERIC_KEY)
 CHECK_FILE_WITH_HASH = os.path.exists(FILE_WITH_HASH)
 CHECK_FOLDER_FOR_RESOURCE = os.path.exists(FOLDER_WITH_RESOURCES)
-# <<<----------- Столбцы файла с логами ------------->>>
-FIELDS_LOG_FILE = ['version', 'date', 'cause', 'status']
 
+# <<<----------- Столбцы файла с логами ------------->>>
+FIELDS_LOG_FILE = ['version', 'date', 'status', 'cause']
 # <<<--------------  Репозиторий для обновлений  -------------->>>
 REPOSITORY = 'git clone https://github.com/Berliner187/elba -b delta'
-
 # <<<--------------  Модули для работы программы  -------------->>>
 stock_modules = [
     'change_mp_obs.py', 'control_bus_obs.py', 'datetime_obs.py',
@@ -74,7 +76,6 @@ stock_modules = [
     'remove_obs.py', 'resources_obs.py', 'rollback_obs.py',
     'security_obs.py', 'settings_obs.py'
 ]
-
 # <<< -------- Цветовые акценты в программе -------- >>>
 dictionary_default_accents = {
     'ACCENT_1': '#EAE7E3',
@@ -86,8 +87,6 @@ dictionary_default_accents = {
 
 
 # <<< ------- ШИРОКО ИСПОЛЬЗУЕМЫЕ ФУНКЦИИ ------- >>>
-
-
 def get_size_of_terminal():
     """ Получение ширины и длины терминала """
     cols, rows = shutil.get_terminal_size()
@@ -96,27 +95,28 @@ def get_size_of_terminal():
 
 def show_name_program():
     from logo_obs import wait_effect, first_start_message
-    if CHECK_FOLDER_FOR_RESOURCE is False:
+    if os.path.exists(FOLDER_WITH_RESOURCES) is False:
         first_start_message()
     lines = [
+        ACCENT_2,
+        f"E  DELTA FOR UNIX  A",
+        f"L    Mino Arimo    B",
+        f"B   {__version__}   L",
+        f"A  by Berliner187  E",
         ACCENT_3,
-        f"E  DELTA FOR LINUX  A",
-        f"L  by Berliner187   B",
-        f"B  Mino Arimo       L",
-        f"A  {__version__}     E",
-        '\n', ACCENT_2,
         "_" * get_size_of_terminal()
     ]
-    ACCENT_3, wait_effect(lines, 0)
+    wait_effect(lines, 0)
 
 
 def standard_location(right_now):
-    return f"\n ELBA{right_now}: ~$ "
+    return f"\n ELBA{right_now} ~E "
+    # return input(ACCENT_1 + f"\n ELBA{right_now}: ~$ " + ACCENT_4)
 
 
 def template_some_message(color, message):
     """ Шаблон сообщения в ходе работы программы """
-    print(color, '\n'*2, f"{message.center(get_size_of_terminal())}{ACCENT_4}")
+    print(color, '\n\n', f"{message.center(get_size_of_terminal())}{ACCENT_4}")
 
 
 def template_question(text):
@@ -125,10 +125,26 @@ def template_question(text):
 
 
 def template_input(text):
-    return input(ACCENT_1 + f" - {text} " + ACCENT_4)
+    return input(ACCENT_1 + f"\n {text} " + ACCENT_4)
+
+
+def template_warning_message(color, text):
+    print(color)
+    print(('=' * len(text)).center(get_size_of_terminal()))
+    print(text.center(get_size_of_terminal()))
+    print(('=' * len(text)).center(get_size_of_terminal()), ACCENT_4)
+
+
+def template_print_decryption_data(data_type, path, generic_key):
+    """ Шаблон отображения названий сервисов/заметок """
+    from security_obs import dec_aes
+    print(" {:8s} {:s}---{:s} {:s}".format(
+        data_type, ACCENT_2, ACCENT_4,
+        dec_aes(path, generic_key)))
 
 
 def template_for_install(program_file):
+    # setup template
     """ Шаблон установки файлов программы """
     os.system(get_peculiarities_system('copy_file') + FOLDER_ELBA + program_file + ' . ')
 
@@ -144,7 +160,7 @@ def format_hex_color(hex_color):
     return f"\x1b[38;2;{r};{g};{b}m".format(**vars())
 
 
-# Создание основных папок
+# Создание основных директорий
 FOLDERS = [
     FOLDER_WITH_DATA, FOLDER_WITH_NOTES,
     FOLDER_WITH_PROGRAM_DATA, FOLDER_WITH_ENC_DATA
@@ -155,14 +171,12 @@ for folder in FOLDERS:
 
 
 # <<< ----------- ЦВЕТОВЫЕ АКЦЕНТЫ ------------- >>>
-
 def create_file_with_theme(record_content):
-    with open(FILE_SETTINGS_COLOR, 'w') as f:
-        f.write('')
-        f.close()
     # Сохранение цветов в файл
     with open(FILE_SETTINGS_COLOR, 'w+') as f:
+        f.write('')
         f.write(str(record_content))
+        f.close()
 
 
 # < ----- Работа с акцентами в файле >
@@ -195,9 +209,13 @@ def system_action(action):
     """ Системные действия (выполнение действия) """
     if action == 'restart':
         system_action('clear')
-        template_some_message(GREEN, '--- Restart ---')
-        sleep(.2)
+        template_warning_message(GREEN, '--- RESTART ---')
+        sleep(.1)
         os.execv(sys.executable, [sys.executable] + sys.argv)
+    if action == 'quit':
+        template_some_message(ACCENT_3, '--- ELBA CLOSED ---')
+        write_log("ELBA", "QUIT")
+        quit()
     if action == 'clear':
         # print('\n'*3)
         os.system('cls' if os.name == 'nt' else 'clear')
@@ -211,49 +229,30 @@ def system_action(action):
 
 def get_peculiarities_system(action):
     """
-        Поддержка синтаксиса командных оболочек Linux, MacOS X и Windows
+        Поддержка синтаксиса командных оболочек Linux, MacOS и Windows
         (возвращение аргументов к действиям)
     """
-    if action == 'copy_dir':
-        if os.name == 'nt':
-            peculiarities_system_action = 'xcopy /y /o /e '
-        else:
-            peculiarities_system_action = 'cp -r '
-    elif action == 'rm_dir':
-        if os.name == 'nt':
-            peculiarities_system_action = 'rmdir '
-        else:
-            peculiarities_system_action = 'rm -r '
-    elif action == 'copy_file':
-        if os.name == 'nt':
-            peculiarities_system_action = 'copy '
-        else:
-            peculiarities_system_action = 'cp '
-    elif action == 'move':
-        if os.name == 'nt':
-            peculiarities_system_action = 'move '
-        else:
-            peculiarities_system_action = 'mv '
-    elif action == 'rm':
-        if os.name == 'nt':
-            peculiarities_system_action = 'del '
-        else:
-            peculiarities_system_action = 'rm '
-    else:
-        peculiarities_system_action = "echo No action selected"
-    return peculiarities_system_action
+    return {
+        'copy_dir': lambda: 'xcopy /y /o /e ' if os.name == 'nt' else 'cp -r ',
+        'rm_dir': lambda: 'rmdir ' if os.name == 'nt' else 'rm -r ',
+        'copy_file': lambda: 'copy ' if os.name == 'nt' else 'cp ',
+        'move': lambda: 'move ' if os.name == 'nt' else 'mv ',
+        'rm': lambda: 'del ' if os.name == 'nt' else 'rm '
+    }.get(action)()
 
 
-def authentication_check(first_start, after_update):
+def authentication_check(first_start=False, after_update=False):
     """ Проверка программы на подлинность """
     from werkzeug.security import generate_password_hash, check_password_hash
 
     def bin_reading_modules():
         """ Чтение модулей и запись в строку подряд """
         string_all_modules = ''
-        # Добавление в хэш главного файла (main.py)
-        with open('main.py', 'rb') as binary_main:
-            string_all_modules += str(binary_main.readlines())
+        not_in_list_of_modules = ['main.py', 'update_obs.py']
+        # Добавление в хэш главного файла и модуля обновлений
+        for item in not_in_list_of_modules:
+            with open(item, 'rb') as binary_main:
+                string_all_modules += str(binary_main.readlines())
         # Прокрутка имеющихся модулей
         for module in stock_modules:
             with open(module, 'rb') as binary_module:
@@ -277,26 +276,26 @@ def authentication_check(first_start, after_update):
     if os.path.exists(FILE_WITH_SHA256) is False:
         write_log('Not verified', 'WAIT')
         template_some_message(RED, 'It is impossible to establish the authenticity of the program')
-        sleep(2)
+        sleep(1)
         change_continue_or_not = template_question('Continue?')
         if change_continue_or_not == 'y':
-            write_log('Not verified: setting current', 'OK')
+            write_log('Not verified: Setting current', 'OK')
             # Прокрутка имеющихся модулей
             create_signature()
         else:
             system_action('clear')
             template_some_message(RED, 'REFUSAL')
-            write_log('Not confirmed', 'EXIT')
+            write_log('Not confirmed', 'QUIT')
             quit()
     else:
         # Чтение имеющихся модулей
         reading_all_modules = bin_reading_modules()
-        # Чтение хэша
+        # Чтение хеша
         with open(FILE_WITH_SHA256, 'r') as hash_modules:
             saved_hash_modules = hash_modules.readline()
         # Проверка на подлинность
         check = check_password_hash(saved_hash_modules, str(reading_all_modules))
-        if (check and after_update) is False:
+        if (check or after_update) is False:
             template_some_message(RED, 'The authenticity of the program is not installed')
             sleep(2)
             quit()
@@ -315,11 +314,11 @@ def download_from_repository():
     module_update = 'update_obs.py'
     system_action('clear')
     if os.path.exists(module_update) is False:
-        os.system(get_peculiarities_system('copy') + f' elba/{module_update} .')
+        os.system(get_peculiarities_system('copy_file') + f' elba/{module_update} .')
         system_action('restart')
 
 
-def write_log(cause, status_itself):
+def write_log(cause, status):
     """ Логирование """
     def get_time_now():      # Получение и форматирование текущего времени
         hms = datetime.datetime.today()
@@ -331,14 +330,15 @@ def write_log(cause, status_itself):
         with open(FILE_LOG, mode="a", encoding='utf-8') as data:
             logs_writer = DictWriter(data, fieldnames=FIELDS_LOG_FILE, delimiter=';')
             logs_writer.writeheader()
+            data.close()
 
     log_data = open(FILE_LOG, mode="a", encoding='utf-8')
     log_writer = DictWriter(log_data, fieldnames=FIELDS_LOG_FILE, delimiter=';')
     log_writer.writerow({
         FIELDS_LOG_FILE[0]: __version__,     # Запись версии
         FIELDS_LOG_FILE[1]: get_time_now(),  # Запись даты и времени
-        FIELDS_LOG_FILE[2]: cause,           # Запись причины
-        FIELDS_LOG_FILE[3]: status_itself    # Запись статуса
+        FIELDS_LOG_FILE[2]: status,          # Запись причины
+        FIELDS_LOG_FILE[3]: cause            # Запись статуса
     })
     log_data.close()
 
@@ -357,8 +357,15 @@ def check_modules():
     if cnt_missing_modules == 0:
         return 0
     else:
-        template_some_message(RED, "- Missing module(-s) -")
+        if cnt_missing_modules == 1:
+            template_warning_message(RED, "--- Missing module ---")
+        elif cnt_missing_modules > 1:
+            template_warning_message(RED, "--- Missing modules ---")
         return 1
+
+
+def use_token_for_authorization():
+    pass
 
 
 def point_of_entry():
@@ -366,9 +373,18 @@ def point_of_entry():
     system_action('clear')
     write_log('-', '-')
     # info_obs.Information().save_modules_info()   # Запись информации о версии
-    if CHECK_FOLDER_FOR_RESOURCE is False:  # При первом запуске
-        authentication_check(True, False)  # Проверка на подлинность
-        logo_obs.show_name_program()
+    if os.path.exists(FOLDER_WITH_RESOURCES):  # При последующем запуске
+        # authentication_check()  # Проверка на подлинность
+        master_password = passwords_obs.ActionsWithPassword(None).verify_master_password(True)
+        generic_key_from_file = security_obs.dec_aes(FILE_WITH_GENERIC_KEY, master_password)
+        system_action('clear')
+        datetime_obs.greeting(generic_key_from_file)
+        write_log('Authorization', 'OK')
+        functions_obs.ProgramFunctions(generic_key_from_file, 'resource').get_category_label()
+        control_bus_obs.control_bus(generic_key_from_file)
+    else:  # При первом запуске
+        # authentication_check(first_start=True, after_update=False)  # Проверка на подлинность
+        show_name_program()
         master_password = passwords_obs.ActionsWithPassword('master').get_password()
         generic_key = passwords_obs.ActionsWithPassword('generic').get_password()
         datetime_obs.greeting(generic_key)
@@ -377,15 +393,6 @@ def point_of_entry():
         functions_obs.ProgramFunctions(generic_key, 'resource').get_category_label()
         write_log('First launch', 'OK')
         control_bus_obs.control_bus(generic_key)
-    else:  # При последующем
-        # authentication_check(False, False)  # Проверка на подлинность
-        master_password = passwords_obs.ActionsWithPassword(None).verify_master_password(True)
-        generic_key_from_file = security_obs.dec_aes(FILE_WITH_GENERIC_KEY, master_password)
-        system_action('clear')
-        datetime_obs.greeting(generic_key_from_file)
-        write_log('Authorization', 'OK')
-        functions_obs.ProgramFunctions(generic_key_from_file, 'resource').get_category_label()
-        control_bus_obs.control_bus(generic_key_from_file)
 
 
 if __name__ == '__main__':
@@ -393,7 +400,7 @@ if __name__ == '__main__':
     try:
         from update_obs import update
     except ModuleNotFoundError as update_obs_error:
-        write_log(update_obs_error, 'FAILED')
+        write_log(update_obs_error, 'FAIL')
         template_some_message(RED, '- Module "update" does not exist -')
         download_from_repository()
 
@@ -402,13 +409,10 @@ if __name__ == '__main__':
     except ModuleNotFoundError as error_module:
         write_log(error_module, 'CRASH')
         template_some_message(RED, f"MISSING: {error_module}")
-        template_some_message(
-            ACCENT_1, f"Please, install {str(error_module)[15:]} with requirements"
-        )
+        template_some_message(ACCENT_1, f"Please, install {str(error_module)[15:]}")
         quit()
-    # Проверка модулей на наличие
-    status_mis_mod = check_modules()
 
+    status_mis_mod = check_modules()    # Проверка модулей на наличие
     if status_mis_mod == 0:     # Если модули на месте
         import control_bus_obs
         import security_obs
@@ -421,32 +425,13 @@ if __name__ == '__main__':
         import rollback_obs
 
         try:
-            point_of_entry()  # Запуск лончера
+            point_of_entry()  # Точка входа в программу
         except Exception or NameError as random_error:
-            write_log(random_error, 'FAIL')
-            template_some_message(RED, ' --- ERROR --- ')
-            print(random_error)
-            sleep(1)
-            system_action('clear')
-            print(f"{ACCENT_3}"
-                  f'\n - Enter 1 to rollback'
-                  f'\n - Enter 2 to update')
-            rollback_or_update = input(ACCENT_1 + '\n - Select by number: ' + ACCENT_4)
-            if rollback_or_update == '1':  # Попытка откатиться
-                template_some_message(RED, '-- You can try roll back --')
-                rollback_obs.rollback()
-            elif rollback_or_update == '2':  # Попытка обновиться
-                write_log('Try update', 'Run')
-                update()
-            else:
-                system_action('clear')
-                template_some_message(RED, '- Error in change -')
-                sleep(1)
-            system_action('restart')
-
+            from update_obs import trying_to_correct_an_error_in_execution
+            trying_to_correct_an_error_in_execution(random_error)
         except KeyError:
             pass
-        except KeyboardInterrupt as keyboard:
+        except KeyboardInterrupt:
             system_action('clear')
             template_some_message(ACCENT_3, '--- ELBA CLOSED ---')
             write_log("ELBA", "QUIT")
