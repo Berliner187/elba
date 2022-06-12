@@ -11,7 +11,7 @@ import os
 from main import *
 
 
-__version__ = '0.10-01'
+__version__ = '0.10-02'
 
 
 cols = get_size_of_terminal()
@@ -37,17 +37,20 @@ def wait_effect(lines, sleeper):
 
 
 logo_strings_row = [
-        "",
-        "EEEEEEEE     LL            BBBBBBB           AAAAAA   ",
-        "E            LL            B      B         A      A  ",
-        "E            LL            B      BB       AA      AA ",
-        "EEEEEEE      LL            BBBBBBBB       AAAAAAAAAAAA",
-        "E            LL            B      BB      AA        AA",
-        "E            LL            B       BB     AA        AA",
-        "E            LL            B        BB    AA        AA",
-        "E            LL            B         BB   AA        AA",
-        "EEEEEEEEEEE  LLLLLLLLLLL   BBBBBBBBBBB    AA        AA"
-    ]
+    ACCENT_5,
+    "EEEEEEEEEEEEEE    LL                 BBBBBBBBBB           AAAAAAAAAAAAA ",
+    "                  LL                          BB         AA           AA",
+    "                  LL                           BB                       ",
+    "                  LL                          BB                        ",
+    "EEEEEEEEEEEEEE    LL                 BBBBBBBBBB          AAAAAAAAAAAAAAA",
+    "                  LL                 BB       BB         AA           AA",
+    "                  LL                 BB        BB        AA           AA",
+    "                  LL                 BB          BB      AA           AA",
+    "                  LL                 BB           BB     AA           AA",
+    "                  LL                 BB          BB      AA           AA",
+    "EEEEEEEEEEEEEE    LLLLLLLLLLLLLLL    BBBBBBBBBBBB        AA           AA",
+    ACCENT_4,
+]
 
 
 hello = [
@@ -73,7 +76,20 @@ author_emb = [
     "|    \    \/     |    \  |__   |__/  |    |  | \  | |__  |__/      |   |   |    /     ",
     "|     |   /      |     | |     |  \  |    |  |  \ | |    |  \      |   |   |   /      ",
     "|_____/  /       |_____/ |___  |   \ |___ |  |   \| |___ |   \     |   |___|  /       ",
-    ACCENT_3, "________________________________________________________________________________"
+    ACCENT_3, "________________________________________________________________________________",
+    ACCENT_5,
+    "            ;ol:;;;;:::;,'.                                                          ...         ..                                   ",
+    "         ,OWWWWWKooONNKx:.                             ..                     .lkKK:      .:x0x.                               .:ox;",
+    "         .dMMMMMO. 'kWMMWO,                          'oO;                     ,KMMN:      ;KMM0'                               :NMWo",
+    "         .dMMMMMk.  :XMMMMK;     ,:.    ,c, .;ll:',oOXWWd.  .:l:.       .c,   ;KMMX:..,.  ;XMM0'    'cl;.    'c:.  .::.      'ckWMWo",
+    "         .dMMMMMk.  'OMMMMMk.  'xNW0: .oXMX:,0MMNc.:0MMWo..lOXWWO,   .oOKWNkl.;KMMNOkXWO' ;XMM0'.:cl0WMNO, .lXMWOlxXWWo    .oKWMMMWo",
+    "         .dMMMMMk.  .kMMMMMK;.oxlkWMXl.oWMWo;0MMNc .xMMNc.xWN0xd:.  'kxccll:. ;KMMNxxNMWO';XMM0' ...,kWMWd. lNMMKcdWMMx.  :0d;xNMMWo",
+    "         .dMMMMMk.  .kMMMMMKcdNd.'OW0: cNMWo;0MMNc .xMMNc.xWMW0c.  .xXc       ,KMMX:.xWMWocXMM0'  'ld0WMMx. lNMM0,:NMMx. cXK; .xMMWo",
+    "          dMMMMMO.  .kMMMMMOoKM0oxkc.  cNMWo;0MMNc .xMMNc .oXMMWO; ,KWk;.     ,KMMN: ;XMMklKMM0'.lXKcdWMMx. lNMM0,:NMMx..OMX; .dWMWo",
+    "         .dMMMMMk.  ,0MMMMXc;KMMNd.    cNMWo;0MMNc .xMMNc   'dXMMNocKMWXx.    ,KMMN: .OMWdlKMMO,lNMx.cNMMx. lNMM0,:NMMx.,KMWk..dWMWo",
+    "         .dMMMMMk. .oNMMMXl .oNMW0c.   cNMWo;0MMNc .xMMNc  .,;ckNMO;dWMMW0:.  ,KMMN: .kMX::XMM0;dMM0,:XMMx. lNMM0,:NMMx..kWMWOlkWMWo",
+    "         .xMMMMM0c:xNMWXx,   .lXMMW0;  cNMM0xKMMWo .xMMWd'c0NNK0KO; .oXMMMWk. ,KMMX: '0No.;XMMO,cXMW0ONMMk. lNMM0,:XMM0' 'OWMMNKWMWx.",
+    "         'oocclodxkkkdc'       'oOkc.  .dOxc,ckOd,  ;kOd,..,ckOd,.    'cd0x,  'x00k, lKo. ,kKKx..cOkc;dK0c. ;O00x..dKOc.  .lOk:'lOk:."
 ]
 
 
@@ -98,7 +114,7 @@ def animation():
             print(row.center(cols))
             sleep(0.09)
         author()
-        sleep(1)
+        sleep(3)
         cnt = 0
         system_action('clear')
         for i in range(10):
@@ -112,66 +128,30 @@ def animation():
             sleep(.1)
 
 
-def Ukraine():
-    system_action('clear')
-    lines_flag = [
-        ACCENT_3,
-        "  __________________________________________________________  ",
-        " /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\ ",
-        "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|",
-        "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|",
-        "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|",
-        "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|",
-        "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|",
-        "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|",
-        f"      ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯ {ACCENT_1}",
-        "  __________________________________________________________  ",
-        " /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\ ",
-        "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|",
-        "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|",
-        "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|",
-        "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|",
-        "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|",
-        "|/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\|",
-        " -------------------------------------------------------------"
-    ]
-    wait_effect(lines_flag, .0006)
-    sleep(2)
-    system_action('clear')
-    logo()
-    sleep(2)
-    animation()
-
-
-def elba():
-    print(ACCENT_5)
-    logo()
-
-
 def first_start_message():
     """ Сообщения в самом начале """
-    elba_say_list = [
-        'Your data is kept confidential through Elba.',
-        'Only you know your service passwords.',
-        'Your notes will remain secret.',
-        RED + 'Нет поддержки русского языка.'
-    ]
-
     def template_elba_say():
+        elba_say_list = [
+            'Your data is kept confidential through Elba.',
+            'Only you know your service passwords.',
+            'Your notes will remain secret.',
+            'The files will be hidden under lock and key.',
+            RED + 'Нет поддержки русского языка.'
+        ]
         for string in elba_say_list:
             sleep(1)
-            iterate_over_characters(standard_location('/SAY') + string, 0.03)
+            iterate_over_characters(standard_location('/SAY') + ACCENT_3 + string, 0.03)
             sleep(1)
 
-    sleep(2)
+    sleep(1)
     system_action('clear')
     print(ACCENT_4)
-    wait_effect(hello, 0.03)    # Приветствие
+    wait_effect(hello, 0.02)    # Приветствие
     sleep(3)
     system_action('clear')
     print(ACCENT_5)
-    wait_effect(logo_strings_row, 0.03)
+    wait_effect(logo_strings_row, 0.02)
     print(ACCENT_3)
     template_elba_say()
-    input(ACCENT_4 + '\n Continue...')
+    input(ACCENT_4 + '\n Proceed...')
     system_action('clear')
