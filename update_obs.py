@@ -5,7 +5,7 @@ import os
 from time import sleep
 
 
-__version__ = '0.10-04'
+__version__ = '0.10-05'
 
 MAIN_FILE = 'main.py'
 
@@ -18,7 +18,7 @@ def update():
 
     def get_info_about_modules(color, message, mod):
         """ Отображение актуальности модулей """
-        print("[ {:s}{:7s}{:s} ] - {:s}".format(color, message, ACCENT_4, mod))
+        print("[ {:s}{:^4s}{:s} ] - {:s}".format(color, message, ACCENT_4, mod))
 
     def get_installed_modules():
         installed_modules = []
@@ -28,9 +28,9 @@ def update():
         return installed_modules
 
     def message_about_status_modules():
-        """ Вывод показателей о состоянии модулей """
-        template_some_message(ACCENT_1, "- Check Modules -")
+        """ Отображение текущего состояния модулей """
         system_action('clear')
+        template_warning_message(ACCENT_1, "-- Check Modules --".upper())
         installed_modules = get_installed_modules()
         cnt_missing_mod = 0
         for item_mod in range(len(stock_modules)):
@@ -40,7 +40,7 @@ def update():
                 cnt_missing_mod += 1
             else:
                 get_info_about_modules(GREEN, 'OK', stock_modules[item_mod])
-            sleep(.2)
+            sleep(.3)
         return cnt_missing_mod
 
     if status_modules != 0:
@@ -124,7 +124,7 @@ def update():
                     if os.path.getsize(FOLDER_ELBA + module) != os.path.getsize(module):
                         template_for_install(module)
                         write_log(f'Upgrade: {module}', 'OK')
-                        get_info_about_modules(GREEN, 'UPDATE ', module)
+                        get_info_about_modules(GREEN, 'UPDATE', module)
                     else:
                         get_info_about_modules(ACCENT_1, 'REMAINS', module)
                     sleep(.2)
@@ -143,7 +143,7 @@ def update():
                 quit()
 
 
-def trying_to_correct_an_error_in_execution():
+def trying_to_correct_an_error_in_execution(random_error):
     write_log(random_error, 'FAIL')
     template_warning_message(RED, '--- ERROR ---')
     print(random_error)
