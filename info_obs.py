@@ -9,80 +9,51 @@ from main import *
 import csv
 import os
 import sys
+import socket
+from uuid import getnode as get_mac
+import platform
 
 from memory_profiler import memory_usage
-
-# from main import __version__ as elba_v
-# from actions_with_password_obs import __version__ as actions_with_password_ver
-# from datetime_obs import __version__ as datetime_ver
-# from del_object_obs import __version__ as del_object_obs
-# from enc_obs import __version__ as enc_ver
-# from logo_obs import __version__ as logo_ver
-# from notes_obs import __version__ as notes_ver
-# from update_obs import __version__ as update_ver
-# from settings_obs import __version__ as settings_ver
-# from category_actions_obs import __version__ as category_actions_ver
-# from decryption_block_obs import __version__ as dec_block_ver
+import getpass
+import functions_obs
 
 
-__version__ = '0.9-02'
+__version__ = '0.10-01'
 
 
 class Information(object):
-    """
-        Вывод версий модулей в консоль, а также
-        получение информации о занимаемой памяти в ОЗУ и ПЗУ
-    """
 
-    # @staticmethod
-    # def save_modules_info():
-    #     massive_versions = [
-    #         datetime_ver, enc_ver, logo_ver,
-    #         del_object_obs, notes_ver, __version__,
-    #         actions_with_password_ver, category_actions_ver,
-    #         dec_block_ver, settings_ver, update_ver
-    #     ]
-    #     if os.path.exists(FILE_PROGRAM_INFO) is not True:
-    #         with open(FILE_PROGRAM_INFO, mode="w", encoding='utf-8') as data:
-    #             info_writer = DictWriter(data, fieldnames=stock_modules, delimiter=';')
-    #             info_writer.writeheader()
-    #
-    #     info_writer_file = open(FILE_PROGRAM_INFO, mode="a", encoding='utf-8')
-    #     info_writer = DictWriter(info_writer_file, fieldnames=stock_modules, delimiter=';')
-    #     info_writer.writerow({
-    #         stock_modules[0]: massive_versions[0],
-    #         stock_modules[1]: massive_versions[1],
-    #         stock_modules[2]: massive_versions[2],
-    #         stock_modules[3]: massive_versions[3],
-    #         stock_modules[4]: massive_versions[4],
-    #         stock_modules[5]: massive_versions[5],
-    #         stock_modules[6]: massive_versions[6],
-    #         stock_modules[7]: massive_versions[7],
-    #         stock_modules[8]: massive_versions[8],
-    #         stock_modules[9]: massive_versions[9],
-    #         stock_modules[10]: massive_versions[10]
-    #     })
+    """
+        Отображение информации о машине, версий модулей, а также о занимаемой памяти в ОЗУ и ПЗУ.
+    """
 
     @staticmethod
     def get_info():
-        template_some_message(GREEN, '- Versions installed modules -')
+        functions_obs.StylishLook().topper('INFORMATION')
+        print("_" * get_size_of_terminal())
+        template_some_message(GREEN, '- Information about machine -')
 
-        # def template_version_module(module, version):
-        #     print(version, '  ---  ', module)
-        #
-        # template_version_module('main', elba_v)
-        # template_version_module('information_obs', __version__)
-        # template_version_module('actions_with_password_obs', actions_with_password_ver)
-        # template_version_module('datetime_obs', datetime_ver)
-        # template_version_module('del_object_obs', del_object_obs)
-        # template_version_module('enc_obs', enc_ver)
-        # template_version_module('logo_obs', logo_ver)
-        # template_version_module('notes_obs', notes_ver)
-        # template_version_module('update_obs', update_ver)
-        # template_version_module('category_actions_obs', category_actions_ver)
-        # template_version_module('decryption_block_obs', dec_block_ver)
+        name = getpass.getuser()  # Имя пользователя
+        mac = get_mac()  # MAC адрес
+        sys_info = platform.uname()  # Название операционной системы
+        update_sys_info = (name, str(mac)) + sys_info
+        list_names_sys_info = [
+            'User name',
+            'MAC address',
+            'System',
+            'Computer name',
+            'Release',
+            'Version release',
+            'Machine',
+        ]
 
-        template_some_message(ACCENT_3, "- Volume taken up by the program -")
+        for i in range(len(update_sys_info)):
+            print("{:16s} - {:s}".format(list_names_sys_info[i], update_sys_info[i]))
+        print("_" * get_size_of_terminal())
+
+        # template_some_message(GREEN, '- Versions installed modules -')
+        print("_" * get_size_of_terminal())
+        template_some_message(GREEN, "- Space occupied in ROM -")
         size_mod_cache = size_program = size_user_data = 0
 
         # Получение файлов программы
@@ -110,11 +81,7 @@ class Information(object):
             size_program += os.path.getsize(files[i])
             dic_with_files_program[files[i]] = os.path.getsize(files[i]) * 8
         for file, size in dic_with_files_program.items():
-            if len(str(size)) == 5:
-                size = f"{size} "
-            elif len(str(size)) == 4:
-                size = f"{size}  "
-            print("{0}  ---  {1}".format(size, file))
+            print("{:6s}  ---  {:s}".format(str(size), file))
 
         # Получение размера пользовательских файлов
         size_notes = size_resources = 0
@@ -134,13 +101,13 @@ class Information(object):
         def to_another_unit_of_measurement(__size__):
             """ Округление и перевод в единицы измерения """
             if 2**20 <= __size__:
-                __size__ = round((__size__ / (2**20)), 1)
+                __size__ = round((__size__ / (2**20)), 2)
                 user_measure = 'MiB'
             elif 2**10 <= __size__ < 2**20:
-                __size__ = round((__size__ / (2**10)), 1)
+                __size__ = round((__size__ / (2**10)), 2)
                 user_measure = 'KiB'
             else:
-                __size__ = round(__size__, 1)
+                __size__ = round(__size__, 2)
                 user_measure = 'B'
             return ACCENT_1 + f"{__size__} {user_measure}" + ACCENT_4
 
@@ -160,4 +127,5 @@ class Information(object):
         }
         print('\n')
         for text, space_used in data_to_print.items():
-            print("{0}  ---  {1}".format(text, space_used))
+            print("{0}{1}{2}  ---  {3}{4}".format(ACCENT_1, text, ACCENT_4, ACCENT_1, space_used))
+        print("_" * get_size_of_terminal())
