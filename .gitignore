@@ -1,9 +1,7 @@
-*.csv
-*.log
-*.dat
-old_elba/*
-tester.py
 volare/*
 volare__/*
+old_elba/*
+tester.py
 tester2.py
 tester3.py
+seele/*
