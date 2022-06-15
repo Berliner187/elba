@@ -11,7 +11,7 @@ import security_obs
 import shutil
 
 
-__version__ = '0.10-03'
+__version__ = '0.10-04'
 
 
 cols = get_size_of_terminal()   # Получение масштаба терминала
@@ -24,23 +24,18 @@ class StylishLook:
         """ Отображение топпера сверху """
         location_above = f'ELBA/{category_display.upper()}'
 
-        def topper(topper_string):
-            print(ACCENT_2, topper_string)
-
         def filling(length):
             number_str = ''
             for i in range(length):
-                char = random.randrange(65, 91)
-                number_str += chr(char)
+                number_str += '-'
             return number_str
 
-        hollow_filled_string = filling(cols - 1)
-        middle_string = filling(((cols - 1) - (len(location_above) + 4)))
-
-        topper(hollow_filled_string)                                         # 1 строка
-        topper(f"19 {ACCENT_5}{location_above}{ACCENT_2} " + middle_string)  # 2 строка
-        topper(hollow_filled_string)                                         # 3 строка
-        print(ACCENT_4, "\n" * 2)
+        filling_space = filling(cols - 1)
+        middle_string = filling(((cols - 1) - (len(location_above) + 6)))
+        # Непосредственно топпер
+        print(ACCENT_2, filling_space)                                                 # 1 строка
+        print(ACCENT_2, f"---- {ACCENT_5}{location_above}{ACCENT_2} {middle_string}")  # 2 строка
+        print(ACCENT_2, filling_space, "\n\n", ACCENT_4)                               # 3 строка
 
     @staticmethod
     def scrolling_and_numbering_content(what_scrolls):
@@ -92,7 +87,7 @@ class ProgramFunctions(object):
 
         # <<< Отображение инструкций, которые возможны для выполнения в данном окне >>>
         def template_show_functions(key, message):
-            """ Шаблон инструкций для пользователя """
+            """ Шаблон отображения инструкций для пользователя """
             return f"{ACCENT_3} [{ACCENT_1}{key}{ACCENT_3}]  —  {message}"
 
         # Для ресурсов:
