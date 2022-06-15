@@ -78,18 +78,7 @@ author_emb = [
     "|_____/  /       |_____/ |___  |   \ |___ |  |   \| |___ |   \     |   |___|  /       ",
     ACCENT_3, "________________________________________________________________________________",
     ACCENT_5,
-    "            ;ol:;;;;:::;,'.                                                          ...         ..                                   ",
-    "         ,OWWWWWKooONNKx:.                             ..                     .lkKK:      .:x0x.                               .:ox;",
-    "         .dMMMMMO. 'kWMMWO,                          'oO;                     ,KMMN:      ;KMM0'                               :NMWo",
-    "         .dMMMMMk.  :XMMMMK;     ,:.    ,c, .;ll:',oOXWWd.  .:l:.       .c,   ;KMMX:..,.  ;XMM0'    'cl;.    'c:.  .::.      'ckWMWo",
-    "         .dMMMMMk.  'OMMMMMk.  'xNW0: .oXMX:,0MMNc.:0MMWo..lOXWWO,   .oOKWNkl.;KMMNOkXWO' ;XMM0'.:cl0WMNO, .lXMWOlxXWWo    .oKWMMMWo",
-    "         .dMMMMMk.  .kMMMMMK;.oxlkWMXl.oWMWo;0MMNc .xMMNc.xWN0xd:.  'kxccll:. ;KMMNxxNMWO';XMM0' ...,kWMWd. lNMMKcdWMMx.  :0d;xNMMWo",
-    "         .dMMMMMk.  .kMMMMMKcdNd.'OW0: cNMWo;0MMNc .xMMNc.xWMW0c.  .xXc       ,KMMX:.xWMWocXMM0'  'ld0WMMx. lNMM0,:NMMx. cXK; .xMMWo",
-    "          dMMMMMO.  .kMMMMMOoKM0oxkc.  cNMWo;0MMNc .xMMNc .oXMMWO; ,KWk;.     ,KMMN: ;XMMklKMM0'.lXKcdWMMx. lNMM0,:NMMx..OMX; .dWMWo",
-    "         .dMMMMMk.  ,0MMMMXc;KMMNd.    cNMWo;0MMNc .xMMNc   'dXMMNocKMWXx.    ,KMMN: .OMWdlKMMO,lNMx.cNMMx. lNMM0,:NMMx.,KMWk..dWMWo",
-    "         .dMMMMMk. .oNMMMXl .oNMW0c.   cNMWo;0MMNc .xMMNc  .,;ckNMO;dWMMW0:.  ,KMMN: .kMX::XMM0;dMM0,:XMMx. lNMM0,:NMMx..kWMWOlkWMWo",
-    "         .xMMMMM0c:xNMWXx,   .lXMMW0;  cNMM0xKMMWo .xMMWd'c0NNK0KO; .oXMMMWk. ,KMMX: '0No.;XMMO,cXMW0ONMMk. lNMM0,:XMM0' 'OWMMNKWMWx.",
-    "         'oocclodxkkkdc'       'oOkc.  .dOxc,ckOd,  ;kOd,..,ckOd,.    'cd0x,  'x00k, lKo. ,kKKx..cOkc;dK0c. ;O00x..dKOc.  .lOk:'lOk:."
+    ""
 ]
 
 
@@ -111,8 +100,7 @@ def animation():
         system_action('clear')
         print(ACCENT_2)
         for row in logo_strings_row:
-            print(row.center(cols))
-            sleep(0.09)
+            iterate_over_characters(row, .01)
         author()
         sleep(3)
         cnt = 0
