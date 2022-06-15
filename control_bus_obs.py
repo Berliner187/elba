@@ -97,7 +97,7 @@ def control_bus(generic_key):
             system_action('clear')
             template_some_message(ACCENT_3, 'Verify master password')
             passwords_obs.ActionsWithPassword(None).verify_master_password(False)
-            template_some_message(RED, ' - Are you sure you want to delete all data? - ')
+            template_some_message(RED, '- Are you sure you want to delete all data? -')
             confirm = template_question('Remove ALL data?')
             if confirm == 'y':
                 template_remove_folder(FOLDER_WITH_DATA)
