@@ -24,7 +24,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from Crypto.Cipher import AES
 
 
-__version__ = '0.9-10-B01_DEV'
+__version__ = '0.10-01-B02_DEV'
 
 
 class AESCipher(object):
@@ -206,21 +206,21 @@ class WorkWithUserFiles:
             cfb_decipher = AES.new(d_key, AES.MODE_OFB, d_iv)
             return cfb_decipher.decrypt(byte_file)
 
-        def read_bin_file(directory):
-            file_to_read = open(directory, "rb")
+        def read_bin_file(directory_to_read):
+            file_to_read = open(directory_to_read, "rb")
             data = file_to_read.read()
             file_to_read.close()
             return data
 
-        def write_bin_file(directory, data):
-            file_to_write = open(directory, "wb")
+        def write_bin_file(directory_to_write, data):
+            file_to_write = open(directory_to_write, "wb")
             file_to_write.write(data)
             file_to_write.close()
 
         if os.path.exists(FOLDER_WITH_ENC_DATA) is False:
             os.mkdir(FOLDER_WITH_ENC_DATA)
 
-        def template_not_confirmed(remove):
+        def template_not_confirmed(remove=False):
             os.chdir('../../')
             write_log('Not confirm', 'ALERT')
             template_some_message(RED, "** DA DUMM BASS **")
@@ -273,8 +273,8 @@ class WorkWithUserFiles:
                 total_progress = count_all_files('.')
                 directory = os.walk('.')
 
+                # Проверка на пустоту директории
                 if total_progress != 0:
-                    # Проверка на пустоту директории
                     prefix_new_enc_folder = template_input('Give a name to the new encrypted folder:')
 
                     # !!! УДАЛЕНИЕ ПРОБЕЛОВ В ДИРЕКТОРИЯХ !!!
@@ -306,13 +306,12 @@ class WorkWithUserFiles:
                     folder_progress = 0
                     folder_progress_all = count_all_files('.')
                     for i in os.walk('.'):
-                        print('I =', i[0][2:])
                         try:
-                            if os.path.exists(f'../{name_enc_folder}%{i[0][2:]}%'):
+                            if os.path.exists('../' + name_enc_folder + i[0][2:]):
                                 pass
                             else:
                                 folder_progress += 1
-                                os.mkdir('../{name_enc_folder}' + f'%{i[0][2:]}%'.upper())
+                                os.system('mkdir ../' + name_enc_folder + i[0][2:])
                                 system_action('clear')
                                 print_progress('folders', folder_progress, folder_progress_all)
                         except FileNotFoundError as not_found_error:
@@ -321,25 +320,25 @@ class WorkWithUserFiles:
                             pass
 
                     file_size = 0
+
                     for root, dirs, files in os.walk('.', topdown=False):
                         for name in files:
-                            # for file_from_list in os.listdir('.'):
-                            #     print('List', file_from_list)
                             progress += 1
                             file = os.path.join(root, name)
                             file = file[2:]
                             file_data = read_bin_file(file)
                             file_size += os.path.getsize(file)
-                            # safe pass
                             try:
-                                print('FILE =', file)
                                 write_bin_file(f"../{name_enc_folder}{file}.elba", encrypt_it(file_data, key, iv))
                                 system_action('clear')
                                 print_progress('files', progress, total_progress)
                             except FileNotFoundError as FileNotFound:
                                 print(FileNotFound)
                                 os.chdir('../../../')
-                                # PASS
+                                template_some_message(RED,
+                                                      'Error in encryption file: directory must not contain a SPACE')
+                                write_log('Directory has got space', 'FAIL')
+                                quit()
 
                     # Шифрование и сохранение ключей
                     save_keyiv(key, path_to_key)
@@ -350,7 +349,7 @@ class WorkWithUserFiles:
                         sign_xzibit = generate_password_hash(control_sum)
                         signature.write(sign_xzibit)
                         signature.close()
-                    template_some_message(GREEN, "Encryption successful \n")
+                    template_some_message(GREEN, "Encryption successful")
                     os.chdir('../../../')
                     write_log('Encryption successful', 'QUIT')
                 else:
@@ -372,7 +371,7 @@ class WorkWithUserFiles:
                         cnt += 1
                         print(f"{cnt}. {folder}")
                 if cnt == 0:
-                    template_some_message(ACCENT_1, " - No data encryption - ")
+                    template_some_message(ACCENT_1, "- No data encryption -")
                 change_folder = int(input(ACCENT_1 + '\n - Select folder by number: ' + ACCENT_4))
 
                 progress = 0
@@ -432,13 +431,13 @@ class WorkWithUserFiles:
                                         template_remove_folder(need_folder)
                                         os.chdir('../../')
                                         if cnt_files != 4:
-                                            template_some_message(GREEN, "Decryption successful \n")
+                                            template_some_message(GREEN, "Decryption successful")
                                             write_log('Decryption successful', 'OK')
                                             sleep(1.5)
                                     else:
-                                        template_not_confirmed(False)
+                                        template_not_confirmed()
                                 else:
-                                    template_not_confirmed(False)
+                                    template_not_confirmed()
                             else:
                                 os.chdir('../../')
                                 system_action('clear')
@@ -446,4 +445,3 @@ class WorkWithUserFiles:
                                 sleep(2)
 
 
-# WorkWithUserFiles('YxSKGZ1kUaPab3gJdYc2EiP0AKoksFTnPbPjLLDpwJTJScPvSqt2ZMOI34RmQHEI', 'enc').file_encryption_control()
