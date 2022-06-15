@@ -25,14 +25,14 @@ __version__ = '0.10.7_ALPHA'
 
 
 # <<<----------------------- Константы --------------------------->>>
-# <--- Директории --->
+# <------------------------- Директории -------------------------->
 FOLDER_ELBA = 'elba/'
 FOLDER_WITH_DATA = 'seele/'  # Zwei Seelen
 FOLDER_WITH_PROGRAM_DATA = FOLDER_WITH_DATA + 'Program_Files/'
 FOLDER_WITH_RESOURCES = FOLDER_WITH_DATA + 'RESOURCES/'
 FOLDER_WITH_NOTES = FOLDER_WITH_DATA + 'NOTES/'
 OLD_ELBA = 'old_elba/'
-# <<<----------- Имена файлов и папок для шифрования ------------>>>
+# <------------- Имена файлов и папок для шифрования ------------->
 FOLDER_WITH_ENC_DATA = FOLDER_WITH_DATA + 'ENCRYPTION_DATA/'
 FOLDER_FOR_ENCRYPTION_FILES = FOLDER_WITH_ENC_DATA + 'FOR_ENCRYPTION'
 PREFIX_FOR_DEC_FILE = 'DEC_'
@@ -76,6 +76,7 @@ stock_modules = [
     'remove_obs.py', 'resources_obs.py', 'rollback_obs.py',
     'security_obs.py', 'settings_obs.py'
 ]
+
 # <<< -------- Цветовые акценты в программе -------- >>>
 dictionary_default_accents = {
     'ACCENT_1': '#EAE7E3',
@@ -84,6 +85,15 @@ dictionary_default_accents = {
     'ACCENT_4': '#FFFFFF',
     'ACCENT_5': '#5FC599'
 }
+
+# Создание основных директорий
+FOLDERS = [
+    FOLDER_WITH_DATA, FOLDER_WITH_NOTES,
+    FOLDER_WITH_PROGRAM_DATA, FOLDER_WITH_ENC_DATA
+]
+for folder in FOLDERS:
+    if os.path.exists(folder) is False:
+        os.mkdir(folder)
 
 
 # <<< ------- ШИРОКО ИСПОЛЬЗУЕМЫЕ ФУНКЦИИ ------- >>>
@@ -107,6 +117,46 @@ def show_name_program():
         "_" * get_size_of_terminal()
     ]
     wait_effect(lines, 0)
+
+
+# <<< ----------- ЦВЕТОВЫЕ АКЦЕНТЫ ------------- >>>
+def create_file_with_theme(record_content):
+    # Сохранение цветов в файл
+    with open(FILE_SETTINGS_COLOR, 'w+') as f:
+        f.write('')
+        f.write(str(record_content))
+        f.close()
+
+
+def format_hex_color(hex_color):
+    """ Получение цвета в формате HEX """
+    r, g, b = [int(hex_color[item:item+2], 16) for item in range(1, len(hex_color), 2)]
+    return f"\x1b[38;2;{r};{g};{b}m".format(**vars())
+
+
+# < ----- Работа с акцентами в файле >
+if os.path.exists(FILE_SETTINGS_COLOR) is False:    # При отсутствии файла
+    create_file_with_theme(dictionary_default_accents)
+else:
+    # Получение цветовой схемы из файла
+    dic_colors = ''
+    with open(FILE_SETTINGS_COLOR, 'r') as file_accent:
+        for i in file_accent.readlines():
+            dic_colors = i
+        file_accent.close()
+    dictionary_default_accents = eval(dic_colors)
+# Ключи словаря с цветами добавляются в массив
+massive_colors = []
+for accent in dictionary_default_accents:
+    massive_colors.append(accent)
+# Цвета в терминале
+ACCENT_1 = format_hex_color(dictionary_default_accents[massive_colors[0]])
+ACCENT_2 = format_hex_color(dictionary_default_accents[massive_colors[1]])
+ACCENT_3 = format_hex_color(dictionary_default_accents[massive_colors[2]])
+ACCENT_4 = format_hex_color(dictionary_default_accents[massive_colors[3]])
+ACCENT_5 = format_hex_color(dictionary_default_accents[massive_colors[4]])
+GREEN = format_hex_color('#6B8E4E')
+RED = format_hex_color('#C70039')
 
 
 def standard_location(right_now):
@@ -152,56 +202,6 @@ def template_for_install(program_file):
 def template_remove_folder(some_folder):
     """ Шаблон удаления папки """
     os.system('rmdir ' + some_folder if os.name == 'nt' else 'rm -r ' + some_folder + ' -f')
-
-
-def format_hex_color(hex_color):
-    """ Получение цвета в формате HEX """
-    r, g, b = [int(hex_color[item:item+2], 16) for item in range(1, len(hex_color), 2)]
-    return f"\x1b[38;2;{r};{g};{b}m".format(**vars())
-
-
-# Создание основных директорий
-FOLDERS = [
-    FOLDER_WITH_DATA, FOLDER_WITH_NOTES,
-    FOLDER_WITH_PROGRAM_DATA, FOLDER_WITH_ENC_DATA
-]
-for folder in FOLDERS:
-    if os.path.exists(folder) is False:
-        os.mkdir(folder)
-
-
-# <<< ----------- ЦВЕТОВЫЕ АКЦЕНТЫ ------------- >>>
-def create_file_with_theme(record_content):
-    # Сохранение цветов в файл
-    with open(FILE_SETTINGS_COLOR, 'w+') as f:
-        f.write('')
-        f.write(str(record_content))
-        f.close()
-
-
-# < ----- Работа с акцентами в файле >
-if os.path.exists(FILE_SETTINGS_COLOR) is False:    # При отсутствии файла
-    create_file_with_theme(dictionary_default_accents)
-else:
-    # Получение цветовой схемы из файла
-    dic_colors = ''
-    with open(FILE_SETTINGS_COLOR, 'r') as file_accent:
-        for i in file_accent.readlines():
-            dic_colors = i
-        file_accent.close()
-    dictionary_default_accents = eval(dic_colors)
-# Ключи словаря с цветами добавляются в массив
-massive_colors = []
-for accent in dictionary_default_accents:
-    massive_colors.append(accent)
-# Цвета в терминале
-ACCENT_1 = format_hex_color(dictionary_default_accents[massive_colors[0]])
-ACCENT_2 = format_hex_color(dictionary_default_accents[massive_colors[1]])
-ACCENT_3 = format_hex_color(dictionary_default_accents[massive_colors[2]])
-ACCENT_4 = format_hex_color(dictionary_default_accents[massive_colors[3]])
-ACCENT_5 = format_hex_color(dictionary_default_accents[massive_colors[4]])
-GREEN = format_hex_color('#6B8E4E')
-RED = format_hex_color('#C70039')
 
 
 # <<< ------- ДЕЙСТВИЯ С СИСТЕМОЙ ------- >>>
