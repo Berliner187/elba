@@ -55,7 +55,7 @@ def create_and_confirm_user_password():
             return new_password
 
 
-def generation_new_password(length_password=22, add_random_symbols=False):
+def generation_new_password(length_password=16, add_random_symbols=False):
     """ Генерирование нового пароля """
     symbols_for_password = list(range(65, 91)) + list(range(97, 123)) + list(range(0, 10))
     if add_random_symbols:
@@ -87,12 +87,12 @@ class ActionsWithPassword:
         """ Получение паролей """
         # Создание мастер-пароля, создание хеша и сохранение в файл
         if self.type_pas == 'master':
-            template_some_message(ACCENT_1, ' - Pick a master-password - \n')
+            template_some_message(ACCENT_1, '- Pick a master-password -')
             master_password = create_and_confirm_user_password()
             # Хэш сохраняется в файл
             if CHECK_FILE_WITH_HASH is False:
                 if CHECK_FOLDER_FOR_RESOURCE is False:
-                    hash_to_file = generate_password_hash(master_password)
+                    hash_to_file = generate_password_hash(master_password, method="pbkdf2:sha512:256512")
                     with open(FILE_WITH_HASH, 'w') as hash_pas:
                         hash_pas.write(hash_to_file)
                         hash_pas.close()
@@ -106,7 +106,8 @@ class ActionsWithPassword:
         elif self.type_pas == 'own_password':
             template_some_message(ACCENT_1, "- Pick an own password - \n")
             password = create_and_confirm_user_password()
-            template_some_message(GREEN, "--- Your password success saved! ---")
+            system_action('clear')
+            template_some_message(GREEN, "--- Your password success saved! ---".upper())
             sleep(1)
             return password
 
@@ -114,15 +115,15 @@ class ActionsWithPassword:
         elif self.type_pas == 'generating':
             length_new_pas = int(input(f"{ACCENT_1}- Length: {ACCENT_4}"))
             status_adding_characters = False
-            request_for_adding_characters = input(
-                f"{ACCENT_1}- Add additional symbols? (Default: no) (y/n): {ACCENT_4}"
-            )
+            request_for_adding_characters = template_question('Add additional symbols? (Default: no)')
             if request_for_adding_characters == 'y':
                 status_adding_characters = True
-            password = generation_new_password(length_new_pas, add_random_symbols=status_adding_characters)
-            template_some_message(
-                ACCENT_3, f'- Your new password - {ACCENT_4}{password}{ACCENT_3} - success saved'
+            password = generation_new_password(
+                length_new_pas, add_random_symbols=status_adding_characters
             )
+            system_action('clear')
+            text_to_display = ' '*30 + f'- Your new password - {ACCENT_4}{password}{ACCENT_3} - success saved'
+            template_some_message(ACCENT_3, text_to_display)
             sleep(3)
             return password
 
@@ -212,7 +213,7 @@ class ActionsWithPassword:
                             quit()
             except FileNotFoundError:
                 system_action('clear')
-                template_warning_message(RED, '--- File with hash not found ---'.upper())
+                template_warning_message(RED, '--- FILE WITH HASH NOT FOUND ---')
                 sleep(3)
                 system_action('quit')
 
